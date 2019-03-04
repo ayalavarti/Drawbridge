@@ -13,6 +13,13 @@
 ## Project Ideas
 
 #### Group Former & Manager
+This project is a website that will allow students to find groups in classes more effectively. The current method of doing this often involves simply posting a small paragraph about yourself and hoping others will find it interesting and email you. It is also often difficult to set up places and times to meet to work on the project in a group.
+
+We envision that this website will have two major parts - group formation and group management. Group formation will include an instructor setting up a class with a list of student's emails and a short project description. Then, students will be able to add their own project descriptions, with a few key modifications: namely, they will also input certain information such as intro sequence, their strengths, and their weaknesses (likely rated 1-5). Then, for students seeking a group, our algorithm will sort in a way as to diversify teams and spread out their strengths/weaknesses so that they can be as effective as possible. 
+
+For the group place/time scheduling, we envision (once groups are formed), students being able to request a meeting within a group with any or all of the group members. They'll input times they would be willing to meet, and our website will send out an email when the other people respond and a proper time/place is found.
+
+These two main features are often the bottleneck for group projects, so that is why we are choosing to focus on them. We expect that the most challenging part of this will be developing a way to sort groups for users so as to diversify them, but still present something that they are interested in.
 
 #### Carpooling Setup
 
