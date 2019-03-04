@@ -24,3 +24,12 @@ These two main features are often the bottleneck for group projects, so that is 
 #### Carpooling Setup
 
 #### Finance Tracker
+This project is an application that helps users monitor their personal finances. It would provide an easy way to keep track of spending and saving on a short-term and long-term scale across multiple accounts and various sources of income.
+
+One of the main features will be a "wallet" that keeps an updated record of the money in each of the user's bank accounts or cash holdings. While transactions will not be processed through this application, it should be able to keep track of all transactions that occur with the user's money. It should allow the user to categorize and record single-event transactions, such as purchases, as well as recurring transactions, such as weekly income or interest.
+
+The other main feature will allow the user to set budgets and trace spending habits over time. The user would be able to divide out a budget between certain categories of spending, and as spending transcations are recorded, the application will inform user whether he/she is on track to be overbudget or underbudget.
+
+As an additional feature, the application would chart budgets in relation to actual expenses over time to show long-term trends in saving and spending habits.
+
+Each of these features is important for anyone managing their own finances, as knowing one's holdings and setting budgets allows for responsible spending. The critical challenges for this project will be security, especially if we link bank accounts, and accuracy and extremely thorough testing, as it would be very bad to misrepresent one's finances. 
