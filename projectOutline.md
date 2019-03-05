@@ -2,13 +2,19 @@
 
 ## Members
 
-*Sam Maffa* - Sam is an all-round coding ninja (blender). He doesn't have a ton of experience with working on front-ends but is great at being flexible with working on different parts of the project. Comfortable with Java, Python, Pyret, SQL.
+![alt text](https://imgur.com/a/w1dsmL9)
 
-*Jeff Zhu* - Jeff is an algorithms guru who enjoys working entirely on the back-end. He despises using third-party APIs and doesn't wish to touch the front-end. Comfortable with Java, Pyret.
+*Sam Maffa* - Sam is an all-round coding ninja. He doesn't have a ton of experience with working on front-ends but is great at being flexible with working on different parts of the project.
+Languages: Java, Python, Pyret, SQL
 
-*Arvind Yalavarti* - Arvind is a freshman who enjoys everything in software development. He's particularly experienced in working with UI/UX architecture and using React to make awesome front-end experiences for the user. Arvind's main weakness is his dependence on existing libraries and APIs when it would be better to write it himself. Comfortable with Java, Python, React, Pyret.
+*Jeff Zhu* - Jeff is an algorithms guru who enjoys working entirely on the back-end. He despises using third-party APIs and doesn't wish to touch the front-end. 
+Languages: Java, Pyret
 
-*Mark Lavrentyev* - Mark is good at googling new things and figuring out how to integrate different parts of the project. He is very frightened of blank files with all those endless possibilities. Comfortable with Java, Python, Pyret, PostgreSQL, and some front-end.
+*Arvind Yalavarti* - Arvind is a freshman who enjoys everything in software development. He's particularly experienced in working with UI/UX architecture and using React and other frameworks to make awesome front-end sites. Arvind's main weakness is his dependence on existing libraries and APIs when it would be better to write it himself.
+Languages: Java, Python, React, Pyret.
+
+*Mark Lavrentyev* - Mark is good at Googling new things and figuring out how to integrate different parts of the project. He is very frightened of blank files with all those endless possibilities.
+Languages: Java, Python, Pyret, PostgreSQL, and some front-end.
 
 ## Project Ideas
 
@@ -22,6 +28,13 @@ For the group place/time scheduling, we envision (once groups are formed), stude
 These two main features are often the bottleneck for group projects, so that is why we are choosing to focus on them. We expect that the most challenging part of this will be developing a way to sort groups for users so as to diversify them, but still present something that they are interested in.
 
 #### Carpooling Setup
+This project is an application that allows users to efficiently carpool to nearby locations. If a student, for example, is looking to travel to another university to visit a friend, he or she can post their itenary. Other students who are also travelling to the same or nearby location can start a conversation with the primary traveller and arrange a carpool.
+
+The application would work for different types of travel methods, including bus, train, plane, and driving. In the case for driving, the application would calculate a total cost per person based on distance and current gas prices that the members of the carpool could split up.
+
+We envision that these carpool groups would be time-sensitive, and after a certain window, the group will close and the application will generate an itenary for the members. Only if all members of a group agree upon an itenary will the itenary be finalized and prices be calculated.
+
+We are focusing on the problem that many students may share connections at different universities and miss out on the opportunity to carpool with others travelling to the same destination. We expect that the most challenging part of this project would be keeping track of the different groups a user is a part of, especially when time becomes an important factor in carpool formation.
 
 #### Finance Tracker
 This project is an application that helps users monitor their personal finances. It would provide an easy way to keep track of spending and saving on a short-term and long-term scale across multiple accounts and various sources of income.
