@@ -2,10 +2,17 @@ package edu.brown.cs.drawbridge.main;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
 import freemarker.template.Configuration;
+import spark.ModelAndView;
+import spark.Request;
+import spark.Response;
+import spark.Spark;
+import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
 
 /**
@@ -37,5 +44,25 @@ public abstract class UserInterface {
    */
   public static void setEndpoints() {
     FreeMarkerEngine freeMarker = createEngine();
+
+    Spark.get("/", new HomeScreenHandler(), freeMarker);
+
   }
+
+  /**
+   * Handle requests to the home screen of the website.
+   */
+  private static class HomeScreenHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+
+      // Return empty data to GUI when / route is called
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("title", "Drawbridge | Home")
+          .put("favicon", "images/favicon.png").build();
+
+      return new ModelAndView(variables, "map.ftl");
+    }
+  }
+
 }
