@@ -18,8 +18,9 @@
 
   <body>
     <div class="header">
-      <div id="profileInfo" style="visibility: hidden;">
-        <div class="profile-btn dropdown">
+      <div style="visibility: hidden;" id="profile-info" class="profile-btn">
+        <div class="user-info" id = "user-name"></div>
+        <div id = "profile-picture-wrapper" class="dropdown">
           <div class="dropdown-content">
             <a class="dropdown-top" href="#">My Trips</a>
             <a class="dropdown-bottom" onclick="signOut();">Sign Out</a>
@@ -27,7 +28,9 @@
         </div>
       </div>
 
-      <div class="g-signin2" data-onsuccess="onSignIn" data-longtitle="true"></div>
+      <div id="sign-in" class="profile-btn">
+        <div class="g-signin2" data-onsuccess="onSignIn" data-onfailure="onFailure" data-longtitle="true"></div>
+      </div>
     </div>
 
     <div class = "body">
