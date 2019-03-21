@@ -1,0 +1,82 @@
+/* -------- Map Styling -------- */
+
+#map {
+	height: 100vh;
+}
+
+
+.search-menu-wrapper {
+	position: absolute;
+	top: 2%;
+	left: 5%;
+	z-index: 5;
+}
+
+.search-menu {
+	width: 350px;
+	height: 40vh;
+	background: #f5f5f5;
+	border-radius: 15px;
+	border: 0;
+	outline: none;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.address-input {
+	outline: 0;
+	border: 0;
+	color: #1e3458;
+	background: none;
+	border-bottom: 1px solid #1e3458;
+	font-size: 14px;
+	font-weight: 300;
+	margin-left: 15px;
+	padding: 13px 20px 13px 0px;
+	text-overflow: ellipsis;
+	width: 200px;
+	margin-bottom: 10px;
+}
+
+.icon {
+	font-size: 40px;
+	margin: 10px;
+	color: #1e3458;
+	cursor: pointer;
+}
+
+.icon-label {
+	font-size: 20px;
+	color: #1e3458;
+}
+
+.icon-switch {
+	color: #1e3458;
+	position: absolute;
+	right: 5%;
+	cursor: pointer;
+}
+
+.icon-current-location {
+	color: #1e3458;
+	cursor: pointer;
+}
+
+#title {
+	color: #fff;
+	background-color: #4d90fe;
+	font-size: 25px;
+	font-weight: 500;
+	padding: 6px 12px;
+}
+
+#infowindow-content .title {
+	font-weight: bold;
+}
+
+#infowindow-content {
+	display: none;
+}
+
+#map #infowindow-content {
+	display: inline;
+}

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/css/normalize.css"  type="text/css">
     <link rel="stylesheet" href="/css/html5bp.css"  type="text/css">
     <link rel="stylesheet" href="/css/main.css"  type="text/css">
+    <link rel="stylesheet" href="/css/map.css"  type="text/css">
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -18,10 +19,11 @@
 
   <body>
     <div class="header">
-      <div style="visibility: hidden;" id="profile-info" class="profile-btn">
+      <div style="visibility: hidden;" id="profile-info" class="profile-btn dropdown">
         <div class="user-info" id = "user-name"></div>
-        <div id = "profile-picture-wrapper" class="dropdown">
+        <div id = "profile-picture-wrapper">
           <div class="dropdown-content">
+            <a class="dropdown-filler"></a>
             <a class="dropdown-top" href="#">My Trips</a>
             <a class="dropdown-bottom" onclick="signOut();">Sign Out</a>
           </div>
