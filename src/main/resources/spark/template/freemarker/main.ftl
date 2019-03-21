@@ -18,7 +18,15 @@
 
   <body>
     <div class="header">
-      <div id="profileInfo" style="visibility: hidden;"><input class="home-btn"></div>
+      <div id="profileInfo" style="visibility: hidden;">
+        <div class="profile-btn dropdown">
+          <div class="dropdown-content">
+            <a class="dropdown-top" href="#">My Trips</a>
+            <a class="dropdown-bottom" onclick="signOut();">Sign Out</a>
+          </div>
+        </div>
+      </div>
+
       <div class="g-signin2" data-onsuccess="onSignIn" data-longtitle="true"></div>
     </div>
 

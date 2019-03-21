@@ -1,3 +1,5 @@
+/* -------- Global Styling -------- */
+
 html {
     font-family: "Montserrat", sans-serif;
     background-color: #ececec;
@@ -18,20 +20,24 @@ input[type="submit"],
     color: #f5f5f5;
 }
 
-.home-btn,
+
+/* -------- Header Styles -------- */
+
+.profile-btn,
 .g-signin2 {
     position: absolute;
     right: 5%;
     top: 2%;
 }
 
-.home-btn {
+.profile-btn {
     border-radius: 30px;
     border: 0;
+    background: #fff;
     width: 150px;
     height: 54px;
-    outline: none;
     cursor: pointer;
+    outline: none;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -44,15 +50,61 @@ input[type="submit"],
     border-radius: 50%;
 }
 
-.copyright {
-    color: hsla(219, 8%, 59%, 0.9);
-    font-size: 11px;
-    font-weight: 600;
+.dropdown {
+    display: inline-block;
 }
+
+.dropdown-content {
+    border-radius: 25px;
+    display: none;
+    position: absolute;
+    top: 100%;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-top {
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+
+.dropdown-bottom {
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+/* -------- Body Styling -------- */
 
 .body {
     min-height: 100vh;
     text-align: center;
+}
+
+
+/* -------- Footer Styling -------- */
+
+.copyright {
+    color: hsla(219, 8%, 59%, 0.9);
+    font-size: 11px;
+    font-weight: 600;
 }
 
 .footer {

@@ -14,3 +14,13 @@ function onSignIn(googleUser) {
         $(".g-signin2").hide();
     }, 500);
 }
+
+function signOut() {
+    let auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function() {
+        console.log('User signed out.');
+        userProfile = undefined;
+        $("#profileInfo").css({ "visibility": "hidden" });
+        $(".g-signin2").show();
+    });
+}
