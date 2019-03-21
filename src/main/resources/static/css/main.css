@@ -60,7 +60,6 @@ input[type="submit"],
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-
 #profile-picture {
 	position: absolute;
 	left: 0;
@@ -102,7 +101,8 @@ input[type="submit"],
 	display: block;
 }
 
-.dropdown-top {}
+.dropdown-top {
+}
 
 .dropdown-filler {
 	cursor: auto;
@@ -151,24 +151,23 @@ input[type="submit"],
 	padding: 15px;
 }
 
-@media screen and (max-width: 1200px) {}
-
-@media screen and (max-width: 991px) {}
-
-@media screen and (max-width: 767px) {
-	.search-menu-wrapper {
-		position: absolute;
-		top: 10%;
-		margin-left: auto;
-		margin-right: auto;
-		z-index: 5;
-	}
+@media screen and (max-width: 1200px) {
 }
 
-@media screen and (max-width: 575px) {}
+@media screen and (max-width: 991px) {
+}
 
-@media screen and (max-width: 479px) {}
+@media screen and (max-width: 767px) {
+}
 
-@media only screen and (min-width: 500px) {}
+@media screen and (max-width: 575px) {
+}
 
-@supports (-webkit-overfloscrolling: touch) {}
+@media screen and (max-width: 479px) {
+}
+
+@media only screen and (min-width: 500px) {
+}
+
+@supports (-webkit-overfloscrolling: touch) {
+}
