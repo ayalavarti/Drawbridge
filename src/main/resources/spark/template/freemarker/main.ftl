@@ -4,7 +4,7 @@
     <title>${title}</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
     <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="853135506127-ulneo7pln3v9ojhsm8r7f0fo098ntigk.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="682909194982-g9daf2o99e5jtijv18i92r1pdmrjk0ec.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 
     <link rel="stylesheet" href="/css/normalize.css"  type="text/css">
@@ -37,11 +37,6 @@
       ${content}
     </div>
 
-    <div class = "footer">
-      <h4 class="copyright">&copy; Drawbridge 2019. All rights reserved.</h4>
-    </div>
-
-    <script src="/js/jquery-3.1.1.js"></script>
     <script src="/js/main.js"></script>
   </body>
 </html>
