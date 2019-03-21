@@ -1,0 +1,64 @@
+html {
+    font-family: "Montserrat", sans-serif;
+    background-color: #ececec;
+}
+
+body {
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: #f5f5f5;
+}
+
+input[type="submit"],
+.modal-button {
+    font-family: "Montserrat", sans-serif;
+    color: #f5f5f5;
+}
+
+.home-btn,
+.g-signin2 {
+    position: absolute;
+    right: 5%;
+    top: 2%;
+}
+
+.home-btn {
+    border-radius: 30px;
+    border: 0;
+    width: 150px;
+    height: 54px;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#profile-picture {
+    position: absolute;
+    right: calc(5% + 100px);
+    top: 2%;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+}
+
+.copyright {
+    color: hsla(219, 8%, 59%, 0.9);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.body {
+    min-height: 100vh;
+    text-align: center;
+}
+
+.footer {
+    color: #f5f5f5;
+    text-align: center;
+    background-color: #1e3458;
+    height: 5%;
+    padding: 15px;
+}
