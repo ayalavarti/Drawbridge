@@ -93,8 +93,55 @@
 
 .start-input {
 	background-image: url('../images/marker-start.png');
-	width: 50px;
-	height: 75px;
+	width: 30px;
+	height: 30px;
+}
+
+.end-input {
+	background-image: url('../images/marker-end.png');
+	width: 34px;
+	height: 51px;
+}
+
+
+.pulse {
+	border-radius: 50%;
+	animation: pulse 2s infinite;
+}
+
+.pulse:hover {
+	animation: none;
+}
+
+@-webkit-keyframes pulse {
+	0% {
+		-webkit-box-shadow: 0 0 0 0 rgba(44, 108, 204, 0.4);
+	}
+
+	70% {
+		-webkit-box-shadow: 0 0 0 20px rgba(44, 113, 204, 0);
+	}
+
+	100% {
+		-webkit-box-shadow: 0 0 0 0 rgba(44, 113, 204, 0);
+	}
+}
+
+@keyframes pulse {
+	0% {
+		-moz-box-shadow: 0 0 0 0 rgba(44, 108, 204, 0.4);
+		box-shadow: 0 0 0 0 rgba(44, 108, 204, 0.4);
+	}
+
+	70% {
+		-moz-box-shadow: 0 0 0 20px rgba(44, 113, 204, 0);
+		box-shadow: 0 0 0 20px rgba(44, 113, 204, 0);
+	}
+
+	100% {
+		-moz-box-shadow: 0 0 0 0 rgba(44, 113, 204, 0);
+		box-shadow: 0 0 0 0 rgba(44, 113, 204, 0);
+	}
 }
 
 .end-input {

@@ -23,23 +23,28 @@ function initMapbox() {
 }
 
 function initMap() {
-    map = new mapboxgl.Map({
-        container: 'map',
-        keyboard: false,
-        maxZoom: 18,
-        style: 'mapbox://styles/mapbox/streets-v11',
-        center: [curLong, curLat],
-        zoom: 12
-    });
-    map.addControl(new mapboxgl.NavigationControl());
+    try {
+        map = new mapboxgl.Map({
+            container: 'map',
+            keyboard: false,
+            maxZoom: 18,
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [curLong, curLat],
+            zoom: 12
+        });
+        map.addControl(new mapboxgl.NavigationControl());
 
-    $("#loading").css({
-        visibility: "hidden"
-    });
-    $("[id=pre-load]").css({
-        visibility: "visible"
-    });
-    console.log("Map loaded.");
+        $("#loading").css({
+            visibility: "hidden"
+        });
+        $("[id=pre-load]").css({
+            visibility: "visible"
+        });
+        console.log("Map loaded.");
+
+    } catch (err) {
+        console.log("Map load error.");
+    }
 }
 
 function handleInput(id, index) {
@@ -53,9 +58,10 @@ function handleInput(id, index) {
             })
             .send()
             .then(function (response) {
-                if (response && response.body && response.body.features && response.body.features.length) {
-                    let feature = response.body.features[0];
+                if (response && response.body && response.body.features &&
+                    response.body.features.length) {
 
+                    let feature = response.body.features[0];
                     $(`#${id}`).val(feature.place_name);
                     addressNames[index] = feature.place_name;
                     coordinates[index] = feature.center;
@@ -86,8 +92,11 @@ function addStreetPoint(lat, long, id, index) {
 }
 
 function addMarker2(lat, long, id, index) {
-    var el = document.createElement('div');
+    let el = document.createElement('div');
     el.className = `marker ${id}`;
+    if (id == "start-input") {
+        el.className = el.className + " pulse";
+    }
     if (markers[index]) {
         console.log("Existing marker exists.");
         markers[index].remove();
