@@ -46,8 +46,18 @@ public abstract class UserInterface {
     FreeMarkerEngine freeMarker = createEngine();
 
     Spark.get("/", new HomeGetHandler(), freeMarker);
-    Spark.get("/help", new InfoGetHandler(), freeMarker);
 
+    Spark.get("/results", new ListGetHandler(), freeMarker);
+    Spark.post("/results", new ListPostHandler(), freeMarker);
+
+    Spark.get("/trip/<:tid>", new DetailGetHandler(), freeMarker);
+
+    Spark.get("/my-trips/<:uid>", new UserGetHandler(), freeMarker);
+
+    Spark.get("/new", new CreateGetHandler(), freeMarker);
+    Spark.post("/new", new CreatePostHandler(), freeMarker);
+
+    Spark.get("/help", new InfoGetHandler(), freeMarker);
   }
 
   //---------------------------- Home ------------------------------------
@@ -68,12 +78,53 @@ public abstract class UserInterface {
   }
 
   //---------------------------- List ------------------------------------
+  private static class ListGetHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
+      return null;
+    }
+  }
+  private static class ListPostHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
+      return null;
+    }
+  }
 
   //--------------------------- Detail -----------------------------------
+  private static class DetailGetHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
+      return null;
+    }
+  }
+
   //---------------------------- User ------------------------------------
+  private static class UserGetHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
+      return null;
+    }
+  }
 
   //--------------------------- Create -----------------------------------
+  private static class CreateGetHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
+      return null;
+    }
+  }
+  private static class CreatePostHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
+      return null;
+    }
+  }
+
   //---------------------------- Info ------------------------------------
+  /**
+   * Class to handle get requests to faq/help/info static page.
+   */
   private static class InfoGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
