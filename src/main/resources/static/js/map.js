@@ -80,31 +80,40 @@ function handleInput(id, index) {
      * Check if address is empty or if address hasn't changed
      */
     if (address != "" && addressNames[index] != address) {
-        // Send network request for geocoding based on address box value
-        mapboxClient.geocoding.forwardGeocode({
-                query: address,
-                proximity: [curLong, curLat],
-                autocomplete: true,
-                limit: 1
-            })
-            .send()
-            .then(function (response) {
-                // If valid response
-                if (response && response.body && response.body.features &&
-                    response.body.features.length) {
-                    /**
-                     * Get the first element of the suggestions, set the input box to that
-                     * value, then update the addressNames and coordinates arrays with the
-                     * feature data.
-                     * */
-                    let feature = response.body.features[0];
-                    $(`#${id}`).val(feature.place_name);
-                    addressNames[index] = feature.place_name;
-                    coordinates[index] = feature.center;
-                    // Add new marker on the map with the returned feature data
-                    addStreetPoint(feature.center[1], feature.center[0], id, index);
-                }
-            });
+        $(`#loading-${id}`).css({
+            visibility: "visible"
+        });
+
+        setTimeout(function () {
+            // Send network request for geocoding based on address box value
+            mapboxClient.geocoding.forwardGeocode({
+                    query: address,
+                    proximity: [curLong, curLat],
+                    autocomplete: true,
+                    limit: 1
+                })
+                .send()
+                .then(function (response) {
+                    // If valid response
+                    if (response && response.body && response.body.features &&
+                        response.body.features.length) {
+                        /**
+                         * Get the first element of the suggestions, set the input box to that
+                         * value, then update the addressNames and coordinates arrays with the
+                         * feature data.
+                         * */
+                        let feature = response.body.features[0];
+                        $(`#${id}`).val(feature.place_name);
+                        addressNames[index] = feature.place_name;
+                        coordinates[index] = feature.center;
+                        // Add new marker on the map with the returned feature data
+                        addStreetPoint(feature.center[1], feature.center[0], id, index);
+                    }
+                    $(`#loading-${id}`).css({
+                        visibility: "hidden"
+                    });
+                });
+        }, 800);
     }
 }
 
