@@ -4,26 +4,30 @@
     <img src ="/images/loading.gif" style="width: 60px; height: auto;"/>
 </div>
 
-<div style="visibility: hidden;" class="search-menu-wrapper">
+<div id="pre-load" style="visibility: hidden;" class="search-menu-wrapper">
     <div class="search-menu">
         <h2 class="section-heading">Search for a Carpool</h2>
         <div class="search-inputs">
             <div><i class="fas fa-dot-circle icon-label"></i>
-                <input class="address-input" id="start-input" onblur="handleInput()" type="text" placeholder="Starting point...">
+                <input class="address-input" id="start-input" onblur="handleInput('start-input', 0)" type="text" placeholder="Starting point...">
             </div>
-            <i class="fab fa-nintendo-switch icon-switch" onclick="switchAddresses()"></i>
             <div><i class="fas fa-map-marker-alt icon-label"></i>
-                <input class="address-input" id="end-input" onblur="handleInput()" type="text" placeholder="Ending destination...">
+                <input class="address-input" id="end-input" onblur="handleInput('end-input', 1)" type="text" placeholder="Ending destination...">
             </div>
-            <button onclick="addMarkerTest()">Add marker</button>
         </div>
     </div>
 </div>
 
-<div class="current-location" onclick="centerMap()">
-    <i class="fas fa-map-pin icon-current-location"></i>
+<div id="pre-load" style="visibility: hidden;" class="map-settings compass-setting" onclick="alignMap()">
+    <i class="fas fa-compass icon-map-settings"></i>
 </div>
 
+<div id="pre-load" style="visibility: hidden;" class="map-settings location-setting" onclick="centerMap()">
+    <i class="fas fa-map-pin icon-map-settings"></i>
+</div>
+
+<script src='https://unpkg.com/es6-promise@4.2.4/dist/es6-promise.auto.min.js'></script>
+<script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
 
 <div id="map"></div>
 
