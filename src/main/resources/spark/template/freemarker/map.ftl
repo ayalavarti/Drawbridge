@@ -28,6 +28,10 @@
     <i class="fas fa-map-pin icon-map-settings"></i>
 </div>
 
+<div id="pre-load" style="visibility: hidden;" class="map-settings trip-setting" onclick="alignTrip()">
+    <i class="fas fa-car icon-map-settings"></i>
+</div>
+
 <script src='/js/es6-promise.auto.min.js'></script>
 <script src="/js/mapbox-sdk.min.js"></script>
 

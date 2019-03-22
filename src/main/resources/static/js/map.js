@@ -132,19 +132,11 @@ function addStreetPoint(lat, long, id, index) {
     found[index] = true;
 
     /**
-     * If both
+     * If both are found, align the map view based on the trip coordinates. Otherwise,
+     * move to the location of the given address.
      */
     if (found[0] && found[1]) {
-        map.fitBounds(coordinates, {
-            padding: {
-                top: 150,
-                bottom: 100,
-                left: 500,
-                right: 150
-            },
-            linear: false
-        });
-
+        alignTrip();
     } else {
         moveToLocation(lat, long);
     }
@@ -229,4 +221,25 @@ function moveToLocation(lat, lng) {
         ],
         zoom: 12
     });
+}
+
+/**
+ * Realigns the map view based on the current trip coordinates.
+ */
+function alignTrip() {
+    if (found[0] && found[1]) {
+        let top = 350;
+        if ($(window).width() < 767) {
+            top = 100;
+        }
+        map.fitBounds(coordinates, {
+            padding: {
+                top: top,
+                bottom: 100,
+                left: 150,
+                right: 150
+            },
+            linear: false
+        });
+    }
 }

@@ -22,6 +22,7 @@
 	border-radius: 15px;
 	border: 0;
 	outline: none;
+	overflow: scroll;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -72,14 +73,20 @@
 }
 
 .location-setting {
-	bottom: 10%;
-	right: 5%;
+	bottom: 100px;
+	right: 50px;
 }
 
 .compass-setting {
-	bottom: 18%;
-	right: 5%;
+	bottom: 150px;
+	right: 50px;
 }
+
+.trip-setting {
+	bottom: 200px;
+	right: 50px;
+}
+
 
 .search-inputs {
 	text-align: left;
@@ -162,17 +169,29 @@
 	}
 
 	.location-setting {
-		bottom: 45%;
+		bottom: 42%;
+		right: 30px;
 	}
 
 	.compass-setting {
-		bottom: 53%;
+		bottom: 42%;
+		right: 90px;
+	}
+
+	.trip-setting {
+		bottom: 42%;
+		right: 150px;
 	}
 
 	.search-menu {
 		width: 100vw;
+		max-height: 50vh;
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
+	}
+
+	#map {
+		height: 70%;
 	}
 }
 
@@ -194,10 +213,19 @@
 		bottom: 60px;
 	}
 
+	.trip-setting {
+		bottom: 110px;
+	}
+
 	.search-menu {
 		height: 100vh;
+		max-width: 50vw;
 		border-top-left-radius: 0;
 		border-bottom-left-radius: 0;
-		overflow-y: scroll;
+	}
+
+	#map {
+		right: 0;
+		width: 80%;
 	}
 }
