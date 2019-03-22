@@ -28,8 +28,8 @@
     <i class="fas fa-map-pin icon-map-settings"></i>
 </div>
 
-<script src='https://unpkg.com/es6-promise@4.2.4/dist/es6-promise.auto.min.js'></script>
-<script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
+<script src='/js/es6-promise.auto.min.js'></script>
+<script src="/js/mapbox-sdk.min.js"></script>
 
 <div id="map"></div>
 
