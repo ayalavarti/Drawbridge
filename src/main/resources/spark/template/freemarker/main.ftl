@@ -7,6 +7,9 @@
     <meta name="google-signin-client_id" content="682909194982-g9daf2o99e5jtijv18i92r1pdmrjk0ec.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
+
     <link rel="stylesheet" href="/css/normalize.css"  type="text/css">
     <link rel="stylesheet" href="/css/html5bp.css"  type="text/css">
     <link rel="stylesheet" href="/css/main.css"  type="text/css">
