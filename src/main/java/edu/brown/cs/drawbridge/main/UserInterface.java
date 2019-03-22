@@ -45,14 +45,16 @@ public abstract class UserInterface {
   public static void setEndpoints() {
     FreeMarkerEngine freeMarker = createEngine();
 
-    Spark.get("/", new HomeScreenHandler(), freeMarker);
+    Spark.get("/", new HomeGetHandler(), freeMarker);
+    Spark.get("/help", new InfoGetHandler(), freeMarker);
 
   }
 
+  //---------------------------- Home ------------------------------------
   /**
    * Handle requests to the home screen of the website.
    */
-  private static class HomeScreenHandler implements TemplateViewRoute {
+  private static class HomeGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
 
@@ -62,6 +64,25 @@ public abstract class UserInterface {
           .put("favicon", "images/favicon.png").build();
 
       return new ModelAndView(variables, "map.ftl");
+    }
+  }
+
+  //---------------------------- List ------------------------------------
+
+  //--------------------------- Detail -----------------------------------
+  //---------------------------- User ------------------------------------
+
+  //--------------------------- Create -----------------------------------
+  //---------------------------- Info ------------------------------------
+  private static class InfoGetHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
+      // Return empty data to GUI when / route is called
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("title", "Drawbridge | Info")
+          .put("favicon", "images/favicon.png").build();
+
+      return new ModelAndView(variables, "info.ftl");
     }
   }
 
