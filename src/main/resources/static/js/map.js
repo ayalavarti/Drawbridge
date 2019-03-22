@@ -20,6 +20,7 @@ let markers = [];
 $(document).ready(function () {
     initMapbox();
     initMap();
+    disableTripButton();
     console.log("DOM ready.");
 });
 
@@ -74,6 +75,7 @@ function handleInput(id, index) {
     let address = $(`#${id}`).val()
     if (address === "") {
         removeMarker(index);
+        disableTripButton();
         return;
     }
 
@@ -112,6 +114,35 @@ function handleInput(id, index) {
     }, 800);
 }
 
+$("#start-input").on('keyup', function (e) {
+    if (e.keyCode == 13) {
+        $("#start-input").blur();
+        $("#end-input").focus();
+    }
+});
+
+$("#end-input").on('keyup', function (e) {
+    if (e.keyCode == 13) {
+        $("#end-input").blur();
+    }
+});
+
+
+function disableTripButton() {
+    $(".trip-setting").css({
+        background: "#a5a5a5",
+        cursor: "auto"
+    });
+}
+
+function enableTripButton() {
+    $(".trip-setting").css({
+        background: "#fff",
+        cursor: "pointer"
+    });
+}
+
+
 /**
  * Add a new street point on the map after a new address is inputted.
  *
@@ -136,6 +167,7 @@ function addStreetPoint(lat, long, id, index) {
      * move to the location of the given address.
      */
     if (found[0] && found[1]) {
+        enableTripButton();
         alignTrip();
     } else {
         moveToLocation(lat, long);

@@ -22,7 +22,6 @@
 	border-radius: 15px;
 	border: 0;
 	outline: none;
-	overflow: scroll;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -44,7 +43,6 @@
 	font-size: 40px;
 	margin: 15px;
 	color: #1e3458;
-	cursor: pointer;
 }
 
 .icon-label {
@@ -55,7 +53,6 @@
 
 .icon-map-settings {
 	color: #1e3458;
-	cursor: pointer;
 }
 
 .map-settings {
@@ -73,18 +70,18 @@
 }
 
 .location-setting {
-	bottom: 100px;
-	right: 50px;
+	bottom: 70px;
+	right: 10px;
 }
 
 .compass-setting {
-	bottom: 150px;
-	right: 50px;
+	bottom: 120px;
+	right: 10px;
 }
 
 .trip-setting {
-	bottom: 200px;
-	right: 50px;
+	bottom: 170px;
+	right: 10px;
 }
 
 
@@ -170,21 +167,22 @@
 
 	.location-setting {
 		bottom: 42%;
-		right: 30px;
+		right: 10px;
 	}
 
 	.compass-setting {
 		bottom: 42%;
-		right: 90px;
+		right: 70px;
 	}
 
 	.trip-setting {
 		bottom: 42%;
-		right: 150px;
+		right: 130px;
 	}
 
 	.search-menu {
 		width: 100vw;
+		overflow: scroll;
 		max-height: 50vh;
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
@@ -219,6 +217,7 @@
 
 	.search-menu {
 		height: 100vh;
+		overflow: scroll;
 		max-width: 50vw;
 		border-top-left-radius: 0;
 		border-bottom-left-radius: 0;
