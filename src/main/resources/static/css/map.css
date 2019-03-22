@@ -1,0 +1,98 @@
+/* -------- Map Styling -------- */
+
+#map {
+	height: 100vh;
+}
+
+.search-menu-wrapper {
+	position: absolute;
+	top: 2%;
+	left: 5%;
+	z-index: 5;
+}
+
+.search-menu {
+	width: 350px;
+	height: 40vh;
+	background: #f5f5f5;
+	border-radius: 15px;
+	border: 0;
+	outline: none;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.address-input {
+	outline: 0;
+	border: 0;
+	color: #1e3458;
+	background: none;
+	border-bottom: 1px solid #1e3458;
+	font-size: 14px;
+	font-weight: 300;
+	padding: 13px 20px 6px 0px;
+	text-overflow: ellipsis;
+	width: 200px;
+	margin-bottom: 10px;
+}
+
+.icon {
+	font-size: 40px;
+	margin: 5px;
+	color: #1e3458;
+	cursor: pointer;
+}
+
+.icon-label {
+	font-size: 12px;
+	color: #1e3458;
+}
+
+.icon-switch {
+	color: #1e3458;
+	position: absolute;
+	right: 5%;
+	cursor: pointer;
+}
+
+.icon-current-location {
+	color: #1e3458;
+	cursor: pointer;
+}
+
+.current-location {
+	cursor: pointer;
+	position: absolute;
+	bottom: 10%;
+	right: 5%;
+	z-index: 5;
+	background: #fff;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 15px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.search-inputs {
+	text-align: left;
+	margin-left: 30px;
+}
+
+@media screen and (max-width: 767px) {
+	.search-menu-wrapper {
+		bottom: 0;
+		top: auto;
+		left: auto;
+		right: auto;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.search-menu {
+		width: 100vw;
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+}
