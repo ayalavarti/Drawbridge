@@ -88,18 +88,19 @@
 
 .marker {
 	background-size: cover;
-	width: 50px;
-	height: 50px;
-	border-radius: 50%;
 	cursor: pointer;
 }
 
 .start-input {
 	background-image: url('../images/marker-start.png');
+	width: 50px;
+	height: 75px;
 }
 
 .end-input {
 	background-image: url('../images/marker-end.png');
+	width: 34px;
+	height: 51px;
 }
 
 

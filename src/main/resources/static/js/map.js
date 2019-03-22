@@ -66,7 +66,7 @@ function handleInput(id, index) {
 }
 
 function addStreetPoint(lat, long, id, index) {
-    addMarker(lat, long, id);
+    addMarker2(lat, long, id, index);
     found[index] = true;
 
     if (found[0] && found[1]) {
@@ -85,47 +85,16 @@ function addStreetPoint(lat, long, id, index) {
     }
 }
 
-function addMarker(lat, long, name) {
-    let mapLayer = map.getLayer(name);
-    if (typeof mapLayer != 'undefined') {
-        map.removeLayer(name).removeSource(name);
-        map.removeImage(name);
+function addMarker2(lat, long, id, index) {
+    var el = document.createElement('div');
+    el.className = `marker ${id}`;
+    if (markers[index]) {
+        console.log("Existing marker exists.");
+        markers[index].remove();
     }
-    /* Image: An image is loaded and added to the map. */
-    let imageUrl;
-    if (name === "start-input") {
-        imageUrl = "/images/marker-start.png";
-    } else {
-        imageUrl = "/images/marker-end.png";
-    }
-
-    map.loadImage(imageUrl, function (error, image) {
-        if (error) throw error;
-        map.addImage(name, image);
-        /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
-        map.addLayer({
-            id: name,
-            type: "symbol",
-            /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
-            source: {
-                type: "geojson",
-                data: {
-                    type: 'FeatureCollection',
-                    features: [{
-                        type: 'Feature',
-                        properties: {},
-                        geometry: {
-                            type: "Point",
-                            coordinates: [long, lat]
-                        }
-                    }]
-                }
-            },
-            layout: {
-                "icon-image": name,
-            }
-        });
-    });
+    markers[index] = new mapboxgl.Marker(el)
+        .setLngLat([long, lat]);
+    markers[index].addTo(map);
 }
 
 function centerMap() {
