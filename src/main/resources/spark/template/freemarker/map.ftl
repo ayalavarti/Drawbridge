@@ -3,20 +3,22 @@
 <div style="visibility: hidden;" class="search-menu-wrapper">
     <div class="search-menu">
         <h2 class="section-heading">Search for a Carpool</h2>
-        <div id="pac-container">
+        <div class="search-inputs">
             <div><i class="fas fa-dot-circle icon-label"></i>
                 <input class="address-input" id="start-input" oninput="handleInput()" type="text" placeholder="Starting point...">
             </div>
-
             <i class="fab fa-nintendo-switch icon-switch" onclick="switchAddresses()"></i>
-            <i class="fas fa-map-pin icon-current-location" onclick="centerMap()"></i>
-
             <div><i class="fas fa-map-marker-alt icon-label"></i>
                 <input class="address-input" id="end-input" oninput="handleInput()" type="text" placeholder="Ending destination...">
             </div>
         </div>
     </div>
 </div>
+
+<div class="current-location" onclick="centerMap()">
+    <i class="fas fa-map-pin icon-current-location"></i>
+</div>
+
 
 <div id="map"></div>
 
