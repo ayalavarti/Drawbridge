@@ -21,6 +21,18 @@ $(document).ready(function () {
     initMapbox();
     initMap();
     disableTripButton();
+
+    flatpickr("#date", {
+        minDate: "today",
+        altInput: true,
+        dateFormat: "m/d/Y",
+    });
+    flatpickr("#time", {
+        enableTime: true,
+        noCalendar: true,
+        altInput: true,
+        dateFormat: "H:i",
+    });
     console.log("DOM ready.");
 });
 
@@ -115,20 +127,53 @@ function handleInput(id, index) {
     }, 800);
 }
 
+/**
+ * Handle submit response when the submit button is pressed.
+ */
+function handleSubmit() {
+    let dateInput = $("#date").val();
+    let timeInput = $("#time").val();
+
+    let date = new Date(`${dateInput} ${timeInput}`);
+
+    const postParameters = {
+        startCoordinates: coordinates[0].reverse(),
+        endCoordinates: coordinates[1].reverse(),
+        date: date.getTime()
+    };
+
+    console.log(postParameters);
+
+    return false;
+}
+
+/**
+ * Add event listener for keyup on the start-input input box.
+ */
 $("#start-input").on('keyup', function (e) {
+    /**
+     * If enter is pressed, blur the start-input and focus
+     * the end-input
+     */
     if (e.keyCode == 13) {
         $("#start-input").blur();
         $("#end-input").focus();
     }
 });
 
+/**
+ * Add event listener for keyup on the end-input input box.
+ */
 $("#end-input").on('keyup', function (e) {
+    // If enter is pressed, blur the end-input
     if (e.keyCode == 13) {
         $("#end-input").blur();
     }
 });
 
-
+/**
+ * Disable the trip realign button.
+ */
 function disableTripButton() {
     $(".trip-setting").css({
         background: "#a5a5a5",
@@ -136,13 +181,15 @@ function disableTripButton() {
     });
 }
 
+/**
+ * Enable the trip realign button.
+ */
 function enableTripButton() {
     $(".trip-setting").css({
         background: "#fff",
         cursor: "pointer"
     });
 }
-
 
 /**
  * Add a new street point on the map after a new address is inputted.
@@ -211,6 +258,11 @@ function addMarker(lat, long, id, index, name) {
     markers[index].addTo(map);
 }
 
+/**
+ * Parse an address and return formatted HTML code.
+ *
+ * @param {*} raw
+ */
 function parseAddress(raw) {
     if (raw.indexOf(',') > -1) {
         let title = raw.substr(0, raw.indexOf(','));

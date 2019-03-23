@@ -16,8 +16,8 @@
 }
 
 .search-menu {
-	width: 350px;
-	height: 40vh;
+	width: 375px;
+	height: 260px;
 	background: #f5f5f5;
 	border-radius: 15px;
 	border: 0;
@@ -25,6 +25,7 @@
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.datetime-input,
 .address-input {
 	outline: 0;
 	border: 0;
@@ -38,6 +39,27 @@
 	width: 200px;
 	margin-bottom: 10px;
 }
+
+.datetime-input {
+	width: 100px;
+}
+
+.submit-btn {
+	border: 0;
+	width: auto;
+	height: 50px;
+	outline: none;
+	cursor: pointer;
+}
+
+.section-heading {
+	font-family: "Montserrat", sans-serif;
+	font-size: 18px;
+	padding-top: 20px;
+	font-weight: 500;
+	color: #1e3458;
+}
+
 
 .icon {
 	font-size: 40px;
@@ -84,10 +106,8 @@
 	right: 10px;
 }
 
-
 .search-inputs {
-	text-align: left;
-	margin-left: 30px;
+	text-align: center;
 }
 
 .marker {
@@ -109,7 +129,8 @@
 
 .popup-title {
 	font-size: 17px;
-	font-weight: 800;
+	font-weight: 500;
+	margin-bottom: 5px;
 }
 
 .popup-content {
@@ -200,6 +221,10 @@
 	.trip-setting {
 		bottom: 42%;
 		right: 130px;
+	}
+
+	.section-heading {
+		padding-top: 0;
 	}
 
 	.search-menu {

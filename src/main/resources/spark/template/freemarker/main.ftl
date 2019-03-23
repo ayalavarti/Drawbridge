@@ -6,15 +6,19 @@
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="682909194982-g9daf2o99e5jtijv18i92r1pdmrjk0ec.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script src='/js/mapbox-gl.js'></script>
 
-    <link rel='stylesheet' href='/css/mapbox-gl.css' />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+
     <link rel="stylesheet" href="/css/normalize.css"  type="text/css">
     <link rel="stylesheet" href="/css/html5bp.css"  type="text/css">
     <link rel="stylesheet" href="/css/main.css"  type="text/css">
     <link rel="stylesheet" href="/css/map.css"  type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/google-fonts.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700,800,900" rel="stylesheet">
     <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
   </head>
 
