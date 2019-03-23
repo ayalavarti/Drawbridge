@@ -7,6 +7,7 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
+import edu.brown.cs.drawbridge.models.Trip;
 import freemarker.template.Configuration;
 import spark.ModelAndView;
 import spark.Request;
@@ -27,7 +28,8 @@ public abstract class UserInterface {
 
   private static FreeMarkerEngine createEngine() {
     Configuration config = new Configuration();
-    File templates = new File("src/main/resources/spark/template/freemarker");
+    File templates =
+            new File("src/main/resources/spark/template/freemarker");
     try {
       config.setDirectoryForTemplateLoading(templates);
     } catch (IOException ioe) {
@@ -95,7 +97,18 @@ public abstract class UserInterface {
   private static class DetailGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
-      return null;
+      int tid;
+      try {
+        tid = Integer.parseInt(request.params(":tid"));
+      } catch (NumberFormatException e) {
+        response.redirect("/"); // 404 error
+      }
+
+      // Return empty data to GUI when / route is called
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("title", "TRIP")
+          .put("favicon", "images/favicon.png").build();
+      return new ModelAndView(variables, "detail.ftl");
     }
   }
 
@@ -137,4 +150,8 @@ public abstract class UserInterface {
     }
   }
 
+  //--------------------------- Errors -----------------------------------
+//  private static class Code404Handler implements TemplateViewRoute {
+//
+//  }
 }
