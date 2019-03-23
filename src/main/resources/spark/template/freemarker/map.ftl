@@ -10,19 +10,19 @@
         <form autocomplete="off" onsubmit="event.preventDefault(); handleSubmit()">
             <div class="search-inputs">
                 <div><i class="fas fa-dot-circle icon-label"></i>
-                    <input required class="address-input" id="start-input" onblur="handleInput('start-input', 0)" type="text" placeholder="Starting point...">
+                    <input required class="address-input" id="start-input" onblur="handleInput('start-input', 0)" type="text" placeholder="Starting point..." />
                     <img id="loading-start-input" src ="/images/loading.gif" style="width: 20px; height: auto; visibility: hidden;"/>
                 </div>
                 <div><i class="fas fa-map-marker-alt icon-label"></i>
-                    <input required class="address-input" id="end-input" onblur="handleInput('end-input', 1)" type="text" placeholder="Ending destination...">
+                    <input required class="address-input" id="end-input" onblur="handleInput('end-input', 1)" type="text" placeholder="Ending destination..." />
                     <img id="loading-end-input" src ="/images/loading.gif" style="width: 20px; height: auto; visibility: hidden;"/>
                 </div>
                 <div>
                     <i class="fas fa-clock icon-label"></i>
-                    <input required class="datetime-input flatpickr flatpickr-input" id="date" type="text" placeholder="Date...">
+                    <input required class="datetime-input flatpickr flatpickr-input" id="date" type="text" placeholder="Date..." />
 
                     <i class="fas fa-calendar icon-label"></i>
-                    <input required class="datetime-input flatpickr flatpickr-input" id="time" type="text" placeholder="Time...">
+                    <input required class="datetime-input flatpickr flatpickr-input" id="time" type="text" placeholder="Time..." />
                 </div>
                 <input id="" name="submit" alt="Submit" type="image" src="/images/submit.png" class="submit-btn"/>
             </div>
@@ -40,6 +40,14 @@
 
 <div id="pre-load" style="visibility: hidden;" class="map-settings trip-setting" onclick="alignTrip()">
     <i class="fas fa-car icon-map-settings"></i>
+</div>
+
+<div id="route-info" style="visibility: hidden; flex-direction: column; padding: 5px;" class="route-info">
+    <span>Route Information</span>
+    <div>
+        <div><i style="font-size: 10px;" class="fas fa-clock icon-label"></i><span style="font-size: 13px;" id = "duration"></span></div>
+        <div><i style="font-size: 10px;" class="fas fa-road icon-label"></i><span style="font-size: 13px;" id = "distance"></span></div>
+    </div>
 </div>
 
 <script src='/js/es6-promise.auto.min.js'></script>

@@ -14,25 +14,16 @@ let found = [];
 let coordinates = [];
 let markers = [];
 
+let route = []
+
 /**
  * When the DOM loads, initialize Mapbox and the Map object.
  */
 $(document).ready(function () {
     initMapbox();
     initMap();
-    disableTripButton();
-
-    flatpickr("#date", {
-        minDate: "today",
-        altInput: true,
-        dateFormat: "m/d/Y",
-    });
-    flatpickr("#time", {
-        enableTime: true,
-        noCalendar: true,
-        altInput: true,
-        dateFormat: "H:i",
-    });
+    initDateTime();
+    disableTrip();
     console.log("DOM ready.");
 });
 
@@ -75,6 +66,28 @@ function initMap() {
 }
 
 /**
+ * Initialize date and time pickers.
+ */
+function initDateTime() {
+    flatpickr("#date", {
+        minDate: "today",
+        altInput: true,
+        dateFormat: "m/d/Y",
+    });
+    flatpickr("#time", {
+        enableTime: true,
+        noCalendar: true,
+        altInput: true,
+        dateFormat: "H:i",
+    });
+    $('.datetime-input').on('focus', ({
+        currentTarget
+    }) => $(currentTarget).blur())
+    $(".datetime-input").prop('readonly', false)
+
+}
+
+/**
  * Handle changes to the address input boxes whenever the input box loses focus.
  *
  * @param {*} id
@@ -87,7 +100,7 @@ function handleInput(id, index) {
     let address = $(`#${id}`).val()
     if (address === "") {
         removeMarker(index);
-        disableTripButton();
+        disableTrip();
         return;
     }
 
@@ -128,70 +141,6 @@ function handleInput(id, index) {
 }
 
 /**
- * Handle submit response when the submit button is pressed.
- */
-function handleSubmit() {
-    let dateInput = $("#date").val();
-    let timeInput = $("#time").val();
-
-    let date = new Date(`${dateInput} ${timeInput}`);
-
-    const postParameters = {
-        startCoordinates: coordinates[0].reverse(),
-        endCoordinates: coordinates[1].reverse(),
-        date: date.getTime()
-    };
-
-    console.log(postParameters);
-
-    return false;
-}
-
-/**
- * Add event listener for keyup on the start-input input box.
- */
-$("#start-input").on('keyup', function (e) {
-    /**
-     * If enter is pressed, blur the start-input and focus
-     * the end-input
-     */
-    if (e.keyCode == 13) {
-        $("#start-input").blur();
-        $("#end-input").focus();
-    }
-});
-
-/**
- * Add event listener for keyup on the end-input input box.
- */
-$("#end-input").on('keyup', function (e) {
-    // If enter is pressed, blur the end-input
-    if (e.keyCode == 13) {
-        $("#end-input").blur();
-    }
-});
-
-/**
- * Disable the trip realign button.
- */
-function disableTripButton() {
-    $(".trip-setting").css({
-        background: "#a5a5a5",
-        cursor: "auto"
-    });
-}
-
-/**
- * Enable the trip realign button.
- */
-function enableTripButton() {
-    $(".trip-setting").css({
-        background: "#fff",
-        cursor: "pointer"
-    });
-}
-
-/**
  * Add a new street point on the map after a new address is inputted.
  *
  * @param {*} lat
@@ -217,8 +166,9 @@ function addStreetPoint(lat, long, id, index, name) {
      * move to the location of the given address.
      */
     if (found[0] && found[1]) {
-        enableTripButton();
         alignTrip();
+        updateRoute();
+        enableTrip();
     } else {
         moveToLocation(lat, long);
     }
@@ -284,8 +234,110 @@ function removeMarker(index) {
         markers[index].remove();
         delete markers[index];
         delete coordinates[index];
+        route = [];
+        removeRoute();
         found[index] = false;
     }
+}
+
+
+function updateRoute() {
+    removeRoute();
+    calcRoute(coordinates.join(';'));
+}
+
+function calcRoute(c) {
+    let url = 'https://api.mapbox.com/directions/v5/mapbox/driving/' +
+        c + '?geometries=geojson&&access_token=' +
+        mapboxgl.accessToken;
+
+    let req = new XMLHttpRequest();
+    req.responseType = 'json';
+    req.open('GET', url, true);
+    req.onload = function () {
+        let jsonResponse = req.response;
+
+        route = [
+            jsonResponse.routes[0].distance * 0.001,
+            jsonResponse.routes[0].duration / 60
+        ];
+        console.log(route);
+        setTripInfo();
+
+        let coords = jsonResponse.routes[0].geometry;
+        addRoute(coords);
+    };
+    req.send();
+}
+
+function addRoute(coords) {
+    if (map.getSource('route')) {
+        map.removeLayer('route')
+        map.removeSource('route')
+    } else {
+        map.addLayer({
+            "id": "route",
+            "type": "line",
+            "source": {
+                "type": "geojson",
+                "data": {
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": coords
+                }
+            },
+            "layout": {
+                "line-join": "round",
+                "line-cap": "round"
+            },
+            "paint": {
+                "line-color": "#4993e7",
+                "line-width": 7,
+                "line-opacity": 0.7
+            }
+        });
+    };
+}
+
+function removeRoute() {
+    if (map.getSource('route')) {
+        map.removeLayer('route');
+        map.removeSource('route');
+    } else {
+        return;
+    }
+}
+
+
+/**
+ * Disable the trip realign button and hide route information modal
+ */
+function disableTrip() {
+    $(".trip-setting").css({
+        background: "#a5a5a5",
+        cursor: "auto"
+    });
+    $("#route-info").css({
+        visibility: "hidden"
+    });
+}
+
+/**
+ * Enable the trip realign button and show route information modal
+ */
+function enableTrip() {
+    $(".trip-setting").css({
+        background: "#fff",
+        cursor: "pointer"
+    });
+    $("#route-info").css({
+        visibility: "visible"
+    });
+}
+
+function setTripInfo() {
+    $("#distance").text(`${route[0].toFixed(2)} km`);
+    $("#duration").text(`${route[1].toFixed(2)} minutes`);
 }
 
 /**
@@ -347,4 +399,22 @@ function alignTrip() {
             linear: false
         });
     }
+}
+
+/**
+ * Handle submit response when the submit button is pressed.
+ */
+function handleSubmit() {
+    let dateInput = $("#date").val();
+    let timeInput = $("#time").val();
+    let date = new Date(`${dateInput} ${timeInput}`);
+
+    const postParameters = {
+        startCoordinates: coordinates[0].slice(0).reverse(),
+        endCoordinates: coordinates[1].slice(0).reverse(),
+        date: date.getTime()
+    };
+
+    console.log(postParameters);
+    return false;
 }
