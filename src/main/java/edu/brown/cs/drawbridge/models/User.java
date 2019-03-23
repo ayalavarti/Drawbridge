@@ -76,8 +76,14 @@ public class User {
    * Get the Trips that the User is hosting.
    *
    * @return The ids of Trips that the User is hosting
+   * @throws IllegalArgumentException
+   *           If Trip information has not been processed by database
    */
   public List<String> getHostingTrips() {
+    if (hostingTripIds == null) {
+      throw new IllegalArgumentException(
+          "ERROR: Trip information has not been initialized.");
+    }
     return hostingTripIds;
   }
 
@@ -85,17 +91,29 @@ public class User {
    * Get the Trips that the User is a member of.
    *
    * @return The ids of Trips that the User is a member of
+   * @throws IllegalArgumentException
+   *           If Trip information has not been processed by database
    */
   public List<String> getMemberTrips() {
+    if (memberTripIds == null) {
+      throw new IllegalArgumentException(
+          "ERROR: Trip information has not been initialized.");
+    }
     return memberTripIds;
   }
 
   /**
    * Get the Trips that the User has requested to join.
    *
-   * @return The ids of Trips that the User has request to join.
+   * @return The ids of Trips that the User has request to join
+   * @throws IllegalArgumentException
+   *           If Trip information has not been processed by database
    */
   public List<String> getPendingTrips() {
+    if (pendingTripIds == null) {
+      throw new IllegalArgumentException(
+          "ERROR: Trip information has not been initialized.");
+    }
     return pendingTripIds;
   }
 }

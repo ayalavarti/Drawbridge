@@ -306,11 +306,12 @@ public class TripTest {
     Trip noUsers = Trip.TripBuilder.newTripBuilder()
         .addIdentification(0, "name").addLocations(5, 6, 7, 8).addTimes(10, 20)
         .addDetails(5, 20, "1234567890", "My car", "comments").build();
-    noUsers.getCostPerUser();
+    noUsers.getCostPerUser("userId");
   }
 
   /**
-   * Test getCostPerUser method given a Trip with User information.
+   * Test getCostPerUser method given a Trip with User information and a User
+   * that exists in the Trip.
    */
   @Test
   public void testGetCostPerUser() {
@@ -320,13 +321,35 @@ public class TripTest {
         .addIdentification(0, "name").addLocations(0, 1, 2, 3).addTimes(10, 20)
         .addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("host", memberIds, pendingIds);
-    assertEquals(hasUsers.getCostPerUser(), 100.0, 0.1);
+    assertEquals(hasUsers.getCostPerUser("host"), 100.0, 0.1);
     memberIds.add("1");
-    assertEquals(hasUsers.getCostPerUser(), 50.0, 0.1);
+    assertEquals(hasUsers.getCostPerUser("1"), 50.0, 0.1);
     memberIds.add("2");
     memberIds.add("3");
-    assertEquals(hasUsers.getCostPerUser(), 25.0, 0.1);
+    assertEquals(hasUsers.getCostPerUser("2"), 25.0, 0.1);
     pendingIds.add("4");
-    assertEquals(hasUsers.getCostPerUser(), 25.0, 0.1);
+    assertEquals(hasUsers.getCostPerUser("3"), 25.0, 0.1);
+  }
+
+  /**
+   * Test getCostPerUser method given a Trip with User information and a User
+   * that does not exist in the Trip.
+   */
+  @Test
+  public void testGetCostPerUserNotInTrip() {
+    List<String> memberIds = new LinkedList<String>();
+    List<String> pendingIds = new LinkedList<String>();
+    Trip hasUsers = Trip.TripBuilder.newTripBuilder()
+        .addIdentification(0, "name").addLocations(0, 1, 2, 3).addTimes(10, 20)
+        .addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("host", memberIds, pendingIds);
+    assertEquals(hasUsers.getCostPerUser("stranger"), 50.0, 0.1);
+    memberIds.add("1");
+    memberIds.add("2");
+    assertEquals(hasUsers.getCostPerUser("stranger"), 25.0, 0.1);
+    memberIds.add("3");
+    assertEquals(hasUsers.getCostPerUser("stranger"), 20.0, 0.1);
+    pendingIds.add("4");
+    assertEquals(hasUsers.getCostPerUser("stranger"), 20.0, 0.1);
   }
 }

@@ -143,4 +143,31 @@ public class UserTest {
       assertEquals(u.getPendingTrips().get(i), pending.get(i));
     }
   }
+
+  /**
+   * Test getHostingTrips method given no Trip data.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetHostingTripsNoTrips() {
+    User u = new User("id1", "name1", "email");
+    u.getMemberTrips();
+  }
+
+  /**
+   * Test getMemberTrips method given no Trip data.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetMemberTripsNoTrips() {
+    User u = new User("id1", "name1", "email");
+    u.getMemberTrips();
+  }
+
+  /**
+   * Test getPendingTrips method given no Trip data.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetPendingTripsNoTrip() {
+    User u = new User("id1", "name1", "email");
+    u.getPendingTrips();
+  }
 }

@@ -223,6 +223,8 @@ public class Trip {
    * Get the id of the Trip's host.
    *
    * @return The id of the Trip's host
+   * @throws IllegalArgumentException
+   *           If User information has not been initialized
    */
   public String getHostId() {
     if (hostId == null) {
@@ -235,7 +237,9 @@ public class Trip {
   /**
    * Get the ids of members in the Trip.
    *
-   * @return A List of ids of members in the Trip.
+   * @return A List of ids of members in the Trip
+   * @throws IllegalArgumentException
+   *           If User information has not been initialized
    */
   public List<String> getMemberIds() {
     if (memberIds == null) {
@@ -249,6 +253,8 @@ public class Trip {
    * Get the ids of Users who have requested to join the Trip.
    *
    * @return A list of Users who have requested to join the Trip
+   * @throws IllegalArgumentException
+   *           If User information has not been initialized
    */
   public List<String> getPendingIds() {
     if (pendingIds == null) {
@@ -262,6 +268,8 @@ public class Trip {
    * Get the current number of Users in the Trip.
    *
    * @return The current number of Users in the Trip
+   * @throws IllegalArgumentException
+   *           If User information has not been initialized
    */
   public int getCurrentSize() {
     if (memberIds == null) {
@@ -274,10 +282,23 @@ public class Trip {
   /**
    * Get the cost per User in the Trip.
    *
-   * @return The cost per User in the Trip
+   * @param userId
+   *          The id of a User
+   * @return The cost per existing User in the Trip if the given User is already
+   *         in the Trip. Otherwise, the cost per existing User plus the current
+   *         User
+   * @throws IllegalArgumentException
+   *           If User information has not been initialized
    */
-  public double getCostPerUser() {
-    return cost / getCurrentSize();
+  public double getCostPerUser(String userId) {
+    int currentSize = getCurrentSize();
+    if (userId.equals(hostId) || memberIds.contains(userId)) {
+      // If the user is in the group, return cost / number of Users in the Trip
+      return cost / currentSize;
+    } else {
+      // Otherwise, return cost / (number of Users in the Trip + 1)
+      return cost / (currentSize + 1);
+    }
   }
 
   /**
