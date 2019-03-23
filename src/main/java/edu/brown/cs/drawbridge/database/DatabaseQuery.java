@@ -84,12 +84,13 @@ public class DatabaseQuery {
    * @throws IOException
    *           Errors involving locating the database.
    */
-  public DatabaseQuery(String db) throws ClassNotFoundException, SQLException {
+  public DatabaseQuery(String db, String username, String password)
+          throws ClassNotFoundException, SQLException {
     // this line loads the driver manager class, and must be
     // present for everything else to work properly
     Class.forName("org.postgresql.Driver");
     String urlToDB = "jdbc:postgresql:" + db;
-    conn = DriverManager.getConnection(urlToDB);
+    conn = DriverManager.getConnection(urlToDB, username, password);
     // these two lines tell the database to enforce foreign
     // keys during operations, and should be present
     try (Statement stat = conn.createStatement()) {
