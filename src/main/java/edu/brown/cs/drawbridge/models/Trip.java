@@ -280,37 +280,129 @@ public class Trip {
     return cost / getCurrentSize();
   }
 
+  /**
+   * A class used to build a Trip.
+   */
   public static class TripBuilder {
 
+    /**
+     * Create a new IdentificationStep object.
+     *
+     * @return A new TripSteps object as an IdentificationStep
+     */
     public static IdentificationStep newTripBuilder() {
       return new TripSteps();
     }
 
-    public static interface IdentificationStep {
+    /**
+     * An interface that adds identification and produces a LocationStep.
+     */
+    public interface IdentificationStep {
+      /**
+       * Add the id and the name of the Trip.
+       *
+       * @param id
+       *          The id of the Trip
+       * @param name
+       *          The name of the Trip
+       * @return A LocationStep containing the new identification data
+       */
       LocationStep addIdentification(int id, String name);
     }
 
-    public static interface LocationStep {
+    /**
+     * An interface that adds starting and ending locations and produces a
+     * TimeStep.
+     */
+    public interface LocationStep {
+      /**
+       * Add the starting and ending locations of the Trip.
+       *
+       * @param startingLatitude
+       *          The starting latitude of the Trip
+       * @param startingLongitude
+       *          The starting longitude of the Trip
+       * @param endingLatitude
+       *          The ending latitude of the Trip
+       * @param endingLongitude
+       *          The ending longitude of the Trip
+       * @return A TimeStep containing the new location data
+       */
       TimeStep addLocations(double startingLatitude, double startingLongitude,
           double endingLatitude, double endingLongitude);
     }
 
-    public static interface TimeStep {
+    /**
+     * An interface that adds departure and arrival time and produces a
+     * DetailsStep.
+     */
+    public interface TimeStep {
+      /**
+       * Add the departure and arrival time of the Trip.
+       *
+       * @param departuretime
+       *          The epoch departure time of the Trip
+       * @param eta
+       *          The epoch estimated time of arrival of the Trip
+       * @return A DetailsStep containing the new time data
+       */
       DetailsStep addTimes(int departuretime, int eta);
     }
 
-    public static interface DetailsStep {
+    /**
+     * An interface that adds Trip details and produces a BuildStep.
+     */
+    public interface DetailsStep {
+      /**
+       * Add the trip details to the object.
+       *
+       * @param maxUsers
+       *          The maximum number of Users allowed in the Trip
+       * @param cost
+       *          The cost of the Trip
+       * @param phoneNumber
+       *          The host's phone number
+       * @param methodOfTransportation
+       *          The method of transportation
+       * @param comments
+       *          An optional description of the Trip
+       * @return A BuildStep containing the new Trip details data
+       */
       BuildStep addDetails(int maxUsers, double cost, String phoneNumber,
           String methodOfTransportation, String comments);
     }
 
-    public static interface BuildStep {
-      public Trip build();
+    /**
+     * A class that builds a Trip.
+     */
+    public interface BuildStep {
+      /**
+       * Build a Trip using data in the BuildStep.
+       *
+       * @return A new Trip
+       */
+      Trip build();
 
-      public Trip buildWithUsers(String hostId, List<String> memberids,
+      /**
+       * Build a Trip given the id of the host, ids of members, and ids of Users
+       * who have requested to join the Trip.
+       *
+       * @param hostId
+       *          The id of the host
+       * @param memberids
+       *          The ids of members in the Trip
+       * @param pendingIds
+       *          The ids of Users who have requested to join the Trip
+       * @return A new Trip
+       */
+      Trip buildWithUsers(String hostId, List<String> memberids,
           List<String> pendingIds);
     }
 
+    /**
+     * A class that contains data about a Trip. It creates a Trip by
+     * incrementally adding data about the Trip.
+     */
     private static class TripSteps implements IdentificationStep, LocationStep,
         TimeStep, DetailsStep, BuildStep {
       // Identification

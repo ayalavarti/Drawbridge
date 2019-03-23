@@ -1,9 +1,5 @@
 package edu.brown.cs.drawbridge.database;
 
-import edu.brown.cs.drawbridge.models.Trip;
-import edu.brown.cs.drawbridge.models.User;
-
-import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,7 +13,7 @@ import java.util.List;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 
-public abstract class DatabaseQuery {
+public class DatabaseQuery {
 
   private Connection conn;
   private static final User DUMMY_USER = new User("0", "Mary",
@@ -50,9 +46,9 @@ public abstract class DatabaseQuery {
 
   private static final String INSERT_USER = "INSERT INTO users VALUES (? ? ?);";
   private static final String INSERT_TRIP = "INSERT INTO trips(name, "
-          + "start_latitude, start_longitude, end_latitude, end_longitude, "
-          + "departure, eta, max_people, total_cost, host_phone, transportation, "
-          + "description) VALUES (? ? ? ? ? ? ? ? ? ? ? ?) RETURNING id;";
+      + "start_latitude, start_longitude, end_latitude, end_longitude, "
+      + "departure, eta, max_people, total_cost, host_phone, transportation, "
+      + "description) VALUES (? ? ? ? ? ? ? ? ? ? ? ?) RETURNING id;";
 
   private static final String REMOVE_TRIP_BY_ID = "DELETE FROM trips WHERE id = ?;";
   private static final String REMOVE_TRIPS_BY_TIME = "DELETE FROM trips WHERE departure < current_timestamp;";
@@ -71,9 +67,10 @@ public abstract class DatabaseQuery {
   private static final String FIND_MEMBER_USERS = "SELECT user_id FROM members WHERE trip_id = ?";
   private static final String FIND_REQUEST_USERS = "SELECT user_id FROM requests WHERE trip_id = ?";
 
-  private static final String FIND_SIMILAR_TRIPS = "";//"SELECT * FROM trips WHERE ";
-  private static final String FIND_CONNECTED_TRIPS = "";//"SELECT * FROM trips WHERE ";
-
+  private static final String FIND_SIMILAR_TRIPS = "";// "SELECT * FROM trips
+                                                      // WHERE ";
+  private static final String FIND_CONNECTED_TRIPS = "";// "SELECT * FROM trips
+                                                        // WHERE ";
 
   /**
    * A constructor based on the String name of the database.
@@ -87,8 +84,7 @@ public abstract class DatabaseQuery {
    * @throws IOException
    *           Errors involving locating the database.
    */
-  public DatabaseQuery(String db)
-          throws ClassNotFoundException, SQLException {
+  public DatabaseQuery(String db) throws ClassNotFoundException, SQLException {
     // this line loads the driver manager class, and must be
     // present for everything else to work properly
     Class.forName("org.postgresql.Driver");
@@ -124,16 +120,16 @@ public abstract class DatabaseQuery {
    */
   public String getHostOnTrip(int tripId) {
     String query = FIND_HOST_USER;
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        if (rs.next()) {
-//          return rs.getString(1);
-//        }
-//      }
-//    } catch (SQLException e) {
-//      assert false;
-//    }
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // if (rs.next()) {
+    // return rs.getString(1);
+    // }
+    // }
+    // } catch (SQLException e) {
+    // assert false;
+    // }
     return "0";
   }
 
@@ -148,16 +144,16 @@ public abstract class DatabaseQuery {
   public List<String> getMembersOnTrip(int tripId) {
     List<String> results = new ArrayList<>();
     String query = FIND_MEMBER_USERS;
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        while (rs.next()) {
-//          results.add(rs.getString(1);
-//        }
-//      }
-//    } catch (SQLException e) {
-//      assert false;
-//    }
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // while (rs.next()) {
+    // results.add(rs.getString(1);
+    // }
+    // }
+    // } catch (SQLException e) {
+    // assert false;
+    // }
     results.add("0");
     return results;
   }
@@ -172,16 +168,16 @@ public abstract class DatabaseQuery {
   public List<String> getRequestsOnTrip(int tripId) {
     List<String> results = new ArrayList<>();
     String query = FIND_REQUEST_USERS;
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        while (rs.next()) {
-//          results.add(rs.getString(1);
-//        }
-//      }
-//    } catch (SQLException e) {
-//      assert false;
-//    }
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // while (rs.next()) {
+    // results.add(rs.getString(1);
+    // }
+    // }
+    // } catch (SQLException e) {
+    // assert false;
+    // }
     results.add("0");
     return results;
   }
@@ -196,16 +192,16 @@ public abstract class DatabaseQuery {
   public List<Integer> getHostTripsWithUser(String userId) {
     List<Integer> results = new ArrayList<>();
     String query = FIND_HOST_TRIPS;
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setString(1, userId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        while (rs.next()) {
-//          results.add(rs.getInt(1);
-//        }
-//      }
-//    } catch (SQLException e) {
-//      assert false;
-//    }
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setString(1, userId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // while (rs.next()) {
+    // results.add(rs.getInt(1);
+    // }
+    // }
+    // } catch (SQLException e) {
+    // assert false;
+    // }
     results.add(new Integer(0));
     return results;
   }
@@ -221,16 +217,16 @@ public abstract class DatabaseQuery {
   public List<Integer> getMemberTripsWithUser(String userId) {
     List<Integer> results = new ArrayList<>();
     String query = FIND_MEMBER_TRIPS;
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setString(1, userId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        while (rs.next()) {
-//          results.add(rs.getInt(1);
-//        }
-//      }
-//    } catch (SQLException e) {
-//      assert false;
-//    }
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setString(1, userId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // while (rs.next()) {
+    // results.add(rs.getInt(1);
+    // }
+    // }
+    // } catch (SQLException e) {
+    // assert false;
+    // }
     results.add(new Integer(0));
     return results;
   }
@@ -247,16 +243,16 @@ public abstract class DatabaseQuery {
   public List<Integer> getRequestTripsWithUser(String userId) {
     List<Integer> results = new ArrayList<>();
     String query = FIND_REQUEST_TRIPS;
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setString(1, userId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        while (rs.next()) {
-//          results.add(rs.getInt(1);
-//        }
-//      }
-//    } catch (SQLException e) {
-//      assert false;
-//    }
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setString(1, userId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // while (rs.next()) {
+    // results.add(rs.getInt(1);
+    // }
+    // }
+    // } catch (SQLException e) {
+    // assert false;
+    // }
     results.add(new Integer(0));
     return results;
   }
@@ -270,18 +266,18 @@ public abstract class DatabaseQuery {
    */
   public User getUserById(String userId) {
     String query = FIND_USER_BY_ID;
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setString(1, userId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        while (rs.next()) {
-//          return new User(userId, rs.getString(1), rs.getString(2),
-//                        getHostTripsWithUser(userId), getMemberTripsWithUser(userId),
-//                        getRequestTripsWithUser(userId));
-//        }
-//      }
-//    } catch (SQLException e) {
-//      assert false;
-//    }
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setString(1, userId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // while (rs.next()) {
+    // return new User(userId, rs.getString(1), rs.getString(2),
+    // getHostTripsWithUser(userId), getMemberTripsWithUser(userId),
+    // getRequestTripsWithUser(userId));
+    // }
+    // }
+    // } catch (SQLException e) {
+    // assert false;
+    // }
     return DUMMY_USER;
   }
 
@@ -294,20 +290,21 @@ public abstract class DatabaseQuery {
    */
   public Trip getTripById(int tripId) {
     String query = FIND_TRIP_BY_ID;
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        while (rs.next()) {
-//          return new Trip(tripId, rs.getString(1), rs.getDouble(2), rs.getDouble(3),
-//                        rs.getDouble(4), rs.getDouble(5), rs.getInt(6), rs.getInt(7),
-//                        rs.getInt(8), rs.getDouble(9), rs.getString(10), rs.getString(11),
-//                        rs.getString(12), getHostOnTrip(tripId), getMembersOnTrip(tripId),
-//                        getRequestsOnTrip(tripId));
-//        }
-//      }
-//    } catch (SQLException e) {
-//      assert false;
-//    }
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // while (rs.next()) {
+    // return new Trip(tripId, rs.getString(1), rs.getDouble(2),
+    // rs.getDouble(3),
+    // rs.getDouble(4), rs.getDouble(5), rs.getInt(6), rs.getInt(7),
+    // rs.getInt(8), rs.getDouble(9), rs.getString(10), rs.getString(11),
+    // rs.getString(12), getHostOnTrip(tripId), getMembersOnTrip(tripId),
+    // getRequestsOnTrip(tripId));
+    // }
+    // }
+    // } catch (SQLException e) {
+    // assert false;
+    // }
     return DUMMY_TRIP;
   }
 
@@ -345,39 +342,40 @@ public abstract class DatabaseQuery {
    */
   public boolean createTrip(Trip trip, String hostId) {
     String query = INSERT_TRIP;
-//    int tripId = -1;
-//    try (PreparedStatement prep = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-//      prep.setString(1, trip.getName());
-//      prep.setDouble(2, trip.getStartingLongitude());
-//      prep.setDouble(3, trip.getStartingLatitude());
-//      prep.setDouble(4, trip.getEndingLongitude());
-//      prep.setDouble(5, trip.getEndingLatitude());
-//      prep.setInt(6, trip.getDepartureTime());
-//      prep.setInt(7, trip.getEta());
-//      prep.setInt(8, trip.getMaxUsers());
-//      prep.setDouble(9, trip.getCost());
-//      prep.setString(10, trip.getPhoneNumber());
-//      prep.setString(11, trip.getMethodOfTransportation());
-//      prep.setString(12, trip.getComments());
-//      prep.addBatch();
-//      try (ResultSet rs = prep.executeQuery()) {
-//        if (rs.next()) {
-//          tripId = rs.getInt(1);
-//        }
-//      }
-//    } catch (SQLException e) {
-//      return false;
-//    }
-    query = INSERT_HOST; //insert into host
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setString(1, hostId);
-//      prep.setInt(2, tripId);
-//      prep.addBatch();
-//      prep.executeUpdate();
-//    } catch (SQLException e) {
-//      deleteTripManually(tripId);
-//      return false;
-//    }
+    // int tripId = -1;
+    // try (PreparedStatement prep = conn.prepareStatement(query,
+    // Statement.RETURN_GENERATED_KEYS)) {
+    // prep.setString(1, trip.getName());
+    // prep.setDouble(2, trip.getStartingLongitude());
+    // prep.setDouble(3, trip.getStartingLatitude());
+    // prep.setDouble(4, trip.getEndingLongitude());
+    // prep.setDouble(5, trip.getEndingLatitude());
+    // prep.setInt(6, trip.getDepartureTime());
+    // prep.setInt(7, trip.getEta());
+    // prep.setInt(8, trip.getMaxUsers());
+    // prep.setDouble(9, trip.getCost());
+    // prep.setString(10, trip.getPhoneNumber());
+    // prep.setString(11, trip.getMethodOfTransportation());
+    // prep.setString(12, trip.getComments());
+    // prep.addBatch();
+    // try (ResultSet rs = prep.executeQuery()) {
+    // if (rs.next()) {
+    // tripId = rs.getInt(1);
+    // }
+    // }
+    // } catch (SQLException e) {
+    // return false;
+    // }
+    query = INSERT_HOST; // insert into host
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setString(1, hostId);
+    // prep.setInt(2, tripId);
+    // prep.addBatch();
+    // prep.executeUpdate();
+    // } catch (SQLException e) {
+    // deleteTripManually(tripId);
+    // return false;
+    // }
     return true;
   }
 
@@ -390,13 +388,13 @@ public abstract class DatabaseQuery {
    */
   public boolean deleteTripManually(int tripId) {
     String query = REMOVE_TRIP_BY_ID;
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      prep.executeUpdate();
-//      return true;
-//    } catch (SQLException e) {
-//      return false;
-//    }
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // prep.executeUpdate();
+    // return true;
+    // } catch (SQLException e) {
+    // return false;
+    // }
     return true;
   }
 
@@ -408,12 +406,12 @@ public abstract class DatabaseQuery {
    */
   public boolean deleteExpiredTrips() {
     String query = REMOVE_TRIPS_BY_TIME;
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.executeUpdate();
-//      return true;
-//    } catch (SQLException e) {
-//      return false;
-//    }
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.executeUpdate();
+    // return true;
+    // } catch (SQLException e) {
+    // return false;
+    // }
     return true;
   }
 
@@ -432,11 +430,11 @@ public abstract class DatabaseQuery {
       int timeBuffer) {
     List<Trip> results = new ArrayList<>();
     String query = FIND_SIMILAR_TRIPS;
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//
-//    } catch (SQLException e) {
-//      assert false;
-//    }
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    //
+    // } catch (SQLException e) {
+    // assert false;
+    // }
     results.add(DUMMY_TRIP);
     return results;
   }
@@ -458,11 +456,11 @@ public abstract class DatabaseQuery {
       int timeBuffer) {
     List<Trip> results = new ArrayList<>();
     String query = FIND_CONNECTED_TRIPS;
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//
-//    } catch (SQLException e) {
-//      assert false;
-//    }
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    //
+    // } catch (SQLException e) {
+    // assert false;
+    // }
     results.add(DUMMY_TRIP);
     return results;
   }
@@ -478,15 +476,15 @@ public abstract class DatabaseQuery {
    */
   public boolean request(int tripId, String userId) {
     String query = INSERT_REQUEST;
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      prep.setString(2,userId);
-//      prep.addBatch();
-//      prep.executeUpdate();
-//      return true;
-//    } catch (SQLException e) {
-//      return false;
-//    }
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // prep.setString(2,userId);
+    // prep.addBatch();
+    // prep.executeUpdate();
+    // return true;
+    // } catch (SQLException e) {
+    // return false;
+    // }
     return true;
   }
 
@@ -501,24 +499,24 @@ public abstract class DatabaseQuery {
    * @return True if the approval was processed successfully. False otherwise.
    */
   public boolean approve(int tripId, String userId) {
-    String query = INSERT_MEMBER; //insert into members
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      prep.setString(2,userId);
-//      prep.addBatch();
-//      prep.executeUpdate();
-//    } catch (SQLException e) {
-//      return false;
-//    }
-    query = REMOVE_REQUEST; //delete from requests
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      prep.setString(2,userId);
-//      prep.executeUpdate();
-//      return true;
-//    } catch (SQLException e) {
-//      return false;
-//    }
+    String query = INSERT_MEMBER; // insert into members
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // prep.setString(2,userId);
+    // prep.addBatch();
+    // prep.executeUpdate();
+    // } catch (SQLException e) {
+    // return false;
+    // }
+    query = REMOVE_REQUEST; // delete from requests
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // prep.setString(2,userId);
+    // prep.executeUpdate();
+    // return true;
+    // } catch (SQLException e) {
+    // return false;
+    // }
     return true;
   }
 
@@ -532,15 +530,15 @@ public abstract class DatabaseQuery {
    * @return True if the rejection was processed successfully. False otherwise.
    */
   public boolean reject(int tripId, String userId) {
-//    String query = REMOVE_REQUEST; //delete from requests
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      prep.setString(2,userId);
-//      prep.executeUpdate();
-//      return true;
-//    } catch (SQLException e) {
-//      return false;
-//    }
+    // String query = REMOVE_REQUEST; //delete from requests
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // prep.setString(2,userId);
+    // prep.executeUpdate();
+    // return true;
+    // } catch (SQLException e) {
+    // return false;
+    // }
     return true;
   }
 }
