@@ -105,7 +105,8 @@ function handleInput(id, index) {
                     $(`#${id}`).val(feature.place_name);
                     coordinates[index] = feature.center;
                     // Add new marker on the map with the returned feature data
-                    addStreetPoint(feature.center[1], feature.center[0], id, index);
+                    addStreetPoint(feature.center[1], feature.center[0], id, index,
+                        feature.place_name);
                 }
                 $(`#loading-${id}`).css({
                     visibility: "hidden"
@@ -154,12 +155,14 @@ function enableTripButton() {
  *            The name of the input box (either 'start-input' or 'end-input')
  * @param {*} index
  *            The index to use for identification (either 0 or 1)
+ * @param {*} name
+ *            The name of the location
  */
-function addStreetPoint(lat, long, id, index) {
+function addStreetPoint(lat, long, id, index, name) {
     /**
      * Add a new marker on the map then mark the associated input type as found
      */
-    addMarker(lat, long, id, index);
+    addMarker(lat, long, id, index, name);
     found[index] = true;
 
     /**
@@ -185,8 +188,10 @@ function addStreetPoint(lat, long, id, index) {
  *            The name of the input box (either 'start-input' or 'end-input')
  * @param {*} index
  *            The index to use for identification (either 0 or 1)
+ * @param {*} name
+ *            The name of the location
  */
-function addMarker(lat, long, id, index) {
+function addMarker(lat, long, id, index, name) {
     let el = document.createElement('div');
     el.className = `marker ${id}`;
     if (id == "start-input") {
@@ -195,9 +200,25 @@ function addMarker(lat, long, id, index) {
     if (markers[index]) {
         markers[index].remove();
     }
+    let popup = new mapboxgl.Popup({
+            offset: 25
+        })
+        .setHTML(parseAddress(name));
+
     markers[index] = new mapboxgl.Marker(el)
-        .setLngLat([long, lat]);
+        .setLngLat([long, lat])
+        .setPopup(popup);
     markers[index].addTo(map);
+}
+
+function parseAddress(raw) {
+    if (raw.indexOf(',') > -1) {
+        let title = raw.substr(0, raw.indexOf(','));
+        return `<div class="popup-title">${title}</div>
+                <div class="popup-content">${raw.substr(raw.indexOf(',')+1)}</div>`;
+    } else {
+        return `<div class="popup-title">${raw}</div>`;
+    }
 }
 
 /**
@@ -260,7 +281,7 @@ function moveToLocation(lat, lng) {
  */
 function alignTrip() {
     if (found[0] && found[1]) {
-        let top = 350;
+        let top = 400;
         if ($(window).width() < 767) {
             top = 100;
         }

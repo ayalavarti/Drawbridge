@@ -107,6 +107,28 @@
 	height: 51px;
 }
 
+.popup-title {
+	font-size: 17px;
+	font-weight: 800;
+}
+
+.popup-content {
+	font-size: 11px;
+	font-weight: 400;
+}
+
+.mapboxgl-popup {
+	z-index: 10;
+}
+
+.mapboxgl-popup-content {
+	font-family: "Montserrat", sans-serif;
+	color: #1e3458;
+	border-radius: 10px;
+	text-align: center;
+	width: 200px;
+}
+
 
 .pulse {
 	border-radius: 50%;
