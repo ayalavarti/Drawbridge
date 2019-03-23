@@ -69,7 +69,7 @@ public class UserTest {
     pending.add("5");
     pending.add("6");
     User u = new User("id1", "name1", "email");
-    u.setUsers(hosting, member, pending);
+    u.setTrips(hosting, member, pending);
     for (int i = 0; i < hosting.size(); i++) {
       assertEquals(u.getHostingTrips().get(i), hosting.get(i));
     }
@@ -90,7 +90,7 @@ public class UserTest {
     pending.add("5");
     pending.add("6");
     User u = new User("id1", "name1", "email");
-    u.setUsers(hosting, member, pending);
+    u.setTrips(hosting, member, pending);
     for (int i = 0; i < member.size(); i++) {
       assertEquals(u.getMemberTrips().get(i), member.get(i));
     }
@@ -111,7 +111,7 @@ public class UserTest {
     pending.add("5");
     pending.add("6");
     User u = new User("id1", "name1", "email");
-    u.setUsers(hosting, member, pending);
+    u.setTrips(hosting, member, pending);
     for (int i = 0; i < pending.size(); i++) {
       assertEquals(u.getPendingTrips().get(i), pending.get(i));
     }
@@ -132,7 +132,7 @@ public class UserTest {
     pending.add("5");
     pending.add("6");
     User u = new User("id1", "name1", "email1");
-    u.setUsers(hosting, member, pending);
+    u.setTrips(hosting, member, pending);
     for (int i = 0; i < hosting.size(); i++) {
       assertEquals(u.getHostingTrips().get(i), hosting.get(i));
     }

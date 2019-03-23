@@ -38,7 +38,7 @@ public class User {
    * @param pendingTrips
    *          A list of ids of Trips that the User has requested to join
    */
-  public void setUsers(List<String> hostingTrips, List<String> memberTrips,
+  public void setTrips(List<String> hostingTrips, List<String> memberTrips,
       List<String> pendingTrips) {
     this.hostingTripIds = hostingTrips;
     this.memberTripIds = memberTrips;
