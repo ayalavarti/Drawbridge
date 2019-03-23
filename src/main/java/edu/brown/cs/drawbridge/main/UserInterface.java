@@ -2,11 +2,13 @@ package edu.brown.cs.drawbridge.main;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
+import edu.brown.cs.drawbridge.database.DatabaseQuery;
 import edu.brown.cs.drawbridge.models.Trip;
 import freemarker.template.Configuration;
 import spark.ModelAndView;
@@ -23,8 +25,9 @@ import spark.template.freemarker.FreeMarkerEngine;
  * @author Arvind Yalavarti
  *
  */
-public abstract class UserInterface {
+public class UserInterface {
   private static final Gson GSON = new Gson();
+  private static DatabaseQuery dbQuery;
 
   private static FreeMarkerEngine createEngine() {
     Configuration config = new Configuration();
@@ -38,6 +41,20 @@ public abstract class UserInterface {
       System.exit(1);
     }
     return new FreeMarkerEngine(config);
+  }
+
+  /**
+   * Method to set the database to use when querying.
+   * @param dbName The name of the database.
+   * @return true when the set is successful; false when unsuccessful.
+   */
+  public static boolean setDB(String dbName) {
+    try {
+      dbQuery = new DatabaseQuery(dbName);
+      return true;
+    } catch (SQLException | ClassNotFoundException e) {
+      return false;
+    }
   }
 
   /**
