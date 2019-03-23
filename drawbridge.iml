@@ -38,5 +38,6 @@
     <orderEntry type="library" name="Maven: com.sparkjava:spark-template-freemarker:2.3" level="project" />
     <orderEntry type="library" name="Maven: org.freemarker:freemarker:2.3.19" level="project" />
     <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.16.1" level="project" />
+    <orderEntry type="library" name="Maven: org.postgresql:postgresql:42.2.5" level="project" />
   </component>
 </module>
