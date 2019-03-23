@@ -2,68 +2,73 @@ package edu.brown.cs.drawbridge.database;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.brown.cs.drawbridge.models.Trip;
+import edu.brown.cs.drawbridge.models.User;
+
 public abstract class DatabaseQuery {
 
   private Connection conn;
-  private static final User DUMMY_USER = new User("0", "Mary", "mary@gmail.com");
-  private static final Trip DUMMY_TRIP = new Trip(0, "Mary's Carpool",
-          1.0, 2.0, 3.0, 4.0, 500, 600, 7, 8.00, "555-867-5309", "uber", "");
+  private static final User DUMMY_USER = new User("0", "Mary",
+      "mary@gmail.com");
+  private static final Trip DUMMY_TRIP = Trip.TripBuilder.newTripBuilder()
+      .addIdentification(0, "Mary's Carpool").addLocations(1.0, 2.0, 3.0, 4.0)
+      .addTimes(500, 600).addDetails(7, 8.00, "555-867-5309", "Uber", "")
+      .build();
   private static final String CREATE_USERS_TABLE = "CREATE IF NOT EXISTS users ("
-          + "id TEXT NOT NULL PRIMARY KEY, "
-          + "name TEXT, "
-          + "email TEXT);";
+      + "id TEXT NOT NULL PRIMARY KEY, " + "name TEXT, " + "email TEXT);";
   private static final String CREATE_TRIPS_TABLE = "CREATE IF NOT EXISTS trips ("
-          + "id INTEGER NOT NULL IDENTITY PRIMARY KEY, "
-          + "name TEXT, "
-          + "start_latitude DOUBLE PRECISION, "
-          + "start_longitude DOUBLE PRECISION, "
-          + "end_latitude DOUBLE PRECISION, "
-          + "end_longitude DOUBLE PRECISION, "
-          + "departure BIGINT, "
-          + "eta BIGINT, "
-          + "max_people SMALLINT, "
-          + "total_cost REAL, "
-          + "host_phone TEXT, "
-          + "transportation TEXT, "
-          + "description TEXT);";
+      + "id INTEGER NOT NULL IDENTITY PRIMARY KEY, " + "name TEXT, "
+      + "start_latitude DOUBLE PRECISION, "
+      + "start_longitude DOUBLE PRECISION, " + "end_latitude DOUBLE PRECISION, "
+      + "end_longitude DOUBLE PRECISION, " + "departure BIGINT, "
+      + "eta BIGINT, " + "max_people SMALLINT, " + "total_cost REAL, "
+      + "host_phone TEXT, " + "transportation TEXT, " + "description TEXT);";
   private static final String CREATE_HOSTS_TABLE = "CREATE IF NOT EXISTS hosts ("
-          + "user_id TEXT REFERENCES users(id), "
-          + "trip_id INTEGER REFERENCES trips(id));";
+      + "user_id TEXT REFERENCES users(id), "
+      + "trip_id INTEGER REFERENCES trips(id));";
   private static final String CREATE_MEMBERS_TABLE = "CREATE IF NOT EXISTS members ("
-          + "user_id TEXT REFERENCES users(id), "
-          + "trip_id INTEGER REFERENCES trips(id));";
+      + "user_id TEXT REFERENCES users(id), "
+      + "trip_id INTEGER REFERENCES trips(id));";
   private static final String CREATE_REQUESTS_TABLE = "CREATE IF NOT EXISTS requests ("
-          + "user_id TEXT REFERENCES users(id), "
-          + "trip_id INTEGER REFERENCES trips(id));";
-  private static final List<String> SETUP_QUERIES = new ArrayList<>(Arrays.asList(
-          CREATE_USERS_TABLE, CREATE_TRIPS_TABLE, CREATE_HOSTS_TABLE,
+      + "user_id TEXT REFERENCES users(id), "
+      + "trip_id INTEGER REFERENCES trips(id));";
+  private static final List<String> SETUP_QUERIES = new ArrayList<>(
+      Arrays.asList(CREATE_USERS_TABLE, CREATE_TRIPS_TABLE, CREATE_HOSTS_TABLE,
           CREATE_MEMBERS_TABLE, CREATE_REQUESTS_TABLE));
 
   private static final String INSERT_USER = "INSERT INTO users VALUES (? ? ?);";
   private static final String INSERT_TRIP = "INSERT INTO trips(name, "
-          + "start_latitude, start_longitude, end_latitude, end_longitude, "
-          + "departure, eta, max_people, total_cost, host_phone, transportation, "
-          + "description) VALUES (? ? ? ? ? ? ? ? ? ? ? ?);";
+      + "start_latitude, start_longitude, end_latitude, end_longitude, "
+      + "departure, eta, max_people, total_cost, host_phone, transportation, "
+      + "description) VALUES (? ? ? ? ? ? ? ? ? ? ? ?);";
 
   private static final String REMOVE_TRIP_BY_ID = "DELETE FROM trips WHERE id = ?;";
   private static final String REMOVE_TRIPS_BY_TIME = "DELETE FROM trips WHERE departure < current_timestamp;";
-  private static final String INSERT_HOST = "INSERT INTO hosts"
+  private static final String INSERT_HOST = "INSERT INTO hosts";
 
   /**
    * A constructor based on the String name of the database.
    *
-   * @param db The name of the database.
-   * @throws ClassNotFoundException Errors involving the forName line.
-   * @throws SQLException Errors involving the sql update.
-   * @throws IOException Errors involving locating the database.
+   * @param db
+   *          The name of the database.
+   * @throws ClassNotFoundException
+   *           Errors involving the forName line.
+   * @throws SQLException
+   *           Errors involving the sql update.
+   * @throws IOException
+   *           Errors involving locating the database.
    */
   public DatabaseQuery(String db)
-          throws ClassNotFoundException, SQLException, IOException {
+      throws ClassNotFoundException, SQLException, IOException {
     File temp = new File(db);
     if (!temp.exists()) {
       throw new IOException();
@@ -85,7 +90,7 @@ public abstract class DatabaseQuery {
    * Creates the necessary tables for the database.
    */
   public void setUp() {
-    //make tables
+    // make tables
     for (String query : SETUP_QUERIES) {
       try (PreparedStatement prep = conn.prepareStatement(query)) {
         prep.executeUpdate();
@@ -97,79 +102,87 @@ public abstract class DatabaseQuery {
 
   /**
    * Finds the id of the user hosting the specified trip.
-   * @param tripId The int id of the trip.
+   *
+   * @param tripId
+   *          The int id of the trip.
    * @return The String id of the host.
    */
   public String getHostOnTrip(int tripId) {
-//    String query = "";
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        if (rs.next()) {
-//          return rs.getString(1);
-//        }
-//      }
-//    }
+    // String query = "";
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // if (rs.next()) {
+    // return rs.getString(1);
+    // }
+    // }
+    // }
     return "0";
   }
 
   /**
    * Finds the ids of all the users that are confirmed members of the specified
    * trip.
-   * @param tripId The int id of the trip.
+   *
+   * @param tripId
+   *          The int id of the trip.
    * @return The List of String ids of the trip's members.
    */
   public List<String> getMembersOnTrip(int tripId) {
     List<String> results = new ArrayList<>();
-//    String query = "";
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        while (rs.next()) {
-//          results.add(rs.getString(1);
-//        }
-//      }
-//    }
+    // String query = "";
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // while (rs.next()) {
+    // results.add(rs.getString(1);
+    // }
+    // }
+    // }
     results.add("0");
     return results;
   }
 
   /**
    * Finds the ids of all the users requesting to join the specified trip.
-   * @param tripId The int id of the trip.
+   *
+   * @param tripId
+   *          The int id of the trip.
    * @return The List of String ids of all requesting users for that trip.
    */
   public List<String> getRequestsOnTrip(int tripId) {
     List<String> results = new ArrayList<>();
-//    String query = "";
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        while (rs.next()) {
-//          results.add(rs.getString(1);
-//        }
-//      }
-//    }
+    // String query = "";
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // while (rs.next()) {
+    // results.add(rs.getString(1);
+    // }
+    // }
+    // }
     results.add("0");
     return results;
   }
 
   /**
    * Finds the ids of all the trips that the specified user is hosting.
-   * @param userId The String id of the user.
+   *
+   * @param userId
+   *          The String id of the user.
    * @return The List of Integer ids of all trips hosted by the user.
    */
   public List<Integer> getHostTripsWithUser(String userId) {
     List<Integer> results = new ArrayList<>();
-//    String query = "";
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setString(1, userId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        while (rs.next()) {
-//          results.add(rs.getInt(1);
-//        }
-//      }
-//    }
+    // String query = "";
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setString(1, userId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // while (rs.next()) {
+    // results.add(rs.getInt(1);
+    // }
+    // }
+    // }
     results.add(new Integer(0));
     return results;
   }
@@ -177,20 +190,22 @@ public abstract class DatabaseQuery {
   /**
    * Finds the ids of all the trips that the specified user is a confirmed
    * member of.
-   * @param userId The String id of the user.
+   *
+   * @param userId
+   *          The String id of the user.
    * @return The List of Integer ids of all trips that the user is a member of.
    */
   public List<Integer> getMemberTripsWithUser(String userId) {
     List<Integer> results = new ArrayList<>();
-//    String query = "";
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setString(1, userId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        while (rs.next()) {
-//          results.add(rs.getInt(1);
-//        }
-//      }
-//    }
+    // String query = "";
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setString(1, userId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // while (rs.next()) {
+    // results.add(rs.getInt(1);
+    // }
+    // }
+    // }
     results.add(new Integer(0));
     return results;
   }
@@ -198,70 +213,79 @@ public abstract class DatabaseQuery {
   /**
    * Finds the ids of all the trips that the specified user is requesting to
    * join.
-   * @param userId The String id of the user.
-   * @return The List of Integer ids of all trips that the user is requesting
-   * to join.
+   *
+   * @param userId
+   *          The String id of the user.
+   * @return The List of Integer ids of all trips that the user is requesting to
+   *         join.
    */
   public List<Integer> getRequestTripsWithUser(String userId) {
     List<Integer> results = new ArrayList<>();
-//    String query = "";
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setString(1, userId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        while (rs.next()) {
-//          results.add(rs.getInt(1);
-//        }
-//      }
-//    }
+    // String query = "";
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setString(1, userId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // while (rs.next()) {
+    // results.add(rs.getInt(1);
+    // }
+    // }
+    // }
     results.add(new Integer(0));
     return results;
   }
 
   /**
    * Finds the information for a specific User by id.
-   * @param userId The String id of the user.
+   *
+   * @param userId
+   *          The String id of the user.
    * @return The User object with the specified id.
    */
   public User getUserById(String userId) {
-//    String query = "";
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setString(1, userId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        while (rs.next()) {
-//          return new User(userId, rs.getString(1), rs.getString(2),
-//                        getHostTripsWithUser(userId), getMemberTripsWithUser(userId),
-//                        getRequestTripsWithUser(userId));
-//        }
-//      }
-//    }
+    // String query = "";
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setString(1, userId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // while (rs.next()) {
+    // return new User(userId, rs.getString(1), rs.getString(2),
+    // getHostTripsWithUser(userId), getMemberTripsWithUser(userId),
+    // getRequestTripsWithUser(userId));
+    // }
+    // }
+    // }
     return DUMMY_USER;
   }
 
   /**
    * Finds the information for a specific Trip by id.
-   * @param tripId The int id of the trip.
+   *
+   * @param tripId
+   *          The int id of the trip.
    * @return The Trip object with the specified id.
    */
   public Trip getTripById(int tripId) {
-//    String query = "";
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      try (ResultSet rs = prep.executeQuery()) {
-//        while (rs.next()) {
-//          return new Trip(tripId, rs.getString(1), rs.getDouble(2), rs.getDouble(3),
-//                        rs.getDouble(4), rs.getDouble(5), rs.getInt(6), rs.getInt(7),
-//                        rs.getInt(8), rs.getDouble(9), rs.getString(10), rs.getString(11),
-//                        rs.getString(12), getHostOnTrip(tripId), getMembersOnTrip(tripId),
-//                        getRequestsOnTrip(tripId));
-//        }
-//      }
-//    }
+    // String query = "";
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // try (ResultSet rs = prep.executeQuery()) {
+    // while (rs.next()) {
+    // return new Trip(tripId, rs.getString(1), rs.getDouble(2),
+    // rs.getDouble(3),
+    // rs.getDouble(4), rs.getDouble(5), rs.getInt(6), rs.getInt(7),
+    // rs.getInt(8), rs.getDouble(9), rs.getString(10), rs.getString(11),
+    // rs.getString(12), getHostOnTrip(tripId), getMembersOnTrip(tripId),
+    // getRequestsOnTrip(tripId));
+    // }
+    // }
+    // }
     return DUMMY_TRIP;
   }
 
   /**
    * Adds a new User to the database.
-   * @param user The User object to add.
+   *
+   * @param user
+   *          The User object to add.
    * @return True if the user was successfully added. False otherwise.
    */
   public boolean addUser(User user) {
@@ -276,15 +300,18 @@ public abstract class DatabaseQuery {
     } catch (SQLException e) {
       return false;
     }
-    return true;
+    // return true;
   }
 
   /**
    * Adds a new Trip to the databse.
-   * @param trip The Trip object to add.
-   * @param hostId The String id of the user hosting the trip.
+   *
+   * @param trip
+   *          The Trip object to add.
+   * @param hostId
+   *          The String id of the user hosting the trip.
    * @return True if the trip and host relation were successfully added. False
-   * otherwise.
+   *         otherwise.
    */
   public boolean createTrip(Trip trip, String hostId) {
     String query = INSERT_TRIP;
@@ -296,7 +323,7 @@ public abstract class DatabaseQuery {
       prep.setDouble(5, trip.getEndingLatitude());
       prep.setInt(6, trip.getDepartureTime());
       prep.setInt(7, trip.getEta());
-      prep.setInt(8, trip.getMaxMembers());
+      prep.setInt(8, trip.getMaxUsers());
       prep.setDouble(9, trip.getCost());
       prep.setString(10, trip.getPhoneNumber());
       prep.setString(11, trip.getMethodOfTransportation());
@@ -306,22 +333,24 @@ public abstract class DatabaseQuery {
     } catch (SQLException e) {
       return false;
     }
-//    query = ""; //insert into host
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setString(1, hostId);
-//      prep.setInt(/*SELECT last_value FROM serial_id_seq;*/);
-//      prep.addBatch();
-//      prep.executeUpdate();
-//    } catch (SQLException e) {
-//      deleteTripManually(/*SELECT last_value FROM serial_id_seq;*/);
-//      return false;
-//    }
+    // query = ""; //insert into host
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setString(1, hostId);
+    // prep.setInt(/*SELECT last_value FROM serial_id_seq;*/);
+    // prep.addBatch();
+    // prep.executeUpdate();
+    // } catch (SQLException e) {
+    // deleteTripManually(/*SELECT last_value FROM serial_id_seq;*/);
+    // return false;
+    // }
     return true;
   }
 
   /**
    * Deletes the trip with the specified id from the database.
-   * @param tripId The int id of the trip.
+   *
+   * @param tripId
+   *          The int id of the trip.
    * @return True if the trip was deleted successfully. False otherwise.
    */
   public boolean deleteTripManually(int tripId) {
@@ -333,127 +362,146 @@ public abstract class DatabaseQuery {
     } catch (SQLException e) {
       return false;
     }
-    return true;
+    // return true;
   }
 
   /**
    * Deletes all trips that have already departed from the database.
+   *
    * @return True if all expired trips were deleted successfully. False
-   * otherwise.
+   *         otherwise.
    */
   public boolean deleteExpiredTrips() {
-//    String query = "";
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.executeUpdate();
-//      return true;
-//    } catch (SQLException e) {
-//      return false;
-//    }
+    // String query = "";
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.executeUpdate();
+    // return true;
+    // } catch (SQLException e) {
+    // return false;
+    // }
     return true;
   }
 
   /**
    * Finds all of the trips that match the search criteria.
-   * @param trip The Trip information being matched.
-   * @param walkRadius The buffer for matching the requested start and end
-   *                   locations.
-   * @param timeBuffer The buffer for matching the requested departure time.
+   *
+   * @param trip
+   *          The Trip information being matched.
+   * @param walkRadius
+   *          The buffer for matching the requested start and end locations.
+   * @param timeBuffer
+   *          The buffer for matching the requested departure time.
    * @return A List of all the relevant trips in the database.
    */
-  public List<Trip> searchRelevantTrips(Trip trip, double walkRadius, int timeBuffer) {
+  public List<Trip> searchRelevantTrips(Trip trip, double walkRadius,
+      int timeBuffer) {
     List<Trip> results = new ArrayList<>();
-//    String query = "";
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//
-//    }
+    // String query = "";
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    //
+    // }
     results.add(DUMMY_TRIP);
     return results;
   }
 
   /**
    * Finds all of the trips that are graphically connected to the input trip.
-   * That is, trips that depart near the given destination and that depart
-   * after the given departure time within a specific time frame.
-   * @param trip The previous Trip.
-   * @param walkRadius The buffer for finding reasonably distanced trips.
-   * @param timeBuffer The buffer for finding reasonably timed trips.
+   * That is, trips that depart near the given destination and that depart after
+   * the given departure time within a specific time frame.
+   *
+   * @param trip
+   *          The previous Trip.
+   * @param walkRadius
+   *          The buffer for finding reasonably distanced trips.
+   * @param timeBuffer
+   *          The buffer for finding reasonably timed trips.
    * @return A List of all the trips connected to the given trip.
    */
-  public List<Trip> getConnectedTrips(Trip trip, double walkRadius, int timeBuffer) {
+  public List<Trip> getConnectedTrips(Trip trip, double walkRadius,
+      int timeBuffer) {
     List<Trip> results = new ArrayList<>();
-//    String query = "";
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//
-//    }
+    // String query = "";
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    //
+    // }
     results.add(DUMMY_TRIP);
     return results;
   }
 
   /**
    * Inserts a request relation into the database.
-   * @param tripId The int id of the trip being requested.
-   * @param userId The String id of the user requesting to join the trip.
+   *
+   * @param tripId
+   *          The int id of the trip being requested.
+   * @param userId
+   *          The String id of the user requesting to join the trip.
    * @return True if the request was processed successfully. False otherwise.
    */
   public boolean request(int tripId, String userId) {
-//    String query = "";
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      prep.setString(2,userId);
-//      prep.addBatch();
-//      prep.executeUpdate();
-//      return true;
-//    } catch (SQLException e) {
-//      return false;
-//    }
+    // String query = "";
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // prep.setString(2,userId);
+    // prep.addBatch();
+    // prep.executeUpdate();
+    // return true;
+    // } catch (SQLException e) {
+    // return false;
+    // }
     return true;
   }
 
   /**
    * Approves a request by inserting a member relation while removing its
    * corresponding request relation.
-   * @param tripId The int id of the trip being requested.
-   * @param userId The String id of the user requesting to join the trip.
+   *
+   * @param tripId
+   *          The int id of the trip being requested.
+   * @param userId
+   *          The String id of the user requesting to join the trip.
    * @return True if the approval was processed successfully. False otherwise.
    */
   public boolean approve(int tripId, String userId) {
-//    String query = ""; //insert into members
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      prep.setString(2,userId);
-//      prep.addBatch();
-//      prep.executeUpdate();
-//    } catch (SQLException e) {
-//      return false;
-//    }
-//    query = ""; //delete from requests
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      prep.setString(2,userId);
-//      prep.executeUpdate();
-//      return true;
-//    } catch (SQLException e) {
-//      return false;
-//    }
+    // String query = ""; //insert into members
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // prep.setString(2,userId);
+    // prep.addBatch();
+    // prep.executeUpdate();
+    // } catch (SQLException e) {
+    // return false;
+    // }
+    // query = ""; //delete from requests
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // prep.setString(2,userId);
+    // prep.executeUpdate();
+    // return true;
+    // } catch (SQLException e) {
+    // return false;
+    // }
     return true;
   }
 
   /**
    * Rejects a request by removing its relation from the database.
-   * @param tripId The int id of the trip being requested.
-   * @param userId The String id of the user requesting to join the trip.
+   *
+   * @param tripId
+   *          The int id of the trip being requested.
+   * @param userId
+   *          The String id of the user requesting to join the trip.
    * @return True if the rejection was processed successfully. False otherwise.
    */
   public boolean reject(int tripId, String userId) {
-//    query = ""; //delete from requests
-//    try (PreparedStatement prep = conn.prepareStatement(query)) {
-//      prep.setInt(1, tripId);
-//      prep.setString(2,userId);
-//      prep.executeUpdate();
-//      return true;
-//    } catch (SQLException e) {
-//      return false;
-//    }
+    // query = ""; //delete from requests
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // prep.setString(2,userId);
+    // prep.executeUpdate();
+    // return true;
+    // } catch (SQLException e) {
+    // return false;
+    // }
     return true;
   }
 }

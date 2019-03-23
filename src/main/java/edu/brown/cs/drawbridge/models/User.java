@@ -9,6 +9,7 @@ public class User {
 
   private String id;
   private String name;
+  private String email;
   private List<String> hostingTripIds, memberTripIds, pendingTripIds;
 
   /**
@@ -18,20 +19,30 @@ public class User {
    *          The User's id
    * @param name
    *          The name of the User
-   * @param hostingTripIds
-   *          A List of ids of Trips that the User is hosting
-   * @param memberTripIds
-   *          A list of ids of Trips that the User is a member of
-   * @param pendingTripIds
-   *          A list of ids of Trips that the User has requested to join
+   * @param email
+   *          The User's email address
    */
-  public User(String id, String name, List<String> hostingTripIds,
-      List<String> memberTripIds, List<String> pendingTripIds) {
+  public User(String id, String name, String email) {
     this.id = id;
     this.name = name;
-    this.hostingTripIds = hostingTripIds;
-    this.memberTripIds = memberTripIds;
-    this.pendingTripIds = pendingTripIds;
+    this.email = email;
+  }
+
+  /**
+   * Set the TripIds of the User.
+   *
+   * @param hostingTrips
+   *          A List of ids of Trips that the User is hosting
+   * @param memberTrips
+   *          A list of ids of Trips that the User is a member of
+   * @param pendingTrips
+   *          A list of ids of Trips that the User has requested to join
+   */
+  public void setUsers(List<String> hostingTrips, List<String> memberTrips,
+      List<String> pendingTrips) {
+    this.hostingTripIds = hostingTrips;
+    this.memberTripIds = memberTrips;
+    this.pendingTripIds = pendingTrips;
   }
 
   /**
@@ -50,6 +61,15 @@ public class User {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Get the email of the User.
+   *
+   * @return The User's email
+   */
+  public String getEmail() {
+    return email;
   }
 
   /**

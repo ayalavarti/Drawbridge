@@ -18,8 +18,7 @@ public class UserTest {
    */
   @Test
   public void testConstructor() {
-    assertNotNull(new User("id", "name", new LinkedList<String>(),
-        new LinkedList<String>(), new LinkedList<String>()));
+    assertNotNull(new User("id", "name", "email"));
   }
 
   /**
@@ -27,14 +26,8 @@ public class UserTest {
    */
   @Test
   public void testGetId() {
-    List<String> hosting = new LinkedList<String>();
-    hosting.add("1");
-    List<String> member = new LinkedList<String>();
-    member.add("2");
-    List<String> pending = new LinkedList<String>();
-    pending.add("3");
-    User u1 = new User("id1", "name", hosting, member, pending);
-    User u2 = new User("id2", "name", hosting, member, pending);
+    User u1 = new User("id1", "name", "email");
+    User u2 = new User("id2", "name", "email");
     assertEquals(u1.getId(), "id1");
     assertEquals(u2.getId(), "id2");
   }
@@ -44,16 +37,21 @@ public class UserTest {
    */
   @Test
   public void testGetName() {
-    List<String> hosting = new LinkedList<String>();
-    hosting.add("1");
-    List<String> member = new LinkedList<String>();
-    member.add("2");
-    List<String> pending = new LinkedList<String>();
-    pending.add("3");
-    User u1 = new User("id1", "name1", hosting, member, pending);
-    User u2 = new User("id2", "name2", hosting, member, pending);
+    User u1 = new User("id1", "name1", "email");
+    User u2 = new User("id2", "name2", "email");
     assertEquals(u1.getName(), "name1");
     assertEquals(u2.getName(), "name2");
+  }
+
+  /**
+   * Test getEmail method.
+   */
+  @Test
+  public void testGetEmail() {
+    User u1 = new User("id1", "name1", "email1");
+    User u2 = new User("id2", "name2", "email2");
+    assertEquals(u1.getEmail(), "email1");
+    assertEquals(u2.getEmail(), "email2");
   }
 
   /**
@@ -70,7 +68,8 @@ public class UserTest {
     List<String> pending = new LinkedList<String>();
     pending.add("5");
     pending.add("6");
-    User u = new User("id1", "name1", hosting, member, pending);
+    User u = new User("id1", "name1", "email");
+    u.setUsers(hosting, member, pending);
     for (int i = 0; i < hosting.size(); i++) {
       assertEquals(u.getHostingTrips().get(i), hosting.get(i));
     }
@@ -90,7 +89,8 @@ public class UserTest {
     List<String> pending = new LinkedList<String>();
     pending.add("5");
     pending.add("6");
-    User u = new User("id1", "name1", hosting, member, pending);
+    User u = new User("id1", "name1", "email");
+    u.setUsers(hosting, member, pending);
     for (int i = 0; i < member.size(); i++) {
       assertEquals(u.getMemberTrips().get(i), member.get(i));
     }
@@ -110,7 +110,35 @@ public class UserTest {
     List<String> pending = new LinkedList<String>();
     pending.add("5");
     pending.add("6");
-    User u = new User("id1", "name1", hosting, member, pending);
+    User u = new User("id1", "name1", "email");
+    u.setUsers(hosting, member, pending);
+    for (int i = 0; i < pending.size(); i++) {
+      assertEquals(u.getPendingTrips().get(i), pending.get(i));
+    }
+  }
+
+  /**
+   * Test setUsers method.
+   */
+  @Test
+  public void testSetUsers() {
+    List<String> hosting = new LinkedList<String>();
+    hosting.add("1");
+    hosting.add("2");
+    List<String> member = new LinkedList<String>();
+    member.add("3");
+    member.add("4");
+    List<String> pending = new LinkedList<String>();
+    pending.add("5");
+    pending.add("6");
+    User u = new User("id1", "name1", "email1");
+    u.setUsers(hosting, member, pending);
+    for (int i = 0; i < hosting.size(); i++) {
+      assertEquals(u.getHostingTrips().get(i), hosting.get(i));
+    }
+    for (int i = 0; i < member.size(); i++) {
+      assertEquals(u.getMemberTrips().get(i), member.get(i));
+    }
     for (int i = 0; i < pending.size(); i++) {
       assertEquals(u.getPendingTrips().get(i), pending.get(i));
     }
