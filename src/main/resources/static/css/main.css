@@ -28,7 +28,7 @@ input[type="submit"],
 .header {
 	position: absolute;
 	top: 2%;
-	right: 5%;
+	right: 8%;
 	z-index: 5;
 }
 
@@ -153,9 +153,17 @@ input[type="submit"],
 
 @media screen and (max-width: 991px) {}
 
-@media screen and (max-width: 767px) {}
+@media screen and (max-width: 767px) {
+	.header {
+		right: 10%;
+	}
+}
 
-@media screen and (max-width: 575px) {}
+@media screen and (max-width: 575px) {
+	.header {
+		right: 12%;
+	}
+}
 
 @media screen and (max-width: 479px) {}
 

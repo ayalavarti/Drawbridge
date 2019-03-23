@@ -41,33 +41,23 @@
 
 .icon {
 	font-size: 40px;
-	margin: 5px;
+	margin: 15px;
 	color: #1e3458;
-	cursor: pointer;
 }
 
 .icon-label {
+	margin-right: 10px;
 	font-size: 12px;
 	color: #1e3458;
 }
 
-.icon-switch {
+.icon-map-settings {
 	color: #1e3458;
-	position: absolute;
-	right: 5%;
-	cursor: pointer;
 }
 
-.icon-current-location {
-	color: #1e3458;
-	cursor: pointer;
-}
-
-.current-location {
+.map-settings {
 	cursor: pointer;
 	position: absolute;
-	bottom: 10%;
-	right: 5%;
 	z-index: 5;
 	background: #fff;
 	width: 40px;
@@ -79,10 +69,91 @@
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.location-setting {
+	bottom: 70px;
+	right: 10px;
+}
+
+.compass-setting {
+	bottom: 120px;
+	right: 10px;
+}
+
+.trip-setting {
+	bottom: 170px;
+	right: 10px;
+}
+
+
 .search-inputs {
 	text-align: left;
 	margin-left: 30px;
 }
+
+.marker {
+	background-size: cover;
+	cursor: pointer;
+}
+
+.start-input {
+	background-image: url('../images/marker-start.png');
+	width: 30px;
+	height: 30px;
+}
+
+.end-input {
+	background-image: url('../images/marker-end.png');
+	width: 34px;
+	height: 51px;
+}
+
+
+.pulse {
+	border-radius: 50%;
+	animation: pulse 2s infinite;
+}
+
+.pulse:hover {
+	animation: none;
+}
+
+@-webkit-keyframes pulse {
+	0% {
+		-webkit-box-shadow: 0 0 0 0 rgba(44, 108, 204, 0.4);
+	}
+
+	70% {
+		-webkit-box-shadow: 0 0 0 20px rgba(44, 113, 204, 0);
+	}
+
+	100% {
+		-webkit-box-shadow: 0 0 0 0 rgba(44, 113, 204, 0);
+	}
+}
+
+@keyframes pulse {
+	0% {
+		-moz-box-shadow: 0 0 0 0 rgba(44, 108, 204, 0.4);
+		box-shadow: 0 0 0 0 rgba(44, 108, 204, 0.4);
+	}
+
+	70% {
+		-moz-box-shadow: 0 0 0 20px rgba(44, 113, 204, 0);
+		box-shadow: 0 0 0 20px rgba(44, 113, 204, 0);
+	}
+
+	100% {
+		-moz-box-shadow: 0 0 0 0 rgba(44, 113, 204, 0);
+		box-shadow: 0 0 0 0 rgba(44, 113, 204, 0);
+	}
+}
+
+.end-input {
+	background-image: url('../images/marker-end.png');
+	width: 34px;
+	height: 51px;
+}
+
 
 @media screen and (max-width: 767px) {
 	.search-menu-wrapper {
@@ -94,13 +165,66 @@
 		margin-right: auto;
 	}
 
-	.current-location {
-		bottom: 45%;
+	.location-setting {
+		bottom: 42%;
+		right: 10px;
+	}
+
+	.compass-setting {
+		bottom: 42%;
+		right: 70px;
+	}
+
+	.trip-setting {
+		bottom: 42%;
+		right: 130px;
 	}
 
 	.search-menu {
 		width: 100vw;
+		overflow: scroll;
+		max-height: 50vh;
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
+	}
+
+	#map {
+		height: 70%;
+	}
+}
+
+@media screen and (min-width: 767px) and (max-height: 600px) {
+	.search-menu-wrapper {
+		bottom: 0;
+		top: auto;
+		left: auto;
+		right: auto;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.location-setting {
+		bottom: 10px;
+	}
+
+	.compass-setting {
+		bottom: 60px;
+	}
+
+	.trip-setting {
+		bottom: 110px;
+	}
+
+	.search-menu {
+		height: 100vh;
+		overflow: scroll;
+		max-width: 50vw;
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+
+	#map {
+		right: 0;
+		width: 80%;
 	}
 }
