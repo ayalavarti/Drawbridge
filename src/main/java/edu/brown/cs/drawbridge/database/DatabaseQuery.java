@@ -91,11 +91,6 @@ public class DatabaseQuery {
     Class.forName("org.postgresql.Driver");
     String urlToDB = "jdbc:postgresql:" + db;
     conn = DriverManager.getConnection(urlToDB, username, password);
-    // these two lines tell the database to enforce foreign
-    // keys during operations, and should be present
-    try (Statement stat = conn.createStatement()) {
-      stat.executeUpdate("PRAGMA foreign_keys = ON;");
-    }
   }
 
   /**
