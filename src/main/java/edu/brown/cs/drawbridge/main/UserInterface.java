@@ -119,12 +119,16 @@ public class UserInterface {
         tid = Integer.parseInt(request.params(":tid"));
       } catch (NumberFormatException e) {
         response.redirect("/"); // 404 error
+        return null;
       }
+
+      Trip trip = dbQuery.getTripById(tid);
 
       // Return empty data to GUI when / route is called
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("title", "TRIP")
-          .put("favicon", "images/favicon.png").build();
+          .put("title", trip.getName())
+          .put("favicon", "images/favicon.png")
+          .put("trip", trip).build();
       return new ModelAndView(variables, "detail.ftl");
     }
   }
