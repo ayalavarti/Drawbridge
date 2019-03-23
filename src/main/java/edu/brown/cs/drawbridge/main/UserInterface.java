@@ -22,8 +22,7 @@ import spark.template.freemarker.FreeMarkerEngine;
  * An abstract class for the User Interface of the Java project. Contains
  * Handler objects for each end-point defined in the setEnpoints() method.
  *
- * @author Arvind Yalavarti
- *
+ * @author mlavrent
  */
 public class UserInterface {
   private static final Gson GSON = new Gson();
@@ -50,7 +49,9 @@ public class UserInterface {
    */
   public static boolean setDB(String dbName) {
     try {
-      dbQuery = new DatabaseQuery(dbName);
+      String dbUser = System.getenv("DB_USER");
+      String dbPass = System.getenv("DB_PASS");
+      dbQuery = new DatabaseQuery(dbName, dbUser, dbPass);
       return true;
     } catch (SQLException | ClassNotFoundException e) {
       return false;
@@ -111,6 +112,9 @@ public class UserInterface {
   }
 
   //--------------------------- Detail -----------------------------------
+  /**
+   * Handler to get information about a specific trip and display it on a page.
+   */
   private static class DetailGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
