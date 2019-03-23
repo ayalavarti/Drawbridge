@@ -68,7 +68,12 @@ public final class Main {
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.exception(Exception.class, new ExceptionPrinter());
 
-    UserInterface.setEndpoints();
+    // If we can't connect to the db, give up and stop the server
+    if (!UserInterface.setDB("carpools")) {
+      return;
+    } else {
+      UserInterface.setEndpoints();
+    }
   }
 
   /**
