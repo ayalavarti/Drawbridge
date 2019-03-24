@@ -328,3 +328,10 @@
 		width: 80%;
 	}
 }
+
+@media screen and (min-width: 767px) and (max-height: 370px) {
+	.route-info {
+		bottom: 10px;
+		left: 390px;
+	}
+}
