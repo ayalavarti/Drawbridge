@@ -410,13 +410,13 @@ public class Trip {
        *
        * @param hostId
        *          The id of the host
-       * @param memberids
+       * @param memberIds
        *          The ids of members in the Trip
        * @param pendingIds
        *          The ids of Users who have requested to join the Trip
        * @return A new Trip
        */
-      Trip buildWithUsers(String hostId, List<String> memberids,
+      Trip buildWithUsers(String hostId, List<String> memberIds,
           List<String> pendingIds);
     }
 
