@@ -70,9 +70,9 @@ public class UserInterface {
     Spark.get("/results", new ListGetHandler(), freeMarker);
     Spark.post("/results", new ListPostHandler(), freeMarker);
 
-    Spark.get("/trip/<:tid>", new DetailGetHandler(), freeMarker);
+    Spark.get("/trip/:tid", new DetailGetHandler(), freeMarker);
 
-    Spark.get("/my-trips/<:uid>", new UserGetHandler(), freeMarker);
+    Spark.get("/my-trips/:uid", new UserGetHandler(), freeMarker);
 
     Spark.get("/new", new CreateGetHandler(), freeMarker);
     Spark.post("/new", new CreatePostHandler(), freeMarker);
@@ -122,7 +122,6 @@ public class UserInterface {
       try {
         tid = Integer.parseInt(request.params(":tid"));
       } catch (NumberFormatException e) {
-        response.redirect("/"); // 404 error
         return null;
       }
 
