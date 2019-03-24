@@ -5,7 +5,6 @@ let userProfile;
  * When the DOM loads, check for the logged in cookie.
  */
 $(document).ready(function () {
-
 	if (navigator.cookieEnabled) {
 		if (getCookie("loggedIn") != "true") {
 			$("#sign-in").css({
@@ -20,11 +19,11 @@ $(document).ready(function () {
 });
 
 function getCookie(cname) {
-	var name = cname + "=";
-	var decodedCookie = decodeURIComponent(document.cookie);
-	var ca = decodedCookie.split(';');
-	for (var i = 0; i < ca.length; i++) {
-		var c = ca[i];
+	let name = cname + "=";
+	let decodedCookie = decodeURIComponent(document.cookie);
+	let ca = decodedCookie.split(';');
+	for (let i = 0; i < ca.length; i++) {
+		let c = ca[i];
 		while (c.charAt(0) == ' ') {
 			c = c.substring(1);
 		}
@@ -33,6 +32,10 @@ function getCookie(cname) {
 		}
 	}
 	return "";
+}
+
+function toHome() {
+	window.open("/", "_self");
 }
 
 /**
@@ -95,5 +98,14 @@ function signOut() {
 		$("#sign-in").css({
 			visibility: "visible"
 		});
+	});
+}
+
+function showHomeInfo() {
+	$("#home-btn").css({
+		visibility: "visible"
+	});
+	$("#info-btn").css({
+		visibility: "visible"
 	});
 }

@@ -35,11 +35,18 @@
           </div>
         </div>
       </div>
-
       <div style="visibility: hidden;" id="sign-in" class="profile-btn">
         <div class="g-signin2" data-onsuccess="onSignIn" data-onfailure="onFailure" data-longtitle="true"></div>
       </div>
     </div>
+    <div style="visibility: hidden; top: 2%;" id="home-btn" class="home-btn" onclick="toHome();">
+      <img style="height: 15px; width: auto" src = "/images/home-icon.png"/>
+    </div>
+
+    <div style="visibility: hidden; bottom: 2%;" id="info-btn" class="info-btn" onclick="toInfo();">
+      <img style="height: 15px; width: auto" src = "/images/info-icon.png" />
+    </div>
+
 
     <div class = "body">
       ${content}
