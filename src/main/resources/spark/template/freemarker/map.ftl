@@ -31,15 +31,15 @@
 </div>
 
 <div id="pre-load" style="visibility: hidden;" class="map-settings compass-setting" onclick="alignMap()">
-    <i class="fas fa-compass icon-map-settings"></i>
+    <img style="height: 15px; width: auto" src = "/images/compass-icon.png" />
 </div>
 
 <div id="pre-load" style="visibility: hidden;" class="map-settings location-setting" onclick="centerMap()">
-    <i class="fas fa-map-pin icon-map-settings"></i>
+    <img style="height: 15px; width: auto" src = "/images/pin-icon.png" />
 </div>
 
 <div id="pre-load" style="visibility: hidden;" class="map-settings trip-setting" onclick="alignTrip()">
-    <i class="fas fa-car icon-map-settings"></i>
+    <img id="car-icon" style="height: 15px; width: auto" src = "/images/car-disabled.png" />
 </div>
 
 <div id="route-info" style="visibility: hidden; flex-direction: column; padding: 5px;" class="route-info">

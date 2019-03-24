@@ -135,7 +135,7 @@
 .end-input {
 	background-image: url("../images/marker-end.png");
 	width: 34px;
-	height: 51px;
+	height: 45px;
 }
 
 .popup-title {
@@ -199,12 +199,6 @@
 		-moz-box-shadow: 0 0 0 0 rgba(44, 113, 204, 0);
 		box-shadow: 0 0 0 0 rgba(44, 113, 204, 0);
 	}
-}
-
-.end-input {
-	background-image: url("../images/marker-end.png");
-	width: 34px;
-	height: 51px;
 }
 
 @media screen and (max-width: 767px) {

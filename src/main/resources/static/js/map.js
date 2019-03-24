@@ -298,7 +298,7 @@ function addRoute(coords) {
                 "line-cap": "round"
             },
             paint: {
-                "line-color": "#4993e7",
+                "line-color": "#47A5FF",
                 "line-width": 7,
                 "line-opacity": 0.7
             }
@@ -326,6 +326,7 @@ function disableTrip() {
         background: "#a5a5a5",
         cursor: "auto"
     });
+    $("#car-icon").attr("src", "/images/car-disabled.png");
     $("#route-info").css({
         visibility: "hidden"
     });
@@ -339,6 +340,7 @@ function enableTrip() {
         background: "#fff",
         cursor: "pointer"
     });
+    $("#car-icon").attr("src", "/images/car-icon.png");
     $("#route-info").css({
         visibility: "visible"
     });
@@ -409,6 +411,9 @@ function alignTrip() {
             top = 150;
         }
 
+        /**
+         * Checks if in half screen vertical mode and adjust map view.
+         */
         if ($(window).height() < 600 && $(window).width() >= 767) {
             right = 50;
             bottom = 50;
