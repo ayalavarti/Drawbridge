@@ -17,7 +17,7 @@
 
 .search-menu {
 	width: 375px;
-	height: 260px;
+	height: 280px;
 	background: #f5f5f5;
 	border-radius: 15px;
 	border: 0;
@@ -53,7 +53,8 @@
 }
 
 .section-heading {
-	font-family: "Montserrat", sans-serif;
+	margin: 0;
+	font-family: "Nunito", sans-serif;
 	font-size: 18px;
 	padding-top: 20px;
 	font-weight: 500;
@@ -67,7 +68,7 @@
 }
 
 .icon-label {
-	margin-right: 10px;
+	margin: 10px 10px;
 	font-size: 12px;
 	color: #1e3458;
 }
@@ -97,6 +98,7 @@
 	height: 75px;
 	left: 50px;
 	bottom: 70px;
+	padding: 15px 0px;
 }
 
 .location-setting,
@@ -149,13 +151,12 @@
 }
 
 .popup-title {
-	font-size: 17px;
+	font-size: 18px;
 	font-weight: 500;
-	margin-bottom: 5px;
 }
 
 .popup-content {
-	font-size: 11px;
+	font-size: 13px;
 	font-weight: 400;
 }
 
@@ -164,7 +165,7 @@
 }
 
 .mapboxgl-popup-content {
-	font-family: "Montserrat", sans-serif;
+	font-family: "Nunito", sans-serif;
 	color: #1e3458;
 	border-radius: 10px;
 	text-align: center;
@@ -227,7 +228,7 @@
 	.trip-setting,
 	.team-setting,
 	.info-setting {
-		bottom: 280px;
+		bottom: 300px;
 	}
 
 	.route-info {
@@ -252,10 +253,6 @@
 
 	.team-setting {
 		right: 250px;
-	}
-
-	.section-heading {
-		padding-top: 0;
 	}
 
 	.search-menu {
@@ -333,23 +330,23 @@
 	}
 
 	.location-setting {
-		bottom: 280px;
+		bottom: 300px;
 	}
 
 	.compass-setting {
-		bottom: 330px;
+		bottom: 350px;
 	}
 
 	.trip-setting {
-		bottom: 380px;
+		bottom: 400px;
 	}
 
 	.info-setting {
-		bottom: 430px;
+		bottom: 450px;
 	}
 
 	.team-setting {
-		bottom: 480px;
+		bottom: 500px;
 	}
 
 }
@@ -369,7 +366,7 @@
 	}
 }
 
-@media screen and (max-width: 767px) and (max-height: 600px) {
+@media screen and (max-width: 767px) and (max-height: 645px) {
 
 	.location-setting,
 	.compass-setting,
@@ -378,12 +375,12 @@
 	}
 
 	.info-setting {
-		bottom: 280px;
+		bottom: 300px;
 		right: 10px;
 	}
 
 	.team-setting {
-		bottom: 330px;
+		bottom: 350px;
 		right: 10px;
 	}
 }

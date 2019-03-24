@@ -213,6 +213,7 @@ function parseAddress(raw) {
     if (raw.indexOf(",") > -1) {
         let title = raw.substr(0, raw.indexOf(","));
         return `<div class="popup-title">${title}</div>
+                <img src="/images/divider.png" style="height: 2px; width: auto;" />
                 <div class="popup-content">${raw.substr(raw.indexOf(",") + 1)}</div>`;
     } else {
         return `<div class="popup-title">${raw}</div>`;
@@ -350,8 +351,8 @@ function enableTrip() {
  * Sets the trip info test boxes to the appropriate distance and duration
  */
 function setTripInfo() {
-    $("#distance").text(`${route[0].toFixed(2)} km`);
-    $("#duration").text(`${route[1].toFixed(2)} minutes`);
+    $("#distance").text(`${((route[0]) * 0.621371).toFixed(2)} minutes`);
+    $("#duration").text(`${route[1].toFixed(0)} min`);
 }
 
 /**

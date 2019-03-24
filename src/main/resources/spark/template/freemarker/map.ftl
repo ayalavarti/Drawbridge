@@ -7,6 +7,7 @@
 <div id="pre-load" style="visibility: visible;" class="search-menu-wrapper">
     <div class="search-menu">
         <h2 class="section-heading">Search for a Carpool</h2>
+        <img src="/images/divider.png" style="height: 4px; width: auto;" />
         <form autocomplete="off" onsubmit="event.preventDefault(); handleSubmit()">
             <div class="search-inputs">
                 <div><i class="fas fa-dot-circle icon-label"></i>
@@ -18,10 +19,10 @@
                     <img id="loading-end-input" src ="/images/loading.gif" style="width: 20px; height: auto; visibility: hidden;"/>
                 </div>
                 <div>
-                    <i class="fas fa-clock icon-label"></i>
+                    <i class="fas fa-calendar icon-label"></i>
                     <input required class="datetime-input flatpickr flatpickr-input" id="date" type="text" placeholder="Date..." />
 
-                    <i class="fas fa-calendar icon-label"></i>
+                    <i class="fas fa-clock icon-label"></i>
                     <input required class="datetime-input flatpickr flatpickr-input" id="time" type="text" placeholder="Time..." />
                 </div>
                 <input id="" name="submit" alt="Submit" type="image" src="/images/submit.png" class="submit-btn"/>
@@ -50,8 +51,9 @@
     <img style="height: 15px; width: auto" src = "/images/info-icon.png" />
 </div>
 
-<div id="route-info" style="visibility: hidden; flex-direction: column; padding: 5px;" class="route-info">
-    <span>Route Information</span>
+<div id="route-info" style="visibility: hidden; flex-direction: column;" class="route-info">
+    <div>Route Information</div>
+    <img src="/images/divider.png" style="height: 2px; width: auto; margin-top: 2px; margin-bottom: 2px;" />
     <div>
         <div><i style="font-size: 10px;" class="fas fa-clock icon-label"></i><span style="font-size: 13px;" id = "duration"></span></div>
         <div><i style="font-size: 10px;" class="fas fa-road icon-label"></i><span style="font-size: 13px;" id = "distance"></span></div>
