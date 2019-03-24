@@ -25,7 +25,7 @@
                     <i class="fas fa-clock icon-label"></i>
                     <input required class="datetime-input flatpickr flatpickr-input" id="time" type="text" placeholder="Time..." />
                 </div>
-                <input id="" name="submit" alt="Submit" type="image" src="/images/submit.png" class="submit-btn"/>
+                <input name="submit" alt="Submit" type="image" src="/images/submit.png" class="submit-btn"/>
             </div>
         </form>
     </div>
