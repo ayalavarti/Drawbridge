@@ -1,0 +1,34 @@
+#basic-info {
+    width: 50%;
+    max-width: 350px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.info-box {
+    display: inline-block;
+    box-sizing: border-box;
+    background-color: #dddddd;
+    padding: 7px 20px;
+    margin: 3px 5px;
+    border-radius: 21px;
+    color: #555555;
+    width: calc(100% - 10px);
+}
+.half-size {
+    width: calc(50% - 10px);
+    float: right;
+}
+.info-box span {
+    display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    top: 3px;
+}
+.info-box i {
+    padding-right: 7px;
+    color: black;
+}
