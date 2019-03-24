@@ -38,7 +38,6 @@
 
 <div id="map"></div>
 
-<script src="/js/jquery-3.1.1.js"></script>
 <script src="/js/map.js"></script>
 
 </#assign>

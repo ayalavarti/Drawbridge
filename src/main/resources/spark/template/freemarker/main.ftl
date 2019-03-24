@@ -7,6 +7,8 @@
     <meta name="google-signin-client_id" content="682909194982-g9daf2o99e5jtijv18i92r1pdmrjk0ec.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src='/js/mapbox-gl.js'></script>
+    <script src="/js/jquery-3.1.1.js"></script>
+
 
     <link rel='stylesheet' href='/css/mapbox-gl.css' />
     <link rel="stylesheet" href="/css/normalize.css"  type="text/css">
