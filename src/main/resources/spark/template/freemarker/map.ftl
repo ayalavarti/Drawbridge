@@ -1,3 +1,4 @@
+<#assign stylesheets></#assign>
 <#assign content>
 
 <div style="width: 300px; text-align: center; position: absolute; left: 0; top: 40%; right: 0; margin-left: auto; margin-right: auto;" id = "loading">
