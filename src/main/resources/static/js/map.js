@@ -14,6 +14,7 @@ let found = [];
 let coordinates = [];
 let markers = [];
 
+let addressNames = []
 let route = [];
 
 /**
@@ -198,7 +199,7 @@ function addMarker(lat, long, id, index, name) {
     }
     let popup = new mapboxgl.Popup({
         offset: 25
-    }).setHTML(parseAddress(name));
+    }).setHTML(parseAddress(name, index));
 
     markers[index] = new mapboxgl.Marker(el).setLngLat([long, lat]).setPopup(popup);
     markers[index].addTo(map);
@@ -208,14 +209,17 @@ function addMarker(lat, long, id, index, name) {
  * Parse an address and return formatted HTML code.
  *
  * @param {*} raw
+ * @param {*} index
  */
-function parseAddress(raw) {
+function parseAddress(raw, index) {
     if (raw.indexOf(",") > -1) {
         let title = raw.substr(0, raw.indexOf(","));
+        addressNames[index] = title;
         return `<div class="popup-title">${title}</div>
                 <img src="/images/divider.png" style="height: 2px; width: auto;" />
                 <div class="popup-content">${raw.substr(raw.indexOf(",") + 1)}</div>`;
     } else {
+        addressNames[index] = raw;
         return `<div class="popup-title">${raw}</div>`;
     }
 }
@@ -452,6 +456,8 @@ function handleSubmit() {
     let date = new Date(`${dateInput} ${timeInput}`);
 
     const postParameters = {
+        startName: addressNames[0],
+        endName: addressNames[1],
         startCoordinates: coordinates[0].slice(0).reverse(),
         endCoordinates: coordinates[1].slice(0).reverse(),
         date: date.getTime()
