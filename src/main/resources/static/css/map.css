@@ -117,6 +117,16 @@
 	bottom: 170px;
 }
 
+.info-setting {
+	bottom: 70px;
+	right: 60px;
+}
+
+.team-setting {
+	bottom: 70px;
+	right: 110px;
+}
+
 .search-inputs {
 	text-align: center;
 }
@@ -214,7 +224,9 @@
 	.route-info,
 	.location-setting,
 	.compass-setting,
-	.trip-setting {
+	.trip-setting,
+	.team-setting,
+	.info-setting {
 		bottom: 280px;
 	}
 
@@ -234,6 +246,14 @@
 		right: 130px;
 	}
 
+	.info-setting {
+		right: 190px;
+	}
+
+	.team-setting {
+		right: 250px;
+	}
+
 	.section-heading {
 		padding-top: 0;
 	}
@@ -248,37 +268,6 @@
 
 	#map {
 		height: 70%;
-	}
-}
-
-@media screen and (max-width: 767px) and (max-height: 450px) {
-
-	.route-info,
-	.map-settings {
-		display: none;
-	}
-}
-
-
-@media screen and (max-width: 430px) {
-
-	.location-setting,
-	.compass-setting,
-	.trip-setting {
-		right: 10px;
-	}
-
-
-	.location-setting {
-		bottom: 280px;
-	}
-
-	.compass-setting {
-		bottom: 330px;
-	}
-
-	.trip-setting {
-		bottom: 380px;
 	}
 }
 
@@ -309,6 +298,16 @@
 		bottom: 110px;
 	}
 
+	.info-setting {
+		bottom: 160px;
+		right: 10px;
+	}
+
+	.team-setting {
+		bottom: 210px;
+		right: 10px;
+	}
+
 	.search-menu {
 		height: 100vh;
 		overflow: scroll;
@@ -323,9 +322,88 @@
 	}
 }
 
+@media screen and (max-width: 570px) {
+
+	.location-setting,
+	.compass-setting,
+	.trip-setting,
+	.info-setting,
+	.team-setting {
+		right: 10px;
+	}
+
+	.location-setting {
+		bottom: 280px;
+	}
+
+	.compass-setting {
+		bottom: 330px;
+	}
+
+	.trip-setting {
+		bottom: 380px;
+	}
+
+	.info-setting {
+		bottom: 430px;
+	}
+
+	.team-setting {
+		bottom: 480px;
+	}
+
+}
+
 @media screen and (min-width: 767px) and (max-height: 370px) {
 	.route-info {
 		bottom: 10px;
 		left: 390px;
 	}
+}
+
+@media screen and (max-width: 767px) and (max-height: 450px) {
+
+	.route-info,
+	.map-settings {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 767px) and (max-height: 600px) {
+
+	.location-setting,
+	.compass-setting,
+	.trip-setting {
+		display: none;
+	}
+
+	.info-setting {
+		bottom: 280px;
+		right: 10px;
+	}
+
+	.team-setting {
+		bottom: 330px;
+		right: 10px;
+	}
+}
+
+@media screen and (min-width: 767px) and (max-height: 360px) {
+
+	.location-setting,
+	.compass-setting,
+	.trip-setting {
+		display: none;
+	}
+
+	.info-setting {
+		bottom: 10px;
+		right: 10px;
+	}
+
+	.team-setting {
+		bottom: 60px;
+		right: 10px;
+	}
+
 }

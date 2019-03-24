@@ -30,16 +30,24 @@
     </div>
 </div>
 
-<div id="pre-load" style="visibility: hidden;" class="map-settings compass-setting" onclick="alignMap()">
+<div id="pre-load" style="visibility: visible;" class="map-settings compass-setting" onclick="alignMap()">
     <img style="height: 15px; width: auto" src = "/images/compass-icon.png" />
 </div>
 
-<div id="pre-load" style="visibility: hidden;" class="map-settings location-setting" onclick="centerMap()">
+<div id="pre-load" style="visibility: visible;" class="map-settings location-setting" onclick="centerMap()">
     <img style="height: 15px; width: auto" src = "/images/pin-icon.png" />
 </div>
 
 <div id="pre-load" style="visibility: hidden;" class="map-settings trip-setting" onclick="alignTrip()">
     <img id="car-icon" style="height: 15px; width: auto" src = "/images/car-disabled.png" />
+</div>
+
+<div id="pre-load" style="visibility: visible;" class="map-settings team-setting" onclick="toTeam()">
+    <img style="height: 15px; width: auto" src = "/images/team-icon.png" />
+</div>
+
+<div id="pre-load" style="visibility: visible;" class="map-settings info-setting" onclick="toInfo()">
+    <img style="height: 15px; width: auto" src = "/images/info-icon.png" />
 </div>
 
 <div id="route-info" style="visibility: hidden; flex-direction: column; padding: 5px;" class="route-info">
