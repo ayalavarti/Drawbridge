@@ -2,10 +2,10 @@
 
 <div class="trip-info-wrapper">
     <div class="trip-info">
-        <i class="fas fa-dot-circle icon-label-small"></i>
+        <i class="fas fa-dot-circle icon-label-medium"></i>
             <span id="start" style="font-size: 25px; margin-left: 5px;"></span>
         <img src="/images/divider.png" style="height: 4px; margin: 0px 10px; width: auto;" />
-        <i class="fas fa-map-marker-alt icon-label-small"></i>
+        <i class="fas fa-map-marker-alt icon-label-medium"></i>
             <span id="end" style="font-size: 25px; margin-left: 5px;"></span>
     </div>
     <span id="date" style="font-size: 18px;">Mar 14 2019</span> at
@@ -24,9 +24,6 @@
                 <span style="margin-bottom: 10px;">Departure Threshold</span>
                 <div><i class="far fa-circle icon-label-large"></i>
                 <input class="threshold-input" id="walking-input" value="15" min="0" max="3600" type="number" placeholder="..." />min</div>
-            </div>
-            <div style="margin-top: 10px; max-width: 300px; width: auto; font-size: 14px;">
-                Walking radius is how long you are willing to walk to the departure location. Departure threshold is within how many minutes of your departure time you are willing to leave.
             </div>
         </div>
     </div>

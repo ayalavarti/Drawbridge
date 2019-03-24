@@ -21,7 +21,6 @@
 }
 
 .results-content {
-	z-index: 5;
 	background: #fff;
 	max-width: 900px;
 	width: 80vw;
@@ -36,7 +35,6 @@
 
 .result,
 .thresholds {
-	z-index: 5;
 	background: #fff;
 	height: auto;
 	padding: 10px;
@@ -60,12 +58,12 @@
 
 .result-info {
 	text-align: center;
-	width: 250px;
+	width: 350px;
 }
 
-.icon-label-large {
+.icon-label-medium {
 	color: #1e3458;
-	font-size: 15px;
+	font-size: 12px;
 }
 
 .icon-label-small {

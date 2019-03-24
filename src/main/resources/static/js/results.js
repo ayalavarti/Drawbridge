@@ -1,4 +1,8 @@
 const tempHeading = ["Boston", "Cambridge", "Mar 14 2019", "1:59 PM"];
+const months = [
+	"January", "February", "March", "April", "May", "June",
+	"July", "August", "September", "October", "November", "December"
+];
 
 const tempData = [{
 		start: "Providence, RI",
@@ -73,6 +77,14 @@ function queryResults() {
 
 function setTripResults(data) {
 	data.forEach(element => {
+		let date = new Date(parseFloat(element["date"]));
+		let hourLabel = "AM";
+		let hour = date.getHours();
+		if (hour > 12) {
+			hour = hour - 12;
+			hourLabel = "PM";
+		}
+
 		$(".results-content").append(
 			`<div class="result">
 				<div class="result-info">
@@ -83,6 +95,12 @@ function setTripResults(data) {
 							${element["start"]}
 						<i class="fas fa-map-marker-alt icon-label-small"></i>
 							${element["end"]}
+						<i class="fas fa-calendar icon-label-small"></i>
+							${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}
+					</div>
+					<div style="font-size: 13px; text-align: left;">
+						<i class="fas fa-clock icon-label-small"></i>
+							${hour}:${date.getMinutes()} ${hourLabel}
 					</div>
 				</div>
 				<img src="../images/${element["status"]}-btn.png" class="${element["status"]}-btn"/>
