@@ -1,14 +1,20 @@
 /* -------- Global Styling -------- */
 
 html {
-	font-family: "Montserrat", sans-serif;
+	font-family: "Nunito", sans-serif;
+	letter-spacing: 0.2px;
 	background-color: #ececec;
 }
 
 body {}
 
 input {
-	font-family: "Montserrat", sans-serif;
+	font-family: "Nunito", sans-serif;
+	letter-spacing: 0.5px;
+}
+
+button {
+	outline: none;
 }
 
 a {
@@ -19,7 +25,7 @@ a {
 
 input[type="submit"],
 .modal-button {
-	font-family: "Montserrat", sans-serif;
+	font-family: "Nunito", sans-serif;
 	color: #f5f5f5;
 }
 
@@ -119,12 +125,6 @@ input[type="submit"],
 
 .dropdown:hover .dropdown-content {
 	display: block;
-}
-
-.section-heading {
-	font-size: 18px;
-	padding-top: 20px;
-	color: #1e3458;
 }
 
 /* -------- Body Styling -------- */
