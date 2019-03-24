@@ -36,7 +36,7 @@
         </div>
       </div>
 
-      <div id="sign-in" class="profile-btn">
+      <div style="visibility: hidden;" id="sign-in" class="profile-btn">
         <div class="g-signin2" data-onsuccess="onSignIn" data-onfailure="onFailure" data-longtitle="true"></div>
       </div>
     </div>
