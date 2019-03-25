@@ -33,29 +33,27 @@
             <h2>Carpool Members</h2>
             <div id="member-list">
                 <div class="list-person">
-                    <span class="user-name">Mary B.</span>
+                    <span class="user-name">${host.getName()}</span>
                     <div class="status host">
                         <span><i class="fas fa-car"></i>Host</span>
                     </div>
                 </div>
-                <div class="list-person">
-                    <span class="user-name">John T.</span>
-                    <div class="status member">
-                        <span><i class="fas fa-user"></i>Member</span>
+                <#list members as member>
+                    <div class="list-person">
+                        <span class="user-name">${member.getName()}</span>
+                        <div class="status member">
+                            <span><i class="fas fa-user"></i>Member</span>
+                        </div>
                     </div>
-                </div>
-                <div class="list-person">
-                    <span class="user-name">Taylor S.</span>
-                    <div class="status member">
-                        <span><i class="fas fa-user"></i>Member</span>
+                </#list>
+                <#list pending as pend>
+                    <div class="list-person">
+                        <span class="user-name">${pend.getName()}<i class="addendum">(pending)</i></span>
+                        <div class="pending">
+                            <button class="approve"><i class="fas fa-check"></i></button><button class="deny"><i class="fas fa-times"></i></button>
+                        </div>
                     </div>
-                </div>
-                <div class="list-person">
-                    <span class="user-name">Sylvester S. <i class="addendum">(pending)</i></span>
-                    <div class="pending">
-                        <button class="approve"><i class="fas fa-check"></i></button><button class="deny"><i class="fas fa-times"></i></button>
-                    </div>
-                </div>
+                </#list>
                 <div id="button-container">
                     <button id="join-btn" style="display: none">Join<i class="fas fa-sign-in-alt"></i></button>
                     <button id="leave-btn" style="display: none">Leave<i class="fas fa-sign-out-alt"></i></button>
@@ -73,3 +71,24 @@
     </div>
 </#assign>
 <#include "main.ftl">
+
+<script type="text/javascript">
+    let uid = userProfile == null ? null : userProfile.getId();
+    let host = "${host.getId()?js_string}";
+    let members = [<#list members as mem>"${mem.getId()?js_string}"</#list>];
+    let pending = [<#list pending as pen>"${pen.getId()?js_string}"</#list>];
+
+    if (uid === host) {
+        $("#delete-btn").show();
+        $("#join-btn").hide();
+        $("#leave-btn").hide();
+    } else if (uid in members || uid in pending) {
+        $("#delete-btn").hide();
+        $("#join-btn").show();
+        $("#leave-btn").hide();
+    } else {
+        $("#delete-btn").hide();
+        $("#join-btn").show();
+        $("#leave-btn").hide();
+    }
+</script>

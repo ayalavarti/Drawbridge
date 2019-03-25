@@ -10,9 +10,11 @@
     <script src='/js/es6-promise.auto.min.js'></script>
     <script src="/js/mapbox-sdk.min.js"></script>
     <script src="/js/jquery-3.1.1.js"></script>
+    <script src="/js/main.js"></script>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/.npm/flatpickr"></script>
 
     <script src='https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
@@ -50,7 +52,5 @@
     <div class = "body">
       ${content}
     </div>
-
-    <script src="/js/main.js"></script>
   </body>
 </html>
