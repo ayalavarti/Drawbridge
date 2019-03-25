@@ -38,5 +38,14 @@
     <orderEntry type="library" name="Maven: com.sparkjava:spark-template-freemarker:2.3" level="project" />
     <orderEntry type="library" name="Maven: org.freemarker:freemarker:2.3.19" level="project" />
     <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.16.1" level="project" />
+    <orderEntry type="library" name="Maven: org.postgresql:postgresql:42.2.5" level="project" />
+    <orderEntry type="library" name="Maven: com.mapbox.mapboxsdk:mapbox-sdk-services:4.5.0" level="project" />
+    <orderEntry type="library" name="Maven: com.mapbox.mapboxsdk:mapbox-sdk-core:4.5.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.retrofit2:retrofit:2.4.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:3.10.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.14.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.retrofit2:converter-gson:2.4.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp3:logging-interceptor:3.11.0" level="project" />
+    <orderEntry type="library" name="Maven: com.mapbox.mapboxsdk:mapbox-sdk-geojson:4.5.0" level="project" />
   </component>
 </module>
