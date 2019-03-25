@@ -30,13 +30,15 @@ public class HostComparatorTest {
   @Test
   public void testBothHosted() {
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
-            "0", new LinkedList<String>(), new LinkedList<String>());
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
     Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
-            "0", new LinkedList<String>(), new LinkedList<String>());
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
     ComparesSearchedTrips hostComparator = new HostComparator();
     hostComparator.setId("0");
     assertEquals(hostComparator.compare(trip1, trip2), 0);
@@ -48,13 +50,15 @@ public class HostComparatorTest {
   @Test
   public void testNeitherHosted() {
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
-            "0", new LinkedList<String>(), new LinkedList<String>());
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
     Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
-            "0", new LinkedList<String>(), new LinkedList<String>());
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
     ComparesSearchedTrips hostComparator = new HostComparator();
     hostComparator.setId("1");
     assertEquals(hostComparator.compare(trip1, trip2), 0);
@@ -66,13 +70,15 @@ public class HostComparatorTest {
   @Test
   public void testFirstHosted() {
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
-            "0", new LinkedList<String>(), new LinkedList<String>());
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
     Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
-            "1", new LinkedList<String>(), new LinkedList<String>());
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("1", new LinkedList<String>(),
+            new LinkedList<String>());
     ComparesSearchedTrips hostComparator = new HostComparator();
     hostComparator.setId("0");
     assertEquals(hostComparator.compare(trip1, trip2), -1);
@@ -84,13 +90,15 @@ public class HostComparatorTest {
   @Test
   public void testSecondHosted() {
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
-            "0", new LinkedList<String>(), new LinkedList<String>());
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
     Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
-            "1", new LinkedList<String>(), new LinkedList<String>());
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("1", new LinkedList<String>(),
+            new LinkedList<String>());
     ComparesSearchedTrips hostComparator = new HostComparator();
     hostComparator.setId("1");
     assertEquals(hostComparator.compare(trip1, trip2), 1);
@@ -102,17 +110,20 @@ public class HostComparatorTest {
   @Test
   public void testMultipleTrips() {
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
-            "0", new LinkedList<String>(), new LinkedList<String>());
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
     Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
-            "0", new LinkedList<String>(), new LinkedList<String>());
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
     Trip trip3 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
-            "1", new LinkedList<String>(), new LinkedList<String>());
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("1", new LinkedList<String>(),
+            new LinkedList<String>());
 
     ArrayList<Trip> trips = new ArrayList<Trip>();
     trips.add(trip1);

@@ -33,12 +33,12 @@ public class MemberComparatorTest {
     List<String> memberIds = new LinkedList<String>();
     memberIds.add("10");
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, new LinkedList<String>());
     Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, new LinkedList<String>());
     ComparesSearchedTrips memberComparator = new MemberComparator();
     memberComparator.setId("10");
@@ -53,12 +53,12 @@ public class MemberComparatorTest {
     List<String> memberIds = new LinkedList<String>();
     memberIds.add("10");
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, new LinkedList<String>());
     Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, new LinkedList<String>());
     ComparesSearchedTrips memberComparator = new MemberComparator();
     memberComparator.setId("0");
@@ -73,13 +73,14 @@ public class MemberComparatorTest {
     List<String> memberIds = new LinkedList<String>();
     memberIds.add("10");
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, new LinkedList<String>());
     Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
-            "0", new LinkedList<String>(), new LinkedList<String>());
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
     ComparesSearchedTrips memberComparator = new MemberComparator();
     memberComparator.setId("10");
     assertEquals(memberComparator.compare(trip1, trip2), -1);
@@ -93,12 +94,13 @@ public class MemberComparatorTest {
     List<String> memberIds = new LinkedList<String>();
     memberIds.add("10");
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
-            "0", new LinkedList<String>(), new LinkedList<String>());
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
     Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, new LinkedList<String>());
     ComparesSearchedTrips memberComparator = new MemberComparator();
     memberComparator.setId("10");
@@ -113,16 +115,18 @@ public class MemberComparatorTest {
     List<String> memberIds = new LinkedList<String>();
     memberIds.add("10");
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
-            "0", new LinkedList<String>(), new LinkedList<String>());
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
     Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
-            "0", new LinkedList<String>(), new LinkedList<String>());
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
     Trip trip3 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
-        .addDetails(5, 100, "1234567890", "My car", "comments")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("1", memberIds, new LinkedList<String>());
 
     ArrayList<Trip> trips = new ArrayList<Trip>();

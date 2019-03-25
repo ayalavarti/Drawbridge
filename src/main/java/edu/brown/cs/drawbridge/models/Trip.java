@@ -11,6 +11,7 @@ public class Trip {
   private String name;
   private double startingLatitude, startingLongitude, endingLatitude,
       endingLongitude;
+  private String startAddress, endAddress;
   private int departureTime, eta;
   private int maxUsers;
   private double cost;
@@ -49,6 +50,19 @@ public class Trip {
     this.startingLongitude = startLon;
     this.endingLatitude = endLat;
     this.endingLongitude = endLon;
+  }
+
+  /**
+   * Set the names of addresses of the Trip.
+   *
+   * @param startAddress
+   *          The name of the starting address
+   * @param endAdress
+   *          The name of the ending address
+   */
+  private void setAddresses(String startingAddress, String endingAddress) {
+    this.startAddress = startingAddress;
+    this.endAddress = endingAddress;
   }
 
   /**
@@ -154,6 +168,24 @@ public class Trip {
    */
   public double getEndingLongitude() {
     return endingLongitude;
+  }
+
+  /**
+   * Get the name of the starting address.
+   *
+   * @return The name of the starting address
+   */
+  public String getStartingAddress() {
+    return startAddress;
+  }
+
+  /**
+   * Get the name of the ending address.
+   *
+   * @return The name of the ending address
+   */
+  public String getEndingAddress() {
+    return endAddress;
   }
 
   /**
@@ -333,7 +365,7 @@ public class Trip {
 
     /**
      * An interface that adds starting and ending locations and produces a
-     * TimeStep.
+     * AddressNamesStep.
      */
     public interface LocationStep {
       /**
@@ -349,8 +381,27 @@ public class Trip {
        *          The ending longitude of the Trip
        * @return A TimeStep containing the new location data
        */
-      TimeStep addLocations(double startingLatitude, double startingLongitude,
-          double endingLatitude, double endingLongitude);
+      AddressNamesStep addLocations(double startingLatitude,
+          double startingLongitude, double endingLatitude,
+          double endingLongitude);
+    }
+
+    /**
+     * An interface that adds names of starting and ending addresses and
+     * produces a TimeStep.
+     */
+    public interface AddressNamesStep {
+      /**
+       * Add the names of starting and ending addresses of the Trip.
+       *
+       * @param startAddress
+       *          The name of the starting address
+       * @param endAddress
+       *          The name of the ending address
+       *
+       * @return A TimeStep containing the new address name data
+       */
+      TimeStep addAddressNames(String startAddress, String endAddress);
     }
 
     /**
@@ -425,13 +476,15 @@ public class Trip {
      * incrementally adding data about the Trip.
      */
     private static class TripSteps implements IdentificationStep, LocationStep,
-        TimeStep, DetailsStep, BuildStep {
+        AddressNamesStep, TimeStep, DetailsStep, BuildStep {
       // Identification
       private int id;
       private String name;
       // Location
       private double startingLatitude, startingLongitude, endingLatitude,
           endingLongitude;
+      // Address names
+      private String startAddress, endAddress;
       // Time
       private int departureTime, eta;
       // Details
@@ -447,12 +500,20 @@ public class Trip {
       }
 
       @Override
-      public TimeStep addLocations(double startLat, double startLon,
+      public AddressNamesStep addLocations(double startLat, double startLon,
           double endLat, double endLon) {
         this.startingLatitude = startLat;
         this.startingLongitude = startLon;
         this.endingLatitude = endLat;
         this.endingLongitude = endLon;
+        return this;
+      }
+
+      @Override
+      public TimeStep addAddressNames(String startingAddress,
+          String endingAddress) {
+        this.startAddress = startingAddress;
+        this.endAddress = endingAddress;
         return this;
       }
 
@@ -480,6 +541,7 @@ public class Trip {
         trip.setIdentification(id, name);
         trip.setLocations(startingLatitude, startingLongitude, endingLatitude,
             endingLongitude);
+        trip.setAddresses(startAddress, endAddress);
         trip.setTimes(departureTime, eta);
         trip.setDetails(maxUsers, cost, phoneNumber, methodOfTransportation,
             comments);
@@ -493,6 +555,7 @@ public class Trip {
         trip.setIdentification(id, name);
         trip.setLocations(startingLatitude, startingLongitude, endingLatitude,
             endingLongitude);
+        trip.setAddresses(startAddress, endAddress);
         trip.setTimes(departureTime, eta);
         trip.setDetails(maxUsers, cost, phoneNumber, methodOfTransportation,
             comments);

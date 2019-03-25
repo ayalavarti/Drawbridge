@@ -28,7 +28,8 @@ public class IsMemberComparatorTest {
     List<String> pendingIds = new LinkedList<String>();
     pendingIds.add("2");
     Trip trip = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20)
         .addDetails(5, 100, "1d234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, pendingIds);
     ComparesUsersInTrip isMemberComparator = new IsMemberComparator();
@@ -46,7 +47,8 @@ public class IsMemberComparatorTest {
     List<String> pendingIds = new LinkedList<String>();
     pendingIds.add("2");
     Trip trip = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20)
         .addDetails(5, 100, "1d234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, pendingIds);
 
@@ -67,7 +69,8 @@ public class IsMemberComparatorTest {
     List<String> pendingIds = new LinkedList<String>();
     pendingIds.add("2");
     Trip trip = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20)
         .addDetails(5, 100, "1d234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, pendingIds);
 
@@ -88,7 +91,8 @@ public class IsMemberComparatorTest {
     List<String> pendingIds = new LinkedList<String>();
     pendingIds.add("2");
     Trip trip = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20)
         .addDetails(5, 100, "1d234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, pendingIds);
 
@@ -110,7 +114,8 @@ public class IsMemberComparatorTest {
     List<String> pendingIds = new LinkedList<String>();
     pendingIds.add("3");
     Trip trip = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
-        .addLocations(0, 0, 0, 0).addTimes(10, 20)
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20)
         .addDetails(5, 100, "1d234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, pendingIds);
 

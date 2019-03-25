@@ -20,8 +20,8 @@ public class DatabaseQuery {
       "mary@gmail.com");
   private static final Trip DUMMY_TRIP = Trip.TripBuilder.newTripBuilder()
       .addIdentification(0, "Mary's Carpool").addLocations(1.0, 2.0, 3.0, 4.0)
-      .addTimes(500, 600).addDetails(7, 8.00, "555-867-5309", "Uber", "")
-      .build();
+      .addAddressNames("start", "end").addTimes(500, 600)
+      .addDetails(7, 8.00, "555-867-5309", "Uber", "").build();
   private static final String CREATE_USERS_TABLE = "CREATE IF NOT EXISTS users ("
       + "id TEXT NOT NULL PRIMARY KEY, " + "name TEXT, " + "email TEXT);";
   private static final String CREATE_TRIPS_TABLE = "CREATE IF NOT EXISTS trips ("
