@@ -104,13 +104,14 @@ h2 {
     grid-row-end: 3;
     grid-column-start: 1;
     grid-column-end: 1;
+    width: 100%;
+    min-width: 350px;
+    max-width: 480px;
 }
 #member-list {
     background-color: #dddddd;
-    max-width: 480px;
     max-height: 300px;
     overflow: auto;
-    width: 480px;
     padding: 7px 10px;
 }
 .list-person, #button-container {
@@ -203,12 +204,13 @@ h2 {
     grid-row-end: 3;
     grid-column-start: 2;
     grid-column-end: 2;
+    min-width: 350px;
+    max-width: 480px;
 }
 #comments {
     box-sizing: border-box;
     padding: 15px;
-    max-width: 400px;
-    width: 400px;
+    width: 100%;
     height: 250px;
     overflow: auto;
     background-color: #dddddd;
@@ -216,5 +218,43 @@ h2 {
 #comments p {
     font-size: 0.9em;
     color: #555555;
+}
+
+@media screen and (max-width: 1030px) {
+    #basic-info {
+        justify-self: center;
+        align-self: center;
+        grid-row-start: 3;
+        grid-row-end: 3;
+        grid-column-start: 1;
+        grid-column-end: 1;
+    }
+    #member-list-container {
+        grid-row-start: 4;
+        grid-row-end: 4;
+        width: 65%;
+    }
+    #comments-container {
+        justify-self: center;
+        grid-row-start: 5;
+        grid-row-end: 5;
+        grid-column-start: 1;
+        grid-column-end: 1;
+        width: 65%;
+    }
+    body {
+        margin: 0;
+    }
+    #map-inset img {
+        width: 100%;
+    }
+    .header {
+        right: 40px;
+    }
+}
+@media screen and (max-width: 790px) {
+    #title {
+        margin-top: 80px;
+    }
 }
 
