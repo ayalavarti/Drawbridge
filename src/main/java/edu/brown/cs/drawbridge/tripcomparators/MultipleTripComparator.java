@@ -17,7 +17,7 @@ public class MultipleTripComparator implements Comparator<Trip> {
    * MultipleComparator constructor.
    *
    * @param comparators
-   *          List of comparators used to compare two Trips
+   *          List of comparators used to compare two searched Trips
    */
   public MultipleTripComparator(List<ComparesSearchedTrips> comparators) {
     this.comparators = comparators;

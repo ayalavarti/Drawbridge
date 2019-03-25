@@ -29,7 +29,9 @@ public class IsHostComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1d234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, pendingIds);
-    assertNotNull(new IsHostComparator(trip));
+    ComparesUsersInTrip isHostComparator = new IsHostComparator();
+    isHostComparator.setTrip(trip);
+    assertNotNull(isHostComparator);
   }
 
   /**
@@ -48,7 +50,9 @@ public class IsHostComparatorTest {
 
     User user1 = new User("10", "name1", "email");
     User user2 = new User("11", "name1", "email");
-    assertEquals(new IsHostComparator(trip).compare(user1, user2), 0);
+    ComparesUsersInTrip isHostComparator = new IsHostComparator();
+    isHostComparator.setTrip(trip);
+    assertEquals(isHostComparator.compare(user1, user2), 0);
   }
 
   /**
@@ -67,7 +71,9 @@ public class IsHostComparatorTest {
 
     User user1 = new User("0", "name1", "email");
     User user2 = new User("11", "name1", "email");
-    assertEquals(new IsHostComparator(trip).compare(user1, user2), -1);
+    ComparesUsersInTrip isHostComparator = new IsHostComparator();
+    isHostComparator.setTrip(trip);
+    assertEquals(isHostComparator.compare(user1, user2), -1);
   }
 
   /**
@@ -86,6 +92,8 @@ public class IsHostComparatorTest {
 
     User user1 = new User("10", "name1", "email");
     User user2 = new User("0", "name1", "email");
-    assertEquals(new IsHostComparator(trip).compare(user1, user2), 1);
+    ComparesUsersInTrip isHostComparator = new IsHostComparator();
+    isHostComparator.setTrip(trip);
+    assertEquals(isHostComparator.compare(user1, user2), 1);
   }
 }

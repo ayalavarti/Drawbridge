@@ -31,7 +31,9 @@ public class IsPendingComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1d234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, pendingIds);
-    assertNotNull(new IsPendingComparator(trip));
+    ComparesUsersInTrip isPendingComparator = new IsPendingComparator();
+    isPendingComparator.setTrip(trip);
+    assertNotNull(isPendingComparator);
   }
 
   /**
@@ -50,7 +52,9 @@ public class IsPendingComparatorTest {
 
     User user1 = new User("10", "name1", "email");
     User user2 = new User("11", "name1", "email");
-    assertEquals(new IsPendingComparator(trip).compare(user1, user2), 0);
+    ComparesUsersInTrip isPendingComparator = new IsPendingComparator();
+    isPendingComparator.setTrip(trip);
+    assertEquals(isPendingComparator.compare(user1, user2), 0);
   }
 
   /**
@@ -69,7 +73,9 @@ public class IsPendingComparatorTest {
 
     User user1 = new User("2", "name1", "email");
     User user2 = new User("11", "name1", "email");
-    assertEquals(new IsPendingComparator(trip).compare(user1, user2), -1);
+    ComparesUsersInTrip isPendingComparator = new IsPendingComparator();
+    isPendingComparator.setTrip(trip);
+    assertEquals(isPendingComparator.compare(user1, user2), -1);
   }
 
   /**
@@ -88,7 +94,9 @@ public class IsPendingComparatorTest {
 
     User user1 = new User("10", "name1", "email");
     User user2 = new User("2", "name1", "email");
-    assertEquals(new IsPendingComparator(trip).compare(user1, user2), 1);
+    ComparesUsersInTrip isPendingComparator = new IsPendingComparator();
+    isPendingComparator.setTrip(trip);
+    assertEquals(isPendingComparator.compare(user1, user2), 1);
   }
 
   /**
@@ -118,7 +126,10 @@ public class IsPendingComparatorTest {
     expected.add(user2);
     expected.add(user3);
     expected.add(user1);
-    Collections.sort(users, new IsPendingComparator(trip));
+
+    ComparesUsersInTrip isPendingComparator = new IsPendingComparator();
+    isPendingComparator.setTrip(trip);
+    Collections.sort(users, isPendingComparator);
     for (int i = 0; i < expected.size(); i++) {
       assertEquals(users.get(i), expected.get(i));
     }

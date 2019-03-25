@@ -4,7 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,7 +20,8 @@ public class MultipleUserComparatorTest {
    */
   @Test
   public void testConstructor() {
-    List<Comparator<User>> comparators = new ArrayList<Comparator<User>>();
+    List<ComparesUsersInTrip> comparators;
+    comparators = new ArrayList<ComparesUsersInTrip>();
     assertNotNull(new MultipleUserComparator(comparators));
   }
 
@@ -37,10 +38,12 @@ public class MultipleUserComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1d234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, pendingIds);
-    List<Comparator<User>> comparators = new ArrayList<Comparator<User>>();
-    comparators.add(new IsHostComparator(trip));
-    comparators.add(new IsMemberComparator(trip));
-    comparators.add(new IsPendingComparator(trip));
+    List<ComparesUsersInTrip> comparators = new ArrayList<ComparesUsersInTrip>(
+        Arrays.asList(new IsHostComparator(), new IsMemberComparator(),
+            new IsPendingComparator()));
+    for (ComparesUsersInTrip comparator : comparators) {
+      comparator.setTrip(trip);
+    }
     MultipleUserComparator c = new MultipleUserComparator(comparators);
 
     User user1 = new User("0", "name1", "email");
@@ -63,10 +66,12 @@ public class MultipleUserComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1d234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, pendingIds);
-    List<Comparator<User>> comparators = new ArrayList<Comparator<User>>();
-    comparators.add(new IsHostComparator(trip));
-    comparators.add(new IsMemberComparator(trip));
-    comparators.add(new IsPendingComparator(trip));
+    List<ComparesUsersInTrip> comparators = new ArrayList<ComparesUsersInTrip>(
+        Arrays.asList(new IsHostComparator(), new IsMemberComparator(),
+            new IsPendingComparator()));
+    for (ComparesUsersInTrip comparator : comparators) {
+      comparator.setTrip(trip);
+    }
     MultipleUserComparator c = new MultipleUserComparator(comparators);
 
     User user1 = new User("1", "name1", "email");
@@ -89,10 +94,12 @@ public class MultipleUserComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1d234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, pendingIds);
-    List<Comparator<User>> comparators = new ArrayList<Comparator<User>>();
-    comparators.add(new IsHostComparator(trip));
-    comparators.add(new IsMemberComparator(trip));
-    comparators.add(new IsPendingComparator(trip));
+    List<ComparesUsersInTrip> comparators = new ArrayList<ComparesUsersInTrip>(
+        Arrays.asList(new IsHostComparator(), new IsMemberComparator(),
+            new IsPendingComparator()));
+    for (ComparesUsersInTrip comparator : comparators) {
+      comparator.setTrip(trip);
+    }
     MultipleUserComparator c = new MultipleUserComparator(comparators);
 
     User user1 = new User("2", "name1", "email");

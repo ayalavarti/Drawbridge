@@ -1,7 +1,5 @@
 package edu.brown.cs.drawbridge.usercomparators;
 
-import java.util.Comparator;
-
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 
@@ -9,17 +7,12 @@ import edu.brown.cs.drawbridge.models.User;
  * A comparator that compares Users based on whether they have requested to join
  * a given Trip.
  */
-public class IsPendingComparator implements Comparator<User> {
+public class IsPendingComparator implements ComparesUsersInTrip {
 
   private Trip trip;
 
-  /**
-   * Creates a new IsPendingComparator using a Trip.
-   *
-   * @param trip
-   *          A Trip used to compare Users.
-   */
-  public IsPendingComparator(Trip trip) {
+  @Override
+  public void setTrip(Trip trip) {
     this.trip = trip;
   }
 

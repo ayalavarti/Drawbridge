@@ -11,15 +11,15 @@ import edu.brown.cs.drawbridge.models.User;
  */
 public class MultipleUserComparator implements Comparator<User> {
 
-  private List<Comparator<User>> comparators;
+  private List<ComparesUsersInTrip> comparators;
 
   /**
    * MultipleComparator constructor.
    *
    * @param comparators
-   *          List of comparators used to compare two User
+   *          List of comparators used to compare two Users in the same Trip
    */
-  public MultipleUserComparator(List<Comparator<User>> comparators) {
+  public MultipleUserComparator(List<ComparesUsersInTrip> comparators) {
     this.comparators = comparators;
   }
 
