@@ -61,9 +61,6 @@
     </div>
 </div>
 
-<script src='/js/es6-promise.auto.min.js'></script>
-<script src="/js/mapbox-sdk.min.js"></script>
-
 <div id="map"></div>
 
 <script src="/js/map.js"></script>

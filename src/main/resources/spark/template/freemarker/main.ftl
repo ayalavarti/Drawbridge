@@ -7,6 +7,8 @@
     <meta name="google-signin-client_id" content="682909194982-g9daf2o99e5jtijv18i92r1pdmrjk0ec.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src='/js/mapbox-gl.js'></script>
+    <script src='/js/es6-promise.auto.min.js'></script>
+    <script src="/js/mapbox-sdk.min.js"></script>
     <script src="/js/jquery-3.1.1.js"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
