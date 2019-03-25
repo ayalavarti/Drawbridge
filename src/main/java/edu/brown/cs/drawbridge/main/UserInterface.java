@@ -50,9 +50,9 @@ public class UserInterface {
 
   /**
    * Method to set the database to use when querying.
-   * 
+   *
    * @param dbName
-   *          The name of the database.
+   *                 The name of the database.
    * @return true when the set is successful; false when unsuccessful.
    */
   public static boolean setDB(String dbName) {
