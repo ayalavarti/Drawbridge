@@ -1,6 +1,5 @@
 <#assign stylesheets>
     <link rel="stylesheet" href="/css/detail.css" type="text/css">
-    <script src="/js/map.js"></script>
     <script src="/js/detail.js"></script>
 </#assign>
 
