@@ -22,7 +22,7 @@ public class PendingComparatorTest {
    */
   @Test
   public void testConstructor() {
-    assertNotNull(new PendingComparator("0"));
+    assertNotNull(new PendingComparator());
   }
 
   /**
@@ -40,7 +40,9 @@ public class PendingComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", new LinkedList<String>(), pendingIds);
-    assertEquals(new PendingComparator("10").compare(trip1, trip2), 0);
+    ComparesSearchedTrips pendingComparator = new PendingComparator();
+    pendingComparator.setId("10");
+    assertEquals(pendingComparator.compare(trip1, trip2), 0);
   }
 
   /**
@@ -58,7 +60,9 @@ public class PendingComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", new LinkedList<String>(), pendingIds);
-    assertEquals(new PendingComparator("11").compare(trip1, trip2), 0);
+    ComparesSearchedTrips pendingComparator = new PendingComparator();
+    pendingComparator.setId("11");
+    assertEquals(pendingComparator.compare(trip1, trip2), 0);
   }
 
   /**
@@ -76,7 +80,9 @@ public class PendingComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
             "0", new LinkedList<String>(), new LinkedList<String>());
-    assertEquals(new PendingComparator("10").compare(trip1, trip2), -1);
+    ComparesSearchedTrips pendingComparator = new PendingComparator();
+    pendingComparator.setId("10");
+    assertEquals(pendingComparator.compare(trip1, trip2), -1);
   }
 
   /**
@@ -94,7 +100,9 @@ public class PendingComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", new LinkedList<String>(), pendingIds);
-    assertEquals(new PendingComparator("10").compare(trip1, trip2), 1);
+    ComparesSearchedTrips pendingComparator = new PendingComparator();
+    pendingComparator.setId("10");
+    assertEquals(pendingComparator.compare(trip1, trip2), 1);
   }
 
   /**
@@ -125,7 +133,10 @@ public class PendingComparatorTest {
     expected.add(trip3);
     expected.add(trip1);
     expected.add(trip2);
-    Collections.sort(trips, new PendingComparator("10"));
+
+    ComparesSearchedTrips pendingComparator = new PendingComparator();
+    pendingComparator.setId("10");
+    Collections.sort(trips, pendingComparator);
     for (int i = 0; i < expected.size(); i++) {
       assertEquals(trips.get(i), expected.get(i));
     }

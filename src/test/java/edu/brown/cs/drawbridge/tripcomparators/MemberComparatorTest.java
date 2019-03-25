@@ -22,7 +22,7 @@ public class MemberComparatorTest {
    */
   @Test
   public void testConstructor() {
-    assertNotNull(new MemberComparator("0"));
+    assertNotNull(new MemberComparator());
   }
 
   /**
@@ -40,7 +40,9 @@ public class MemberComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, new LinkedList<String>());
-    assertEquals(new MemberComparator("10").compare(trip1, trip2), 0);
+    ComparesSearchedTrips memberComparator = new MemberComparator();
+    memberComparator.setId("10");
+    assertEquals(memberComparator.compare(trip1, trip2), 0);
   }
 
   /**
@@ -58,7 +60,9 @@ public class MemberComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, new LinkedList<String>());
-    assertEquals(new MemberComparator("0").compare(trip1, trip2), 0);
+    ComparesSearchedTrips memberComparator = new MemberComparator();
+    memberComparator.setId("0");
+    assertEquals(memberComparator.compare(trip1, trip2), 0);
   }
 
   /**
@@ -76,7 +80,9 @@ public class MemberComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
             "0", new LinkedList<String>(), new LinkedList<String>());
-    assertEquals(new MemberComparator("10").compare(trip1, trip2), -1);
+    ComparesSearchedTrips memberComparator = new MemberComparator();
+    memberComparator.setId("10");
+    assertEquals(memberComparator.compare(trip1, trip2), -1);
   }
 
   /**
@@ -94,7 +100,9 @@ public class MemberComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, new LinkedList<String>());
-    assertEquals(new MemberComparator("10").compare(trip1, trip2), 1);
+    ComparesSearchedTrips memberComparator = new MemberComparator();
+    memberComparator.setId("10");
+    assertEquals(memberComparator.compare(trip1, trip2), 1);
   }
 
   /**
@@ -125,7 +133,10 @@ public class MemberComparatorTest {
     expected.add(trip3);
     expected.add(trip1);
     expected.add(trip2);
-    Collections.sort(trips, new MemberComparator("10"));
+
+    ComparesSearchedTrips memberComparator = new MemberComparator();
+    memberComparator.setId("10");
+    Collections.sort(trips, memberComparator);
     for (int i = 0; i < expected.size(); i++) {
       assertEquals(trips.get(i), expected.get(i));
     }

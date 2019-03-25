@@ -21,7 +21,7 @@ public class CostComparatorTest {
    */
   @Test
   public void testConstructor() {
-    assertNotNull(new CostComparator("0"));
+    assertNotNull(new CostComparator());
   }
 
   /**
@@ -37,7 +37,9 @@ public class CostComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
             "0", new LinkedList<String>(), new LinkedList<String>());
-    assertEquals(new CostComparator("1").compare(trip1, trip2), 0);
+    ComparesSearchedTrips costComparator = new CostComparator();
+    costComparator.setId("1");
+    assertEquals(costComparator.compare(trip1, trip2), 0);
   }
 
   /**
@@ -53,7 +55,9 @@ public class CostComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
             "0", new LinkedList<String>(), new LinkedList<String>());
-    assertEquals(new CostComparator("1").compare(trip1, trip2), 1);
+    ComparesSearchedTrips costComparator = new CostComparator();
+    costComparator.setId("1");
+    assertEquals(costComparator.compare(trip1, trip2), 1);
   }
 
   /**
@@ -69,7 +73,9 @@ public class CostComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 111, "1234567890", "My car", "comments").buildWithUsers(
             "0", new LinkedList<String>(), new LinkedList<String>());
-    assertEquals(new CostComparator("1").compare(trip1, trip2), -1);
+    ComparesSearchedTrips costComparator = new CostComparator();
+    costComparator.setId("1");
+    assertEquals(costComparator.compare(trip1, trip2), -1);
   }
 
   /**
@@ -98,7 +104,10 @@ public class CostComparatorTest {
     expected.add(trip3);
     expected.add(trip2);
     expected.add(trip1);
-    Collections.sort(trips, new CostComparator("1"));
+
+    ComparesSearchedTrips costComparator = new CostComparator();
+    costComparator.setId("1");
+    Collections.sort(trips, costComparator);
     for (int i = 0; i < expected.size(); i++) {
       assertEquals(trips.get(i), expected.get(i));
     }

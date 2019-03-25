@@ -11,7 +11,7 @@ import edu.brown.cs.drawbridge.models.Trip;
  */
 public class MultipleTripComparator implements Comparator<Trip> {
 
-  private List<Comparator<Trip>> comparators;
+  private List<ComparesSearchedTrips> comparators;
 
   /**
    * MultipleComparator constructor.
@@ -19,7 +19,7 @@ public class MultipleTripComparator implements Comparator<Trip> {
    * @param comparators
    *          List of comparators used to compare two Trips
    */
-  public MultipleTripComparator(List<Comparator<Trip>> comparators) {
+  public MultipleTripComparator(List<ComparesSearchedTrips> comparators) {
     this.comparators = comparators;
   }
 

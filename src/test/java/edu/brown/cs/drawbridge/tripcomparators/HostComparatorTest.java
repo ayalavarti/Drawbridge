@@ -21,7 +21,7 @@ public class HostComparatorTest {
    */
   @Test
   public void testConstructor() {
-    assertNotNull(new HostComparator("0"));
+    assertNotNull(new HostComparator());
   }
 
   /**
@@ -37,7 +37,9 @@ public class HostComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
             "0", new LinkedList<String>(), new LinkedList<String>());
-    assertEquals(new HostComparator("0").compare(trip1, trip2), 0);
+    ComparesSearchedTrips hostComparator = new HostComparator();
+    hostComparator.setId("0");
+    assertEquals(hostComparator.compare(trip1, trip2), 0);
   }
 
   /**
@@ -53,7 +55,9 @@ public class HostComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
             "0", new LinkedList<String>(), new LinkedList<String>());
-    assertEquals(new HostComparator("1").compare(trip1, trip2), 0);
+    ComparesSearchedTrips hostComparator = new HostComparator();
+    hostComparator.setId("1");
+    assertEquals(hostComparator.compare(trip1, trip2), 0);
   }
 
   /**
@@ -69,7 +73,9 @@ public class HostComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
             "1", new LinkedList<String>(), new LinkedList<String>());
-    assertEquals(new HostComparator("0").compare(trip1, trip2), -1);
+    ComparesSearchedTrips hostComparator = new HostComparator();
+    hostComparator.setId("0");
+    assertEquals(hostComparator.compare(trip1, trip2), -1);
   }
 
   /**
@@ -85,7 +91,9 @@ public class HostComparatorTest {
         .addLocations(0, 0, 0, 0).addTimes(10, 20)
         .addDetails(5, 100, "1234567890", "My car", "comments").buildWithUsers(
             "1", new LinkedList<String>(), new LinkedList<String>());
-    assertEquals(new HostComparator("1").compare(trip1, trip2), 1);
+    ComparesSearchedTrips hostComparator = new HostComparator();
+    hostComparator.setId("1");
+    assertEquals(hostComparator.compare(trip1, trip2), 1);
   }
 
   /**
@@ -114,7 +122,11 @@ public class HostComparatorTest {
     expected.add(trip3);
     expected.add(trip1);
     expected.add(trip2);
-    Collections.sort(trips, new HostComparator("1"));
+
+    ComparesSearchedTrips hostComparator = new HostComparator();
+    hostComparator.setId("1");
+    assertEquals(hostComparator.compare(trip1, trip2), 0);
+    Collections.sort(trips, hostComparator);
     for (int i = 0; i < expected.size(); i++) {
       assertEquals(trips.get(i), expected.get(i));
     }
