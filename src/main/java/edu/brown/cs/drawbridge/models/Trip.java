@@ -55,9 +55,9 @@ public class Trip {
   /**
    * Set the names of addresses of the Trip.
    *
-   * @param startAddress
+   * @param startingAddress
    *          The name of the starting address
-   * @param endAdress
+   * @param endingAddress
    *          The name of the ending address
    */
   private void setAddresses(String startingAddress, String endingAddress) {
