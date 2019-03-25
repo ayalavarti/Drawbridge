@@ -1,10 +1,75 @@
+body {
+    margin: 0 10%;
+}
+
+button, input[type="submit"] {
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+
+    border: 0;
+    width: auto;
+    outline: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 0.7em;
+    box-sizing: border-box;
+}
+
+/* Color scheme: https://coolors.co/1da1f2-d72638-2b303a-7fb800-8e0058 */
+h1:after, h2:after {
+    background: none repeat scroll 0 0 #1da1f2;
+    bottom: 1px;
+    content: "";
+    display: block;
+    height: 4px;
+    position: relative;
+    width: 60px;
+    border-radius: 2px;
+}
+h1:after {
+    left: calc(50% - 30px);
+}
+h2 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+#container {
+    display: grid;
+    grid-gap: 10px;
+}
+
+#title {
+    justify-self: center;
+    grid-row-start: 1;
+    grid-row-end: 1;
+    grid-column-start: 1;
+    grid-column-end: 1;
+}
+
+#map-inset {
+    justify-self: center;
+    grid-row-start: 2;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 1;
+}
+
 #basic-info {
-    width: 50%;
+    justify-self: start;
+    align-self: start;
+    grid-row-start: 2;
+    grid-row-end: 2;
+    grid-column-start: 2;
+    grid-column-end: 2;
+
     max-width: 350px;
     display: flex;
     flex-wrap: wrap;
 }
-
 .info-box {
     display: inline-block;
     box-sizing: border-box;
@@ -32,3 +97,115 @@
     padding-right: 7px;
     color: black;
 }
+
+#member-list-container {
+    justify-self: center;
+    grid-row-start: 3;
+    grid-row-end: 3;
+    grid-column-start: 1;
+    grid-column-end: 1;
+}
+#member-list {
+    background-color: #dddddd;
+    max-width: 480px;
+    max-height: 300px;
+    overflow: auto;
+    width: 480px;
+    padding: 0 10px;
+}
+.list-person, #button-container {
+    border-bottom: 2px solid #bbbbbb;
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+}
+.list-person:nth-last-child(2) {
+    border: none;
+}
+.user-name {
+    height: fit-content;
+    margin: auto 20px;
+}
+.addendum {
+    font-size: 0.6em;
+    color: #555555;
+}
+.status {
+    float: right;
+    padding: 6px 3px;
+    text-align: center;
+    background-color: #1da1f2;
+    color: white;
+    border-radius: 6px;
+    margin: auto 5px;
+    font-size: 0.7em;
+    width: 90px;
+    height: 35px;
+    box-sizing: border-box;
+}
+.host {
+    background-color: #8E0058;
+}
+.status i, .pending i, #button-container i {
+    margin: 4px;
+    font-size: 1.2em;
+    align: left;
+}
+.pending {
+    margin: auto 5px;
+    width: 90px;
+    text-align: center;
+}
+.pending button {
+    margin: 2px;
+    width: 35px;
+    height: 35px;
+}
+.approve {
+    background-color: #7FB800;
+}
+.approve:hover {
+    background-color: #8bcc00;
+}
+.deny {
+    background-color: #D72638;
+}
+.deny:hover {
+    background-color: #dd3c4c;
+}
+
+#button-container {
+    border: none;
+}
+#button-container button {
+    margin: auto;
+    background-color: #1da1f2;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 35px;
+    width: 70px;
+    font-size: 0.8em;
+}
+
+#comments-container {
+    justify-self: start;
+    grid-row-start: 3;
+    grid-row-end: 3;
+    grid-column-start: 2;
+    grid-column-end: 2;
+}
+#comments {
+    box-sizing: border-box;
+    padding: 15px;
+    max-width: 400px;
+    width: 400px;
+    height: 250px;
+    overflow: auto;
+    background-color: #dddddd;
+}
+#comments p {
+    font-size: 0.9em;
+    color: #555555;
+}
+
