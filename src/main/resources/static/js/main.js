@@ -109,3 +109,11 @@ function showHomeInfo() {
 		visibility: "visible"
 	});
 }
+
+function hover(e) {
+	e.setAttribute('src', `../images/${e.className}-hover.png`);
+}
+
+function unhover(e) {
+	e.setAttribute('src', `../images/${e.className}.png`);
+}
