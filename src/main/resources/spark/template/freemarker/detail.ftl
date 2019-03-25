@@ -14,10 +14,10 @@
         </div>
         <div id="basic-info">
             <div class="info-box">
-                <span><i class="far fa-dot-circle"></i>40 Hillside Rd., Cromwell, CT</span>
+                <span><i class="far fa-dot-circle"></i>${startName}</span>
             </div>
             <div class="info-box">
-                <span><i class="fas fa-map-marker-alt"></i>Keeney Quadrangle, Brown University, Providence, RI</span>
+                <span><i class="fas fa-map-marker-alt"></i>${endName}</span>
             </div>
             <div class="info-box half-size">
                 <span><i class="far fa-calendar-alt"></i>${(trip.getDepartureTime()*1000)?number_to_date}</span>

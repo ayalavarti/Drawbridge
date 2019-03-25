@@ -3,11 +3,16 @@ package edu.brown.cs.drawbridge.main;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
+import com.mapbox.api.geocoding.v5.GeocodingCriteria;
+import com.mapbox.api.geocoding.v5.MapboxGeocoding;
+import com.mapbox.api.geocoding.v5.models.CarmenFeature;
+import com.mapbox.geojson.Point;
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
 import edu.brown.cs.drawbridge.models.Trip;
 import freemarker.template.Configuration;
@@ -26,6 +31,7 @@ import spark.template.freemarker.FreeMarkerEngine;
  */
 public class UserInterface {
   private static final Gson GSON = new Gson();
+  private static final String MAPBOX_TOKEN = "pk.eyJ1IjoiYXJ2Mzk1IiwiYSI6ImNqdGpodWcwdDB6dXEzeXBrOHJyeGVpNm8ifQ.bAwH-KG_5A5kwIxCf6xCSQ";
   private static DatabaseQuery dbQuery;
 
   private static FreeMarkerEngine createEngine() {
@@ -127,11 +133,48 @@ public class UserInterface {
 
       Trip trip = dbQuery.getTripById(tid);
 
+      // Get human-readable names for the addresses
+      String startName, endName;
+
+      MapboxGeocoding startGeocode = MapboxGeocoding.builder()
+              .accessToken(MAPBOX_TOKEN)
+              .query(Point.fromLngLat(trip.getStartingLongitude(),
+                                      trip.getStartingLatitude()))
+              .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS)
+              .build();
+      try {
+        startName =
+                startGeocode.executeCall().body().features().get(0).placeName();
+      } catch (Exception e) {
+        String lngDir = trip.getStartingLongitude() < 0 ? "°S" : "°N";
+        String latDir = trip.getStartingLatitude() < 0 ? "°W" : "°E";
+        startName = Math.abs(trip.getStartingLatitude()) + latDir + ", "
+                  + Math.abs(trip.getStartingLongitude()) + lngDir;
+      }
+
+      MapboxGeocoding endGeocode = MapboxGeocoding.builder()
+              .accessToken(MAPBOX_TOKEN)
+              .query(Point.fromLngLat(trip.getEndingLongitude(),
+                                      trip.getEndingLatitude()))
+              .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS)
+              .build();
+      try {
+        endName =
+                endGeocode.executeCall().body().features().get(0).placeName();
+      } catch (Exception e) {
+        String lngDir = trip.getEndingLongitude() < 0 ? "°S" : "°N";
+        String latDir = trip.getEndingLatitude() < 0 ? "°W" : "°E";
+        endName = Math.abs(trip.getEndingLatitude()) + latDir + ", "
+                + Math.abs(trip.getEndingLongitude()) + lngDir;
+      }
+
       // Return empty data to GUI when / route is called
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", trip.getName())
           .put("favicon", "images/favicon.png")
-          .put("trip", trip).build();
+          .put("trip", trip)
+          .put("startName", startName)
+          .put("endName", endName).build();
       return new ModelAndView(variables, "detail.ftl");
     }
   }
