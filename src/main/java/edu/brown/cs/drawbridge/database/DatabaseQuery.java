@@ -22,7 +22,7 @@ public class DatabaseQuery {
       .addIdentification(0, "Mary's Carpool").addLocations(41.608550, -72.656662, 41.827104, -71.399639)
       .addTimes(1553487799, 1553494999).addDetails(7, 8.40, "555-867-5309",
                                                    "Uber", "We'll be meeting at the Ratty around this time, but maybe a bit later")
-      .build();
+      .buildWithUsers("118428670975676923422", new ArrayList<>(), new ArrayList<>());
   private static final String CREATE_USERS_TABLE = "CREATE IF NOT EXISTS users ("
       + "id TEXT NOT NULL PRIMARY KEY, " + "name TEXT, " + "email TEXT);";
   private static final String CREATE_TRIPS_TABLE = "CREATE IF NOT EXISTS trips ("

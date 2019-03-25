@@ -3,6 +3,7 @@ package edu.brown.cs.drawbridge.main;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,9 @@ import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.geojson.Point;
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
 import edu.brown.cs.drawbridge.models.Trip;
+import edu.brown.cs.drawbridge.models.User;
 import freemarker.template.Configuration;
+import javafx.util.Pair;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -168,13 +171,31 @@ public class UserInterface {
                 + Math.abs(trip.getEndingLongitude()) + lngDir;
       }
 
+      // Get user's names from the trip
+//      User host = dbQuery.getUserById(trip.getHostId());
+      User host = new User(trip.getHostId(), "Mary III", "mary@queen.com");
+      List<User> members = new ArrayList<>();
+      for (String memId : trip.getMemberIds()) {
+        members.add(dbQuery.getUserById(memId));
+      }
+      List<User> pending = new ArrayList<>();
+      for (String pendId : trip.getPendingIds()) {
+        pending.add(dbQuery.getUserById(pendId));
+      }
+      // TODO: remove this; for testing purposes only
+      pending.add(new User("1", "Mark Lavrentyev", "lavrema@outlook.com"));
+      members.add(new User("2", "Arvind Yalavarti", "abc@example.com"));
+
       // Return empty data to GUI when / route is called
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", trip.getName())
           .put("favicon", "images/favicon.png")
           .put("trip", trip)
           .put("startName", startName)
-          .put("endName", endName).build();
+          .put("endName", endName)
+          .put("host", host)
+          .put("members", members)
+          .put("pending", pending).build();
       return new ModelAndView(variables, "detail.ftl");
     }
   }
