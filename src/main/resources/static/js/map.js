@@ -351,7 +351,7 @@ function enableTrip() {
  * Sets the trip info test boxes to the appropriate distance and duration
  */
 function setTripInfo() {
-    $("#distance").text(`${((route[0]) * 0.621371).toFixed(2)} minutes`);
+    $("#distance").text(`${((route[0]) * 0.621371).toFixed(2)} mi`);
     $("#duration").text(`${route[1].toFixed(0)} min`);
 }
 
