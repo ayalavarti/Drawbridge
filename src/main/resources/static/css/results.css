@@ -37,7 +37,7 @@
 	border-top-left-radius: 15px;
 	border-top-right-radius: 15px;
 	padding: 20px 20px;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	box-shadow: 0 4px 8px 0 #0000001e, 0 5px 10px 0 #00000023;
 }
 
 .thresholds {
@@ -70,7 +70,7 @@
 
 	margin: 30px 10px;
 	border-radius: 15px;
-	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.096), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+	box-shadow: 0 2px 4px 0 #0000001e, 0 3px 10px 0 #00000028;
 }
 
 .result-trips {

@@ -39,7 +39,7 @@
 	border-radius: 15px;
 	border: 0;
 	outline: none;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	box-shadow: 0 4px 8px 0 #0000001e, 0 6px 20px 0 #0000002f;
 }
 
 .datetime-input,
