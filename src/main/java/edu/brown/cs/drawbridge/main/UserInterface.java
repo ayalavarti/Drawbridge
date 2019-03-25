@@ -89,7 +89,7 @@ public class UserInterface {
     Spark.get("/help", new InfoGetHandler(), freeMarker);
   }
 
-  //---------------------------- Home ------------------------------------
+  // ---------------------------- Home ------------------------------------
   /**
    * Handle requests to the home screen of the website.
    */
@@ -110,7 +110,12 @@ public class UserInterface {
   private static class ListGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
-      return null;
+      // Return empty data to GUI when / route is called
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("title", "Drawbridge | Info")
+          .put("favicon", "images/favicon.png").build();
+
+      return new ModelAndView(variables, "info.ftl");
     }
   }
   private static class ListPostHandler implements TemplateViewRoute {
