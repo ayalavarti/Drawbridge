@@ -195,8 +195,11 @@ function setTripResults(data) {
 				e[trip]["currentSize"], e[trip]["maxSize"],
 				e[trip]["costPerPerson"]);
 		}
-
-		result = result + `</div><img src="../images/${element["status"]}-btn.png" class="${element["status"]}-btn"/>
+		let imgAtt = "";
+		if (element["status"] === "join") {
+			imgAtt = `onmouseover="hover(this);" onmouseout="unhover(this);"`;
+		}
+		result = result + `</div><img src="../images/${element["status"]}-btn.png" class="${element["status"]}-btn" ${imgAtt}/>
 							</div>`
 		$(".results-content").append(result);
 	});

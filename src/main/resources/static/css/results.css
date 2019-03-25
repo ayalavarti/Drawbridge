@@ -82,14 +82,12 @@
 }
 
 .result-info {
-	text-align: center;
 	width: 250px;
 	margin-bottom: 15px;
 }
 
 .result-info>div {
 	font-size: 13px;
-	text-align: left;
 }
 
 .icon-label-medium {
@@ -101,6 +99,16 @@
 	color: #222;
 	font-size: 10px;
 	margin-left: 10px;
+}
+
+.join-btn,
+.joined-btn,
+.pending-btn {
+	border: 0;
+	width: auto;
+	height: 50px;
+	outline: none;
+	cursor: pointer;
 }
 
 .joined-btn,
