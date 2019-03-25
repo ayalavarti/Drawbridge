@@ -29,9 +29,9 @@
 .address-input {
 	outline: 0;
 	border: 0;
-	color: #1e3458;
+	color: #222;
 	background: none;
-	border-bottom: 1px solid #1e3458;
+	border-bottom: 1px solid #222;
 	font-size: 14px;
 	font-weight: 300;
 	padding: 13px 20px 6px 0px;
@@ -61,23 +61,23 @@
 	font-size: 18px;
 	padding-top: 20px;
 	font-weight: 500;
-	color: #1e3458;
+	color: #222;
 }
 
 .icon {
 	font-size: 40px;
 	margin: 15px;
-	color: #1e3458;
+	color: #222;
 }
 
 .icon-label {
 	margin: 10px 10px;
 	font-size: 12px;
-	color: #1e3458;
+	color: #222;
 }
 
 .icon-map-settings {
-	color: #1e3458;
+	color: #222;
 }
 
 .route-info,
@@ -169,7 +169,7 @@
 
 .mapboxgl-popup-content {
 	font-family: "Nunito", sans-serif;
-	color: #1e3458;
+	color: #222;
 	border-radius: 10px;
 	text-align: center;
 	width: 200px;

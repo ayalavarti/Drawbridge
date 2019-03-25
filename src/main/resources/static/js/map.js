@@ -14,7 +14,7 @@ let found = [];
 let coordinates = [];
 let markers = [];
 
-let addressNames = []
+let addressNames = [];
 let route = [];
 
 /**
@@ -355,7 +355,7 @@ function enableTrip() {
  * Sets the trip info test boxes to the appropriate distance and duration
  */
 function setTripInfo() {
-    $("#distance").text(`${((route[0]) * 0.621371).toFixed(2)} minutes`);
+    $("#distance").text(`${(route[0] * 0.621371).toFixed(2)} minutes`);
     $("#duration").text(`${route[1].toFixed(0)} min`);
 }
 
@@ -410,9 +410,11 @@ function alignTrip() {
          * height is below a threshold. Then the map view is adjusted since the search
          * menu will not cover up the trip.
          */
-        if ((coordinates[0][0] < coordinates[1][0]) && (coordinates[0][1] < coordinates[1][1]) ||
-            (coordinates[0][0] > coordinates[1][0]) && (coordinates[0][1] > coordinates[1][1]) ||
-            $(window).height() < 600) {
+        if (
+            (coordinates[0][0] < coordinates[1][0] && coordinates[0][1] < coordinates[1][1]) ||
+            (coordinates[0][0] > coordinates[1][0] && coordinates[0][1] > coordinates[1][1]) ||
+            $(window).height() < 600
+        ) {
             top = 150;
         }
 
@@ -464,5 +466,4 @@ function handleSubmit() {
     };
 
     console.log(postParameters);
-    return false;
 }
