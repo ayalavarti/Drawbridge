@@ -47,8 +47,15 @@ public class DatabaseQuery {
   private static final String FIND_REQUEST_USERS = "SELECT user_id FROM requests WHERE trip_id = ?";
 
   private static final String FIND_SIMILAR_TRIPS = "SELECT * FROM trips WHERE "
+          + "((start_latitude - ?)^2 + (start_longitude - ?)^2 <= (?)^2) AND "
+          + "((end_latitude - ?)^2 + (end_longitude - ?)^2 <= (?)^2) "
+          + "AND (departure BETWEEN ? AND ?);";
+
+  private static final String FIND_CONNECTED_TRIPS = "SELECT * FROM trips WHERE "
           + "((start_latitude - ?)^2 + (start_longitude - ?)^2 <= (?)^2) "
           + "AND (departure BETWEEN ? AND ?);";
+
+
 
   /**
    * A constructor based on the String name of the database.
@@ -62,12 +69,12 @@ public class DatabaseQuery {
    * @throws IOException
    *           Errors involving locating the database.
    */
-  public DatabaseQuery(String db) throws ClassNotFoundException, SQLException {
+  public DatabaseQuery(String db, String username, String password) throws ClassNotFoundException, SQLException {
     // this line loads the driver manager class, and must be
     // present for everything else to work properly
     Class.forName("org.postgresql.Driver");
     String urlToDB = "jdbc:postgresql:" + db;
-    conn = DriverManager.getConnection(urlToDB);
+    conn = DriverManager.getConnection(urlToDB, username, password);
     // these two lines tell the database to enforce foreign
     // keys during operations, and should be present
     try (Statement stat = conn.createStatement()) {
@@ -381,17 +388,18 @@ public class DatabaseQuery {
 
   /**
    * Finds all of the trips that match the search criteria.
-   *
-   * @param trip
-   *          The Trip information being matched.
-   * @param walkRadius
-   *          The buffer for matching the requested start and end locations.
-   * @param timeBuffer
-   *          The buffer for matching the requested departure time.
+   * @param startLat The double starting latitude.
+   * @param startLon The double starting longitude.
+   * @param endLat The double ending latitude.
+   * @param endLong The double ending longitude.
+   * @param departure The int time of departure in epoch time
+   * @param walkRadius The buffer for matching the requested start and end locations.
+   * @param timeBuffer The buffer for matching the requested departure time.
    * @return A List of all the relevant trips in the database.
    */
-  public List<Trip> searchRelevantTrips(Trip trip, double walkRadius,
-      int timeBuffer) {
+  public List<Trip> searchRelevantTrips(
+          double startLat, double startLon, double endLat, double endLong,
+          double departure, double walkRadius, int timeBuffer) {
     List<Trip> results = new ArrayList<>();
     String query = FIND_SIMILAR_TRIPS;
     // try (PreparedStatement prep = conn.prepareStatement(query)) {
@@ -408,18 +416,20 @@ public class DatabaseQuery {
    * That is, trips that depart near the given destination and that depart after
    * the given departure time within a specific time frame.
    *
-   * @param trip
-   *          The previous Trip.
+   * @param lastEndLat The double ending latitude of the previous trip.
+   * @param lastEndLon The double ending longitude of the previous trip.
    * @param walkRadius
    *          The buffer for finding reasonably distanced trips.
+   * @param lastEta The int expected arrival time of the last trip.
    * @param timeBuffer
    *          The buffer for finding reasonably timed trips.
    * @return A List of all the trips connected to the given trip.
    */
-  public List<Trip> getConnectedTrips(Trip trip, double walkRadius,
-      int timeBuffer) {
+  public List<Trip> getConnectedTrips(
+          double lastEndLat, double lastEndLon, double walkRadius,
+          int lastEta, int timeBuffer) {
     List<Trip> results = new ArrayList<>();
-    String query = FIND_SIMILAR_TRIPS;
+    String query = FIND_CONNECTED_TRIPS;
     // try (PreparedStatement prep = conn.prepareStatement(query)) {
     //
     // } catch (SQLException e) {
