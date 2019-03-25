@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DatabaseQueryTest {
 
-  @Test
+  //@Test
   public void testDatabaseConnection() {
     try {
       DatabaseQuery test = new DatabaseQuery("//localhost/carpools");

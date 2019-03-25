@@ -22,33 +22,12 @@ public class DatabaseQuery {
       .addIdentification(0, "Mary's Carpool").addLocations(1.0, 2.0, 3.0, 4.0)
       .addAddressNames("start", "end").addTimes(500, 600)
       .addDetails(7, 8.00, "555-867-5309", "Uber", "").build();
-  private static final String CREATE_USERS_TABLE = "CREATE IF NOT EXISTS users ("
-      + "id TEXT NOT NULL PRIMARY KEY, " + "name TEXT, " + "email TEXT);";
-  private static final String CREATE_TRIPS_TABLE = "CREATE IF NOT EXISTS trips ("
-      + "id INTEGER NOT NULL IDENTITY PRIMARY KEY, " + "name TEXT, "
-      + "start_latitude DOUBLE PRECISION, "
-      + "start_longitude DOUBLE PRECISION, " + "end_latitude DOUBLE PRECISION, "
-      + "end_longitude DOUBLE PRECISION, " + "departure BIGINT, "
-      + "eta BIGINT, " + "max_people SMALLINT, " + "total_cost REAL, "
-      + "host_phone TEXT, " + "transportation TEXT, " + "description TEXT);";
-  private static final String CREATE_HOSTS_TABLE = "CREATE IF NOT EXISTS hosts ("
-      + "user_id TEXT REFERENCES users(id), "
-      + "trip_id INTEGER REFERENCES trips(id));";
-  private static final String CREATE_MEMBERS_TABLE = "CREATE IF NOT EXISTS members ("
-      + "user_id TEXT REFERENCES users(id), "
-      + "trip_id INTEGER REFERENCES trips(id));";
-  private static final String CREATE_REQUESTS_TABLE = "CREATE IF NOT EXISTS requests ("
-      + "user_id TEXT REFERENCES users(id), "
-      + "trip_id INTEGER REFERENCES trips(id));";
-  private static final List<String> SETUP_QUERIES = new ArrayList<>(
-      Arrays.asList(CREATE_USERS_TABLE, CREATE_TRIPS_TABLE, CREATE_HOSTS_TABLE,
-          CREATE_MEMBERS_TABLE, CREATE_REQUESTS_TABLE));
 
   private static final String INSERT_USER = "INSERT INTO users VALUES (? ? ?);";
   private static final String INSERT_TRIP = "INSERT INTO trips(name, "
       + "start_latitude, start_longitude, end_latitude, end_longitude, "
       + "departure, eta, max_people, total_cost, host_phone, transportation, "
-      + "description) VALUES (? ? ? ? ? ? ? ? ? ? ? ?) RETURNING id;";
+      + "description) VALUES (? ? ? ? ? ? ? ? ? ? ? ? ? ?) RETURNING id;";
 
   private static final String REMOVE_TRIP_BY_ID = "DELETE FROM trips WHERE id = ?;";
   private static final String REMOVE_TRIPS_BY_TIME = "DELETE FROM trips WHERE departure < current_timestamp;";
@@ -67,10 +46,9 @@ public class DatabaseQuery {
   private static final String FIND_MEMBER_USERS = "SELECT user_id FROM members WHERE trip_id = ?";
   private static final String FIND_REQUEST_USERS = "SELECT user_id FROM requests WHERE trip_id = ?";
 
-  private static final String FIND_SIMILAR_TRIPS = "";// "SELECT * FROM trips
-                                                      // WHERE ";
-  private static final String FIND_CONNECTED_TRIPS = "";// "SELECT * FROM trips
-                                                        // WHERE ";
+  private static final String FIND_SIMILAR_TRIPS = "SELECT * FROM trips WHERE "
+          + "((start_latitude - ?)^2 + (start_longitude - ?)^2 <= (?)^2) "
+          + "AND (departure BETWEEN ? AND ?);";
 
   /**
    * A constructor based on the String name of the database.
@@ -94,20 +72,6 @@ public class DatabaseQuery {
     // keys during operations, and should be present
     try (Statement stat = conn.createStatement()) {
       stat.executeUpdate("PRAGMA foreign_keys = ON;");
-    }
-  }
-
-  /**
-   * Creates the necessary tables for the database.
-   */
-  public void setUp() {
-    // make tables
-    for (String query : SETUP_QUERIES) {
-      try (PreparedStatement prep = conn.prepareStatement(query)) {
-        prep.executeUpdate();
-      } catch (SQLException e) {
-        assert false;
-      }
     }
   }
 
@@ -317,17 +281,17 @@ public class DatabaseQuery {
    */
   public boolean addUser(User user) {
     String query = INSERT_USER;
-    try (PreparedStatement prep = conn.prepareStatement(query)) {
-      prep.setString(1, user.getId());
-      prep.setString(2, user.getName());
-      prep.setString(3, user.getEmail());
-      prep.addBatch();
-      prep.executeUpdate();
-      return true;
-    } catch (SQLException e) {
-      return false;
-    }
-    // return true;
+//    try (PreparedStatement prep = conn.prepareStatement(query)) {
+//      prep.setString(1, user.getId());
+//      prep.setString(2, user.getName());
+//      prep.setString(3, user.getEmail());
+//      prep.addBatch();
+//      prep.executeUpdate();
+//      return true;
+//    } catch (SQLException e) {
+//      return false;
+//    }
+     return true;
   }
 
   /**
@@ -455,7 +419,7 @@ public class DatabaseQuery {
   public List<Trip> getConnectedTrips(Trip trip, double walkRadius,
       int timeBuffer) {
     List<Trip> results = new ArrayList<>();
-    String query = FIND_CONNECTED_TRIPS;
+    String query = FIND_SIMILAR_TRIPS;
     // try (PreparedStatement prep = conn.prepareStatement(query)) {
     //
     // } catch (SQLException e) {
@@ -530,7 +494,29 @@ public class DatabaseQuery {
    * @return True if the rejection was processed successfully. False otherwise.
    */
   public boolean reject(int tripId, String userId) {
-    // String query = REMOVE_REQUEST; //delete from requests
+     String query = REMOVE_REQUEST;
+    // try (PreparedStatement prep = conn.prepareStatement(query)) {
+    // prep.setInt(1, tripId);
+    // prep.setString(2,userId);
+    // prep.executeUpdate();
+    // return true;
+    // } catch (SQLException e) {
+    // return false;
+    // }
+    return true;
+  }
+
+  /**
+   * Kicks a member by removing its relation from the database.
+   *
+   * @param tripId
+   *          The int id of the trip.
+   * @param userId
+   *          The String id of the user being kicked from the trip.
+   * @return True if the kick was processed successfully. False otherwise.
+   */
+  public boolean kick(int tripId, String userId) {
+     String query = REMOVE_MEMBER;
     // try (PreparedStatement prep = conn.prepareStatement(query)) {
     // prep.setInt(1, tripId);
     // prep.setString(2,userId);
