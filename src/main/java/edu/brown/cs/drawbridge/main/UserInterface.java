@@ -47,10 +47,11 @@ public abstract class UserInterface {
 
     Spark.get("/", new HomeGetHandler(), freeMarker);
     Spark.get("/help", new InfoGetHandler(), freeMarker);
+    Spark.get("/results", new ListGetHandler(), freeMarker);
 
   }
 
-  //---------------------------- Home ------------------------------------
+  // ---------------------------- Home ------------------------------------
   /**
    * Handle requests to the home screen of the website.
    */
@@ -67,13 +68,24 @@ public abstract class UserInterface {
     }
   }
 
-  //---------------------------- List ------------------------------------
+  // ---------------------------- List ------------------------------------
+  private static class ListGetHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
+      // Return empty data to GUI when /results route is called
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("title", "Drawbridge | Results")
+          .put("favicon", "images/favicon.png").build();
 
-  //--------------------------- Detail -----------------------------------
-  //---------------------------- User ------------------------------------
+      return new ModelAndView(variables, "results.ftl");
+    }
+  }
 
-  //--------------------------- Create -----------------------------------
-  //---------------------------- Info ------------------------------------
+  // --------------------------- Detail -----------------------------------
+  // ---------------------------- User ------------------------------------
+
+  // --------------------------- Create -----------------------------------
+  // ---------------------------- Info ------------------------------------
   private static class InfoGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {

@@ -25,28 +25,25 @@
                     <i class="fas fa-clock icon-label"></i>
                     <input required class="datetime-input flatpickr flatpickr-input" id="time" type="text" placeholder="Time..." />
                 </div>
-                <input id="" name="submit" alt="Submit" type="image" src="/images/submit.png" class="submit-btn"/>
+                <input name="submit" alt="Submit" type="image" src="/images/submit.png" class="submit-btn"/>
             </div>
         </form>
     </div>
 </div>
 
+
 <div id="pre-load" style="visibility: visible;" class="map-settings compass-setting" onclick="alignMap()">
     <img style="height: 15px; width: auto" src = "/images/compass-icon.png" />
 </div>
-
 <div id="pre-load" style="visibility: visible;" class="map-settings location-setting" onclick="centerMap()">
     <img style="height: 15px; width: auto" src = "/images/pin-icon.png" />
 </div>
-
 <div id="pre-load" style="visibility: hidden;" class="map-settings trip-setting" onclick="alignTrip()">
     <img id="car-icon" style="height: 15px; width: auto" src = "/images/car-disabled.png" />
 </div>
-
 <div id="pre-load" style="visibility: visible;" class="map-settings team-setting" onclick="toTeam()">
     <img style="height: 15px; width: auto" src = "/images/team-icon.png" />
 </div>
-
 <div id="pre-load" style="visibility: visible;" class="map-settings info-setting" onclick="toInfo()">
     <img style="height: 15px; width: auto" src = "/images/info-icon.png" />
 </div>
@@ -60,12 +57,12 @@
     </div>
 </div>
 
-<script src='/js/es6-promise.auto.min.js'></script>
-<script src="/js/mapbox-sdk.min.js"></script>
+<script src='/js/external/es6-promise.auto.min.js'></script>
+<script src="/js/external/mapbox-sdk.min.js"></script>
 
 <div id="map"></div>
 
-<script src="/js/jquery-3.1.1.js"></script>
+<script src="/js/external/jquery-3.1.1.js"></script>
 <script src="/js/map.js"></script>
 
 </#assign>
