@@ -1,6 +1,6 @@
 <#assign content>
 
-<div style="width: 300px; text-align: center; position: absolute; left: 0; top: 40%; right: 0; margin-left: auto; margin-right: auto;" id = "loading">
+<div class="loading-gif" id = "loading">
     <img src ="/images/loading.gif" style="width: 60px; height: auto;"/>
 </div>
 
@@ -12,11 +12,11 @@
             <div class="search-inputs">
                 <div><i class="fas fa-dot-circle icon-label"></i>
                     <input required class="address-input" id="start-input" onblur="handleInput('start-input', 0)" type="text" placeholder="Starting point..." />
-                    <img id="loading-start-input" src ="/images/loading.gif" style="width: 20px; height: auto; visibility: hidden;"/>
+                    <img id="loading-start-input" src ="/images/loading.gif" class="loading-address-gif"/>
                 </div>
                 <div><i class="fas fa-map-marker-alt icon-label"></i>
                     <input required class="address-input" id="end-input" onblur="handleInput('end-input', 1)" type="text" placeholder="Ending destination..." />
-                    <img id="loading-end-input" src ="/images/loading.gif" style="width: 20px; height: auto; visibility: hidden;"/>
+                    <img id="loading-end-input" src ="/images/loading.gif" class="loading-address-gif"/>
                 </div>
                 <div>
                     <i class="fas fa-calendar icon-label"></i>
@@ -33,19 +33,19 @@
 
 
 <div id="pre-load" style="visibility: visible;" class="map-settings compass-setting" onclick="alignMap()">
-    <img style="height: 15px; width: auto" src = "/images/compass-icon.png" />
+    <img class="icon-img" src = "/images/compass-icon.png" />
 </div>
 <div id="pre-load" style="visibility: visible;" class="map-settings location-setting" onclick="centerMap()">
-    <img style="height: 15px; width: auto" src = "/images/pin-icon.png" />
+    <img class="icon-img" src = "/images/pin-icon.png" />
 </div>
 <div id="pre-load" style="visibility: hidden;" class="map-settings trip-setting" onclick="alignTrip()">
-    <img id="car-icon" style="height: 15px; width: auto" src = "/images/car-disabled.png" />
+    <img id="car-icon" class="icon-img" src = "/images/car-disabled.png" />
 </div>
 <div id="pre-load" style="visibility: visible;" class="map-settings team-setting" onclick="toTeam()">
-    <img style="height: 15px; width: auto" src = "/images/team-icon.png" />
+    <img class="icon-img" src = "/images/team-icon.png" />
 </div>
 <div id="pre-load" style="visibility: visible;" class="map-settings info-setting" onclick="toInfo()">
-    <img style="height: 15px; width: auto" src = "/images/info-icon.png" />
+    <img class="icon-img" src = "/images/info-icon.png" />
 </div>
 
 <div id="route-info" style="visibility: hidden; flex-direction: column;" class="route-info">

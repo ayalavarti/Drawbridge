@@ -162,20 +162,19 @@ function generateTrip(name, start, end, rawDate, size, maxSize, price) {
 	}
 
 	return (`<div class="result-info">
-				<div>${name}</div>
+				<div class="sub-heading">${name}</div>
 				<img src="/images/divider.png" style="height: 3px; width: auto;" />
-				<div style="font-size: 13px; text-align: left;">
+				<div>
 					<i class="fas fa-map-marker-alt icon-label-small"></i>
-						${start} -
-						${end}
+						${start} - ${end}
 				</div>
-				<div style="font-size: 13px; text-align: left;">
+				<div>
 					<i class="fas fa-calendar icon-label-small"></i>
 						${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}
 					<i class="fas fa-clock icon-label-small"></i>
 						${hour}:${date.getMinutes()} ${hourLabel}
 				</div>
-				<div style="font-size: 13px; text-align: left;">
+				<div>
 					<i class="fas fa-users icon-label-small"></i>
 						${size} / ${maxSize}
 						<i class="fas fa-dollar-sign icon-label-small"></i>
@@ -198,8 +197,7 @@ function setTripResults(data) {
 		}
 
 		result = result + `</div><img src="../images/${element["status"]}-btn.png" class="${element["status"]}-btn"/>
-		</div>`
-
+							</div>`
 		$(".results-content").append(result);
 	});
 }
