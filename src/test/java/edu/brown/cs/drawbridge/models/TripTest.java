@@ -24,10 +24,13 @@ public class TripTest {
     List<String> pendingIds = new LinkedList<String>();
     pendingIds.add("3");
     pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
-    assertNotNull(t);
+    assertNotNull(Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
+        .addLocations(0, 1, 2, 3).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build());
+    assertNotNull(Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
+        .addLocations(0, 1, 2, 3).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments")
+        .buildWithUsers("host", memberIds, pendingIds));
   }
 
   /**
@@ -35,15 +38,9 @@ public class TripTest {
    */
   @Test
   public void testGetId() {
-    List<String> memberIds = new LinkedList<String>();
-    memberIds.add("1");
-    memberIds.add("2");
-    List<String> pendingIds = new LinkedList<String>();
-    pendingIds.add("3");
-    pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
+    Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
+        .addLocations(0, 1, 2, 3).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
     assertEquals(t.getId(), 0);
   }
 
@@ -52,15 +49,9 @@ public class TripTest {
    */
   @Test
   public void testGetName() {
-    List<String> memberIds = new LinkedList<String>();
-    memberIds.add("1");
-    memberIds.add("2");
-    List<String> pendingIds = new LinkedList<String>();
-    pendingIds.add("3");
-    pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
+    Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
+        .addLocations(0, 1, 2, 3).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
     assertEquals(t.getName(), "name");
   }
 
@@ -69,16 +60,10 @@ public class TripTest {
    */
   @Test
   public void testGetStartingLatitude() {
-    List<String> memberIds = new LinkedList<String>();
-    memberIds.add("1");
-    memberIds.add("2");
-    List<String> pendingIds = new LinkedList<String>();
-    pendingIds.add("3");
-    pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.001, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
-    assertEquals(t.getStartingLatitude(), 0.001, 0.1);
+    Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
+        .addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
+    assertEquals(t.getStartingLatitude(), 5, 0.1);
   }
 
   /**
@@ -86,16 +71,10 @@ public class TripTest {
    */
   @Test
   public void testGetStartingLongitude() {
-    List<String> memberIds = new LinkedList<String>();
-    memberIds.add("1");
-    memberIds.add("2");
-    List<String> pendingIds = new LinkedList<String>();
-    pendingIds.add("3");
-    pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.002, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
-    assertEquals(t.getStartingLongitude(), 0.002, 0.1);
+    Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
+        .addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
+    assertEquals(t.getStartingLongitude(), 6, 0.1);
   }
 
   /**
@@ -103,16 +82,10 @@ public class TripTest {
    */
   @Test
   public void testGetEndingLatitude() {
-    List<String> memberIds = new LinkedList<String>();
-    memberIds.add("1");
-    memberIds.add("2");
-    List<String> pendingIds = new LinkedList<String>();
-    pendingIds.add("3");
-    pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.003, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
-    assertEquals(t.getEndingLatitude(), 0.003, 0.1);
+    Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
+        .addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
+    assertEquals(t.getEndingLatitude(), 7, 0.1);
   }
 
   /**
@@ -120,16 +93,10 @@ public class TripTest {
    */
   @Test
   public void testGetEndingLongitude() {
-    List<String> memberIds = new LinkedList<String>();
-    memberIds.add("1");
-    memberIds.add("2");
-    List<String> pendingIds = new LinkedList<String>();
-    pendingIds.add("3");
-    pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.004, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
-    assertEquals(t.getEndingLongitude(), 0.004, 0.1);
+    Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
+        .addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
+    assertEquals(t.getEndingLongitude(), 8, 0.1);
   }
 
   /**
@@ -137,15 +104,9 @@ public class TripTest {
    */
   @Test
   public void testGetDepartureTime() {
-    List<String> memberIds = new LinkedList<String>();
-    memberIds.add("1");
-    memberIds.add("2");
-    List<String> pendingIds = new LinkedList<String>();
-    pendingIds.add("3");
-    pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
+    Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
+        .addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
     assertEquals(t.getDepartureTime(), 10);
   }
 
@@ -154,15 +115,9 @@ public class TripTest {
    */
   @Test
   public void testGetEta() {
-    List<String> memberIds = new LinkedList<String>();
-    memberIds.add("1");
-    memberIds.add("2");
-    List<String> pendingIds = new LinkedList<String>();
-    pendingIds.add("3");
-    pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
+    Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
+        .addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
     assertEquals(t.getEta(), 20);
   }
 
@@ -171,15 +126,9 @@ public class TripTest {
    */
   @Test
   public void testGetMaxUsers() {
-    List<String> memberIds = new LinkedList<String>();
-    memberIds.add("1");
-    memberIds.add("2");
-    List<String> pendingIds = new LinkedList<String>();
-    pendingIds.add("3");
-    pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
+    Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
+        .addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
     assertEquals(t.getMaxUsers(), 5);
   }
 
@@ -188,15 +137,9 @@ public class TripTest {
    */
   @Test
   public void testGetCost() {
-    List<String> memberIds = new LinkedList<String>();
-    memberIds.add("1");
-    memberIds.add("2");
-    List<String> pendingIds = new LinkedList<String>();
-    pendingIds.add("3");
-    pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
+    Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
+        .addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 100, "1234567890", "My car", "comments").build();
     assertEquals(t.getCost(), 100.0, 0.1);
   }
 
@@ -205,15 +148,9 @@ public class TripTest {
    */
   @Test
   public void testGetPhoneNumber() {
-    List<String> memberIds = new LinkedList<String>();
-    memberIds.add("1");
-    memberIds.add("2");
-    List<String> pendingIds = new LinkedList<String>();
-    pendingIds.add("3");
-    pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
+    Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
+        .addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
     assertEquals(t.getPhoneNumber(), "1234567890");
   }
 
@@ -222,16 +159,10 @@ public class TripTest {
    */
   @Test
   public void testGetMethodOfTransportation() {
-    List<String> memberIds = new LinkedList<String>();
-    memberIds.add("1");
-    memberIds.add("2");
-    List<String> pendingIds = new LinkedList<String>();
-    pendingIds.add("3");
-    pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
-    assertEquals(t.getMethodOfTransportation(), "My Car");
+    Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
+        .addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
+    assertEquals(t.getMethodOfTransportation(), "My car");
   }
 
   /**
@@ -239,20 +170,47 @@ public class TripTest {
    */
   @Test
   public void testGetComments() {
-    List<String> memberIds = new LinkedList<String>();
-    memberIds.add("1");
-    memberIds.add("2");
-    List<String> pendingIds = new LinkedList<String>();
-    pendingIds.add("3");
-    pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
+    Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(0, "name")
+        .addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
     assertEquals(t.getComments(), "comments");
   }
 
   /**
-   * Test getHostId method.
+   * Test getHostId method given a Trip without User information.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetHostIdNull() {
+    Trip noUsers = Trip.TripBuilder.newTripBuilder()
+        .addIdentification(0, "name").addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
+    noUsers.getHostId();
+  }
+
+  /**
+   * Test getMemberIds method given a Trip without User information.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetMemberIdsNull() {
+    Trip noUsers = Trip.TripBuilder.newTripBuilder()
+        .addIdentification(0, "name").addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
+    noUsers.getMemberIds();
+  }
+
+  /**
+   * Test getPendingIds method given a Trip without User information.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetPendingIdsNull() {
+    Trip noUsers = Trip.TripBuilder.newTripBuilder()
+        .addIdentification(0, "name").addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
+    noUsers.getPendingIds();
+  }
+
+  /**
+   * Test getHostId method given a Trip with User information.
    */
   @Test
   public void testGetHostId() {
@@ -262,14 +220,15 @@ public class TripTest {
     List<String> pendingIds = new LinkedList<String>();
     pendingIds.add("3");
     pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
-    assertEquals(t.getHostId(), "hostId");
+    Trip hasUsers = Trip.TripBuilder.newTripBuilder()
+        .addIdentification(0, "name").addLocations(0, 1, 2, 3).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments")
+        .buildWithUsers("host", memberIds, pendingIds);
+    assertEquals(hasUsers.getHostId(), "host");
   }
 
   /**
-   * Test getMemberIds method.
+   * Test getMemberIds method given a Trip with User information.
    */
   @Test
   public void testGetMemberIds() {
@@ -279,16 +238,18 @@ public class TripTest {
     List<String> pendingIds = new LinkedList<String>();
     pendingIds.add("3");
     pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
+    Trip hasUsers = Trip.TripBuilder.newTripBuilder()
+        .addIdentification(0, "name").addLocations(0, 1, 2, 3).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments")
+        .buildWithUsers("host", memberIds, pendingIds);
+    assertEquals(hasUsers.getHostId(), "host");
     for (int i = 0; i < memberIds.size(); i++) {
-      assertEquals(t.getMemberIds().get(i), memberIds.get(i));
+      assertEquals(hasUsers.getMemberIds().get(i), memberIds.get(i));
     }
   }
 
   /**
-   * Test getPendingIds method.
+   * Test getPendingIds method given a Trip with User information.
    */
   @Test
   public void testGetPendingIds() {
@@ -298,50 +259,74 @@ public class TripTest {
     List<String> pendingIds = new LinkedList<String>();
     pendingIds.add("3");
     pendingIds.add("4");
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
+    Trip hasUsers = Trip.TripBuilder.newTripBuilder()
+        .addIdentification(0, "name").addLocations(0, 1, 2, 3).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments")
+        .buildWithUsers("host", memberIds, pendingIds);
+    assertEquals(hasUsers.getHostId(), "host");
     for (int i = 0; i < memberIds.size(); i++) {
-      assertEquals(t.getPendingIds().get(i), pendingIds.get(i));
+      assertEquals(hasUsers.getPendingIds().get(i), pendingIds.get(i));
     }
   }
 
   /**
-   * Test getCurrentSize method.
+   * Test getCurrentSize method given a Trip without User information.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetCurrentSizeNull() {
+    Trip noUsers = Trip.TripBuilder.newTripBuilder()
+        .addIdentification(0, "name").addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
+    noUsers.getCurrentSize();
+  }
+
+  /**
+   * Test getCurrentSize method given a Trip with User information.
    */
   @Test
   public void testGetCurrentSize() {
     List<String> memberIds = new LinkedList<String>();
     List<String> pendingIds = new LinkedList<String>();
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
-
-    assertEquals(t.getCurrentSize(), 1);
+    Trip hasUsers = Trip.TripBuilder.newTripBuilder()
+        .addIdentification(0, "name").addLocations(0, 1, 2, 3).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments")
+        .buildWithUsers("host", memberIds, pendingIds);
+    assertEquals(hasUsers.getCurrentSize(), 1);
     memberIds.add("1");
-    assertEquals(t.getCurrentSize(), 2);
+    assertEquals(hasUsers.getCurrentSize(), 2);
     pendingIds.add("2");
-    assertEquals(t.getCurrentSize(), 2);
+    assertEquals(hasUsers.getCurrentSize(), 2);
   }
 
   /**
-   * Test getCostPerUser method.
+   * Test getCostPerUser method given a Trip without User information.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetCostPerUserNull() {
+    Trip noUsers = Trip.TripBuilder.newTripBuilder()
+        .addIdentification(0, "name").addLocations(5, 6, 7, 8).addTimes(10, 20)
+        .addDetails(5, 20, "1234567890", "My car", "comments").build();
+    noUsers.getCostPerUser();
+  }
+
+  /**
+   * Test getCostPerUser method given a Trip with User information.
    */
   @Test
   public void testGetCostPerUser() {
     List<String> memberIds = new LinkedList<String>();
     List<String> pendingIds = new LinkedList<String>();
-    Trip t = new Trip.Builder(0, "name", 0.1, 0.2, 0.3, 0.4, 10, 20, 5, 100.0,
-        "1234567890", "My Car", "comments", "hostId", memberIds, pendingIds)
-            .build();
-
-    assertEquals(t.getCostPerUser(), 100.0, 0.1);
+    Trip hasUsers = Trip.TripBuilder.newTripBuilder()
+        .addIdentification(0, "name").addLocations(0, 1, 2, 3).addTimes(10, 20)
+        .addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("host", memberIds, pendingIds);
+    assertEquals(hasUsers.getCostPerUser(), 100.0, 0.1);
     memberIds.add("1");
-    assertEquals(t.getCostPerUser(), 50.0, 0.1);
+    assertEquals(hasUsers.getCostPerUser(), 50.0, 0.1);
     memberIds.add("2");
     memberIds.add("3");
-    assertEquals(t.getCostPerUser(), 25.0, 0.1);
+    assertEquals(hasUsers.getCostPerUser(), 25.0, 0.1);
     pendingIds.add("4");
-    assertEquals(t.getCostPerUser(), 25.0, 0.1);
+    assertEquals(hasUsers.getCostPerUser(), 25.0, 0.1);
   }
 }

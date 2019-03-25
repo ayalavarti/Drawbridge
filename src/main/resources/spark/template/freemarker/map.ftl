@@ -1,3 +1,4 @@
+<#assign stylesheets></#assign>
 <#assign content>
 
 <div style="width: 300px; text-align: center; position: absolute; left: 0; top: 40%; right: 0; margin-left: auto; margin-right: auto;" id = "loading">
@@ -57,12 +58,8 @@
     </div>
 </div>
 
-<script src='/js/external/es6-promise.auto.min.js'></script>
-<script src="/js/external/mapbox-sdk.min.js"></script>
-
 <div id="map"></div>
 
-<script src="/js/external/jquery-3.1.1.js"></script>
 <script src="/js/map.js"></script>
 
 </#assign>
