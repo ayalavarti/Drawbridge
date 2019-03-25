@@ -20,13 +20,13 @@
                 <span><i class="fas fa-map-marker-alt"></i>Keeney Quadrangle, Brown University, Providence, RI</span>
             </div>
             <div class="info-box half-size">
-                <span><i class="far fa-calendar-alt"></i>April 5, 2019</span>
+                <span><i class="far fa-calendar-alt"></i>${(trip.getDepartureTime()*1000)?number_to_date}</span>
             </div>
             <div class="info-box half-size">
-                <span><i class="far fa-clock"></i>11:59 am</span>
+                <span><i class="far fa-clock"></i>${(trip.getDepartureTime()*1000)?number_to_time?string("h:mm a")}</span>
             </div>
             <div class="info-box">
-                <span><i class="fas fa-phone"></i>Contact host at (555) 555-5555</span>
+                <span><i class="fas fa-phone"></i>Contact host at ${trip.getPhoneNumber()}</span>
             </div>
         </div>
         <div id="member-list-container">
@@ -57,15 +57,17 @@
                     </div>
                 </div>
                 <div id="button-container">
-                    <button>Join<i class="fas fa-sign-in-alt"></i></button>
+                    <button id="join-btn" style="display: none">Join<i class="fas fa-sign-in-alt"></i></button>
+                    <button id="leave-btn" style="display: none">Leave<i class="fas fa-sign-out-alt"></i></button>
+                    <button id="delete-btn" style="display: none">Delete<i class="fas fa-trash-alt"></i></button>
                 </div>
             </div>
         </div>
         <div id="comments-container">
             <h2>Description</h2>
             <div id="comments">
-                <i class="fas fa-dollar-sign"></i>24<i class="addendum">/person</i>
-                <p>We'll be meeting inside the Ratty at 4pm, though a little later is okay too.</p>
+                <i class="fas fa-dollar-sign"></i>${trip.getCost()?string("##0.00")}<i class="addendum">/person</i>
+                <p>${trip.getComments()}</p>
             </div>
         </div>
     </div>

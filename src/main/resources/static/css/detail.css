@@ -184,8 +184,17 @@ h2 {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     height: 35px;
-    width: 70px;
+    width: 75px;
     font-size: 0.8em;
+}
+#button-container button:hover {
+    background-color: #3eaef4;
+}
+#delete-btn {
+    background-color: #D72638 !important;
+}
+#delete-btn:hover {
+    background-color: #dd3c4c !important;
 }
 
 #comments-container {
