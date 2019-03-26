@@ -9,16 +9,14 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
-
 import com.mapbox.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
-import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.geojson.Point;
+
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import freemarker.template.Configuration;
-import javafx.util.Pair;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -39,8 +37,7 @@ public class UserInterface {
 
   private static FreeMarkerEngine createEngine() {
     Configuration config = new Configuration();
-    File templates =
-            new File("src/main/resources/spark/template/freemarker");
+    File templates = new File("src/main/resources/spark/template/freemarker");
     try {
       config.setDirectoryForTemplateLoading(templates);
     } catch (IOException ioe) {
@@ -53,7 +50,9 @@ public class UserInterface {
 
   /**
    * Method to set the database to use when querying.
-   * @param dbName The name of the database.
+   * 
+   * @param dbName
+   *          The name of the database.
    * @return true when the set is successful; false when unsuccessful.
    */
   public static boolean setDB(String dbName) {
@@ -106,18 +105,19 @@ public class UserInterface {
     }
   }
 
-  //---------------------------- List ------------------------------------
+  // ---------------------------- List ------------------------------------
   private static class ListGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
       // Return empty data to GUI when / route is called
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("title", "Drawbridge | Info")
+          .put("title", "Drawbridge | Results")
           .put("favicon", "images/favicon.png").build();
 
-      return new ModelAndView(variables, "info.ftl");
+      return new ModelAndView(variables, "results.ftl");
     }
   }
+
   private static class ListPostHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
@@ -125,7 +125,7 @@ public class UserInterface {
     }
   }
 
-  //--------------------------- Detail -----------------------------------
+  // --------------------------- Detail -----------------------------------
   /**
    * Handler to get information about a specific trip and display it on a page.
    */
@@ -145,39 +145,36 @@ public class UserInterface {
       String startName, endName;
 
       MapboxGeocoding startGeocode = MapboxGeocoding.builder()
-              .accessToken(MAPBOX_TOKEN)
-              .query(Point.fromLngLat(trip.getStartingLongitude(),
-                                      trip.getStartingLatitude()))
-              .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS)
-              .build();
+          .accessToken(MAPBOX_TOKEN)
+          .query(Point.fromLngLat(trip.getStartingLongitude(),
+              trip.getStartingLatitude()))
+          .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS).build();
       try {
-        startName =
-                startGeocode.executeCall().body().features().get(0).placeName();
+        startName = startGeocode.executeCall().body().features().get(0)
+            .placeName();
       } catch (Exception e) {
         String lngDir = trip.getStartingLongitude() < 0 ? "°S" : "°N";
         String latDir = trip.getStartingLatitude() < 0 ? "°W" : "°E";
         startName = Math.abs(trip.getStartingLatitude()) + latDir + ", "
-                  + Math.abs(trip.getStartingLongitude()) + lngDir;
+            + Math.abs(trip.getStartingLongitude()) + lngDir;
       }
 
       MapboxGeocoding endGeocode = MapboxGeocoding.builder()
-              .accessToken(MAPBOX_TOKEN)
-              .query(Point.fromLngLat(trip.getEndingLongitude(),
-                                      trip.getEndingLatitude()))
-              .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS)
-              .build();
+          .accessToken(MAPBOX_TOKEN)
+          .query(Point.fromLngLat(trip.getEndingLongitude(),
+              trip.getEndingLatitude()))
+          .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS).build();
       try {
-        endName =
-                endGeocode.executeCall().body().features().get(0).placeName();
+        endName = endGeocode.executeCall().body().features().get(0).placeName();
       } catch (Exception e) {
         String lngDir = trip.getEndingLongitude() < 0 ? "°S" : "°N";
         String latDir = trip.getEndingLatitude() < 0 ? "°W" : "°E";
         endName = Math.abs(trip.getEndingLatitude()) + latDir + ", "
-                + Math.abs(trip.getEndingLongitude()) + lngDir;
+            + Math.abs(trip.getEndingLongitude()) + lngDir;
       }
 
       // Get user's names from the trip
-//      User host = dbQuery.getUserById(trip.getHostId());
+      // User host = dbQuery.getUserById(trip.getHostId());
       User host = new User(trip.getHostId(), "Mary III", "mary@queen.com");
       List<User> members = new ArrayList<>();
       for (String memId : trip.getMemberIds()) {
@@ -193,19 +190,15 @@ public class UserInterface {
 
       // Return empty data to GUI when / route is called
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("title", trip.getName())
-          .put("favicon", "images/favicon.png")
-          .put("trip", trip)
-          .put("startName", startName)
-          .put("endName", endName)
-          .put("host", host)
-          .put("members", members)
-          .put("pending", pending).build();
+          .put("title", trip.getName()).put("favicon", "images/favicon.png")
+          .put("trip", trip).put("startName", startName).put("endName", endName)
+          .put("host", host).put("members", members).put("pending", pending)
+          .build();
       return new ModelAndView(variables, "detail.ftl");
     }
   }
 
-  //---------------------------- User ------------------------------------
+  // ---------------------------- User ------------------------------------
   private static class UserGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
@@ -213,13 +206,14 @@ public class UserInterface {
     }
   }
 
-  //--------------------------- Create -----------------------------------
+  // --------------------------- Create -----------------------------------
   private static class CreateGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
       return null;
     }
   }
+
   private static class CreatePostHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
@@ -227,7 +221,7 @@ public class UserInterface {
     }
   }
 
-  //---------------------------- Info ------------------------------------
+  // ---------------------------- Info ------------------------------------
   /**
    * Class to handle get requests to faq/help/info static page.
    */
@@ -243,8 +237,8 @@ public class UserInterface {
     }
   }
 
-  //--------------------------- Errors -----------------------------------
-//  private static class Code404Handler implements TemplateViewRoute {
-//
-//  }
+  // --------------------------- Errors -----------------------------------
+  // private static class Code404Handler implements TemplateViewRoute {
+  //
+  // }
 }
