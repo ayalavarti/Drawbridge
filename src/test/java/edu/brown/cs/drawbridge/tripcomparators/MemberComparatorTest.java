@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,10 +27,11 @@ public class MemberComparatorTest {
   }
 
   /**
-   * Test compare method given two Trips with User as member.
+   * Test compare method given two paths with equal number of Trips with User as
+   * member.
    */
   @Test
-  public void testBothMember() {
+  public void testMemberEqual() {
     List<String> memberIds = new LinkedList<String>();
     memberIds.add("10");
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
@@ -40,16 +42,28 @@ public class MemberComparatorTest {
         .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
         .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, new LinkedList<String>());
+    Trip trip3 = Trip.TripBuilder.newTripBuilder().addIdentification(3, "name3")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", memberIds, new LinkedList<String>());
+    Trip trip4 = Trip.TripBuilder.newTripBuilder().addIdentification(4, "name4")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", memberIds, new LinkedList<String>());
+    List<Trip> path1 = new ArrayList<Trip>(Arrays.asList(trip1, trip2));
+    List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
+
     ComparesSearchedTrips memberComparator = new MemberComparator();
     memberComparator.setId("10");
-    assertEquals(memberComparator.compare(trip1, trip2), 0);
+    assertEquals(memberComparator.compare(path1, path2), 0);
   }
 
   /**
-   * Test compare method given two Trips, neither with User as member.
+   * Test compare method given the first path has User as member more
+   * frequently.
    */
   @Test
-  public void testNeitherMember() {
+  public void testFirstMemberMore() {
     List<String> memberIds = new LinkedList<String>();
     memberIds.add("10");
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
@@ -60,37 +74,29 @@ public class MemberComparatorTest {
         .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
         .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, new LinkedList<String>());
-    ComparesSearchedTrips memberComparator = new MemberComparator();
-    memberComparator.setId("0");
-    assertEquals(memberComparator.compare(trip1, trip2), 0);
-  }
-
-  /**
-   * Test compare method given the first with User as member.
-   */
-  @Test
-  public void testFirstMember() {
-    List<String> memberIds = new LinkedList<String>();
-    memberIds.add("10");
-    Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
-        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
-        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
-        .buildWithUsers("0", memberIds, new LinkedList<String>());
-    Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
+    Trip trip3 = Trip.TripBuilder.newTripBuilder().addIdentification(3, "name3")
         .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
         .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", new LinkedList<String>(),
             new LinkedList<String>());
+    Trip trip4 = Trip.TripBuilder.newTripBuilder().addIdentification(4, "name4")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", memberIds, new LinkedList<String>());
+    List<Trip> path1 = new ArrayList<Trip>(Arrays.asList(trip1, trip2));
+    List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
+
     ComparesSearchedTrips memberComparator = new MemberComparator();
     memberComparator.setId("10");
-    assertEquals(memberComparator.compare(trip1, trip2), -1);
+    assertEquals(memberComparator.compare(path1, path2), -1);
   }
 
   /**
-   * Test compare method given the second with User as member.
+   * Test compare method given the second path has User as member more
+   * frequently.
    */
   @Test
-  public void testSecondMember() {
+  public void testSecondMemberMore() {
     List<String> memberIds = new LinkedList<String>();
     memberIds.add("10");
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
@@ -102,47 +108,75 @@ public class MemberComparatorTest {
         .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
         .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", memberIds, new LinkedList<String>());
+    Trip trip3 = Trip.TripBuilder.newTripBuilder().addIdentification(3, "name3")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", memberIds, new LinkedList<String>());
+    Trip trip4 = Trip.TripBuilder.newTripBuilder().addIdentification(4, "name4")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", memberIds, new LinkedList<String>());
+    List<Trip> path1 = new ArrayList<Trip>(Arrays.asList(trip1, trip2));
+    List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
+
     ComparesSearchedTrips memberComparator = new MemberComparator();
     memberComparator.setId("10");
-    assertEquals(memberComparator.compare(trip1, trip2), 1);
+    assertEquals(memberComparator.compare(path1, path2), 1);
   }
 
   /**
-   * Test MemberComparator by sorting multiple Trips.
+   * Test MemberComparator by sorting multiple paths.
    */
   @Test
-  public void testMultipleTrips() {
+  public void testMultiplePaths() {
     List<String> memberIds = new LinkedList<String>();
     memberIds.add("10");
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
         .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
-        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .addTimes(10, 20).addDetails(5, 77, "1234567890", "My car", "comments")
         .buildWithUsers("0", new LinkedList<String>(),
             new LinkedList<String>());
     Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
         .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
-        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .addTimes(10, 20).addDetails(5, 25, "1234567890", "My car", "comments")
         .buildWithUsers("0", new LinkedList<String>(),
             new LinkedList<String>());
-    Trip trip3 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
+    Trip trip3 = Trip.TripBuilder.newTripBuilder().addIdentification(3, "name3")
         .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
-        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .addTimes(10, 20).addDetails(5, 70, "1234567890", "My car", "comments")
+        .buildWithUsers("0", memberIds, new LinkedList<String>());
+    Trip trip4 = Trip.TripBuilder.newTripBuilder().addIdentification(4, "name4")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 31, "1234567890", "My car", "comments")
+        .buildWithUsers("1", new LinkedList<String>(),
+            new LinkedList<String>());
+    Trip trip5 = Trip.TripBuilder.newTripBuilder().addIdentification(5, "name5")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 70, "1234567890", "My car", "comments")
+        .buildWithUsers("1", memberIds, new LinkedList<String>());
+    Trip trip6 = Trip.TripBuilder.newTripBuilder().addIdentification(6, "name6")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 30, "1234567890", "My car", "comments")
         .buildWithUsers("1", memberIds, new LinkedList<String>());
 
-    ArrayList<Trip> trips = new ArrayList<Trip>();
-    trips.add(trip1);
-    trips.add(trip2);
-    trips.add(trip3);
-    ArrayList<Trip> expected = new ArrayList<Trip>();
-    expected.add(trip3);
-    expected.add(trip1);
-    expected.add(trip2);
+    List<Trip> path1 = new ArrayList<Trip>(Arrays.asList(trip1, trip2));
+    List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
+    List<Trip> path3 = new ArrayList<Trip>(Arrays.asList(trip5, trip6));
+
+    List<List<Trip>> paths = new ArrayList<List<Trip>>();
+    paths.add(path1);
+    paths.add(path2);
+    paths.add(path3);
+    List<List<Trip>> expected = new ArrayList<List<Trip>>();
+    expected.add(path3);
+    expected.add(path2);
+    expected.add(path1);
 
     ComparesSearchedTrips memberComparator = new MemberComparator();
     memberComparator.setId("10");
-    Collections.sort(trips, memberComparator);
+    Collections.sort(paths, memberComparator);
     for (int i = 0; i < expected.size(); i++) {
-      assertEquals(trips.get(i), expected.get(i));
+      assertEquals(paths.get(i), expected.get(i));
     }
   }
 }

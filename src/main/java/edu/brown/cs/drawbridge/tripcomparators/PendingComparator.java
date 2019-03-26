@@ -1,10 +1,12 @@
 package edu.brown.cs.drawbridge.tripcomparators;
 
+import java.util.List;
+
 import edu.brown.cs.drawbridge.models.Trip;
 
 /**
- * A comparator that compares Trips based on whether or the User has requested
- * to join the Trip.
+ * A comparator that compares Lists of Trips based on how many Trips the User
+ * has requested to join.
  */
 public class PendingComparator implements ComparesSearchedTrips {
 
@@ -16,19 +18,19 @@ public class PendingComparator implements ComparesSearchedTrips {
   }
 
   @Override
-  public int compare(Trip t1, Trip t2) {
-    boolean pendingOfFirst = t1.getPendingIds().contains(userId);
-    boolean pendingOfSecond = t2.getPendingIds().contains(userId);
-    if (pendingOfFirst) {
-      if (pendingOfSecond) {
-        return 0;
-      } else {
-        return -1;
+  public int compare(List<Trip> path1, List<Trip> path2) {
+    int numberOfTripsPending1 = 0;
+    int numberOfTripsPending2 = 0;
+    for (Trip trip : path1) {
+      if (trip.getPendingIds().contains(userId)) {
+        numberOfTripsPending1++;
       }
     }
-    if (pendingOfSecond) {
-      return 1;
+    for (Trip trip : path2) {
+      if (trip.getPendingIds().contains(userId)) {
+        numberOfTripsPending2++;
+      }
     }
-    return 0;
+    return Integer.compare(numberOfTripsPending2, numberOfTripsPending1);
   }
 }

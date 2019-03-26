@@ -1,6 +1,7 @@
 package edu.brown.cs.drawbridge.models;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.LinkedList;
@@ -400,5 +401,82 @@ public class TripTest {
     assertEquals(hasUsers.getCostPerUser("stranger"), 20.0, 0.1);
     pendingIds.add("4");
     assertEquals(hasUsers.getCostPerUser("stranger"), 20.0, 0.1);
+  }
+
+  /**
+   * Test distanceTo method.
+   */
+  @Test
+  public void testDistanceTo() {
+    Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 20, "1234567890", "My car", "comments")
+        .build();
+    Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
+        .addLocations(0, 0, 3, 4).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 20, "1234567890", "My car", "comments")
+        .build();
+    assertEquals(trip1.distanceTo(trip2), 5, 0.1);
+  }
+
+  /**
+   * Test getTripDistance method.
+   */
+  @Test
+  public void testGetTripDistance() {
+    Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 20, "1234567890", "My car", "comments")
+        .build();
+    Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
+        .addLocations(0, 0, 3, 4).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 20, "1234567890", "My car", "comments")
+        .build();
+    assertEquals(trip1.getTripDistance(), 0, 0.1);
+    assertEquals(trip2.getTripDistance(), 5, 0.1);
+  }
+
+  /**
+   * Test equals method.
+   */
+  @Test
+  public void testEquals() {
+    Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 20, "1234567890", "My car", "comments")
+        .build();
+    Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 20, "1234567890", "My car", "comments")
+        .build();
+    Trip trip3 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
+        .addLocations(0, 0, 3, 4).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 20, "1234567890", "My car", "comments")
+        .build();
+    assertEquals(trip1, trip2);
+    assertNotEquals(trip1, trip3);
+    assertNotEquals(trip2, trip3);
+  }
+
+  /**
+   * Test hashCode method.
+   */
+  @Test
+  public void testHashCode() {
+    Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 20, "1234567890", "My car", "comments")
+        .build();
+    Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 20, "1234567890", "My car", "comments")
+        .build();
+    Trip trip3 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
+        .addLocations(0, 0, 3, 4).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 20, "1234567890", "My car", "comments")
+        .build();
+    assertEquals(trip1.hashCode(), trip2.hashCode());
+    assertNotEquals(trip1.hashCode(), trip3.hashCode());
+    assertNotEquals(trip2.hashCode(), trip3.hashCode());
   }
 }

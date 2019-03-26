@@ -1,10 +1,12 @@
 package edu.brown.cs.drawbridge.tripcomparators;
 
+import java.util.List;
+
 import edu.brown.cs.drawbridge.models.Trip;
 
 /**
- * A comparator that compares Trips based on whether or not it is hosted by the
- * User.
+ * A comparator that compares Lists of Trips based on how many Trips are hosted
+ * by the User.
  */
 public class HostComparator implements ComparesSearchedTrips {
 
@@ -16,19 +18,19 @@ public class HostComparator implements ComparesSearchedTrips {
   }
 
   @Override
-  public int compare(Trip t1, Trip t2) {
-    boolean hostsFirstTrip = t1.getHostId().equals(userId);
-    boolean hostsSecondTrip = t2.getHostId().equals(userId);
-    if (hostsFirstTrip) {
-      if (hostsSecondTrip) {
-        return 0;
-      } else {
-        return -1;
+  public int compare(List<Trip> path1, List<Trip> path2) {
+    int numberOfTripsHosted1 = 0;
+    int numberOfTripsHosted2 = 0;
+    for (Trip trip : path1) {
+      if (trip.getHostId().equals(userId)) {
+        numberOfTripsHosted1++;
       }
     }
-    if (hostsSecondTrip) {
-      return 1;
+    for (Trip trip : path2) {
+      if (trip.getHostId().equals(userId)) {
+        numberOfTripsHosted2++;
+      }
     }
-    return 0;
+    return Integer.compare(numberOfTripsHosted2, numberOfTripsHosted1);
   }
 }

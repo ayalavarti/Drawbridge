@@ -308,7 +308,7 @@ public class Trip {
       throw new IllegalArgumentException(
           "ERROR: User information has not been initialized.");
     }
-    return 1 + memberIds.size();
+    return 1 + memberIds.size(); // Sum the number of members + 1 host
   }
 
   /**
@@ -331,6 +331,61 @@ public class Trip {
       // Otherwise, return cost / (number of Users in the Trip + 1)
       return cost / (currentSize + 1);
     }
+  }
+
+  /**
+   * Get the distance from one Trip to another.
+   *
+   * @param other
+   *          The other Trip
+   * @return The distance from the end of one trip to the start of the other,
+   *         plus the length of the other.
+   */
+  public double distanceTo(Trip other) {
+    double distanceFromEndtoStart = Math
+        .sqrt((endingLatitude - other.startingLatitude)
+            * (endingLatitude - other.startingLatitude)
+            + (endingLongitude - other.startingLongitude)
+                * (endingLongitude - other.startingLongitude));
+    return distanceFromEndtoStart + other.getTripDistance();
+  }
+
+  /**
+   * Get the distance of the Trip.
+   *
+   * @return The distance of the Trip
+   */
+  public double getTripDistance() {
+    return Math.sqrt((startingLatitude - endingLatitude)
+        * (startingLatitude - endingLatitude)
+        + (startingLongitude - endingLongitude)
+            * (startingLongitude - endingLongitude));
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + id;
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    Trip other = (Trip) obj;
+    if (id != other.id) {
+      return false;
+    }
+    return true;
   }
 
   /**

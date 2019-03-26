@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,10 +27,11 @@ public class PendingComparatorTest {
   }
 
   /**
-   * Test compare method given two Trips with User as pending.
+   * Test compare method given two paths with equal number of Trip with User as
+   * pending.
    */
   @Test
-  public void testBothPending() {
+  public void testPendingEqual() {
     List<String> pendingIds = new LinkedList<String>();
     pendingIds.add("10");
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
@@ -40,16 +42,28 @@ public class PendingComparatorTest {
         .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
         .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", new LinkedList<String>(), pendingIds);
+    Trip trip3 = Trip.TripBuilder.newTripBuilder().addIdentification(3, "name3")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(), pendingIds);
+    Trip trip4 = Trip.TripBuilder.newTripBuilder().addIdentification(4, "name4")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(), pendingIds);
+    List<Trip> path1 = new ArrayList<Trip>(Arrays.asList(trip1, trip2));
+    List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
+
     ComparesSearchedTrips pendingComparator = new PendingComparator();
     pendingComparator.setId("10");
-    assertEquals(pendingComparator.compare(trip1, trip2), 0);
+    assertEquals(pendingComparator.compare(path1, path2), 0);
   }
 
   /**
-   * Test compare method given two Trips, neither with User as pending.
+   * Test compare method given the first path has User as pending more
+   * frequently.
    */
   @Test
-  public void testNeitherPending() {
+  public void testFirstPendingMore() {
     List<String> pendingIds = new LinkedList<String>();
     pendingIds.add("10");
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
@@ -60,37 +74,29 @@ public class PendingComparatorTest {
         .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
         .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", new LinkedList<String>(), pendingIds);
-    ComparesSearchedTrips pendingComparator = new PendingComparator();
-    pendingComparator.setId("11");
-    assertEquals(pendingComparator.compare(trip1, trip2), 0);
-  }
-
-  /**
-   * Test compare method given the first with User as pending.
-   */
-  @Test
-  public void testFirstPending() {
-    List<String> pendingIds = new LinkedList<String>();
-    pendingIds.add("10");
-    Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
+    Trip trip3 = Trip.TripBuilder.newTripBuilder().addIdentification(3, "name3")
         .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
         .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", new LinkedList<String>(), pendingIds);
-    Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
+    Trip trip4 = Trip.TripBuilder.newTripBuilder().addIdentification(4, "name4")
         .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
         .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", new LinkedList<String>(),
             new LinkedList<String>());
+    List<Trip> path1 = new ArrayList<Trip>(Arrays.asList(trip1, trip2));
+    List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
+
     ComparesSearchedTrips pendingComparator = new PendingComparator();
     pendingComparator.setId("10");
-    assertEquals(pendingComparator.compare(trip1, trip2), -1);
+    assertEquals(pendingComparator.compare(path1, path2), -1);
   }
 
   /**
-   * Test compare method given the second with User as pending.
+   * Test compare method given the second path has User as pending more
+   * frequently.
    */
   @Test
-  public void testSecondPending() {
+  public void testSecondPendingMore() {
     List<String> pendingIds = new LinkedList<String>();
     pendingIds.add("10");
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
@@ -102,16 +108,27 @@ public class PendingComparatorTest {
         .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
         .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", new LinkedList<String>(), pendingIds);
+    Trip trip3 = Trip.TripBuilder.newTripBuilder().addIdentification(3, "name3")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(), pendingIds);
+    Trip trip4 = Trip.TripBuilder.newTripBuilder().addIdentification(4, "name4")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(), pendingIds);
+    List<Trip> path1 = new ArrayList<Trip>(Arrays.asList(trip1, trip2));
+    List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
+
     ComparesSearchedTrips pendingComparator = new PendingComparator();
     pendingComparator.setId("10");
-    assertEquals(pendingComparator.compare(trip1, trip2), 1);
+    assertEquals(pendingComparator.compare(path1, path2), 1);
   }
 
   /**
-   * Test PendingComparator by sorting multiple Trips.
+   * Test PendingComparator by sorting multiple paths.
    */
   @Test
-  public void testMultipleTrips() {
+  public void testMultiplePaths() {
     List<String> pendingIds = new LinkedList<String>();
     pendingIds.add("10");
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
@@ -124,25 +141,42 @@ public class PendingComparatorTest {
         .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
         .buildWithUsers("0", new LinkedList<String>(),
             new LinkedList<String>());
-    Trip trip3 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
+    Trip trip3 = Trip.TripBuilder.newTripBuilder().addIdentification(3, "name3")
         .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
         .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(), pendingIds);
+    Trip trip4 = Trip.TripBuilder.newTripBuilder().addIdentification(4, "name4")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
+    Trip trip5 = Trip.TripBuilder.newTripBuilder().addIdentification(5, "name5")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 70, "1234567890", "My car", "comments")
+        .buildWithUsers("1", new LinkedList<String>(), pendingIds);
+    Trip trip6 = Trip.TripBuilder.newTripBuilder().addIdentification(6, "name6")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 30, "1234567890", "My car", "comments")
         .buildWithUsers("1", new LinkedList<String>(), pendingIds);
 
-    ArrayList<Trip> trips = new ArrayList<Trip>();
-    trips.add(trip1);
-    trips.add(trip2);
-    trips.add(trip3);
-    ArrayList<Trip> expected = new ArrayList<Trip>();
-    expected.add(trip3);
-    expected.add(trip1);
-    expected.add(trip2);
+    List<Trip> path1 = new ArrayList<Trip>(Arrays.asList(trip1, trip2));
+    List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
+    List<Trip> path3 = new ArrayList<Trip>(Arrays.asList(trip5, trip6));
+
+    List<List<Trip>> paths = new ArrayList<List<Trip>>();
+    paths.add(path1);
+    paths.add(path2);
+    paths.add(path3);
+    List<List<Trip>> expected = new ArrayList<List<Trip>>();
+    expected.add(path3);
+    expected.add(path2);
+    expected.add(path1);
 
     ComparesSearchedTrips pendingComparator = new PendingComparator();
     pendingComparator.setId("10");
-    Collections.sort(trips, pendingComparator);
+    Collections.sort(paths, pendingComparator);
     for (int i = 0; i < expected.size(); i++) {
-      assertEquals(trips.get(i), expected.get(i));
+      assertEquals(paths.get(i), expected.get(i));
     }
   }
 }
