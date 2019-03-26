@@ -8,9 +8,7 @@
     <div id="container">
         <h1 id="title">${trip.getName()}</h1>
         <div id="map-inset">
-            <div id="map-container">
-                <div id="map"></div>
-            </div>
+            <div id="map"></div>
         </div>
         <div id="basic-info">
             <div class="info-box">
