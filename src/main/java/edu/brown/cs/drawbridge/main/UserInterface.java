@@ -190,10 +190,10 @@ public class UserInterface {
 
       // Return empty data to GUI when / route is called
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("title", trip.getName()).put("favicon", "images/favicon.png")
-          .put("trip", trip).put("startName", startName).put("endName", endName)
-          .put("host", host).put("members", members).put("pending", pending)
-          .build();
+          .put("title", String.format("Drawbridge | %s", trip.getName()))
+          .put("favicon", "images/favicon.png").put("trip", trip)
+          .put("startName", startName).put("endName", endName).put("host", host)
+          .put("members", members).put("pending", pending).build();
       return new ModelAndView(variables, "detail.ftl");
     }
   }
