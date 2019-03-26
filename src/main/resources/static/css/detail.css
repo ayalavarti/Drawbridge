@@ -57,6 +57,11 @@ h2 {
     grid-column-end: 1;
 }
 
+#map {
+    width: 500px;
+    height: 300px;
+}
+
 #basic-info {
     justify-self: start;
     align-self: start;

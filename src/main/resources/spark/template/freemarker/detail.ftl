@@ -1,5 +1,6 @@
 <#assign stylesheets>
     <link rel="stylesheet" href="/css/detail.css" type="text/css">
+    <script src="/js/mapUtil.js"></script>
     <script src="/js/detail.js"></script>
 </#assign>
 
@@ -8,7 +9,7 @@
         <h1 id="title">${trip.getName()}</h1>
         <div id="map-inset">
             <div id="map-container">
-                <img alt="Trip map" src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/-71,42,7/500x300?access_token=pk.eyJ1IjoiYXJ2Mzk1IiwiYSI6ImNqdGpodWcwdDB6dXEzeXBrOHJyeGVpNm8ifQ.bAwH-KG_5A5kwIxCf6xCSQ">
+                <div id="map"></div>
             </div>
         </div>
         <div id="basic-info">
@@ -69,6 +70,15 @@
 <#include "main.ftl">
 
 <script type="text/javascript">
+    let coordinates = [
+        [${trip.getStartingLongitude()},
+         ${trip.getStartingLatitude()}],
+        [${trip.getEndingLongitude()},
+         ${trip.getEndingLatitude()}]
+    ];
+    let startName = "${startName?js_string}";
+    let endName = "${endName?js_string}";
+
     let uid = userProfile == null ? null : userProfile.getId();
     let host = "${host.getId()?js_string}";
     let members = [<#list members as mem>"${mem.getId()?js_string}"</#list>];

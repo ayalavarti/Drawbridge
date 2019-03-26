@@ -61,6 +61,7 @@
     </div>
 
     <div id="map"></div>
+    <script src="/js/mapUtil.js"></script>
     <script src="/js/map.js"></script>
 </#assign>
 <#include "main.ftl">
