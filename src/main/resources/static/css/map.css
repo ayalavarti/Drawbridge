@@ -70,27 +70,6 @@
 	color: #222;
 }
 
-.tippy-tooltip.drawbridge-theme {
-	background-color: #47A5FF;
-	color: #f5f5f5;
-	font-family: "Nunito", sans-serif;
-	font-size: 15px;
-	font-weight: 600;
-	text-align: center;
-}
-
-.tippy-tooltip.drawbridge-theme[data-animatefill] {
-	background-color: transparent;
-}
-
-.tippy-tooltip.drawbridge-theme .tippy-backdrop {
-	background-color: #47A5FF;
-}
-
-.tippy-tooltip.drawbridge-theme .tippy-roundarrow {
-	fill: #47A5FF;
-}
-
 .icon {
 	font-size: 40px;
 	margin: 15px;

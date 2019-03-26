@@ -23,6 +23,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
+    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+	  <script src="https://unpkg.com/tippy.js@4"></script>
+
     <#--  Normalize CSS  -->
     <link rel="stylesheet" href="/css/external/normalize.css"  type="text/css">
     <link rel="stylesheet" href="/css/external/html5bp.css"  type="text/css">

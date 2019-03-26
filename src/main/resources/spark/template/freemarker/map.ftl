@@ -62,8 +62,6 @@
     </div>
 
     <div id="map"></div>
-	<script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
-	<script src="https://unpkg.com/tippy.js@4"></script>
     <script src="/js/mapUtil.js"></script>
     <script src="/js/map.js"></script>
 </#assign>

@@ -141,7 +141,21 @@ const tempData = [{
 $(document).ready(function () {
 	showHomeInfo();
 	queryResults();
+	initTooltips();
 });
+
+function initTooltips() {
+	tippy("#info", {
+		animation: "scale",
+		arrow: true,
+		maxWidth: "250px",
+		arrowType: "round",
+		theme: "drawbridge",
+		hideOnClick: false,
+		inertia: true,
+		placement: "bottom",
+	});
+}
 
 function queryResults() {
 	$("#start").text(tempHeading[0]);
