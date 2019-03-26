@@ -85,7 +85,7 @@ public class TripSearcher {
     while (!currentPaths.isEmpty()) {
       List<PathNode> nextPaths = new LinkedList<PathNode>();
       for (PathNode node : currentPaths) {
-        if (node.trips.size() < 3) {
+        if (node.trips.size() < 2) { // A path can have 4 Trips at maximum
           for (Trip nextTrip : database.getConnectedTrips(
               node.current.getEndingLatitude(),
               node.current.getEndingLongitude(), distanceRadius,

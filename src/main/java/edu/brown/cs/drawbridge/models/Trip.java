@@ -308,7 +308,7 @@ public class Trip {
       throw new IllegalArgumentException(
           "ERROR: User information has not been initialized.");
     }
-    return 1 + memberIds.size();
+    return 1 + memberIds.size(); // Sum the number of members + 1 host
   }
 
   /**
