@@ -16,6 +16,8 @@ let markers = [];
 let addressNames = [];
 let route = [];
 
+let tooltips = []
+
 /**
  * When the DOM loads, initialize Mapbox and the Map object.
  */
@@ -23,6 +25,7 @@ $(document).ready(function () {
     initMapbox();
     initMap();
     initDateTime();
+    initTooltips();
     disableTrip();
     console.log("DOM ready.");
 });
@@ -69,10 +72,21 @@ function initDateTime() {
         altInput: true,
         dateFormat: "H:i"
     });
-    $(".datetime-input").on("focus", ({
-        currentTarget
-    }) => $(currentTarget).blur());
-    $(".datetime-input").prop("readonly", false);
+}
+
+function initTooltips() {
+    tooltips[0] = tippy("#requiredTooltip", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge",
+        interactive: false,
+        trigger: "manual",
+        hideOnClick: false,
+        inertia: true,
+        sticky: true,
+        placement: "top",
+    });
 }
 
 /**
@@ -184,7 +198,6 @@ function removeMarker(index) {
 function updateRoute() {
     removeRoute();
     calcRoute(coordinates.join(";"));
-    setTripInfo();
 }
 
 /**
@@ -197,6 +210,33 @@ function removeRoute() {
     } else {
         return;
     }
+}
+
+/**
+ * Calculates the route direction coordinates based on starting and ending locations
+ * using the Mapbox directions API.
+ *
+ * @param {*} c
+ */
+function calcRoute(c) {
+    let url =
+        "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+        c +
+        "?geometries=geojson&&access_token=" +
+        mapboxgl.accessToken;
+
+    let req = new XMLHttpRequest();
+    req.responseType = "json";
+    req.open("GET", url, true);
+    req.onload = function () {
+        let jsonResponse = req.response;
+        route = [jsonResponse.routes[0].distance * 0.001, jsonResponse.routes[0].duration / 60];
+        setTripInfo();
+
+        let coords = jsonResponse.routes[0].geometry;
+        addRoute(coords, map);
+    };
+    req.send();
 }
 
 /**
@@ -333,13 +373,19 @@ function handleSubmit() {
     let timeInput = $("#time").val();
     let date = new Date(`${dateInput} ${timeInput}`);
 
-    const postParameters = {
-        startName: addressNames[0],
-        endName: addressNames[1],
-        startCoordinates: coordinates[0].slice(0).reverse(),
-        endCoordinates: coordinates[1].slice(0).reverse(),
-        date: date.getTime()
-    };
-
-    console.log(postParameters);
+    if (dateInput === "" || timeInput === "" || coordinates[0] === undefined || coordinates[1] === undefined) {
+        tooltips[0][0].show();
+        setTimeout(function () {
+            tooltips[0][0].hide();
+        }, 3000);
+    } else {
+        const postParameters = {
+            startName: addressNames[0],
+            endName: addressNames[1],
+            startCoordinates: coordinates[0].slice(0).reverse(),
+            endCoordinates: coordinates[1].slice(0).reverse(),
+            date: date.getTime()
+        };
+        console.log(postParameters);
+    }
 }
