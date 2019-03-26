@@ -38,6 +38,10 @@ function toHome() {
 	window.open("/", "_self");
 }
 
+function toInfo() {
+	window.open("/help", "_self");
+}
+
 /**
  * Handles sign in errors.
  *
