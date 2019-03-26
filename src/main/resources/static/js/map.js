@@ -387,12 +387,20 @@ function handleSubmit() {
             tooltips[0][0].hide();
         }, 3000);
     } else {
+        let userID;
+        if (userProfile === undefined) {
+            userID = null;
+        } else {
+            userID = userProfile.getId();
+        }
+
         const postParameters = {
             startName: addressNames[0],
             endName: addressNames[1],
             startCoordinates: coordinates[0].slice(0).reverse(),
             endCoordinates: coordinates[1].slice(0).reverse(),
-            date: date.getTime()
+            date: date.getTime(),
+            userID: userID
         };
         console.log(postParameters);
     }

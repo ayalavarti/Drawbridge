@@ -146,6 +146,7 @@ $(document).ready(function () {
 
 function onUserSignedIn() {
 	console.log("User signed in.");
+	signInTooltip[0].hide();
 }
 
 function onUserSignedOut() {
@@ -210,6 +211,7 @@ function setTripResults(data) {
 	data.forEach(element => {
 		let result = `<div class="result"><div class="result-trips">`;
 		let e = element["trips"];
+		let ids = [];
 
 		for (let trip in e) {
 			result = result + generateTrip(
@@ -217,15 +219,41 @@ function setTripResults(data) {
 				e[trip]["end"], e[trip]["date"],
 				e[trip]["currentSize"], e[trip]["maxSize"],
 				e[trip]["costPerPerson"]);
+			ids.push(e[trip]["id"]);
 		}
 		let imgAtt = "";
 		if (element["status"] === "join") {
-			imgAtt = `onmouseover="hover(this);" onmouseout="unhover(this);"`;
+			imgAtt = `onmouseover="hover(this);" onmouseout="unhover(this);" onclick="handleJoin(${ids	});"	`;
 		}
+
 		result = result + `</div><img src="../images/${element["status"]}-btn.png" class="${element["status"]}-btn" ${imgAtt}/>
 							</div>`
 		$(".results-content").append(result);
 	});
 	$(".results-content").append(`<input name="host" alt="Host" type="image" src="/images/host-btn.png"
-		class="host-btn" onmouseover="hover(this);" onmouseout="unhover(this);"/>`);
+		class="host-btn" onmouseover="hover(this);" onmouseout="unhover(this);" onclick="handleHost();"/>`);
+}
+
+function handleJoin(ids) {
+	if (userProfile == undefined) {
+		$("html, body").animate({
+			scrollTop: 0
+		}, "slow");
+		signInTooltip[0].setContent("Sign in with your Google Account to join an existing trip.");
+		signInTooltip[0].show();
+	} else {
+		console.log(ids);
+	}
+}
+
+function handleHost() {
+	if (userProfile == undefined) {
+		$("html, body").animate({
+			scrollTop: 0
+		}, "slow");
+		signInTooltip[0].setContent("Sign in with your Google Account to host your own trip.");
+		signInTooltip[0].show();
+	} else {
+		console.log("HOST");
+	}
 }

@@ -32,7 +32,7 @@ function initSignInTooltip() {
 		trigger: "manual",
 		hideOnClick: false,
 		offset: "0, 40",
-		maxWidth: 130,
+		maxWidth: 170,
 		inertia: true,
 		sticky: true,
 		placement: "bottom",

@@ -17,6 +17,7 @@ $(document).ready(function () {
 
 function onUserSignedIn() {
 	console.log("User signed in.");
+	signInTooltip[0].hide();
 }
 
 function onUserSignedOut() {
@@ -74,4 +75,16 @@ function drawRoute(c) {
 		addRoute(coords, map);
 	};
 	req.send();
+}
+
+function handleJoin(id) {
+	if (userProfile == undefined) {
+		$("html, body").animate({
+			scrollTop: 0
+		}, "slow");
+		signInTooltip[0].setContent("Sign in with your Google Account to join this trip.");
+		signInTooltip[0].show();
+	} else {
+		console.log(id);
+	}
 }
