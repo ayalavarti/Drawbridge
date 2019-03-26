@@ -33,3 +33,7 @@
     </div>
 </#assign>
 <#include "main.ftl">
+
+<script type="text/javascript">
+	showHomeInfo();
+</script>

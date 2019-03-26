@@ -203,4 +203,6 @@ function setTripResults(data) {
 							</div>`
 		$(".results-content").append(result);
 	});
+	$(".results-content").append(`<input name="host" alt="Host" type="image" src="/images/host-btn.png"
+		class="host-btn" onmouseover="hover(this);" onmouseout="unhover(this);"/>`);
 }
