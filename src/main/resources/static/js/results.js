@@ -144,6 +144,15 @@ $(document).ready(function () {
 	initTooltips();
 });
 
+function onUserSignedIn() {
+	console.log("User signed in.");
+}
+
+function onUserSignedOut() {
+	console.log("User signed out.");
+}
+
+
 function initTooltips() {
 	tippy("#info", {
 		animation: "scale",

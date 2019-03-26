@@ -30,6 +30,14 @@ $(document).ready(function () {
     console.log("DOM ready.");
 });
 
+function onUserSignedIn() {
+    console.log("User signed in.");
+}
+
+function onUserSignedOut() {
+    console.log("User signed out.");
+}
+
 /**
  * Initializes the Map.
  */

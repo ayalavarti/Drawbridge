@@ -15,6 +15,14 @@ $(document).ready(function () {
 	initMap();
 });
 
+function onUserSignedIn() {
+	console.log("User signed in.");
+}
+
+function onUserSignedOut() {
+	console.log("User signed out.");
+}
+
 /**
  * Initializes the Map.
  */

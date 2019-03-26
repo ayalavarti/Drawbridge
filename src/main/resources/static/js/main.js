@@ -1,10 +1,14 @@
 // Store user profile across JS files
-let userProfile;
+let userProfile = undefined;
+
+let signInTooltip;
 
 /**
  * When the DOM loads, check for the logged in cookie.
  */
+
 $(document).ready(function () {
+	initSignInTooltip();
 	if (navigator.cookieEnabled) {
 		if (getCookie("loggedIn") != "true") {
 			$("#sign-in").css({
@@ -17,6 +21,23 @@ $(document).ready(function () {
 		});
 	}
 });
+
+function initSignInTooltip() {
+	signInTooltip = tippy("#profile-picture-wrapper", {
+		animation: "scale",
+		arrow: true,
+		arrowType: "round",
+		theme: "drawbridge",
+		interactive: false,
+		trigger: "manual",
+		hideOnClick: false,
+		offset: "0, 40",
+		maxWidth: 130,
+		inertia: true,
+		sticky: true,
+		placement: "bottom",
+	});
+}
 
 function getCookie(cname) {
 	let name = cname + "=";
@@ -58,22 +79,22 @@ function onFailure(error) {
  */
 function onSignIn(googleUser) {
 	// Store userprofile in global variable
-	userProfile = googleUser;
-	let profile = googleUser.getBasicProfile();
-
+	userProfile = googleUser.getBasicProfile();
 	document.cookie = "loggedIn=true; path=/";
+
+	onUserSignedIn();
 
 	// Add profile picture
 	$("#profile-picture-wrapper").prepend(
 		$("<img>", {
 			id: "profile-picture",
-			src: `${profile.getImageUrl()}`,
-			onerror: "this.onerror=null;this.src='images/temp.png';"
+			src: `${userProfile.getImageUrl()}`,
+			onerror: "this.onerror=null;this.src='/images/temp.png';"
 		})
 	);
 
 	// Set user name
-	$("#user-name").text(profile.getGivenName());
+	$("#user-name").text(userProfile.getGivenName());
 
 	// Hide the sign in button and show the profile info button
 	$("#profile-info").css({
@@ -90,10 +111,11 @@ function onSignIn(googleUser) {
 function signOut() {
 	let auth2 = gapi.auth2.getAuthInstance();
 	auth2.signOut().then(function () {
-		console.log("User signed out.");
 		// Reset userProfile variable
 		userProfile = undefined;
 		document.cookie = "loggedIn=false; path=/";
+
+		onUserSignedOut();
 
 		// Hide profile info dropdown and show login button
 		$("#profile-info").css({

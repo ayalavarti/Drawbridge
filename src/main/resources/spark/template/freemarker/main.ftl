@@ -42,10 +42,10 @@
     <div class="header">
       <div style="visibility: hidden;" id="profile-info" class="profile-btn dropdown">
         <div class="user-info" id = "user-name"></div>
-        <div id = "profile-picture-wrapper">
+        <div id = "profile-picture-wrapper" data-tippy-content="Sign in with your Google Account to continue.">
           <div class="dropdown-content">
             <a class="dropdown-filler"></a>
-            <a class="dropdown-top" href="#">My Trips</a>
+            <a class="dropdown-top" href="/my-trips">My Trips</a>
             <a class="dropdown-bottom" onclick="signOut();">Sign Out</a>
           </div>
         </div>
