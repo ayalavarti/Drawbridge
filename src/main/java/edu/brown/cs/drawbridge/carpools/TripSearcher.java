@@ -5,8 +5,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
 
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
 import edu.brown.cs.drawbridge.models.Trip;
@@ -20,6 +26,8 @@ import edu.brown.cs.drawbridge.tripcomparators.PendingComparator;
 public class TripSearcher {
 
   private static final int CONNECTION_WAIT_TIME = 30;
+  private static final int MAX_TRIPS_PER_PATH = 3;
+  private static final int MAX_PATH_OPTIONS = 5;
   private DatabaseQuery database;
 
   private static final List<ComparesSearchedTrips> COMPARATORS = Arrays.asList(
@@ -38,24 +46,50 @@ public class TripSearcher {
     }
   }
 
-  private class PathNode {
-    private List<Trip> trips;
-    private Trip current;
+  private class PathNode implements Comparable<PathNode> {
+    private List<Trip> trips; // Previous trips in the path
+    private Trip current; // Current trip in the path
+    private double totalWeight; // Total weight of the path with the heuristic
 
-    PathNode(Trip trip) {
+    // The ending latitude and longitude of the destination
+    private double endLat, endLon;
+
+    PathNode(Trip trip, double endLat, double endLon,
+        Map<Trip, Double> weights) {
+      trips = new LinkedList<Trip>();
       current = trip;
+      // Actual weight + heuristic
+      totalWeight = weights.get(trip) + distance(trip, endLat, endLon);
+      this.endLat = endLat;
+      this.endLon = endLon;
     }
 
-    public void addTrip(Trip trip) {
-      trips.add(current);
-      current = trip;
+    PathNode(PathNode old, Trip newTrip, Map<Trip, Double> weights) {
+      trips = old.trips;
+      trips.add(old.current);
+      current = newTrip;
+      endLat = old.endLat;
+      endLon = old.endLon;
+      // Actual weight + heuristic
+      totalWeight = weights.get(newTrip) + distance(newTrip, endLat, endLon);
     }
+
+    @Override
+    public int compareTo(PathNode o) {
+      return Double.compare(this.totalWeight, o.totalWeight);
+    }
+  }
+
+  private double distance(Trip trip, double endLat, double endLon) {
+    return Math.sqrt((trip.getEndingLatitude() - endLat)
+        * (trip.getEndingLatitude() - endLat)
+        + (trip.getEndingLongitude() - endLon)
+            * (trip.getEndingLongitude() - endLon));
   }
 
   private boolean isWithinDestinationRadius(Trip trip, double distanceRadius,
       double endLat, double endLon) {
-    return Math.abs(trip.getEndingLatitude() - endLat) <= distanceRadius
-        && Math.abs(trip.getEndingLongitude() - endLon) <= distanceRadius;
+    return distance(trip, endLat, endLon) <= distanceRadius;
   }
 
   private List<Trip> unwrap(PathNode node) {
@@ -71,36 +105,57 @@ public class TripSearcher {
     // Set the user id for all comparators
     setUser(userId);
 
+    // Set up List of paths found and Queue of nodes to visit
     List<List<Trip>> paths = new ArrayList<List<Trip>>();
+    // Contains PathNodes with the distance-to-destination heuristic
+    Queue<PathNode> toVisit = new PriorityQueue<PathNode>();
+    // Contains a Set of visited Trips
+    Set<Trip> visited = new HashSet<Trip>();
+    // Contains a Map from Trips to their total path weight (no heuristic)
+    Map<Trip, Double> weights = new HashMap<Trip, Double>();
 
     // Create list of paths from starting location
     List<Trip> startingTrips = database.getConnectedTrips(startLat, startLon,
         distanceRadius, departureTime, timeRadius);
-    List<PathNode> currentPaths = new LinkedList<PathNode>();
     for (Trip trip : startingTrips) {
-      currentPaths.add(new PathNode(trip));
+      // Add weight to weights HashMap
+      weights.put(trip, trip.getTripDistance());
+      // Add PathNode with distance-to-destination heuristic to toVisit Queue
+      toVisit.add(new PathNode(trip, endLat, endLon, weights));
     }
 
     // Search for valid paths to destination
-    while (!currentPaths.isEmpty()) {
-      List<PathNode> nextPaths = new LinkedList<PathNode>();
-      for (PathNode node : currentPaths) {
-        if (node.trips.size() < 2) { // A path can have 4 Trips at maximum
+    while (!toVisit.isEmpty() && paths.size() <= MAX_PATH_OPTIONS) {
+      PathNode visitingNode = toVisit.poll();
+      Trip visitingTrip = visitingNode.current;
+      if (visited.contains(visitingTrip)) {
+        continue;
+      } else {
+        visited.add(visitingTrip);
+      }
+
+      if (isWithinDestinationRadius(visitingTrip, distanceRadius, endLat,
+          endLon)) {
+        paths.add(unwrap(visitingNode));
+        continue;
+      } else {
+        if (visitingNode.trips.size() < MAX_TRIPS_PER_PATH - 1) {
           for (Trip nextTrip : database.getConnectedTrips(
-              node.current.getEndingLatitude(),
-              node.current.getEndingLongitude(), distanceRadius,
-              node.current.getEta(), CONNECTION_WAIT_TIME)) {
-            node.addTrip(nextTrip);
-            if (isWithinDestinationRadius(nextTrip, distanceRadius, endLat,
-                endLon)) {
-              paths.add(unwrap(node));
+              visitingTrip.getEndingLatitude(),
+              visitingTrip.getEndingLongitude(), distanceRadius,
+              visitingTrip.getEta(), CONNECTION_WAIT_TIME)) {
+            if (weights.containsKey(nextTrip)
+                && weights.get(nextTrip) < weights.get(visitingTrip)
+                    + visitingTrip.distanceTo(nextTrip)) {
+              continue;
             } else {
-              nextPaths.add(node);
+              weights.put(nextTrip, weights.get(visitingTrip)
+                  + visitingTrip.distanceTo(nextTrip));
+              toVisit.add(new PathNode(visitingNode, nextTrip, weights));
             }
           }
         }
       }
-      currentPaths = nextPaths;
     }
     Collections.sort(paths, TRIP_COMPARATOR);
     return paths;
