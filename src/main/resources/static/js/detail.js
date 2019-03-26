@@ -14,7 +14,6 @@ $(document).ready(function () {
 	showHomeInfo();
 	initMapbox();
 	initMap();
-
 });
 
 /**
@@ -51,4 +50,35 @@ function setRoute() {
 	addMarker(coordinates[1][1], coordinates[1][0], "end-input",
 		1, endName, map);
 	calcRoute(coordinates.join(";"));
+}
+
+/** Sets up the button click handlers */
+function joinClick(uid) {
+	const data = {
+		action: "join",
+		user: uid
+	}
+}
+function leaveClick(uid) {
+	const data = {
+		action: "leave",
+		user: uid
+	}
+}
+function deleteClick(tid) {
+	const data = {
+		action: "delete",
+	}
+}
+function approveClick(tid, pendUID) {
+	const data = {
+		action: "approve",
+		user: pendUID
+	}
+}
+function denyClick(tid, pendUID) {
+	const data = {
+		action: "deny",
+		user: pendUID
+	}
 }
