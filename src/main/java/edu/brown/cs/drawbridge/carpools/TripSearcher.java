@@ -98,7 +98,25 @@ public class TripSearcher {
     return trips;
   }
 
-  public List<List<Trip>> search(String userId, double startLat,
+  public List<List<Trip>> searchWithId(String userId, double startLat,
+      double startLon, double endLat, double endLon, int departureTime,
+      double distanceRadius, int timeRadius) {
+    List<List<Trip>> paths = search(userId, startLat, startLon, endLat, endLon,
+        departureTime, distanceRadius, timeRadius);
+    Collections.sort(paths, TRIP_COMPARATOR);
+    return paths;
+  }
+
+  public List<List<Trip>> searchWithoutId(String userId, double startLat,
+      double startLon, double endLat, double endLon, int departureTime,
+      double distanceRadius, int timeRadius) {
+    List<List<Trip>> paths = search(userId, startLat, startLon, endLat, endLon,
+        departureTime, distanceRadius, timeRadius);
+    Collections.sort(paths, new CostComparator());
+    return paths;
+  }
+
+  private List<List<Trip>> search(String userId, double startLat,
       double startLon, double endLat, double endLon, int departureTime,
       double distanceRadius, int timeRadius) {
 
@@ -157,7 +175,6 @@ public class TripSearcher {
         }
       }
     }
-    Collections.sort(paths, TRIP_COMPARATOR);
     return paths;
   }
 }
