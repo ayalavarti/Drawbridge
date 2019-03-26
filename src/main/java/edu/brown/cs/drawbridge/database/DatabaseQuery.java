@@ -374,29 +374,28 @@ public class DatabaseQuery {
   }
 
   /**
-   * Finds all of the trips that match the search criteria.
-   * @param startLat The double starting latitude.
-   * @param startLon The double starting longitude.
-   * @param endLat The double ending latitude.
-   * @param endLong The double ending longitude.
-   * @param departure The int time of departure in epoch time
-   * @param walkRadius The buffer for matching the requested start and end locations.
-   * @param timeBuffer The buffer for matching the requested departure time.
-   * @return A List of all the relevant trips in the database.
+   * Finds all of the trips that are graphically connected to the input trip.
+   * That is, trips that depart near the given destination and that depart after
+   * the given departure time within a specific time frame.
+   *
+   * @param lastLat The double ending latitude of the previous trip.
+   * @param lastLon The double ending longitude of the previous trip.
+   * @param walkRadius
+   *          The buffer for finding reasonably distanced trips.
+   * @param start The int beginning of the time window in epoch time.
+   * @param end The int end of the time window in epoch time.
+   * @return A List of all the trips connected to the given trip.
    */
-  public List<Trip> searchRelevantTrips(
-          double startLat, double startLon, double endLat, double endLong,
-          int departure, double walkRadius, int timeBuffer) {
+  public List<Trip> searchTripsByTimeWindow(
+          double lastLat, double lastLon, double walkRadius,
+          int start, int end) {
     List<Trip> results = new ArrayList<>();
-    try (PreparedStatement prep = conn.prepareStatement(FIND_SIMILAR_TRIPS)) {
-      prep.setDouble(1, startLat);
-      prep.setDouble(2, startLon);
+    try (PreparedStatement prep = conn.prepareStatement(FIND_CONNECTED_TRIPS)) {
+      prep.setDouble(1, lastLat);
+      prep.setDouble(2, lastLon);
       prep.setDouble(3, walkRadius);
-      prep.setDouble(4, endLat);
-      prep.setDouble(5, endLong);
-      prep.setDouble(6, walkRadius);
-      prep.setInt(7, departure - timeBuffer);
-      prep.setInt(8, departure + timeBuffer);
+      prep.setInt(4, start);
+      prep.setInt(5, end);
       try (ResultSet rs = prep.executeQuery()) {
         while (rs.next()) {
           results.add(Trip.TripBuilder.newTripBuilder()
@@ -421,8 +420,8 @@ public class DatabaseQuery {
    * That is, trips that depart near the given destination and that depart after
    * the given departure time within a specific time frame.
    *
-   * @param lastEndLat The double ending latitude of the previous trip.
-   * @param lastEndLon The double ending longitude of the previous trip.
+   * @param lastLat The double ending latitude of the previous trip.
+   * @param lastLon The double ending longitude of the previous trip.
    * @param walkRadius
    *          The buffer for finding reasonably distanced trips.
    * @param lastEta The int expected arrival time of the last trip.
@@ -430,33 +429,31 @@ public class DatabaseQuery {
    *          The buffer for finding reasonably timed trips.
    * @return A List of all the trips connected to the given trip.
    */
-  public List<Trip> getConnectedTrips(
-          double lastEndLat, double lastEndLon, double walkRadius,
+  public List<Trip> getConnectedTripsAfterEta(
+          double lastLat, double lastLon, double walkRadius,
           int lastEta, int timeBuffer) {
-    List<Trip> results = new ArrayList<>();
-    try (PreparedStatement prep = conn.prepareStatement(FIND_CONNECTED_TRIPS)) {
-      prep.setDouble(1, lastEndLat);
-      prep.setDouble(2, lastEndLon);
-      prep.setDouble(3, walkRadius);
-      prep.setInt(4, lastEta);
-      prep.setInt(5, lastEta + timeBuffer);
-      try (ResultSet rs = prep.executeQuery()) {
-        while (rs.next()) {
-          results.add(Trip.TripBuilder.newTripBuilder()
-                  .addIdentification(rs.getInt(1), rs.getString(2))
-                  .addLocations(rs.getDouble(4), rs.getDouble(5),
-                          rs.getDouble(7), rs.getDouble(8))
-                  .addAddressNames(rs.getString(3), rs.getString(6))
-                  .addTimes(rs.getInt(9), rs.getInt(10))
-                  .addDetails(rs.getInt(11), rs.getDouble(12),
-                          rs.getString(13), rs.getString(14), rs.getString(15))
-                  .build());
-        }
-      }
-    } catch (SQLException e) {
-      assert false;
-    }
-    return results;
+    return searchTripsByTimeWindow(
+            lastLat, lastLon, walkRadius, lastEta, lastEta + timeBuffer);
+  }
+
+  /**
+   * Finds all of the trips that match the search criteria based on departure.
+   *
+   * @param lat The double latitude of departure.
+   * @param lat The double longitude of departure.
+   * @param walkRadius
+   *          The buffer for finding reasonably distanced trips.
+   * @param departure The int time of departure.
+   * @param timeBuffer
+   *          The buffer for finding reasonably timed trips.
+   * @return A List of all the trips leaving around the specified location and
+   * time.
+   */
+  public List<Trip> getConnectedTripsWithinTimeRadius(
+          double lat, double lon, double walkRadius,
+          int departure, int timeBuffer) {
+    return searchTripsByTimeWindow(
+            lat, lon, walkRadius, departure - timeBuffer, departure + timeBuffer);
   }
 
   /**
@@ -551,6 +548,10 @@ public class DatabaseQuery {
     }
   }
 
+  /**
+   * Clears all data from the database.
+   * @return True if the data has been deleted successfully. False otherwise.
+   */
   public boolean clearData() {
     try (PreparedStatement prep = conn.prepareStatement("DELETE FROM requests;")) {
       prep.executeUpdate();
