@@ -3,6 +3,7 @@ package edu.brown.cs.drawbridge.carpools;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class TripSearcher {
   private static final List<ComparesSearchedTrips> COMPARATORS = Arrays.asList(
       new HostComparator(), new MemberComparator(), new PendingComparator(),
       new CostComparator());
-  private static final Comparator<Trip> TRIP_COMPARATOR = new MultipleTripComparator(
+  private static final Comparator<List<Trip>> TRIP_COMPARATOR = new MultipleTripComparator(
       COMPARATORS);
 
   public TripSearcher() throws ClassNotFoundException, SQLException {
@@ -101,12 +102,7 @@ public class TripSearcher {
       }
       currentPaths = nextPaths;
     }
-    return radixSort(paths);
+    Collections.sort(paths, TRIP_COMPARATOR);
+    return paths;
   }
-
-  private List<List<Trip>> radixSort(List<List<Trip>> paths) {
-    // Sort the list of paths
-    return new LinkedList<List<Trip>>();
-  }
-
 }
