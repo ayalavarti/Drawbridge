@@ -61,14 +61,6 @@
 	width: 100px;
 }
 
-.submit-btn {
-	border: 0;
-	width: auto;
-	height: 50px;
-	outline: none;
-	cursor: pointer;
-}
-
 .section-heading {
 	margin: 0;
 	font-family: "Nunito", sans-serif;

@@ -101,17 +101,6 @@
 	margin-left: 10px;
 }
 
-.host-btn,
-.join-btn,
-.joined-btn,
-.pending-btn {
-	border: 0;
-	width: auto;
-	height: 50px;
-	outline: none;
-	cursor: pointer;
-}
-
 .joined-btn,
 .pending-btn {
 	cursor: auto;

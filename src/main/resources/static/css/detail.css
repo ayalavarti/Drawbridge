@@ -2,24 +2,6 @@ body {
     width: 100%;
 }
 
-button,
-input[type="submit"] {
-    -webkit-appearance: none;
-    appearance: none;
-    cursor: pointer;
-    padding: 0;
-    margin: 0;
-
-    border: 0;
-    width: auto;
-    outline: none;
-    border-radius: 6px;
-    color: white;
-    font-size: 0.7em;
-    box-sizing: border-box;
-}
-
-/* Color scheme: https://coolors.co/1da1f2-d72638-2b303a-7fb800-8e0058 */
 h1:after,
 h2:after {
     background: url("../images/divider.png");
@@ -167,85 +149,19 @@ h2 {
     color: #555555;
 }
 
-.status {
-    float: right;
-    padding: 6px 3px;
-    text-align: center;
-    background-color: #1da1f2;
-    color: white;
-    border-radius: 6px;
-    margin: auto 5px;
-    font-size: 0.7em;
-    width: 90px;
-    height: 35px;
-    box-sizing: border-box;
+.leave-btn,
+.delete-btn,
+.join-btn {
+    margin: auto;
 }
 
-.host {
-    background-color: #8E0058;
-}
-
-.status i,
-.pending i,
-#button-container i {
-    margin: 4px;
-    font-size: 1.2em;
-    align: left;
-}
-
-.pending {
-    margin: auto 5px;
-    width: 90px;
-    text-align: center;
-}
-
-.pending button {
-    margin: 2px;
-    width: 35px;
-    height: 35px;
-}
-
-.approve {
-    background-color: #7FB800;
-}
-
-.approve:hover {
-    background-color: #8bcc00;
-}
-
-.deny {
-    background-color: #D72638;
-}
-
-.deny:hover {
-    background-color: #dd3c4c;
+.member-label,
+.host-label {
+    cursor: auto;
 }
 
 #button-container {
     border: none;
-}
-
-#button-container button {
-    margin: auto;
-    background-color: #1da1f2;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    height: 35px;
-    width: 75px;
-    font-size: 0.8em;
-}
-
-#button-container button:hover {
-    background-color: #3eaef4;
-}
-
-#delete-btn {
-    background-color: #D72638 !important;
-}
-
-#delete-btn:hover {
-    background-color: #dd3c4c !important;
 }
 
 #comments-container {
