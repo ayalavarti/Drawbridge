@@ -26,9 +26,9 @@ public class DatabaseQuery {
   private static final String REMOVE_TRIP_BY_ID = "DELETE FROM trips WHERE id = ?;";
   private static final String REMOVE_TRIPS_BY_TIME = "DELETE FROM trips WHERE "
           + "departure < EXTRACT(EPOCH FROM current_timestamp);";
-  private static final String INSERT_HOST = "INSERT INTO hosts VALUES (?, ?);";
-  private static final String INSERT_MEMBER = "INSERT INTO members VALUES (?, ?);";
-  private static final String INSERT_REQUEST = "INSERT INTO requests VALUES (?, ?);";
+  private static final String INSERT_HOST = "INSERT INTO hosts(trip_id, user_id) VALUES (?, ?);";
+  private static final String INSERT_MEMBER = "INSERT INTO members(trip_id, user_id) VALUES (?, ?);";
+  private static final String INSERT_REQUEST = "INSERT INTO requests(trip_id, user_id) VALUES (?, ?);";
   private static final String REMOVE_MEMBER = "DELETE FROM members WHERE trip_id = ? AND user_id = ?;";
   private static final String REMOVE_REQUEST = "DELETE FROM requests WHERE trip_id = ? AND user_id = ?;";
 
@@ -292,15 +292,14 @@ public class DatabaseQuery {
    *          The Trip object to add.
    * @param hostId
    *          The String id of the user hosting the trip.
-   * @return True if the trip and host relation were successfully added. False
-   *         otherwise.
+   * @return The database's id of the inserted trip.
    */
-  public boolean createTrip(Trip trip, String hostId) {
+  public int createTrip(Trip trip, String hostId) {
+    int tripId = -1;
     if (getUserById(hostId) == null) {
-      return false;
+      return tripId;
     }
     //insert into trip
-    int tripId = -1;
     try (PreparedStatement prep = conn.prepareStatement(INSERT_TRIP,
             Statement.RETURN_GENERATED_KEYS)) {
       prep.setString(1, trip.getName());
@@ -326,19 +325,20 @@ public class DatabaseQuery {
       }
     } catch (SQLException e) {
       e.printStackTrace();
-      return false;
+      return tripId;
     }
     //insert into host
     try (PreparedStatement prep = conn.prepareStatement(INSERT_HOST)) {
-      prep.setString(1, hostId);
-      prep.setInt(2, tripId);
+      prep.setInt(1, tripId);
+      prep.setString(2, hostId);
       prep.addBatch();
       prep.executeUpdate();
     } catch (SQLException e) {
       deleteTripManually(tripId);
-      return false;
+      assert false;
+      return tripId;
     }
-    return true;
+    return tripId;
   }
 
   /**
@@ -471,7 +471,7 @@ public class DatabaseQuery {
   public boolean request(int tripId, String userId) {
     try (PreparedStatement prep = conn.prepareStatement(INSERT_REQUEST)) {
       prep.setInt(1, tripId);
-      prep.setString(2,userId);
+      prep.setString(2, userId);
       prep.addBatch();
       prep.executeUpdate();
       return true;
@@ -544,6 +544,35 @@ public class DatabaseQuery {
     try (PreparedStatement prep = conn.prepareStatement(REMOVE_MEMBER)) {
       prep.setInt(1, tripId);
       prep.setString(2,userId);
+      prep.executeUpdate();
+      return true;
+    } catch (SQLException e) {
+      return false;
+    }
+  }
+
+  public boolean clearData() {
+    try (PreparedStatement prep = conn.prepareStatement("DELETE FROM requests;")) {
+      prep.executeUpdate();
+    } catch (SQLException e) {
+      return false;
+    }
+    try (PreparedStatement prep = conn.prepareStatement("DELETE FROM members;")) {
+      prep.executeUpdate();
+    } catch (SQLException e) {
+      return false;
+    }
+    try (PreparedStatement prep = conn.prepareStatement("DELETE FROM hosts;")) {
+      prep.executeUpdate();
+    } catch (SQLException e) {
+      return false;
+    }
+    try (PreparedStatement prep = conn.prepareStatement("DELETE FROM trips;")) {
+      prep.executeUpdate();
+    } catch (SQLException e) {
+      return false;
+    }
+    try (PreparedStatement prep = conn.prepareStatement("DELETE FROM users;")) {
       prep.executeUpdate();
       return true;
     } catch (SQLException e) {
