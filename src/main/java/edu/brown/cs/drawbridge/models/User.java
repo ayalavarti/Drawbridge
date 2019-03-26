@@ -10,7 +10,7 @@ public class User {
   private String id;
   private String name;
   private String email;
-  private List<String> hostingTripIds, memberTripIds, pendingTripIds;
+  private List<Integer> hostingTripIds, memberTripIds, pendingTripIds;
 
   /**
    * Creates a new User object.
@@ -38,8 +38,8 @@ public class User {
    * @param pendingTrips
    *          A list of ids of Trips that the User has requested to join
    */
-  public void setTrips(List<String> hostingTrips, List<String> memberTrips,
-      List<String> pendingTrips) {
+  public void setTrips(List<Integer> hostingTrips, List<Integer> memberTrips,
+      List<Integer> pendingTrips) {
     this.hostingTripIds = hostingTrips;
     this.memberTripIds = memberTrips;
     this.pendingTripIds = pendingTrips;
@@ -79,7 +79,7 @@ public class User {
    * @throws IllegalArgumentException
    *           If Trip information has not been processed by database
    */
-  public List<String> getHostingTrips() {
+  public List<Integer> getHostingTrips() {
     if (hostingTripIds == null) {
       throw new IllegalArgumentException(
           "ERROR: Trip information has not been initialized.");
@@ -94,7 +94,7 @@ public class User {
    * @throws IllegalArgumentException
    *           If Trip information has not been processed by database
    */
-  public List<String> getMemberTrips() {
+  public List<Integer> getMemberTrips() {
     if (memberTripIds == null) {
       throw new IllegalArgumentException(
           "ERROR: Trip information has not been initialized.");
@@ -109,7 +109,7 @@ public class User {
    * @throws IllegalArgumentException
    *           If Trip information has not been processed by database
    */
-  public List<String> getPendingTrips() {
+  public List<Integer> getPendingTrips() {
     if (pendingTripIds == null) {
       throw new IllegalArgumentException(
           "ERROR: Trip information has not been initialized.");

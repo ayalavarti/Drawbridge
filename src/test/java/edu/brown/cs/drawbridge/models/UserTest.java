@@ -59,15 +59,15 @@ public class UserTest {
    */
   @Test
   public void testGetHostingTrips() {
-    List<String> hosting = new LinkedList<String>();
-    hosting.add("1");
-    hosting.add("2");
-    List<String> member = new LinkedList<String>();
-    member.add("3");
-    member.add("4");
-    List<String> pending = new LinkedList<String>();
-    pending.add("5");
-    pending.add("6");
+    List<Integer> hosting = new LinkedList<Integer>();
+    hosting.add(1);
+    hosting.add(2);
+    List<Integer> member = new LinkedList<Integer>();
+    member.add(3);
+    member.add(4);
+    List<Integer> pending = new LinkedList<Integer>();
+    pending.add(5);
+    pending.add(6);
     User u = new User("id1", "name1", "email");
     u.setTrips(hosting, member, pending);
     for (int i = 0; i < hosting.size(); i++) {
@@ -80,15 +80,15 @@ public class UserTest {
    */
   @Test
   public void testGetMemberTrips() {
-    List<String> hosting = new LinkedList<String>();
-    hosting.add("1");
-    hosting.add("2");
-    List<String> member = new LinkedList<String>();
-    member.add("3");
-    member.add("4");
-    List<String> pending = new LinkedList<String>();
-    pending.add("5");
-    pending.add("6");
+    List<Integer> hosting = new LinkedList<Integer>();
+    hosting.add(1);
+    hosting.add(2);
+    List<Integer> member = new LinkedList<Integer>();
+    member.add(3);
+    member.add(4);
+    List<Integer> pending = new LinkedList<Integer>();
+    pending.add(5);
+    pending.add(6);
     User u = new User("id1", "name1", "email");
     u.setTrips(hosting, member, pending);
     for (int i = 0; i < member.size(); i++) {
@@ -101,15 +101,15 @@ public class UserTest {
    */
   @Test
   public void testGetPendingTrips() {
-    List<String> hosting = new LinkedList<String>();
-    hosting.add("1");
-    hosting.add("2");
-    List<String> member = new LinkedList<String>();
-    member.add("3");
-    member.add("4");
-    List<String> pending = new LinkedList<String>();
-    pending.add("5");
-    pending.add("6");
+    List<Integer> hosting = new LinkedList<Integer>();
+    hosting.add(1);
+    hosting.add(2);
+    List<Integer> member = new LinkedList<Integer>();
+    member.add(3);
+    member.add(4);
+    List<Integer> pending = new LinkedList<Integer>();
+    pending.add(5);
+    pending.add(6);
     User u = new User("id1", "name1", "email");
     u.setTrips(hosting, member, pending);
     for (int i = 0; i < pending.size(); i++) {
@@ -122,15 +122,15 @@ public class UserTest {
    */
   @Test
   public void testSetUsers() {
-    List<String> hosting = new LinkedList<String>();
-    hosting.add("1");
-    hosting.add("2");
-    List<String> member = new LinkedList<String>();
-    member.add("3");
-    member.add("4");
-    List<String> pending = new LinkedList<String>();
-    pending.add("5");
-    pending.add("6");
+    List<Integer> hosting = new LinkedList<Integer>();
+    hosting.add(1);
+    hosting.add(2);
+    List<Integer> member = new LinkedList<Integer>();
+    member.add(3);
+    member.add(4);
+    List<Integer> pending = new LinkedList<Integer>();
+    pending.add(5);
+    pending.add(6);
     User u = new User("id1", "name1", "email1");
     u.setTrips(hosting, member, pending);
     for (int i = 0; i < hosting.size(); i++) {
