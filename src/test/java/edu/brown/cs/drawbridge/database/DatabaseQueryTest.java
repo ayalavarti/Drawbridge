@@ -1,6 +1,5 @@
 package edu.brown.cs.drawbridge.database;
 
-import edu.brown.cs.drawbridge.models.User;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
