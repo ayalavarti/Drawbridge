@@ -293,30 +293,31 @@
 	}
 }
 
-@media screen and (max-width: 767px) and (max-height: 450px) {
+@media screen and (max-width: 767px) and (max-height: 650px) {
 
-	.route-info,
-	.map-settings {
-		display: none;
-	}
-}
-
-@media screen and (max-width: 767px) and (max-height: 645px) {
-
-	.location-setting,
-	.compass-setting,
-	.trip-setting {
-		display: none;
-	}
-
-	.info-setting {
+	.location-setting {
 		bottom: 300px;
 		right: 10px;
 	}
 
-	.team-setting {
+	.compass-setting {
 		bottom: 350px;
 		right: 10px;
+	}
+
+	.trip-setting {
+		bottom: 400px;
+		right: 10px;
+	}
+
+	.info-setting {
+		bottom: 300px;
+		right: 60px;
+	}
+
+	.team-setting {
+		bottom: 300px;
+		right: 110px;
 	}
 }
 
@@ -338,4 +339,12 @@
 		right: 10px;
 	}
 
+}
+
+@media screen and (max-width: 767px) and (max-height: 550px) {
+
+	.route-info,
+	.map-settings {
+		display: none;
+	}
 }

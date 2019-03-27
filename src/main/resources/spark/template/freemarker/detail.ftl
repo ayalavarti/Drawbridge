@@ -50,8 +50,8 @@
                     </div>
                 </#list>
                 <div id="button-container">
-                    <img src="/images/join-btn.png" id="join-btn" style="display: none" class="join-btn" onclick="joinClick(${trip.getId()}, userProfile.getId());" onmouseover="hover(this);" onmouseout="unhover(this);"/>
-                    <img src="/images/leave-btn.png" id="leave-btn" style="display: none" class="leave-btn" onclick="leaveClick(${trip.getId()}, userProfile.getId());" onmouseover="hover(this);" onmouseout="unhover(this);"/>
+                    <img src="/images/join-btn.png" id="join-btn" style="display: none" class="join-btn" onclick="joinClick(${trip.getId()});" onmouseover="hover(this);" onmouseout="unhover(this);"/>
+                    <img src="/images/leave-btn.png" id="leave-btn" style="display: none" class="leave-btn" onclick="leaveClick(${trip.getId()});" onmouseover="hover(this);" onmouseout="unhover(this);"/>
                     <img src="/images/delete-btn.png" id="delete-btn" style="display: none" class="delete-btn" onclick="deleteClick(${trip.getId()});" onmouseover="hover(this);" onmouseout="unhover(this);"/>
                 </div>
             </div>

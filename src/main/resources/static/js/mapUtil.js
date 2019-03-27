@@ -65,32 +65,6 @@ function parseAddress(raw, index) {
 }
 
 /**
- * Calculates the route direction coordinates based on starting and ending locations
- * using the Mapbox directions API.
- *
- * @param {*} c
- */
-function calcRoute(c) {
-    let url =
-        "https://api.mapbox.com/directions/v5/mapbox/driving/" +
-        c +
-        "?geometries=geojson&&access_token=" +
-        mapboxgl.accessToken;
-
-    let req = new XMLHttpRequest();
-    req.responseType = "json";
-    req.open("GET", url, true);
-    req.onload = function () {
-        let jsonResponse = req.response;
-        route = [jsonResponse.routes[0].distance * 0.001, jsonResponse.routes[0].duration / 60];
-
-        let coords = jsonResponse.routes[0].geometry;
-        addRoute(coords, map);
-    };
-    req.send();
-}
-
-/**
  * Adds the route visualization to the map based on the given set of coordinates.
  *
  * @param {*} coords

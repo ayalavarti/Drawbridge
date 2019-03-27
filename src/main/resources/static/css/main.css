@@ -19,19 +19,26 @@ button {
 	outline: none;
 }
 
+span,
+img {
+	outline: none;
+}
+
 a {
 	text-decoration: none;
 	color: #f5f5f5;
 	cursor: pointer;
 }
 
-input[type=number]::-moz-inner-spin-button,
-input[type=number]::-moz-outer-spin-button,
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
 	-webkit-appearance: none;
-	-moz-appearance: none;
 	margin: 0;
+}
+
+input[type=number] {
+	-moz-appearance: textfield;
+	/* Firefox */
 }
 
 /* -------- Header Styles -------- */
@@ -67,9 +74,10 @@ input[type=number]::-webkit-outer-spin-button {
 	width: 200px;
 	height: 54px;
 	outline: none;
-	box-shadow: 0 4px 8px 0 #0000001e, 0 6px 20px 0 #0000002f;
+	box-shadow: 0 2px 4px 0 #0000001e, 0 5px 10px 0 #0000002f;
 }
 
+.info-tooltip,
 .info-btn,
 .home-btn {
 	right: 20px;
@@ -83,7 +91,7 @@ input[type=number]::-webkit-outer-spin-button {
 	align-items: center;
 	justify-content: center;
 	border-radius: 15px;
-	box-shadow: 0 4px 8px 0 #0000001e, 0 6px 20px 0 #0000002f;
+	box-shadow: 0 2px 4px 0 #0000001e, 0 5px 10px 0 #0000002f;
 }
 
 .approve-btn,
@@ -103,6 +111,15 @@ input[type=number]::-webkit-outer-spin-button {
 	outline: none;
 	cursor: pointer;
 }
+
+.info-tooltip {
+	position: static;
+	margin-left: 20px;
+	width: 30px;
+	height: 30px;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.096), 0 2px 4px 0 rgba(0, 0, 0, 0.19);
+}
+
 
 #profile-picture {
 	position: absolute;
@@ -134,7 +151,7 @@ input[type=number]::-webkit-outer-spin-button {
 	background-color: #fff;
 	z-index: -1;
 	width: 200px;
-	box-shadow: 0 4px 8px 0 #0000001e, 0 6px 20px 0 #0000002f;
+	box-shadow: 0 2px 4px 0 #0000001e, 0 5px 10px 0 #0000002f;
 	border-bottom-left-radius: 25px;
 	border-bottom-right-radius: 25px;
 }
@@ -145,8 +162,6 @@ input[type=number]::-webkit-outer-spin-button {
 	text-decoration: none;
 	display: block;
 }
-
-.dropdown-top {}
 
 .dropdown-filler {
 	cursor: auto;
@@ -247,20 +262,41 @@ input[type=number]::-webkit-outer-spin-button {
 	}
 }
 
-/* -------- Footer Styling -------- */
+/* -------- Tooltip Styling -------- */
 
-.copyright {
-	color: hsla(219, 8%, 59%, 0.9);
-	font-size: 11px;
-	font-weight: 600;
+.tippy-tooltip.drawbridge-alt-theme,
+.tippy-tooltip.drawbridge-theme {
+	background-color: #fff;
+	color: rgb(94, 96, 97);
+	font-family: "Nunito", sans-serif;
+	font-size: 12px;
+	font-weight: 400;
+	text-align: left;
+	padding: 15px 20px;
+	text-align: center;
+	border-radius: 20px;
+	box-shadow: 0 2px 4px 0 #FF5B62;
 }
 
-.footer {
-	color: #f5f5f5;
-	text-align: center;
-	background-color: #222;
-	height: 5%;
-	padding: 15px;
+.tippy-tooltip.drawbridge-alt-theme {
+	color: #46B0FF;
+	padding: 10px;
+	border-radius: 10px;
+}
+
+.tippy-tooltip.drawbridge-alt-theme[data-animatefill],
+.tippy-tooltip.drawbridge-theme[data-animatefill] {
+	background-color: transparent;
+}
+
+.tippy-tooltip.drawbridge-alt-theme .tippy-backdrop,
+.tippy-tooltip.drawbridge-theme .tippy-backdrop {
+	background-color: #fff;
+}
+
+.tippy-tooltip.drawbridge-alt-theme .tippy-roundarrow,
+.tippy-tooltip.drawbridge-theme .tippy-roundarrow {
+	fill: #fff;
 }
 
 @media screen and (max-width: 767px) {}
