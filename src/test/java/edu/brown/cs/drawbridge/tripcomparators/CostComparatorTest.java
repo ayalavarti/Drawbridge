@@ -55,7 +55,7 @@ public class CostComparatorTest {
     List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
 
     ComparesSearchedTrips costComparator = new CostComparator();
-    costComparator.setId("1");
+    costComparator.setUserId("1");
     assertEquals(costComparator.compare(path1, path2), 0);
   }
 
@@ -88,7 +88,7 @@ public class CostComparatorTest {
     List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
 
     ComparesSearchedTrips costComparator = new CostComparator();
-    costComparator.setId("1");
+    costComparator.setUserId("1");
     assertEquals(costComparator.compare(path1, path2), 1);
   }
 
@@ -121,7 +121,7 @@ public class CostComparatorTest {
     List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
 
     ComparesSearchedTrips costComparator = new CostComparator();
-    costComparator.setId("1");
+    costComparator.setUserId("1");
     assertEquals(costComparator.compare(path1, path2), -1);
   }
 
@@ -175,7 +175,7 @@ public class CostComparatorTest {
     expected.add(path1);
 
     ComparesSearchedTrips costComparator = new CostComparator();
-    costComparator.setId("1");
+    costComparator.setUserId("1");
     Collections.sort(paths, costComparator);
     for (int i = 0; i < expected.size(); i++) {
       assertEquals(paths.get(i), expected.get(i));
