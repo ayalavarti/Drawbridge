@@ -1,11 +1,11 @@
 package edu.brown.cs.drawbridge.database;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
 
-import static org.junit.Assert.*;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 public class DatabaseQueryTest {
 
@@ -17,9 +17,9 @@ public class DatabaseQueryTest {
       String username = "dev";
       String password = "dev";
       /*
-      If your database denies access, run the following queries in pgadmin:
-      CREATE USER dev WITH PASSWORD 'dev';
-      GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO dev;
+       * If your database denies access, run the following queries in pgadmin:
+       * CREATE USER dev WITH PASSWORD 'dev'; GRANT ALL PRIVILEGES ON ALL TABLES
+       * IN SCHEMA public TO dev;
        */
       test = new DatabaseQuery("//127.0.0.1:5432/carpools", username, password);
     } catch (ClassNotFoundException | SQLException e) {
