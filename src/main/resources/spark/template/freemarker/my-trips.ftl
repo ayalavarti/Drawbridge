@@ -24,6 +24,6 @@
         </div>
     </div>
     <script src="/js/util.js"></script>
-    <script src="/js/trips.js"></script>
+    <script src="/js/my-trips.js"></script>
 </#assign>
 <#include "main.ftl">

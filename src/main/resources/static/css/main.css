@@ -275,13 +275,14 @@ input[type=number] {
 	padding: 15px 20px;
 	text-align: center;
 	border-radius: 20px;
-	box-shadow: 0 2px 4px 0 #FF5B62;
+	box-shadow: 0 2px 4px 0 rgba(99, 100, 100, 0.397);
 }
 
 .tippy-tooltip.drawbridge-alt-theme {
 	color: #46B0FF;
 	padding: 10px;
 	border-radius: 10px;
+	box-shadow: 0 2px 4px 0 rgba(70, 175, 255, 0.199);
 }
 
 .tippy-tooltip.drawbridge-alt-theme[data-animatefill],
