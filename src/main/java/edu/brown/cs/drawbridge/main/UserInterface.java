@@ -52,7 +52,7 @@ public class UserInterface {
    * Method to set the database to use when querying.
    *
    * @param dbName
-   *                 The name of the database.
+   *          The name of the database.
    * @return true when the set is successful; false when unsuccessful.
    */
   public static boolean setDB(String dbName) {
@@ -80,7 +80,7 @@ public class UserInterface {
 
     Spark.get("/trip/:tid", new DetailGetHandler(), freeMarker);
 
-    Spark.get("/my-trips/:uid", new UserGetHandler(), freeMarker);
+    Spark.get("/my-trips", new UserGetHandler(), freeMarker);
 
     Spark.get("/new", new CreateGetHandler(), freeMarker);
     Spark.post("/new", new CreatePostHandler(), freeMarker);
@@ -202,7 +202,11 @@ public class UserInterface {
   private static class UserGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
-      return null;
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("title", "Drawbridge | My Trips")
+          .put("favicon", "images/favicon.png").build();
+
+      return new ModelAndView(variables, "trips.ftl");
     }
   }
 

@@ -1,0 +1,79 @@
+body {
+    width: 100%;
+}
+
+#container {
+    max-width: 100%;
+    margin: 80px 10px 10px 10px;
+}
+
+#title {
+    font-weight: 500;
+    font-size: 25px;
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#trips-picture {
+    position: static;
+    margin-right: 15px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+#my-trips-wrapper {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+}
+
+.results-content {
+    background: none;
+    padding: 0;
+    box-shadow: none;
+}
+
+.sub-heading-left {
+    font-weight: 500;
+    font-size: 20px;
+    text-align: left;
+}
+
+.card-list {
+    margin: 10px 0px;
+    height: 100%;
+    width: 100%;
+}
+
+.result {
+    width: 250px;
+    height: 120px;
+    position: absolute;
+}
+
+.result.main {
+    -webkit-transition: transform 0.6s ease-in-out;
+    -moz-transition: transform 0.6s ease-in-out;
+    -o-transition: transform 0.6s ease-in-out;
+    transition: transform 0.6s ease-in-out;
+    z-index: 10;
+}
+
+.result.main:hover {
+    cursor: pointer;
+    transform: translate3d(0px, -10px, 0px);
+}
+
+.results-container {
+    margin: 10px 0px 15px 0px;
+}
+
+@media screen and (max-width: 1030px) {
+    #title {
+        margin-top: 80px;
+    }
+}

@@ -50,7 +50,7 @@
                     </div>
                 </#list>
                 <div id="button-container">
-                    <img src="/images/join-btn.png" id="join-btn" style="display: none" class="join-btn" onmouseover="hover(this);" onmouseout="unhover(this);"/>
+                    <img src="/images/join-btn.png" id="join-btn" style="display: none" class="join-btn" onmouseover="hover(this);" onmouseout="unhover(this);" onclick="handleJoin(${trip.getId()})"/>
                     <img src="/images/leave-btn.png" id="leave-btn" style="display: none" class="leave-btn" onmouseover="hover(this);" onmouseout="unhover(this);"/>
                     <img src="/images/delete-btn.png" id="delete-btn" style="display: none" class="delete-btn" onmouseover="hover(this);" onmouseout="unhover(this);"/>
                 </div>
