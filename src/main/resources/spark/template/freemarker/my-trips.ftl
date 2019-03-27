@@ -1,6 +1,6 @@
 <#assign stylesheets>
     <link rel="stylesheet" href="/css/results.css"  type="text/css">
-    <link rel="stylesheet" href="/css/trips.css"  type="text/css">
+    <link rel="stylesheet" href="/css/my-trips.css"  type="text/css">
 </#assign>
 
 <#assign content>
