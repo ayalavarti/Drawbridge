@@ -13,7 +13,7 @@ import edu.brown.cs.drawbridge.usercomparators.IsMemberComparator;
 import edu.brown.cs.drawbridge.usercomparators.IsPendingComparator;
 import edu.brown.cs.drawbridge.usercomparators.MultipleUserComparator;
 
-public class Carpools {
+public abstract class Carpools {
 
   private static TripSearcher tripSearcher;
   private static final Comparator<Trip> TIME_COMPARATOR = new TimeComparator();

@@ -20,17 +20,7 @@ public class IsMemberComparator implements ComparesUsersInTrip {
   public int compare(User user1, User user2) {
     boolean firstIsMember = trip.getMemberIds().contains(user1.getId());
     boolean secondIsMember = trip.getMemberIds().contains(user2.getId());
-    if (firstIsMember) {
-      if (secondIsMember) {
-        return 0;
-      } else {
-        return -1;
-      }
-    }
-    if (secondIsMember) {
-      return 1;
-    }
-    return 0;
+    return Boolean.compare(secondIsMember, firstIsMember);
   }
 
 }

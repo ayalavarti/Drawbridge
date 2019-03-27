@@ -315,7 +315,7 @@ public class Trip {
    * Get the cost per User in the Trip.
    *
    * @param userId
-   *          The id of a User
+   *          The id of the User requesting the cost per User
    * @return The cost per existing User in the Trip if the given User is already
    *         in the Trip. Otherwise, the cost per existing User plus the current
    *         User
@@ -334,7 +334,7 @@ public class Trip {
   }
 
   /**
-   * Get the distance from one Trip to another.
+   * Get the haversine distance from one Trip to another.
    *
    * @param other
    *          The other Trip
@@ -342,24 +342,42 @@ public class Trip {
    *         plus the length of the other.
    */
   public double distanceTo(Trip other) {
-    double distanceFromEndtoStart = Math
-        .sqrt((endingLatitude - other.startingLatitude)
-            * (endingLatitude - other.startingLatitude)
-            + (endingLongitude - other.startingLongitude)
-                * (endingLongitude - other.startingLongitude));
-    return distanceFromEndtoStart + other.getTripDistance();
+    double lat1 = Math.toRadians(endingLatitude);
+    double lat2 = Math.toRadians(other.startingLatitude);
+    double lon1 = Math.toRadians(endingLongitude);
+    double lon2 = Math.toRadians(other.startingLatitude);
+    double latDifference = lat2 - lat1;
+    double lonDifference = lon2 - lon1;
+    double latSquares = Math.sin(latDifference / 2)
+        * Math.sin(latDifference / 2);
+    double lonSquares = Math.sin(lonDifference / 2)
+        * Math.sin(lonDifference / 2);
+    double products = latSquares + lonSquares * Math.cos(lat1) * Math.cos(lat2);
+
+    double distanceFromEndToStart = Math.toDegrees(
+        2 * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products)));
+    return distanceFromEndToStart + other.getTripDistance();
   }
 
   /**
-   * Get the distance of the Trip.
+   * Get the haversine distance of the Trip.
    *
    * @return The distance of the Trip
    */
   public double getTripDistance() {
-    return Math.sqrt((startingLatitude - endingLatitude)
-        * (startingLatitude - endingLatitude)
-        + (startingLongitude - endingLongitude)
-            * (startingLongitude - endingLongitude));
+    double lat1 = Math.toRadians(startingLatitude);
+    double lat2 = Math.toRadians(endingLatitude);
+    double lon1 = Math.toRadians(startingLongitude);
+    double lon2 = Math.toRadians(endingLongitude);
+    double latDifference = lat2 - lat1;
+    double lonDifference = lon2 - lon1;
+    double latSquares = Math.sin(latDifference / 2)
+        * Math.sin(latDifference / 2);
+    double lonSquares = Math.sin(lonDifference / 2)
+        * Math.sin(lonDifference / 2);
+    double products = latSquares + lonSquares * Math.cos(lat1) * Math.cos(lat2);
+    return Math.toDegrees(
+        2 * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products)));
   }
 
   @Override
