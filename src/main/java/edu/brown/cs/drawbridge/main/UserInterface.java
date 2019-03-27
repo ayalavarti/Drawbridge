@@ -13,15 +13,12 @@ import com.mapbox.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.geojson.Point;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import freemarker.template.Configuration;
-import spark.ModelAndView;
-import spark.Request;
-import spark.Response;
-import spark.Spark;
-import spark.TemplateViewRoute;
+import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 
 /**
@@ -79,6 +76,7 @@ public class UserInterface {
     Spark.post("/results", new ListPostHandler(), freeMarker);
 
     Spark.get("/trip/:tid", new DetailGetHandler(), freeMarker);
+    Spark.post("/trip/:tid", new DetailPostHandler(), freeMarker);
 
     Spark.get("/my-trips/:uid", new UserGetHandler(), freeMarker);
 
@@ -195,6 +193,38 @@ public class UserInterface {
           .put("startName", startName).put("endName", endName).put("host", host)
           .put("members", members).put("pending", pending).build();
       return new ModelAndView(variables, "detail.ftl");
+    }
+  }
+
+  private static class DetailPostHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
+      int tid;
+      try {
+        tid = Integer.parseInt(request.params(":tid"));
+      } catch (NumberFormatException e) {
+        return null;
+      }
+
+      String action = request.queryParams("action");
+      String uid = request.queryParams("user");
+
+      if (action.equals("join")) {
+
+      } else if (action.equals("leave")) {
+
+      } else if (action.equals("delete")) {
+
+      } else if (action.equals("approve")) {
+
+      } else if (action.equals("deny")) {
+
+      } else {
+
+      }
+
+      response.redirect("/trip/" + tid, 303);
+      return null;
     }
   }
 
