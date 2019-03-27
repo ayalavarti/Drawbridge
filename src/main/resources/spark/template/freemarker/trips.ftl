@@ -9,7 +9,7 @@
             <img id="trips-picture" src="/images/temp.png" /> My Trips
         </h1>
 
-        <div id="my-trips-wrapper" style="visibility: hidden">
+        <div id="my-trips-wrapper" style="display: none">
             <div class="sub-heading-left">Hosting</div>
             <img src="/images/divider.png" style="height: 4px; width: auto;" />
             <div id="hosting" class="results-content"></div>
