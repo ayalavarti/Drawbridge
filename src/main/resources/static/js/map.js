@@ -16,7 +16,7 @@ let markers = [];
 let addressNames = [];
 let route = [];
 
-let tooltips = []
+let formValidationTooltip;
 
 /**
  * When the DOM loads, initialize Mapbox and the Map object.
@@ -30,10 +30,16 @@ $(document).ready(function () {
     console.log("DOM ready.");
 });
 
+/**
+ * Overriden function for user sign in action.
+ */
 function onUserSignedIn() {
     console.log("User signed in.");
 }
 
+/**
+ * Overriden function for user sign out action.
+ */
 function onUserSignedOut() {
     console.log("User signed out.");
 }
@@ -82,8 +88,11 @@ function initDateTime() {
     });
 }
 
+/**
+ * Initialize the form validation tooltip
+ */
 function initTooltips() {
-    tooltips[0] = tippy("#requiredTooltip", {
+    formValidationTooltip = tippy("#requiredTooltip", {
         animation: "scale",
         arrow: true,
         arrowType: "round",
@@ -381,12 +390,20 @@ function handleSubmit() {
     let timeInput = $("#time").val();
     let date = new Date(`${dateInput} ${timeInput}`);
 
+    /**
+     * If any of the input entries are not filled out, show the form validation tooltip, wait
+     * 3 seconds, then hide it, prompting the user to fill out the form completely.
+     */
     if (dateInput === "" || timeInput === "" || coordinates[0] === undefined || coordinates[1] === undefined) {
-        tooltips[0][0].show();
+        formValidationTooltip[0].show();
         setTimeout(function () {
-            tooltips[0][0].hide();
+            formValidationTooltip[0].hide();
         }, 3000);
     } else {
+        /**
+         * If the user is logged in, send a GET request with the UID.
+         * Otherwise, send null as the UID, returning generic results.
+         */
         let userID;
         if (userProfile === undefined) {
             userID = null;
