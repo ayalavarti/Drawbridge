@@ -206,7 +206,7 @@ function setTripResults(data) {
 
 		//Iterate through each connecting trip in a trip group
 		for (let trip in e) {
-			result = result + generateTrip(
+			result += generateTrip(
 				e[trip]["name"], e[trip]["start"],
 				e[trip]["end"], e[trip]["date"],
 				e[trip]["currentSize"], e[trip]["maxSize"],
@@ -220,7 +220,7 @@ function setTripResults(data) {
 		}
 
 		// Add the corresponding button and append to the results-content div
-		result = result + `</div><img src="../images/${element["status"]}-btn.png" class="${element["status"]}-btn" ${imgAtt}/>
+		result += `</div><img src="../images/${element["status"]}-btn.png" class="${element["status"]}-btn" ${imgAtt}/>
 							</div>`
 		$(".results-content").append(result);
 	});

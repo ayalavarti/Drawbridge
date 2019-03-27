@@ -40,7 +40,7 @@ body {
     box-shadow: none;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-evenly;
     min-height: auto;
     margin-bottom: 70px;
 
@@ -70,6 +70,10 @@ body {
     -o-transition: transform 0.3s ease-in-out;
     transition: transform box-shadow 0.3s ease-in-out;
     z-index: 10;
+}
+
+.result-info {
+    margin: 0;
 }
 
 .result.main:hover {
