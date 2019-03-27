@@ -53,32 +53,43 @@ function setRoute() {
 }
 
 /** Sets up the button click handlers */
-function joinClick(uid) {
+function joinClick(tid, uid) {
 	const data = {
 		action: "join",
 		user: uid
 	}
+	sendRequest(data, "/trip/" + tid);
 }
-function leaveClick(uid) {
+function leaveClick(tid, uid) {
 	const data = {
 		action: "leave",
 		user: uid
 	}
+	sendRequest(data, "/trip/" + tid);
 }
 function deleteClick(tid) {
 	const data = {
 		action: "delete",
 	}
+	sendRequest(data, "/trip/" + tid);
 }
 function approveClick(tid, pendUID) {
 	const data = {
 		action: "approve",
 		user: pendUID
 	}
+	sendRequest(data, "/trip/" + tid);
 }
 function denyClick(tid, pendUID) {
 	const data = {
 		action: "deny",
 		user: pendUID
 	}
+	sendRequest(data, "/trip/" + tid);
+}
+
+function sendRequest(data, url) {
+	const req = new XMLHttpRequest();
+	req.open("POST", url);
+	req.send();
 }
