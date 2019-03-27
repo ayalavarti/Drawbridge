@@ -137,39 +137,9 @@ public class UserInterface {
         return null;
       }
 
-      Trip trip = dbQuery.getTripById(tid);
-
-      // Get human-readable names for the addresses
-      String startName, endName;
-
-      MapboxGeocoding startGeocode = MapboxGeocoding.builder()
-          .accessToken(MAPBOX_TOKEN)
-          .query(Point.fromLngLat(trip.getStartingLongitude(),
-              trip.getStartingLatitude()))
-          .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS).build();
-      try {
-        startName = startGeocode.executeCall().body().features().get(0)
-            .placeName();
-      } catch (Exception e) {
-        String lngDir = trip.getStartingLongitude() < 0 ? "°S" : "°N";
-        String latDir = trip.getStartingLatitude() < 0 ? "°W" : "°E";
-        startName = Math.abs(trip.getStartingLatitude()) + latDir + ", "
-            + Math.abs(trip.getStartingLongitude()) + lngDir;
-      }
-
-      MapboxGeocoding endGeocode = MapboxGeocoding.builder()
-          .accessToken(MAPBOX_TOKEN)
-          .query(Point.fromLngLat(trip.getEndingLongitude(),
-              trip.getEndingLatitude()))
-          .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS).build();
-      try {
-        endName = endGeocode.executeCall().body().features().get(0).placeName();
-      } catch (Exception e) {
-        String lngDir = trip.getEndingLongitude() < 0 ? "°S" : "°N";
-        String latDir = trip.getEndingLatitude() < 0 ? "°W" : "°E";
-        endName = Math.abs(trip.getEndingLatitude()) + latDir + ", "
-            + Math.abs(trip.getEndingLongitude()) + lngDir;
-      }
+      //TODO: switch this out
+      //Trip trip = dbQuery.getTripById(tid);
+      Trip trip = dbQuery.DUMMY_TRIP;
 
       // Get user's names from the trip
       // User host = dbQuery.getUserById(trip.getHostId());
@@ -189,8 +159,9 @@ public class UserInterface {
       // Return empty data to GUI when / route is called
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", String.format("Drawbridge | %s", trip.getName()))
-          .put("favicon", "images/favicon.png").put("trip", trip)
-          .put("startName", startName).put("endName", endName).put("host", host)
+          .put("favicon", "images/favicon.png")
+          .put("trip", trip)
+          .put("host", host)
           .put("members", members).put("pending", pending).build();
       return new ModelAndView(variables, "detail.ftl");
     }
