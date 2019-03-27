@@ -206,7 +206,7 @@ public class UserInterface {
           .put("title", "Drawbridge | My Trips")
           .put("favicon", "images/favicon.png").build();
 
-      return new ModelAndView(variables, "trips.ftl");
+      return new ModelAndView(variables, "my-trips.ftl");
     }
   }
 
