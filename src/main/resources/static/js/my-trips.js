@@ -254,7 +254,7 @@ function generateTripCards(data) {
                     linkedTrips[trip]["costPerPerson"]);
 
                 if (i === ids.length - 1) {
-                    result += `<div style="width: 100%; text-align: right;"><i onclick="hideGroup(${ids[0]},[${ids.slice(1)}])" class="fas fa-chevron-up icon-label-large"></i></div>`;
+                    result += `<div id="hide-${ids[0]}" style="width: 100%; text-align: right; display: none;"><i onclick="hideGroup(${ids[0]},[${ids.slice(1)}])" class="fas fa-chevron-up icon-label-large"></i></div>`;
                 }
                 result += "</div>";
             }
@@ -297,6 +297,8 @@ function showGroup(startID, ids) {
             "z-index": "10"
         });
     });
+
+    $("#hide-" + startID).show();
 }
 
 function hideGroup(startID, ids) {
@@ -313,4 +315,6 @@ function hideGroup(startID, ids) {
         });
         bottom *= 2;
     });
+
+    $("#hide-" + startID).hide();
 }
