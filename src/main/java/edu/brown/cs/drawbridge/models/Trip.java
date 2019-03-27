@@ -11,6 +11,7 @@ public class Trip {
   private String name;
   private double startingLatitude, startingLongitude, endingLatitude,
       endingLongitude;
+  private String startAddress, endAddress;
   private int departureTime, eta;
   private int maxUsers;
   private double cost;
@@ -49,6 +50,19 @@ public class Trip {
     this.startingLongitude = startLon;
     this.endingLatitude = endLat;
     this.endingLongitude = endLon;
+  }
+
+  /**
+   * Set the names of addresses of the Trip.
+   *
+   * @param startingAddress
+   *          The name of the starting address
+   * @param endingAddress
+   *          The name of the ending address
+   */
+  private void setAddresses(String startingAddress, String endingAddress) {
+    this.startAddress = startingAddress;
+    this.endAddress = endingAddress;
   }
 
   /**
@@ -157,6 +171,24 @@ public class Trip {
   }
 
   /**
+   * Get the name of the starting address.
+   *
+   * @return The name of the starting address
+   */
+  public String getStartingAddress() {
+    return startAddress;
+  }
+
+  /**
+   * Get the name of the ending address.
+   *
+   * @return The name of the ending address
+   */
+  public String getEndingAddress() {
+    return endAddress;
+  }
+
+  /**
    * Get the departure time of the Trip.
    *
    * @return The departure time of the Trip
@@ -223,6 +255,8 @@ public class Trip {
    * Get the id of the Trip's host.
    *
    * @return The id of the Trip's host
+   * @throws IllegalArgumentException
+   *           If User information has not been initialized
    */
   public String getHostId() {
     if (hostId == null) {
@@ -235,7 +269,9 @@ public class Trip {
   /**
    * Get the ids of members in the Trip.
    *
-   * @return A List of ids of members in the Trip.
+   * @return A List of ids of members in the Trip
+   * @throws IllegalArgumentException
+   *           If User information has not been initialized
    */
   public List<String> getMemberIds() {
     if (memberIds == null) {
@@ -249,6 +285,8 @@ public class Trip {
    * Get the ids of Users who have requested to join the Trip.
    *
    * @return A list of Users who have requested to join the Trip
+   * @throws IllegalArgumentException
+   *           If User information has not been initialized
    */
   public List<String> getPendingIds() {
     if (pendingIds == null) {
@@ -262,22 +300,110 @@ public class Trip {
    * Get the current number of Users in the Trip.
    *
    * @return The current number of Users in the Trip
+   * @throws IllegalArgumentException
+   *           If User information has not been initialized
    */
   public int getCurrentSize() {
     if (memberIds == null) {
       throw new IllegalArgumentException(
           "ERROR: User information has not been initialized.");
     }
-    return 1 + memberIds.size();
+    return 1 + memberIds.size(); // Sum the number of members + 1 host
   }
 
   /**
    * Get the cost per User in the Trip.
    *
-   * @return The cost per User in the Trip
+   * @param userId
+   *          The id of the User requesting the cost per User
+   * @return The cost per existing User in the Trip if the given User is already
+   *         in the Trip. Otherwise, the cost per existing User plus the current
+   *         User
+   * @throws IllegalArgumentException
+   *           If User information has not been initialized
    */
-  public double getCostPerUser() {
-    return cost / getCurrentSize();
+  public double getCostPerUser(String userId) {
+    int currentSize = getCurrentSize();
+    if (userId.equals(hostId) || memberIds.contains(userId)) {
+      // If the user is in the group, return cost / number of Users in the Trip
+      return cost / currentSize;
+    } else {
+      // Otherwise, return cost / (number of Users in the Trip + 1)
+      return cost / (currentSize + 1);
+    }
+  }
+
+  /**
+   * Get the haversine distance from one Trip to another.
+   *
+   * @param other
+   *          The other Trip
+   * @return The distance from the end of one trip to the start of the other,
+   *         plus the length of the other.
+   */
+  public double distanceTo(Trip other) {
+    double lat1 = Math.toRadians(endingLatitude);
+    double lat2 = Math.toRadians(other.startingLatitude);
+    double lon1 = Math.toRadians(endingLongitude);
+    double lon2 = Math.toRadians(other.startingLatitude);
+    double latDifference = lat2 - lat1;
+    double lonDifference = lon2 - lon1;
+    double latSquares = Math.sin(latDifference / 2)
+        * Math.sin(latDifference / 2);
+    double lonSquares = Math.sin(lonDifference / 2)
+        * Math.sin(lonDifference / 2);
+    double products = latSquares + lonSquares * Math.cos(lat1) * Math.cos(lat2);
+
+    double distanceFromEndToStart = Math.toDegrees(
+        2 * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products)));
+    return distanceFromEndToStart + other.getTripDistance();
+  }
+
+  /**
+   * Get the haversine distance of the Trip.
+   *
+   * @return The distance of the Trip
+   */
+  public double getTripDistance() {
+    double lat1 = Math.toRadians(startingLatitude);
+    double lat2 = Math.toRadians(endingLatitude);
+    double lon1 = Math.toRadians(startingLongitude);
+    double lon2 = Math.toRadians(endingLongitude);
+    double latDifference = lat2 - lat1;
+    double lonDifference = lon2 - lon1;
+    double latSquares = Math.sin(latDifference / 2)
+        * Math.sin(latDifference / 2);
+    double lonSquares = Math.sin(lonDifference / 2)
+        * Math.sin(lonDifference / 2);
+    double products = latSquares + lonSquares * Math.cos(lat1) * Math.cos(lat2);
+    return Math.toDegrees(
+        2 * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products)));
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + id;
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    Trip other = (Trip) obj;
+    if (id != other.id) {
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -312,7 +438,7 @@ public class Trip {
 
     /**
      * An interface that adds starting and ending locations and produces a
-     * TimeStep.
+     * AddressNamesStep.
      */
     public interface LocationStep {
       /**
@@ -328,8 +454,27 @@ public class Trip {
        *          The ending longitude of the Trip
        * @return A TimeStep containing the new location data
        */
-      TimeStep addLocations(double startingLatitude, double startingLongitude,
-          double endingLatitude, double endingLongitude);
+      AddressNamesStep addLocations(double startingLatitude,
+          double startingLongitude, double endingLatitude,
+          double endingLongitude);
+    }
+
+    /**
+     * An interface that adds names of starting and ending addresses and
+     * produces a TimeStep.
+     */
+    public interface AddressNamesStep {
+      /**
+       * Add the names of starting and ending addresses of the Trip.
+       *
+       * @param startAddress
+       *          The name of the starting address
+       * @param endAddress
+       *          The name of the ending address
+       *
+       * @return A TimeStep containing the new address name data
+       */
+      TimeStep addAddressNames(String startAddress, String endAddress);
     }
 
     /**
@@ -389,13 +534,13 @@ public class Trip {
        *
        * @param hostId
        *          The id of the host
-       * @param memberids
+       * @param memberIds
        *          The ids of members in the Trip
        * @param pendingIds
        *          The ids of Users who have requested to join the Trip
        * @return A new Trip
        */
-      Trip buildWithUsers(String hostId, List<String> memberids,
+      Trip buildWithUsers(String hostId, List<String> memberIds,
           List<String> pendingIds);
     }
 
@@ -404,13 +549,15 @@ public class Trip {
      * incrementally adding data about the Trip.
      */
     private static class TripSteps implements IdentificationStep, LocationStep,
-        TimeStep, DetailsStep, BuildStep {
+        AddressNamesStep, TimeStep, DetailsStep, BuildStep {
       // Identification
       private int id;
       private String name;
       // Location
       private double startingLatitude, startingLongitude, endingLatitude,
           endingLongitude;
+      // Address names
+      private String startAddress, endAddress;
       // Time
       private int departureTime, eta;
       // Details
@@ -426,12 +573,20 @@ public class Trip {
       }
 
       @Override
-      public TimeStep addLocations(double startLat, double startLon,
+      public AddressNamesStep addLocations(double startLat, double startLon,
           double endLat, double endLon) {
         this.startingLatitude = startLat;
         this.startingLongitude = startLon;
         this.endingLatitude = endLat;
         this.endingLongitude = endLon;
+        return this;
+      }
+
+      @Override
+      public TimeStep addAddressNames(String startingAddress,
+          String endingAddress) {
+        this.startAddress = startingAddress;
+        this.endAddress = endingAddress;
         return this;
       }
 
@@ -459,6 +614,7 @@ public class Trip {
         trip.setIdentification(id, name);
         trip.setLocations(startingLatitude, startingLongitude, endingLatitude,
             endingLongitude);
+        trip.setAddresses(startAddress, endAddress);
         trip.setTimes(departureTime, eta);
         trip.setDetails(maxUsers, cost, phoneNumber, methodOfTransportation,
             comments);
@@ -472,6 +628,7 @@ public class Trip {
         trip.setIdentification(id, name);
         trip.setLocations(startingLatitude, startingLongitude, endingLatitude,
             endingLongitude);
+        trip.setAddresses(startAddress, endAddress);
         trip.setTimes(departureTime, eta);
         trip.setDetails(maxUsers, cost, phoneNumber, methodOfTransportation,
             comments);
