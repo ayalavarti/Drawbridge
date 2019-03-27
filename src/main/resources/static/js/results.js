@@ -223,7 +223,7 @@ function setTripResults(data) {
 		}
 		let imgAtt = "";
 		if (element["status"] === "join") {
-			imgAtt = `onmouseover="hover(this);" onmouseout="unhover(this);" onclick="handleJoin(${ids	});"	`;
+			imgAtt = `onmouseover="hover(this);" onmouseout="unhover(this);" onclick="handleJoin(${ids	});"`;
 		}
 
 		result = result + `</div><img src="../images/${element["status"]}-btn.png" class="${element["status"]}-btn" ${imgAtt}/>

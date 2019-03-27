@@ -7,6 +7,7 @@ $(document).ready(function () {
     } else {
         signInTooltip[0].show();
     }
+    showHomeInfo();
 });
 
 

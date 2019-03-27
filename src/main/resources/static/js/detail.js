@@ -36,7 +36,7 @@ function initMap() {
 		style: "mapbox://styles/mapbox/streets-v11",
 		center: coordinates[0],
 		zoom: 12,
-		interactive: false,
+		interactive: false
 	});
 	setRoute();
 	console.log("Map loaded.");
@@ -52,10 +52,8 @@ function setRoute() {
 		},
 		linear: false
 	});
-	addMarker(coordinates[0][1], coordinates[0][0], "start-input",
-		0, startName, map);
-	addMarker(coordinates[1][1], coordinates[1][0], "end-input",
-		1, endName, map);
+	addMarker(coordinates[0][1], coordinates[0][0], "start-input", 0, startName, map);
+	addMarker(coordinates[1][1], coordinates[1][0], "end-input", 1, endName, map);
 	drawRoute(coordinates.join(";"));
 }
 
@@ -80,8 +78,10 @@ function drawRoute(c) {
 function handleJoin(id) {
 	if (userProfile == undefined) {
 		$("html, body").animate({
-			scrollTop: 0
-		}, "slow");
+				scrollTop: 0
+			},
+			"slow"
+		);
 		signInTooltip[0].setContent("Sign in with your Google Account to join this trip.");
 		signInTooltip[0].show();
 	} else {
