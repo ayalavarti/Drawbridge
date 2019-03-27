@@ -2,6 +2,7 @@ package edu.brown.cs.drawbridge.database;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import edu.brown.cs.drawbridge.models.Trip;
@@ -16,41 +17,6 @@ public class DatabaseQuery {
       .addIdentification(0, "Mary's Carpool").addLocations(1.0, 2.0, 3.0, 4.0)
       .addAddressNames("start", "end").addTimes(500, 600)
       .addDetails(7, 8.00, "555-867-5309", "Uber", "").build();
-
-  private static final String INSERT_USER = "INSERT INTO users VALUES (?, ?, ?);";
-  private static final String INSERT_TRIP = "INSERT INTO trips(name, start_name,"
-      + "start_latitude, start_longitude, end_name, end_latitude, end_longitude, "
-      + "departure, eta, max_people, total_cost, phone_number, transportation, "
-      + "description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-
-  private static final String REMOVE_TRIP_BY_ID = "DELETE FROM trips WHERE id = ?;";
-  private static final String REMOVE_TRIPS_BY_TIME = "DELETE FROM trips WHERE "
-          + "departure < EXTRACT(EPOCH FROM current_timestamp);";
-  private static final String INSERT_HOST = "INSERT INTO hosts(trip_id, user_id) VALUES (?, ?);";
-  private static final String INSERT_MEMBER = "INSERT INTO members(trip_id, user_id) VALUES (?, ?);";
-  private static final String INSERT_REQUEST = "INSERT INTO requests(trip_id, user_id) VALUES (?, ?);";
-  private static final String REMOVE_MEMBER = "DELETE FROM members WHERE trip_id = ? AND user_id = ?;";
-  private static final String REMOVE_REQUEST = "DELETE FROM requests WHERE trip_id = ? AND user_id = ?;";
-
-  private static final String FIND_USER_BY_ID = "SELECT * FROM users WHERE id = ?;";
-  private static final String FIND_TRIP_BY_ID = "SELECT * FROM trips WHERE id = ?;";
-  private static final String FIND_HOST_TRIPS = "SELECT trip_id FROM hosts WHERE user_id = ?";
-  private static final String FIND_MEMBER_TRIPS = "SELECT trip_id FROM members WHERE user_id = ?";
-  private static final String FIND_REQUEST_TRIPS = "SELECT trip_id FROM requests WHERE user_id = ?";
-  private static final String FIND_HOST_USER = "SELECT user_id FROM hosts WHERE trip_id = ?";
-  private static final String FIND_MEMBER_USERS = "SELECT user_id FROM members WHERE trip_id = ?";
-  private static final String FIND_REQUEST_USERS = "SELECT user_id FROM requests WHERE trip_id = ?";
-
-  private static final String FIND_SIMILAR_TRIPS = "SELECT * FROM trips WHERE "
-          + "((start_latitude - ?)^2 + (start_longitude - ?)^2 <= (?)^2) AND "
-          + "((end_latitude - ?)^2 + (end_longitude - ?)^2 <= (?)^2) "
-          + "AND (departure BETWEEN ? AND ?);";
-
-  private static final String FIND_CONNECTED_TRIPS = "SELECT * FROM trips WHERE "
-          + "((start_latitude - ?)^2 + (start_longitude - ?)^2 <= (?)^2) "
-          + "AND (departure BETWEEN ? AND ?);";
-
-
 
   /**
    * A constructor based on the String name of the database.
@@ -81,7 +47,8 @@ public class DatabaseQuery {
    * @return The String id of the host.
    */
   public String getHostOnTrip(int tripId) {
-    try (PreparedStatement prep = conn.prepareStatement(FIND_HOST_USER)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.FIND_HOST_USER)) {
       prep.setInt(1, tripId);
       try (ResultSet rs = prep.executeQuery()) {
         if (rs.next()) {
@@ -104,7 +71,8 @@ public class DatabaseQuery {
    */
   public List<String> getMembersOnTrip(int tripId) {
     List<String> results = new ArrayList<>();
-    try (PreparedStatement prep = conn.prepareStatement(FIND_MEMBER_USERS)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.FIND_MEMBER_USERS)) {
       prep.setInt(1, tripId);
       try (ResultSet rs = prep.executeQuery()) {
         while (rs.next()) {
@@ -126,7 +94,8 @@ public class DatabaseQuery {
    */
   public List<String> getRequestsOnTrip(int tripId) {
     List<String> results = new ArrayList<>();
-    try (PreparedStatement prep = conn.prepareStatement(FIND_REQUEST_USERS)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.FIND_REQUEST_USERS)) {
       prep.setInt(1, tripId);
       try (ResultSet rs = prep.executeQuery()) {
         while (rs.next()) {
@@ -148,7 +117,8 @@ public class DatabaseQuery {
    */
   public List<Integer> getHostTripsWithUser(String userId) {
     List<Integer> results = new ArrayList<>();
-    try (PreparedStatement prep = conn.prepareStatement(FIND_HOST_TRIPS)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.FIND_HOST_TRIPS)) {
       prep.setString(1, userId);
       try (ResultSet rs = prep.executeQuery()) {
         while (rs.next()) {
@@ -171,7 +141,8 @@ public class DatabaseQuery {
    */
   public List<Integer> getMemberTripsWithUser(String userId) {
     List<Integer> results = new ArrayList<>();
-    try (PreparedStatement prep = conn.prepareStatement(FIND_MEMBER_TRIPS)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.FIND_MEMBER_TRIPS)) {
       prep.setString(1, userId);
       try (ResultSet rs = prep.executeQuery()) {
         while (rs.next()) {
@@ -195,7 +166,8 @@ public class DatabaseQuery {
    */
   public List<Integer> getRequestTripsWithUser(String userId) {
     List<Integer> results = new ArrayList<>();
-    try (PreparedStatement prep = conn.prepareStatement(FIND_REQUEST_TRIPS)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.FIND_REQUEST_TRIPS)) {
       prep.setString(1, userId);
       try (ResultSet rs = prep.executeQuery()) {
         while (rs.next()) {
@@ -216,7 +188,8 @@ public class DatabaseQuery {
    * @return The User object with the specified id.
    */
   public User getUserById(String userId) {
-    try (PreparedStatement prep = conn.prepareStatement(FIND_USER_BY_ID)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.FIND_USER_BY_ID)) {
       prep.setString(1, userId);
       try (ResultSet rs = prep.executeQuery()) {
         if (rs.next()) {
@@ -240,7 +213,8 @@ public class DatabaseQuery {
    * @return The Trip object with the specified id.
    */
   public Trip getTripById(int tripId) {
-    try (PreparedStatement prep = conn.prepareStatement(FIND_TRIP_BY_ID)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.FIND_TRIP_BY_ID)) {
       prep.setInt(1, tripId);
       try (ResultSet rs = prep.executeQuery()) {
         if (rs.next()) {
@@ -272,7 +246,8 @@ public class DatabaseQuery {
     if (getUserById(user.getId()) != null) {
       return true;
     }
-    try (PreparedStatement prep = conn.prepareStatement(INSERT_USER)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.INSERT_USER)) {
       prep.setString(1, user.getId());
       prep.setString(2, user.getName());
       prep.setString(3, user.getEmail());
@@ -300,8 +275,8 @@ public class DatabaseQuery {
       return tripId;
     }
     //insert into trip
-    try (PreparedStatement prep = conn.prepareStatement(INSERT_TRIP,
-            Statement.RETURN_GENERATED_KEYS)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.INSERT_TRIP, Statement.RETURN_GENERATED_KEYS)) {
       prep.setString(1, trip.getName());
       prep.setString(2, trip.getStartingAddress());
       prep.setDouble(3, trip.getStartingLatitude());
@@ -328,7 +303,8 @@ public class DatabaseQuery {
       return tripId;
     }
     //insert into host
-    try (PreparedStatement prep = conn.prepareStatement(INSERT_HOST)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.INSERT_HOST)) {
       prep.setInt(1, tripId);
       prep.setString(2, hostId);
       prep.addBatch();
@@ -349,7 +325,8 @@ public class DatabaseQuery {
    * @return True if the trip was deleted successfully. False otherwise.
    */
   public boolean deleteTripManually(int tripId) {
-    try (PreparedStatement prep = conn.prepareStatement(REMOVE_TRIP_BY_ID)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.REMOVE_TRIP_BY_ID)) {
       prep.setInt(1, tripId);
       prep.executeUpdate();
       return true;
@@ -365,7 +342,8 @@ public class DatabaseQuery {
    *         otherwise.
    */
   public boolean deleteExpiredTrips() {
-    try (PreparedStatement prep = conn.prepareStatement(REMOVE_TRIPS_BY_TIME)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.REMOVE_TRIPS_BY_TIME)) {
       prep.executeUpdate();
       return true;
     } catch (SQLException e) {
@@ -390,12 +368,14 @@ public class DatabaseQuery {
           double lastLat, double lastLon, double walkRadius,
           int start, int end) {
     List<Trip> results = new ArrayList<>();
-    try (PreparedStatement prep = conn.prepareStatement(FIND_CONNECTED_TRIPS)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.FIND_CONNECTED_TRIPS)) {
       prep.setDouble(1, lastLat);
-      prep.setDouble(2, lastLon);
-      prep.setDouble(3, walkRadius);
-      prep.setInt(4, start);
-      prep.setInt(5, end);
+      prep.setDouble(2, lastLat);
+      prep.setDouble(3, lastLon);
+      prep.setDouble(4, walkRadius);
+      prep.setInt(5, start);
+      prep.setInt(6, end);
       try (ResultSet rs = prep.executeQuery()) {
         while (rs.next()) {
           results.add(Trip.TripBuilder.newTripBuilder()
@@ -466,7 +446,8 @@ public class DatabaseQuery {
    * @return True if the request was processed successfully. False otherwise.
    */
   public boolean request(int tripId, String userId) {
-    try (PreparedStatement prep = conn.prepareStatement(INSERT_REQUEST)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.INSERT_REQUEST)) {
       prep.setInt(1, tripId);
       prep.setString(2, userId);
       prep.addBatch();
@@ -489,7 +470,8 @@ public class DatabaseQuery {
    */
   public boolean approve(int tripId, String userId) {
     //insert into members
-    try (PreparedStatement prep = conn.prepareStatement(INSERT_MEMBER)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.INSERT_MEMBER)) {
       prep.setInt(1, tripId);
       prep.setString(2,userId);
       prep.addBatch();
@@ -498,7 +480,8 @@ public class DatabaseQuery {
       return false;
     }
     //delete from requests
-    try (PreparedStatement prep = conn.prepareStatement(REMOVE_REQUEST)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.REMOVE_REQUEST)) {
       prep.setInt(1, tripId);
       prep.setString(2,userId);
       prep.executeUpdate();
@@ -518,7 +501,8 @@ public class DatabaseQuery {
    * @return True if the rejection was processed successfully. False otherwise.
    */
   public boolean reject(int tripId, String userId) {
-    try (PreparedStatement prep = conn.prepareStatement(REMOVE_REQUEST)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.REMOVE_REQUEST)) {
       prep.setInt(1, tripId);
       prep.setString(2,userId);
       prep.executeUpdate();
@@ -538,7 +522,8 @@ public class DatabaseQuery {
    * @return True if the kick was processed successfully. False otherwise.
    */
   public boolean kick(int tripId, String userId) {
-    try (PreparedStatement prep = conn.prepareStatement(REMOVE_MEMBER)) {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.REMOVE_MEMBER)) {
       prep.setInt(1, tripId);
       prep.setString(2,userId);
       prep.executeUpdate();
@@ -549,35 +534,38 @@ public class DatabaseQuery {
   }
 
   /**
+   * Creates the tables in the database.
+   * @return True if the tables have been set up successfully. False otherwise.
+   */
+  public boolean setUp() {
+    for (String query : QueryStrings.SETUP_QUERIES) {
+      try (PreparedStatement prep = conn.prepareStatement(query)) {
+        prep.executeUpdate();
+      } catch (SQLException e) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
    * Clears all data from the database.
    * @return True if the data has been deleted successfully. False otherwise.
    */
   public boolean clearData() {
-    try (PreparedStatement prep = conn.prepareStatement("DELETE FROM requests;")) {
-      prep.executeUpdate();
-    } catch (SQLException e) {
-      return false;
+    List<String> deleteQueries = new ArrayList<String>(Arrays.asList(
+            "DELETE FROM requests;",
+            "DELETE FROM members;",
+            "DELETE FROM hosts;",
+            "DELETE FROM trips;",
+            "DELETE FROM users;"));
+    for (String query : deleteQueries) {
+      try (PreparedStatement prep = conn.prepareStatement(query)) {
+        prep.executeUpdate();
+      } catch (SQLException e) {
+        return false;
+      }
     }
-    try (PreparedStatement prep = conn.prepareStatement("DELETE FROM members;")) {
-      prep.executeUpdate();
-    } catch (SQLException e) {
-      return false;
-    }
-    try (PreparedStatement prep = conn.prepareStatement("DELETE FROM hosts;")) {
-      prep.executeUpdate();
-    } catch (SQLException e) {
-      return false;
-    }
-    try (PreparedStatement prep = conn.prepareStatement("DELETE FROM trips;")) {
-      prep.executeUpdate();
-    } catch (SQLException e) {
-      return false;
-    }
-    try (PreparedStatement prep = conn.prepareStatement("DELETE FROM users;")) {
-      prep.executeUpdate();
-      return true;
-    } catch (SQLException e) {
-      return false;
-    }
+    return true;
   }
 }

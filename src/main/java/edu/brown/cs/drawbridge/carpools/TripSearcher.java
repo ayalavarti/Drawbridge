@@ -133,7 +133,7 @@ public class TripSearcher {
     Map<Trip, Double> weights = new HashMap<Trip, Double>();
 
     // Create list of paths from starting location
-    List<Trip> startingTrips = database.getConnectedTrips(startLat, startLon,
+    List<Trip> startingTrips = database.getConnectedTripsWithinTimeRadius(startLat, startLon,
         distanceRadius, departureTime, timeRadius);
     for (Trip trip : startingTrips) {
       // Add weight to weights HashMap
@@ -158,7 +158,7 @@ public class TripSearcher {
         continue;
       } else {
         if (visitingNode.trips.size() < MAX_TRIPS_PER_PATH - 1) {
-          for (Trip nextTrip : database.getConnectedTrips(
+          for (Trip nextTrip : database.getConnectedTripsAfterEta(
               visitingTrip.getEndingLatitude(),
               visitingTrip.getEndingLongitude(), distanceRadius,
               visitingTrip.getEta(), CONNECTION_WAIT_TIME)) {

@@ -50,6 +50,7 @@ public class DatabaseQueryTest {
       GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO dev;
        */
       test = new DatabaseQuery("//127.0.0.1:5432/carpools", username, password);
+      test.setUp();
       test.addUser(DUMMY_U1);
       test.addUser(DUMMY_U2);
       t1 = test.createTrip(DUMMY_T1, "1");
