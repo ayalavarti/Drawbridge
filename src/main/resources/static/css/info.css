@@ -1,0 +1,50 @@
+
+body {
+    margin: 0 auto;
+    max-width: 820px;
+}
+@media screen and (max-width: 900px){
+    body {
+        margin: 0 10%;
+    }
+}
+
+h1 {
+    text-align: center;
+}
+h2, h3, p {
+    font-family: "Trebuchet MS", sans-serif;
+}
+
+
+.section {
+}
+h2 {
+    margin-bottom: 0;
+}
+hr {
+    margin-top: 0;
+    border: none;
+    height: 2px;
+    background-color: #cccccc;
+}
+
+
+#people {
+    display: flex;
+    justify-content: center;
+    align-content: start;
+    flex-wrap: wrap;
+}
+.person {
+    text-align: center;
+    display: inline-block;
+    margin: 15px 35px;
+    width: 150px;
+}
+
+img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
