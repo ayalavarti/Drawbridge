@@ -40,9 +40,9 @@ body {
     box-shadow: none;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: left;
     min-height: auto;
-    margin-bottom: 70px;
+    margin-bottom: 40px;
 
     max-width: none;
     width: auto;
@@ -57,7 +57,7 @@ body {
 .result {
     width: 250px;
     height: 120px;
-    margin: 0;
+    margin: 5px;
 }
 
 .result.sub {
@@ -88,7 +88,7 @@ body {
     }
 }
 
-@media screen and (max-width: 745px) {
+@media screen and (max-width: 750px) {
     .results-content {
         justify-content: center;
     }
