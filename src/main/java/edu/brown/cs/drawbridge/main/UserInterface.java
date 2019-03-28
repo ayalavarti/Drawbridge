@@ -13,15 +13,12 @@ import com.mapbox.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.geojson.Point;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import freemarker.template.Configuration;
-import spark.ModelAndView;
-import spark.Request;
-import spark.Response;
-import spark.Spark;
-import spark.TemplateViewRoute;
+import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 
 /**
@@ -79,6 +76,7 @@ public class UserInterface {
     Spark.post("/results", new ListPostHandler(), freeMarker);
 
     Spark.get("/trip/:tid", new DetailGetHandler(), freeMarker);
+    Spark.post("/trip/:tid", new DetailPostHandler(), freeMarker);
 
     Spark.get("/my-trips", new UserGetHandler(), freeMarker);
 
@@ -139,39 +137,9 @@ public class UserInterface {
         return null;
       }
 
-      Trip trip = dbQuery.getTripById(tid);
-
-      // Get human-readable names for the addresses
-      String startName, endName;
-
-      MapboxGeocoding startGeocode = MapboxGeocoding.builder()
-          .accessToken(MAPBOX_TOKEN)
-          .query(Point.fromLngLat(trip.getStartingLongitude(),
-              trip.getStartingLatitude()))
-          .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS).build();
-      try {
-        startName = startGeocode.executeCall().body().features().get(0)
-            .placeName();
-      } catch (Exception e) {
-        String lngDir = trip.getStartingLongitude() < 0 ? "°S" : "°N";
-        String latDir = trip.getStartingLatitude() < 0 ? "°W" : "°E";
-        startName = Math.abs(trip.getStartingLatitude()) + latDir + ", "
-            + Math.abs(trip.getStartingLongitude()) + lngDir;
-      }
-
-      MapboxGeocoding endGeocode = MapboxGeocoding.builder()
-          .accessToken(MAPBOX_TOKEN)
-          .query(Point.fromLngLat(trip.getEndingLongitude(),
-              trip.getEndingLatitude()))
-          .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS).build();
-      try {
-        endName = endGeocode.executeCall().body().features().get(0).placeName();
-      } catch (Exception e) {
-        String lngDir = trip.getEndingLongitude() < 0 ? "°S" : "°N";
-        String latDir = trip.getEndingLatitude() < 0 ? "°W" : "°E";
-        endName = Math.abs(trip.getEndingLatitude()) + latDir + ", "
-            + Math.abs(trip.getEndingLongitude()) + lngDir;
-      }
+      //TODO: switch this out
+      //Trip trip = dbQuery.getTripById(tid);
+      Trip trip = dbQuery.DUMMY_TRIP;
 
       // Get user's names from the trip
       // User host = dbQuery.getUserById(trip.getHostId());
@@ -191,10 +159,43 @@ public class UserInterface {
       // Return empty data to GUI when / route is called
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", String.format("Drawbridge | %s", trip.getName()))
-          .put("favicon", "images/favicon.png").put("trip", trip)
-          .put("startName", startName).put("endName", endName).put("host", host)
+          .put("favicon", "images/favicon.png")
+          .put("trip", trip)
+          .put("host", host)
           .put("members", members).put("pending", pending).build();
       return new ModelAndView(variables, "detail.ftl");
+    }
+  }
+
+  private static class DetailPostHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
+      int tid;
+      try {
+        tid = Integer.parseInt(request.params(":tid"));
+      } catch (NumberFormatException e) {
+        return null;
+      }
+
+      String action = request.queryParams("action");
+      String uid = request.queryParams("user");
+
+      if (action.equals("join")) {
+
+      } else if (action.equals("leave")) {
+
+      } else if (action.equals("delete")) {
+
+      } else if (action.equals("approve")) {
+
+      } else if (action.equals("deny")) {
+
+      } else {
+
+      }
+
+      response.redirect("/trip/" + tid, 303);
+      return null;
     }
   }
 

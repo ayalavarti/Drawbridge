@@ -13,7 +13,7 @@ let curLong = -71.058502;
  * When the DOM is ready, show home and info buttons, initialize the
  * mapbox client, and initialize the map.
  */
-$(document).ready(function () {
+$(document).ready(function() {
 	showHomeInfo();
 	initMapbox();
 	initMap();
@@ -76,6 +76,74 @@ function setRoute() {
 	drawRoute(coordinates.join(";"));
 }
 
+/** Sets up the button click handlers */
+function joinClick(tid) {
+	if (userProfile == undefined) {
+		$("html, body").animate(
+			{
+				scrollTop: 0
+			},
+			"slow"
+		);
+		signInTooltip[0].setContent("Sign in with your Google Account to join this trip.");
+		signInTooltip[0].show();
+	} else {
+		const data = {
+			action: "join",
+			user: userProfile.getId()
+		};
+		sendRequest(data, "/trip/" + tid);
+	}
+}
+
+function leaveClick(tid) {
+	if (userProfile == undefined) {
+		$("html, body").animate(
+			{
+				scrollTop: 0
+			},
+			"slow"
+		);
+		signInTooltip[0].setContent("Sign in with your Google Account to join this trip.");
+		signInTooltip[0].show();
+	} else {
+		const data = {
+			action: "leave",
+			user: userProfile.getId()
+		};
+		sendRequest(data, "/trip/" + tid);
+	}
+}
+
+function deleteClick(tid) {
+	const data = {
+		action: "delete"
+	};
+	sendRequest(data, "/trip/" + tid);
+}
+
+function approveClick(tid, pendUID) {
+	const data = {
+		action: "approve",
+		user: pendUID
+	};
+	sendRequest(data, "/trip/" + tid);
+}
+
+function denyClick(tid, pendUID) {
+	const data = {
+		action: "deny",
+		user: pendUID
+	};
+	sendRequest(data, "/trip/" + tid);
+}
+
+function sendRequest(data, url) {
+	const req = new XMLHttpRequest();
+	req.open("POST", url);
+	req.send(data);
+}
+
 /**
  * Draws the route on the map
  * @param {*} c
@@ -90,34 +158,10 @@ function drawRoute(c) {
 	let req = new XMLHttpRequest();
 	req.responseType = "json";
 	req.open("GET", url, true);
-	req.onload = function () {
+	req.onload = function() {
 		let jsonResponse = req.response;
 		let coords = jsonResponse.routes[0].geometry;
 		addRoute(coords, map);
 	};
 	req.send();
-}
-
-/**
- * Handles a join button press.
- * @param {*} id
- */
-function handleJoin(id) {
-	/**
-	 * If the user is not logged in, scroll to the top of the screen and display the
-	 * sign in tooltip prompting the user to sign in.
-	 *
-	 * Otherwise, perform a join trip request if the user is not already a member/pending/host
-	 */
-	if (userProfile == undefined) {
-		$("html, body").animate({
-				scrollTop: 0
-			},
-			"slow"
-		);
-		signInTooltip[0].setContent("Sign in with your Google Account to join this trip.");
-		signInTooltip[0].show();
-	} else {
-		console.log(id);
-	}
 }
