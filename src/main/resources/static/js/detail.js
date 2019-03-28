@@ -9,17 +9,30 @@ let addressNames = [];
 let curLat = 42.358188;
 let curLong = -71.058502;
 
+/**
+ * When the DOM is ready, show home and info buttons, initialize the
+ * mapbox client, and initialize the map.
+ */
 $(document).ready(function() {
 	showHomeInfo();
 	initMapbox();
 	initMap();
 });
 
+/**
+ * Overriden function for user sign in action.
+ */
 function onUserSignedIn() {
+	/**
+	 * Hide the sign in tooltip if it is visible.
+	 */
 	console.log("User signed in.");
 	signInTooltip[0].hide();
 }
 
+/**
+ * Overriden function for user sign out action.
+ */
 function onUserSignedOut() {
 	console.log("User signed out.");
 }
@@ -42,7 +55,11 @@ function initMap() {
 	console.log("Map loaded.");
 }
 
+/**
+ * Sets the route on the map.
+ */
 function setRoute() {
+	// Fit the map to the coordinates of the trip starting and ending coordinates
 	map.fitBounds(coordinates, {
 		padding: {
 			top: 75,
@@ -52,6 +69,8 @@ function setRoute() {
 		},
 		linear: false
 	});
+
+	// Add the two markers and draw the route
 	addMarker(coordinates[0][1], coordinates[0][0], "start-input", 0, startName, map);
 	addMarker(coordinates[1][1], coordinates[1][0], "end-input", 1, endName, map);
 	drawRoute(coordinates.join(";"));
@@ -125,6 +144,10 @@ function sendRequest(data, url) {
 	req.send(data);
 }
 
+/**
+ * Draws the route on the map
+ * @param {*} c
+ */
 function drawRoute(c) {
 	let url =
 		"https://api.mapbox.com/directions/v5/mapbox/driving/" +

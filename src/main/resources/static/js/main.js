@@ -1,14 +1,20 @@
 // Store user profile across JS files
 let userProfile = undefined;
 
+// Set up sign in tooltip for use across pages
 let signInTooltip;
 
 /**
  * When the DOM loads, check for the logged in cookie.
  */
-
 $(document).ready(function () {
+	// Initialize tooltip
 	initSignInTooltip();
+
+	/**
+	 * If cookies are not enabled or the user is not signed in, display
+	 * the sign in button
+	 */
 	if (navigator.cookieEnabled) {
 		if (getCookie("loggedIn") != "true") {
 			$("#sign-in").css({
@@ -22,6 +28,9 @@ $(document).ready(function () {
 	}
 });
 
+/**
+ * Initializes the sign in tooltip below the sign in button.
+ */
 function initSignInTooltip() {
 	signInTooltip = tippy("#profile-picture-wrapper", {
 		animation: "scale",
@@ -39,6 +48,10 @@ function initSignInTooltip() {
 	});
 }
 
+/**
+ * Gets the cookie value of a given attribute
+ * @param {*} cname
+ */
 function getCookie(cname) {
 	let name = cname + "=";
 	let decodedCookie = decodeURIComponent(document.cookie);
@@ -55,10 +68,16 @@ function getCookie(cname) {
 	return "";
 }
 
+/**
+ * Routes to the home page.
+ */
 function toHome() {
 	window.open("/", "_self");
 }
 
+/**
+ * Routes to the info page.
+ */
 function toInfo() {
 	window.open("/help", "_self");
 }
@@ -82,6 +101,7 @@ function onSignIn(googleUser) {
 	userProfile = googleUser.getBasicProfile();
 	document.cookie = "loggedIn=true; path=/";
 
+	// Performs page specific actions after user has signed in
 	onUserSignedIn();
 
 	// Add profile picture
@@ -115,6 +135,7 @@ function signOut() {
 		userProfile = undefined;
 		document.cookie = "loggedIn=false; path=/";
 
+		// Performs page specific actions after user has signed out
 		onUserSignedOut();
 
 		// Hide profile info dropdown and show login button
@@ -127,6 +148,9 @@ function signOut() {
 	});
 }
 
+/**
+ * Show the home and info buttons on the screen.
+ */
 function showHomeInfo() {
 	$("#home-btn").css({
 		visibility: "visible"
@@ -136,10 +160,18 @@ function showHomeInfo() {
 	});
 }
 
+/**
+ * Change the given image to the hovered version.
+ * @param {*} e
+ */
 function hover(e) {
 	e.setAttribute('src', `../images/${e.className}-hover.png`);
 }
 
+/**
+ * Change the given image to the un-hovered version.
+ * @param {*} e
+ */
 function unhover(e) {
 	e.setAttribute('src', `../images/${e.className}.png`);
 }
