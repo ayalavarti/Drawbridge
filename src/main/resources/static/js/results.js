@@ -15,6 +15,7 @@ const tempData = [{
 				costPerPerson: "15",
 				id: "1",
 				name: "Jeff's Carpool",
+				status: "joined"
 			},
 			trip2: {
 				start: "New Haven, CT",
@@ -25,6 +26,7 @@ const tempData = [{
 				costPerPerson: "20",
 				id: "2",
 				name: "Sam's Carpool",
+				status: "joined"
 			},
 			trip3: {
 				start: "New York, NY",
@@ -35,11 +37,9 @@ const tempData = [{
 				costPerPerson: "10",
 				id: "3",
 				name: "Arvind's Carpool",
+				status: "pending"
 			}
-		},
-		totalPrice: "24",
-		totalTime: "260",
-		status: "joined"
+		}
 	},
 	{
 		trips: {
@@ -52,6 +52,7 @@ const tempData = [{
 				costPerPerson: "15",
 				id: "1",
 				name: "Jeff's Carpool",
+				status: "joined"
 			},
 			trip2: {
 				start: "New Haven, CT",
@@ -62,11 +63,9 @@ const tempData = [{
 				costPerPerson: "20",
 				id: "4",
 				name: "Mark's Carpool",
+				status: "pending"
 			}
-		},
-		totalPrice: "2",
-		totalTime: "220",
-		status: "pending"
+		}
 	},
 	{
 		trips: {
@@ -79,11 +78,9 @@ const tempData = [{
 				costPerPerson: "24",
 				id: "5",
 				name: "Going to Airport",
+				status: "pending"
 			}
-		},
-		totalPrice: "24",
-		totalTime: "60",
-		status: "pending"
+		}
 	},
 	{
 		trips: {
@@ -96,11 +93,9 @@ const tempData = [{
 				costPerPerson: "24",
 				id: "6",
 				name: "Six Flags Trip",
+				status: "join"
 			}
-		},
-		totalPrice: "24",
-		totalTime: "180",
-		status: "join"
+		}
 	},
 	{
 		trips: {
@@ -113,11 +108,9 @@ const tempData = [{
 				costPerPerson: "15",
 				id: "7",
 				name: "Boston to Brown",
+				status: "join"
 			}
-		},
-		totalPrice: "15",
-		totalTime: "140",
-		status: "join"
+		}
 	},
 	{
 		trips: {
@@ -130,11 +123,9 @@ const tempData = [{
 				costPerPerson: "14",
 				id: "8",
 				name: "Yale to Harvard",
+				status: "join"
 			}
-		},
-		totalPrice: "14",
-		totalTime: "200",
-		status: "join"
+		}
 	}
 ];
 
@@ -206,22 +197,10 @@ function setTripResults(data) {
 
 		//Iterate through each connecting trip in a trip group
 		for (let trip in e) {
-			result += generateTrip(
-				e[trip]["name"], e[trip]["start"],
-				e[trip]["end"], e[trip]["date"],
-				e[trip]["currentSize"], e[trip]["maxSize"],
-				e[trip]["costPerPerson"]);
+			result += generateTrip(e[trip]);
 			ids.push(e[trip]["id"]);
 		}
-		// If the status is "join" add hover effects and an onclick handler
-		let imgAtt = "";
-		if (element["status"] === "join") {
-			imgAtt = `onmouseover="hover(this);" onmouseout="unhover(this);" onclick="handleJoin(${ids	});"`;
-		}
-
-		// Add the corresponding button and append to the results-content div
-		result += `</div><img src="../images/${element["status"]}-btn.png" class="${element["status"]}-btn" ${imgAtt}/>
-							</div>`
+		result += `</div></div>`
 		$(".results-content").append(result);
 	});
 	/**
