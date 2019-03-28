@@ -9,7 +9,7 @@ let addressNames = [];
 let curLat = 42.358188;
 let curLong = -71.058502;
 
-$(document).ready(function () {
+$(document).ready(function() {
 	showHomeInfo();
 	initMapbox();
 	initMap();
@@ -57,6 +57,74 @@ function setRoute() {
 	drawRoute(coordinates.join(";"));
 }
 
+/** Sets up the button click handlers */
+function joinClick(tid) {
+	if (userProfile == undefined) {
+		$("html, body").animate(
+			{
+				scrollTop: 0
+			},
+			"slow"
+		);
+		signInTooltip[0].setContent("Sign in with your Google Account to join this trip.");
+		signInTooltip[0].show();
+	} else {
+		const data = {
+			action: "join",
+			user: userProfile.getId()
+		};
+		sendRequest(data, "/trip/" + tid);
+	}
+}
+
+function leaveClick(tid) {
+	if (userProfile == undefined) {
+		$("html, body").animate(
+			{
+				scrollTop: 0
+			},
+			"slow"
+		);
+		signInTooltip[0].setContent("Sign in with your Google Account to join this trip.");
+		signInTooltip[0].show();
+	} else {
+		const data = {
+			action: "leave",
+			user: userProfile.getId()
+		};
+		sendRequest(data, "/trip/" + tid);
+	}
+}
+
+function deleteClick(tid) {
+	const data = {
+		action: "delete"
+	};
+	sendRequest(data, "/trip/" + tid);
+}
+
+function approveClick(tid, pendUID) {
+	const data = {
+		action: "approve",
+		user: pendUID
+	};
+	sendRequest(data, "/trip/" + tid);
+}
+
+function denyClick(tid, pendUID) {
+	const data = {
+		action: "deny",
+		user: pendUID
+	};
+	sendRequest(data, "/trip/" + tid);
+}
+
+function sendRequest(data, url) {
+	const req = new XMLHttpRequest();
+	req.open("POST", url);
+	req.send(data);
+}
+
 function drawRoute(c) {
 	let url =
 		"https://api.mapbox.com/directions/v5/mapbox/driving/" +
@@ -67,24 +135,10 @@ function drawRoute(c) {
 	let req = new XMLHttpRequest();
 	req.responseType = "json";
 	req.open("GET", url, true);
-	req.onload = function () {
+	req.onload = function() {
 		let jsonResponse = req.response;
 		let coords = jsonResponse.routes[0].geometry;
 		addRoute(coords, map);
 	};
 	req.send();
-}
-
-function handleJoin(id) {
-	if (userProfile == undefined) {
-		$("html, body").animate({
-				scrollTop: 0
-			},
-			"slow"
-		);
-		signInTooltip[0].setContent("Sign in with your Google Account to join this trip.");
-		signInTooltip[0].show();
-	} else {
-		console.log(id);
-	}
 }

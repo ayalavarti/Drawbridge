@@ -54,7 +54,7 @@ public class PendingComparatorTest {
     List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
 
     ComparesSearchedTrips pendingComparator = new PendingComparator();
-    pendingComparator.setId("10");
+    pendingComparator.setUserId("10");
     assertEquals(pendingComparator.compare(path1, path2), 0);
   }
 
@@ -87,7 +87,7 @@ public class PendingComparatorTest {
     List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
 
     ComparesSearchedTrips pendingComparator = new PendingComparator();
-    pendingComparator.setId("10");
+    pendingComparator.setUserId("10");
     assertEquals(pendingComparator.compare(path1, path2), -1);
   }
 
@@ -120,7 +120,7 @@ public class PendingComparatorTest {
     List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
 
     ComparesSearchedTrips pendingComparator = new PendingComparator();
-    pendingComparator.setId("10");
+    pendingComparator.setUserId("10");
     assertEquals(pendingComparator.compare(path1, path2), 1);
   }
 
@@ -173,7 +173,7 @@ public class PendingComparatorTest {
     expected.add(path1);
 
     ComparesSearchedTrips pendingComparator = new PendingComparator();
-    pendingComparator.setId("10");
+    pendingComparator.setUserId("10");
     Collections.sort(paths, pendingComparator);
     for (int i = 0; i < expected.size(); i++) {
       assertEquals(paths.get(i), expected.get(i));

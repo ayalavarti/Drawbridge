@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static junit.framework.TestCase.*;
+
 public class DatabaseQueryTest {
 
   private static DatabaseQuery test;

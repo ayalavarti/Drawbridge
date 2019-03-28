@@ -39,7 +39,7 @@ public class MultipleTripComparatorTest {
             new PendingComparator(), new CostComparator()));
     String userId = "0";
     for (ComparesSearchedTrips comparator : comparators) {
-      comparator.setId(userId);
+      comparator.setUserId(userId);
     }
     MultipleTripComparator c = new MultipleTripComparator(comparators);
     List<String> memberIds = new LinkedList<String>();
@@ -79,7 +79,7 @@ public class MultipleTripComparatorTest {
             new PendingComparator(), new CostComparator()));
     String userId = "10";
     for (ComparesSearchedTrips comparator : comparators) {
-      comparator.setId(userId);
+      comparator.setUserId(userId);
     }
     MultipleTripComparator c = new MultipleTripComparator(comparators);
     List<String> memberIds = new LinkedList<String>();
@@ -119,7 +119,7 @@ public class MultipleTripComparatorTest {
             new PendingComparator(), new CostComparator()));
     String userId = "10";
     for (ComparesSearchedTrips comparator : comparators) {
-      comparator.setId(userId);
+      comparator.setUserId(userId);
     }
     MultipleTripComparator c = new MultipleTripComparator(comparators);
     List<String> pendingIds = new LinkedList<String>();
@@ -159,7 +159,7 @@ public class MultipleTripComparatorTest {
             new PendingComparator(), new CostComparator()));
     String userId = "10";
     for (ComparesSearchedTrips comparator : comparators) {
-      comparator.setId(userId);
+      comparator.setUserId(userId);
     }
     MultipleTripComparator c = new MultipleTripComparator(comparators);
     Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
