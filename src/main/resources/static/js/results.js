@@ -197,7 +197,7 @@ function setTripResults(data) {
 
 		//Iterate through each connecting trip in a trip group
 		for (let trip in e) {
-			result += generateTrip(e[trip]);
+			result += generateTrip(e[trip], true);
 			ids.push(e[trip]["id"]);
 		}
 		result += `</div></div>`

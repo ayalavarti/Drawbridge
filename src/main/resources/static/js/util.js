@@ -1,4 +1,4 @@
-function generateTrip(trip) {
+function generateTrip(trip, addButton) {
 	let date = new Date(parseFloat(trip["date"]));
 	let hourLabel = "AM";
 	let hour = date.getHours();
@@ -6,11 +6,15 @@ function generateTrip(trip) {
 		hour = hour - 12;
 		hourLabel = "PM";
 	}
+	let imgElement = "";
 
-	// If the status is "join" add hover effects and an onclick handler
-	let imgAtt = "";
-	if (trip["status"] === "join") {
-		imgAtt = `onmouseover="hover(this);" onmouseout="unhover(this);" onclick="handleJoin(${trip["id"]});"`;
+	if (addButton) {
+		// If the status is "join" add hover effects and an onclick handler
+		let imgAtt = "";
+		if (trip["status"] === "join") {
+			imgAtt = `onmouseover="hover(this);" onmouseout="unhover(this);" onclick="handleJoin(${trip["id"]});"`;
+		}
+		imgElement = `<div><img src="../images/${trip["status"]}-btn.png" class="${trip["status"]}-btn" ${imgAtt}/></div>`
 	}
 
 	return (`<div class="result-info">
@@ -32,9 +36,7 @@ function generateTrip(trip) {
 						<i class="fas fa-dollar-sign icon-label-small"></i>
 						${trip["costPerPerson"]}
 				</div>
-				<div>
-					<img src="../images/${trip["status"]}-btn.png" class="${trip["status"]}-btn" ${imgAtt}/>
-				</div>
+				${imgElement}
 			</div>`)
 }
 
