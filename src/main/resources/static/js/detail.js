@@ -96,6 +96,10 @@ function leaveClick(tid) {
 function deleteClick(tid) {
 	const data = {
 		action: "delete",
+<<<<<<< Updated upstream
+=======
+		uid: ""
+>>>>>>> Stashed changes
 	};
 	sendRequest(data, "/trip/" + tid);
 }
@@ -115,9 +119,9 @@ function denyClick(tid, pendUID) {
 }
 
 function sendRequest(data, url) {
-	const req = new XMLHttpRequest();
-	req.open("POST", url);
-	req.send();
+	$.post(url, data, responseJSON => {
+		console.log("Response");
+	}, "json");
 }
 
 function drawRoute(c) {

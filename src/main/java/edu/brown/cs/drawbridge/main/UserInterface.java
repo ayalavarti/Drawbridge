@@ -15,6 +15,7 @@ import com.mapbox.geojson.Point;
 
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
+import edu.brown.cs.drawbridge.database.QueryStrings;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import freemarker.template.Configuration;
@@ -170,25 +171,33 @@ public class UserInterface {
   private static class DetailPostHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
-      int tid;
+      QueryParamsMap qm = request.queryMap();
+
+      int tid = 2;
       try {
         tid = Integer.parseInt(request.params(":tid"));
       } catch (NumberFormatException e) {
         return null;
       }
 
-      String action = request.queryParams("action");
-      String uid = request.queryParams("user");
+      String action = qm.value("action");
+      String uid = qm.value("user");
+      System.out.println(request.body());
 
       if (action.equals("join")) {
+        System.out.println("JOIN " + uid);
 
       } else if (action.equals("leave")) {
+        System.out.println("LEAVE " + uid);
 
       } else if (action.equals("delete")) {
+        System.out.println("DELETE");
 
       } else if (action.equals("approve")) {
+        System.out.println("APPROVE " + uid);
 
       } else if (action.equals("deny")) {
+        System.out.println("DENY " + uid);
 
       } else {
 
