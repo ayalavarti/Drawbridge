@@ -39,6 +39,7 @@
   </head>
 
   <body>
+    <div class="header-bar"></div>
     <div class="header">
       <div style="visibility: hidden;" id="profile-info" class="profile-btn dropdown">
         <div class="user-info" id = "user-name"></div>

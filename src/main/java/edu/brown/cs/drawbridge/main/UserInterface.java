@@ -84,6 +84,8 @@ public class UserInterface {
     Spark.post("/new", new CreatePostHandler(), freeMarker);
 
     Spark.get("/help", new InfoGetHandler(), freeMarker);
+
+    Spark.get("/*", new Code404Handler(), freeMarker);
   }
 
   // ---------------------------- Home ------------------------------------
@@ -93,8 +95,6 @@ public class UserInterface {
   private static class HomeGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-
-      // Return empty data to GUI when / route is called
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Home")
           .put("favicon", "images/favicon.png").build();
@@ -107,7 +107,6 @@ public class UserInterface {
   private static class ListGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
-      // Return empty data to GUI when / route is called
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Results")
           .put("favicon", "images/favicon.png").build();
@@ -156,7 +155,6 @@ public class UserInterface {
       pending.add(new User("1", "Mark Lavrentyev", "lavrema@outlook.com"));
       members.add(new User("2", "Arvind Yalavarti", "abc@example.com"));
 
-      // Return empty data to GUI when / route is called
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", String.format("Drawbridge | %s", trip.getName()))
           .put("favicon", "images/favicon.png").put("trip", trip)
@@ -175,7 +173,7 @@ public class UserInterface {
     public ModelAndView handle(Request request, Response response) {
       QueryParamsMap qm = request.queryMap();
 
-      int tid = 2;
+      int tid;
       try {
         tid = Integer.parseInt(request.params(":tid"));
       } catch (NumberFormatException e) {
@@ -248,7 +246,6 @@ public class UserInterface {
   private static class InfoGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
-      // Return empty data to GUI when / route is called
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Info")
           .put("favicon", "images/favicon.png").build();
@@ -258,7 +255,18 @@ public class UserInterface {
   }
 
   // --------------------------- Errors -----------------------------------
-  // private static class Code404Handler implements TemplateViewRoute {
-  //
-  // }
+  private static class Code404Handler implements TemplateViewRoute {
+    /**
+     * Class to handle all page not found requests.
+     */
+    @Override
+    public ModelAndView handle(Request request, Response response) {
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("title", "Drawbridge | Page Not Found")
+          .put("favicon", "images/favicon.png").build();
+
+      return new ModelAndView(variables, "not-found.ftl");
+    }
+
+  }
 }

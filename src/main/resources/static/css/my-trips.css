@@ -4,7 +4,7 @@ body {
 
 #container {
     max-width: 100%;
-    margin: 80px 10px 10px 10px;
+    margin: 10px;
 }
 
 #title {
@@ -80,12 +80,6 @@ body {
     cursor: pointer;
     transform: translate3d(0px, -6px, 0px);
     box-shadow: 0 6px 6px 0 #0000001e, 0 3px 8px 0 #00000023;
-}
-
-@media screen and (max-width: 1030px) {
-    #title {
-        margin-top: 80px;
-    }
 }
 
 @media screen and (max-width: 750px) {
