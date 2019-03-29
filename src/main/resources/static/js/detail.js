@@ -9,10 +9,10 @@ let addressNames = [];
 let curLat = 42.358188;
 let curLong = -71.058502;
 
-$(document).ready(function() {
+$(document).ready(function () {
 	showHomeInfo();
-	initMapbox();
-	initMap();
+	//initMapbox();
+	//initMap();
 });
 
 function onUserSignedIn() {
@@ -60,8 +60,7 @@ function setRoute() {
 /** Sets up the button click handlers */
 function joinClick(tid) {
 	if (userProfile == undefined) {
-		$("html, body").animate(
-			{
+		$("html, body").animate({
 				scrollTop: 0
 			},
 			"slow"
@@ -79,8 +78,7 @@ function joinClick(tid) {
 
 function leaveClick(tid) {
 	if (userProfile == undefined) {
-		$("html, body").animate(
-			{
+		$("html, body").animate({
 				scrollTop: 0
 			},
 			"slow"
@@ -98,15 +96,8 @@ function leaveClick(tid) {
 
 function deleteClick(tid) {
 	const data = {
-<<<<<<< HEAD
 		action: "delete",
-<<<<<<< Updated upstream
-=======
-		uid: ""
->>>>>>> Stashed changes
-=======
-		action: "delete"
->>>>>>> e268dc25b069066a9047618f9cbccf503753c75b
+		user: userProfile.getId()
 	};
 	sendRequest(data, "/trip/" + tid);
 }
@@ -143,7 +134,7 @@ function drawRoute(c) {
 	let req = new XMLHttpRequest();
 	req.responseType = "json";
 	req.open("GET", url, true);
-	req.onload = function() {
+	req.onload = function () {
 		let jsonResponse = req.response;
 		let coords = jsonResponse.routes[0].geometry;
 		addRoute(coords, map);
