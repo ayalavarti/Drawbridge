@@ -6,9 +6,6 @@ let map;
 let markers = [];
 let addressNames = [];
 
-let curLat = 42.358188;
-let curLong = -71.058502;
-
 /**
  * When the DOM is ready, show home and info buttons, initialize the
  * mapbox client, and initialize the map.

@@ -4,7 +4,7 @@ body {
 
 #container {
     max-width: 100%;
-    margin: 80px 10px 10px 10px;
+    margin: 110px 10px 10px 10px;
     text-align: center;
 }
 
@@ -89,6 +89,10 @@ body {
     justify-content: space-evenly;
     flex-wrap: wrap;
     margin: 20px 0px;
+}
+
+.input-info>div {
+    margin-top: 20px;
 }
 
 .icon-label {

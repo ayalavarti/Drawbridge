@@ -305,8 +305,7 @@ function showGroup(startID, ids) {
             "z-index": "10"
         });
     });
-
-    $("#hide-" + startID).show();
+    $(`#hide-${startID}`).show();
 }
 
 /**
@@ -328,6 +327,5 @@ function hideGroup(startID, ids) {
         });
         bottom *= 2;
     });
-
-    $("#hide-" + startID).hide();
+    $(`#hide-${startID}`).hide();
 }
