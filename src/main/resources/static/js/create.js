@@ -1,26 +1,20 @@
 let addressNames = [];
 let coordinates = [];
 
+let formValidationTooltip;
+let formTooltips = [];
+
 /**
  * When the DOM loads, set the tooltip content and check if cookies are enabled and
  * show the home and info buttons.s
  */
 $(document).ready(function () {
     signInTooltip[0].setContent("Sign in with your Google Account to host a trip.");
-    /**
-     * If the user is not logged in or cookies are disabled, show the signin tooltip
-     * prompting the user to sign in to view their trips.
-     */
-    if (navigator.cookieEnabled) {
-        if (getCookie("loggedIn") != "true") {
-            signInTooltip[0].show();
-        }
-    } else {
-        signInTooltip[0].show();
-    }
+    initMapbox();
     showHomeInfo();
     initDateTime();
     initTooltips();
+    console.log("DOM ready.");
 });
 
 /**
@@ -72,44 +66,137 @@ function initTooltips() {
         sticky: true,
         placement: "top",
     });
+    formTooltips = tippy(".form-tooltip", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge-alt",
+        interactive: false,
+        trigger: "manual",
+        hideOnClick: false,
+        inertia: true,
+        placement: "bottom",
+    });
+
+}
+
+/**
+ * Handle changes to the address input boxes whenever the input box loses focus.
+ *
+ * @param {*} id
+ *            The name of the input box (either 'start-input' or 'end-input')
+ * @param {*} index
+ *            The index to use for identification (either 0 or 1)
+ */
+function handleInput(id, index) {
+    // Get the address value from the correct input box
+    let address = $(`#${id}`).val();
+    if (address === "" || address === addressNames[index]) {
+        return;
+    }
+
+    $(`#loading-${id}`).css({
+        visibility: "visible"
+    });
+
+    setTimeout(function () {
+        // Send network request for geocoding based on address box value
+        mapboxClient.geocoding
+            .forwardGeocode({
+                query: address,
+                proximity: [curLong, curLat],
+                autocomplete: true,
+                limit: 1
+            })
+            .send()
+            .then(function (response) {
+                // If valid response
+                if (response && response.body && response.body.features && response.body.features.length) {
+                    /**
+                     * Get the first element of the suggestions, set the input box to that
+                     * value, then update the addressNames and coordinates arrays with the
+                     * feature data.
+                     * */
+                    let feature = response.body.features[0];
+                    $(`#${id}`).val(feature.place_name);
+                    coordinates[index] = feature.center;
+                    addressNames[index] = feature.place_name;
+                }
+                $(`#loading-${id}`).css({
+                    visibility: "hidden"
+                });
+            });
+    }, 800);
 }
 
 /**
  * Handle submit response when the submit button is pressed.
  */
 function handleSubmit() {
+    hideFormTooltips();
     let dateInput = $("#date").val();
     let timeInput = $("#time").val();
     let date = new Date(`${dateInput} ${timeInput}`);
+
+    let sizeInput = $("#carpool-size").val();
+    let priceInput = $("#expected-price").val();
+    let phoneInput = $("#contact-number").val();
+    let commentsInput = $("#comments").val();
+    let phoneRegex = new RegExp("[0-9]{3}-[0-9]{3}-[0-9]{4}");
 
     /**
      * If any of the input entries are not filled out, show the form validation tooltip, wait
      * 3 seconds, then hide it, prompting the user to fill out the form completely.
      */
-    if (dateInput === "" || timeInput === "" || coordinates[0] === undefined || coordinates[1] === undefined) {
+    if (dateInput === "" || timeInput === "" ||
+        sizeInput === "" || priceInput === "" || phoneInput === "") {
         formValidationTooltip[0].show();
         setTimeout(function () {
             formValidationTooltip[0].hide();
         }, 3000);
     } else {
-
-        if (userProfile != undefined) {
-            const postParameters = {
-                startName: addressNames[0],
-                endName: addressNames[1],
-                startCoordinates: coordinates[0].slice(0).reverse(),
-                endCoordinates: coordinates[1].slice(0).reverse(),
-                date: date.getTime(),
-                userID: userProfile.getId()
-            };
-            console.log(postParameters);
-        } else {
+        if (sizeInput < 1) {
+            formTooltips[0].show();
+            setTimeout(function () {
+                formTooltips[0].hide();
+            }, 3000);
+        } else if (priceInput < 0) {
+            formTooltips[1].show();
+            setTimeout(function () {
+                formTooltips[1].hide();
+            }, 3000);
+        } else if (!phoneRegex.test(phoneInput)) {
+            formTooltips[2].show();
+            setTimeout(function () {
+                formTooltips[2].hide();
+            }, 3000);
+        } else if (userProfile === undefined) {
             $("html, body").animate({
                     scrollTop: 0
                 },
                 "slow"
             );
             signInTooltip[0].show();
+        } else {
+            const postParameters = {
+                startName: addressNames[0],
+                endName: addressNames[1],
+                startCoordinates: coordinates[0].slice(0).reverse(),
+                endCoordinates: coordinates[1].slice(0).reverse(),
+                date: date.getTime(),
+                size: sizeInput,
+                price: priceInput,
+                phone: phoneInput,
+                comments: commentsInput,
+                userID: userProfile.getId()
+            };
+            console.log(postParameters);
         }
+    }
+}
+
+function hideFormTooltips() {
+    for (let i = 0; i < 3; i++) {
+        formTooltips[i].hide();
     }
 }

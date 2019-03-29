@@ -31,14 +31,14 @@
                             <span class="sub-heading">Carpool Size</span>
                             <div>
                                 <i class="fas fa-users icon-label"></i>
-                                <input class="size-input" id="carpool-size" min="1" max="30" type="number" placeholder="Size..." />
+                                <input data-tippy-content="Minimum carpool size must be 1." class="form-tooltip size-input" id="carpool-size" type="number" placeholder="Size..." />
                             </div>
                         </div>
                         <div>
                             <span class="sub-heading">Expected Price</span>
                             <div>
                                 <i class="fas fa-dollar-sign icon-label-large"></i>
-                                <input class="price-input" id="expected-price" min="0" type="number" placeholder="Price..." />
+                                <input data-tippy-content="Minimum price must be $0." class="form-tooltip price-input" id="expected-price" type="number" placeholder="Price..." />
                                     <span style="font-size: 12px;">/person</span>
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                             <span class="sub-heading">Contact Number</span>
                             <div>
                                 <i class="fas fa-phone icon-label-large"></i>
-                                <input class="phone-input" id="contact-number" type="tel" placeholder="Phone..." pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"/>
+                                <input data-tippy-content="Required phone format is 123-456-7890." class="form-tooltip phone-input" id="contact-number" type="tel" placeholder="Phone..."/>
                             </div>
                         </div>
                     </div>
@@ -67,6 +67,7 @@
             </form>
         </div>
     </div>
+    <script src="/js/mapUtil.js"></script>
     <script src="/js/create.js"></script>
 </#assign>
 <#include "main.ftl">

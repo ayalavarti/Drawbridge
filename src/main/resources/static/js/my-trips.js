@@ -158,6 +158,7 @@ $(document).ready(function () {
         signInTooltip[0].show();
     }
     showHomeInfo();
+    console.log("DOM ready.");
 });
 
 /**
@@ -180,6 +181,7 @@ function onUserSignedIn() {
     $("#member").empty();
     $("#pending").empty();
     allIDs = [];
+    console.log("User signed in.");
 
     signInTooltip[0].hide();
     queryUserTrips();
@@ -200,6 +202,7 @@ function onUserSignedOut() {
     $("#trips-picture").attr({
         src: "/images/temp.png"
     });
+    console.log("User signed out.");
 
     signInTooltip[0].show();
 }

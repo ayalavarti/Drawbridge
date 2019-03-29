@@ -3,12 +3,6 @@
  */
 let map;
 
-/**
- * Hardcoded starting location - will replace later.
- */
-let curLat = 42.358188;
-let curLong = -71.058502;
-
 let found = [];
 let coordinates = [];
 let markers = [];
@@ -398,7 +392,7 @@ function handleSubmit() {
         formValidationTooltip[0].show();
         setTimeout(function () {
             formValidationTooltip[0].hide();
-        }, 3000);
+        }, 2000);
     } else {
         /**
          * If the user is logged in, send a GET request with the UID.

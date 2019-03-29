@@ -13,10 +13,11 @@ let curLong = -71.058502;
  * When the DOM is ready, show home and info buttons, initialize the
  * mapbox client, and initialize the map.
  */
-$(document).ready(function() {
+$(document).ready(function () {
 	showHomeInfo();
 	initMapbox();
 	initMap();
+	console.log("DOM ready.");
 });
 
 /**
@@ -79,8 +80,7 @@ function setRoute() {
 /** Sets up the button click handlers */
 function joinClick(tid) {
 	if (userProfile == undefined) {
-		$("html, body").animate(
-			{
+		$("html, body").animate({
 				scrollTop: 0
 			},
 			"slow"
@@ -98,8 +98,7 @@ function joinClick(tid) {
 
 function leaveClick(tid) {
 	if (userProfile == undefined) {
-		$("html, body").animate(
-			{
+		$("html, body").animate({
 				scrollTop: 0
 			},
 			"slow"
@@ -158,7 +157,7 @@ function drawRoute(c) {
 	let req = new XMLHttpRequest();
 	req.responseType = "json";
 	req.open("GET", url, true);
-	req.onload = function() {
+	req.onload = function () {
 		let jsonResponse = req.response;
 		let coords = jsonResponse.routes[0].geometry;
 		addRoute(coords, map);

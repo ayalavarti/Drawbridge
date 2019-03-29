@@ -1,6 +1,12 @@
 let mapboxClient;
 
 /**
+ * Hardcoded starting location - will replace later.
+ */
+let curLat = 42.358188;
+let curLong = -71.058502;
+
+/**
  * Initializes the Mapbox using the accessToken and sets up the
  * mapboxClient for use in Geolocating.
  */
