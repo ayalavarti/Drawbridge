@@ -389,10 +389,7 @@ function handleSubmit() {
      * 3 seconds, then hide it, prompting the user to fill out the form completely.
      */
     if (dateInput === "" || timeInput === "" || coordinates[0] === undefined || coordinates[1] === undefined) {
-        formValidationTooltip[0].show();
-        setTimeout(function () {
-            formValidationTooltip[0].hide();
-        }, 2000);
+        showHideTooltip(formValidationTooltip[0]);
     } else {
         /**
          * If the user is logged in, send a GET request with the UID.

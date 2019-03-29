@@ -94,7 +94,6 @@ function handleInput(id, index) {
     if (address === "" || address === addressNames[index]) {
         return;
     }
-
     $(`#loading-${id}`).css({
         visibility: "visible"
     });
@@ -150,26 +149,14 @@ function handleSubmit() {
      */
     if (dateInput === "" || timeInput === "" ||
         sizeInput === "" || priceInput === "" || phoneInput === "") {
-        formValidationTooltip[0].show();
-        setTimeout(function () {
-            formValidationTooltip[0].hide();
-        }, 3000);
+        showHideTooltip(formValidationTooltip[0]);
     } else {
         if (sizeInput < 1) {
-            formTooltips[0].show();
-            setTimeout(function () {
-                formTooltips[0].hide();
-            }, 3000);
+            showHideTooltip(formTooltips[0]);
         } else if (priceInput < 0) {
-            formTooltips[1].show();
-            setTimeout(function () {
-                formTooltips[1].hide();
-            }, 3000);
+            showHideTooltip(formTooltips[1]);
         } else if (!phoneRegex.test(phoneInput)) {
-            formTooltips[2].show();
-            setTimeout(function () {
-                formTooltips[2].hide();
-            }, 3000);
+            showHideTooltip(formTooltips[2]);
         } else if (userProfile === undefined) {
             $("html, body").animate({
                     scrollTop: 0

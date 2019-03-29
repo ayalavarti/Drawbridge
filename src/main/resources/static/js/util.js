@@ -1,5 +1,4 @@
 function generateTrip(trip) {
-
 	let date = new Date(parseFloat(trip["date"]));
 	let hourLabel = "AM";
 	let hour = date.getHours();
@@ -37,4 +36,11 @@ function generateTrip(trip) {
 					<img src="../images/${trip["status"]}-btn.png" class="${trip["status"]}-btn" ${imgAtt}/>
 				</div>
 			</div>`)
+}
+
+function showHideTooltip(tooltip) {
+	tooltip.show();
+	setTimeout(function () {
+		tooltip.hide();
+	}, 3000);
 }
