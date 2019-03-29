@@ -11,17 +11,34 @@ body {
 
 h1 {
     text-align: center;
+    font-weight: 500;
 }
 
-h2,
 h3,
-p {
-    font-family: "Trebuchet MS", sans-serif;
+h2 {
+    font-weight: 400;
 }
 
+#container {
+    max-width: 100%;
+    margin: 80px 10px 10px 10px;
+}
+
+.title {
+    text-align: center;
+}
+
+
+.descript {
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgb(44, 108, 204);
+}
 
 .section {}
 
+h3,
 h2 {
     margin-bottom: 0;
 }
@@ -44,11 +61,11 @@ hr {
 .person {
     text-align: center;
     display: inline-block;
-    margin: 15px 35px;
+    margin: 10px 20px;
     width: 150px;
 }
 
-img {
+.person>img {
     width: 100px;
     height: 100px;
     border-radius: 50%;
