@@ -41,6 +41,7 @@
             <span class="trip-info-text">Carpool Search Results</span>
         </div>
     </div>
+    <script src="/js/util.js"></script>
     <script src="/js/results.js"></script>
 </#assign>
 <#include "main.ftl">
