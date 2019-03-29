@@ -9,7 +9,7 @@ let addressNames = [];
 let curLat = 42.358188;
 let curLong = -71.058502;
 
-$(document).ready(function () {
+$(document).ready(function() {
 	showHomeInfo();
 	initMapbox();
 	initMap();
@@ -54,13 +54,14 @@ function setRoute() {
 	});
 	addMarker(coordinates[0][1], coordinates[0][0], "start-input", 0, startName, map);
 	addMarker(coordinates[1][1], coordinates[1][0], "end-input", 1, endName, map);
-	calcRoute(coordinates.join(";"));
+	drawRoute(coordinates.join(";"));
 }
 
 /** Sets up the button click handlers */
 function joinClick(tid) {
 	if (userProfile == undefined) {
-		$("html, body").animate({
+		$("html, body").animate(
+			{
 				scrollTop: 0
 			},
 			"slow"
@@ -74,11 +75,12 @@ function joinClick(tid) {
 		};
 		sendRequest(data, "/trip/" + tid);
 	}
-
 }
+
 function leaveClick(tid) {
 	if (userProfile == undefined) {
-		$("html, body").animate({
+		$("html, body").animate(
+			{
 				scrollTop: 0
 			},
 			"slow"
@@ -93,16 +95,22 @@ function leaveClick(tid) {
 		sendRequest(data, "/trip/" + tid);
 	}
 }
+
 function deleteClick(tid) {
 	const data = {
+<<<<<<< HEAD
 		action: "delete",
 <<<<<<< Updated upstream
 =======
 		uid: ""
 >>>>>>> Stashed changes
+=======
+		action: "delete"
+>>>>>>> e268dc25b069066a9047618f9cbccf503753c75b
 	};
 	sendRequest(data, "/trip/" + tid);
 }
+
 function approveClick(tid, pendUID) {
 	const data = {
 		action: "approve",
@@ -110,6 +118,7 @@ function approveClick(tid, pendUID) {
 	};
 	sendRequest(data, "/trip/" + tid);
 }
+
 function denyClick(tid, pendUID) {
 	const data = {
 		action: "deny",
@@ -134,7 +143,7 @@ function drawRoute(c) {
 	let req = new XMLHttpRequest();
 	req.responseType = "json";
 	req.open("GET", url, true);
-	req.onload = function () {
+	req.onload = function() {
 		let jsonResponse = req.response;
 		let coords = jsonResponse.routes[0].geometry;
 		addRoute(coords, map);
