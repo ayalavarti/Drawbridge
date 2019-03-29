@@ -1,9 +1,21 @@
 <#assign stylesheets>
+<style>
+	#container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100vh;
+		flex-wrap: wrap;
+	}
+	img {
+		width: 350px;
+	}
+</style>
 </#assign>
 
 <#assign content>
     <div id="container">
-        <img src="/images/not-found.jpg" style="width: 100vw;" />
+        <img src="/images/not-found.png" />
     </div>
 </#assign>
 <#include "main.ftl">
