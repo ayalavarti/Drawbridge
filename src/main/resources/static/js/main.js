@@ -32,7 +32,7 @@ $(document).ready(function () {
  * Initializes the sign in tooltip below the sign in button.
  */
 function initSignInTooltip() {
-	signInTooltip = tippy("#profile-picture-wrapper", {
+	signInTooltip = tippy("#sign-in", {
 		animation: "scale",
 		arrow: true,
 		arrowType: "round",
@@ -40,7 +40,6 @@ function initSignInTooltip() {
 		interactive: false,
 		trigger: "manual",
 		hideOnClick: false,
-		offset: "0, 40",
 		maxWidth: 150,
 		inertia: true,
 		sticky: true,

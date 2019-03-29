@@ -3,12 +3,6 @@
  */
 let map;
 
-/**
- * Hardcoded starting location - will replace later.
- */
-let curLat = 42.358188;
-let curLong = -71.058502;
-
 let found = [];
 let coordinates = [];
 let markers = [];
@@ -241,19 +235,13 @@ function calcRoute(c) {
         c +
         "?geometries=geojson&&access_token=" +
         mapboxgl.accessToken;
-
-    let req = new XMLHttpRequest();
-    req.responseType = "json";
-    req.open("GET", url, true);
-    req.onload = function () {
-        let jsonResponse = req.response;
-        route = [jsonResponse.routes[0].distance * 0.001, jsonResponse.routes[0].duration / 60];
+    $.get(url, responseJSON => {
+        route = [responseJSON.routes[0].distance * 0.001, responseJSON.routes[0].duration / 60];
         setTripInfo();
 
-        let coords = jsonResponse.routes[0].geometry;
+        let coords = responseJSON.routes[0].geometry;
         addRoute(coords, map);
-    };
-    req.send();
+    }, "json");
 }
 
 /**
@@ -337,7 +325,6 @@ function alignTrip() {
         let left = 250;
         let right = 150;
         let bottom = 150;
-
         /**
          * Checks if the trip positions are routed diagonally upwards or if the window
          * height is below a threshold. Then the map view is adjusted since the search
@@ -346,11 +333,9 @@ function alignTrip() {
         if (
             (coordinates[0][0] < coordinates[1][0] && coordinates[0][1] < coordinates[1][1]) ||
             (coordinates[0][0] > coordinates[1][0] && coordinates[0][1] > coordinates[1][1]) ||
-            $(window).height() < 600
-        ) {
+            $(window).height() < 600) {
             top = 150;
         }
-
         /**
          * Checks if in half screen vertical mode and adjust map view.
          */
@@ -358,7 +343,6 @@ function alignTrip() {
             right = 50;
             bottom = 50;
         }
-
         /**
          * Checks if the window width is below a threshold. Then the map view is adjusted
          * since the search menu will not cover up the trip.
@@ -368,7 +352,6 @@ function alignTrip() {
             left = 75;
             right = 75;
         }
-
         // Fits the bounds of the map to the given padding sizes.
         map.fitBounds(coordinates, {
             padding: {
@@ -395,10 +378,7 @@ function handleSubmit() {
      * 3 seconds, then hide it, prompting the user to fill out the form completely.
      */
     if (dateInput === "" || timeInput === "" || coordinates[0] === undefined || coordinates[1] === undefined) {
-        formValidationTooltip[0].show();
-        setTimeout(function () {
-            formValidationTooltip[0].hide();
-        }, 3000);
+        showHideTooltip(formValidationTooltip[0]);
     } else {
         /**
          * If the user is logged in, send a GET request with the UID.

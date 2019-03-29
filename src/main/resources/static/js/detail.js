@@ -6,17 +6,15 @@ let map;
 let markers = [];
 let addressNames = [];
 
-let curLat = 42.358188;
-let curLong = -71.058502;
-
 /**
  * When the DOM is ready, show home and info buttons, initialize the
  * mapbox client, and initialize the map.
  */
-$(document).ready(function() {
+$(document).ready(function () {
 	showHomeInfo();
 	initMapbox();
 	initMap();
+	console.log("DOM ready.");
 });
 
 /**
@@ -62,7 +60,7 @@ function setRoute() {
 	// Fit the map to the coordinates of the trip starting and ending coordinates
 	map.fitBounds(coordinates, {
 		padding: {
-			top: 75,
+			top: 100,
 			bottom: 100,
 			left: 75,
 			right: 75
@@ -76,7 +74,11 @@ function setRoute() {
 	drawRoute(coordinates.join(";"));
 }
 
-/** Sets up the button click handlers */
+/**
+ * Button click handler for a join request.
+ *
+ * @param {*} tid
+ */
 function joinClick(tid) {
 	if (userProfile == undefined) {
 		$("html, body").animate({
@@ -95,24 +97,24 @@ function joinClick(tid) {
 	}
 }
 
+/**
+ * Button click handler for a leave request.
+ *
+ * @param {*} tid
+ */
 function leaveClick(tid) {
-	if (userProfile == undefined) {
-		$("html, body").animate({
-				scrollTop: 0
-			},
-			"slow"
-		);
-		signInTooltip[0].setContent("Sign in with your Google Account to join this trip.");
-		signInTooltip[0].show();
-	} else {
-		const data = {
-			action: "leave",
-			user: userProfile.getId()
-		};
-		sendRequest(data, "/trip/" + tid);
-	}
+	const data = {
+		action: "leave",
+		user: userProfile.getId()
+	};
+	sendRequest(data, "/trip/" + tid);
 }
 
+/**
+ * Button click handler for a delete request.
+ *
+ * @param {*} tid
+ */
 function deleteClick(tid) {
 	const data = {
 		action: "delete",
@@ -121,6 +123,12 @@ function deleteClick(tid) {
 	sendRequest(data, "/trip/" + tid);
 }
 
+/**
+ *  Button click handler for an approve request.
+ *
+ * @param {*} tid
+ * @param {*} pendUID
+ */
 function approveClick(tid, pendUID) {
 	const data = {
 		action: "approve",
@@ -129,6 +137,12 @@ function approveClick(tid, pendUID) {
 	sendRequest(data, "/trip/" + tid);
 }
 
+/**
+ *  Button click handler for a deny request.
+ *
+ * @param {*} tid
+ * @param {*} pendUID
+ */
 function denyClick(tid, pendUID) {
 	const data = {
 		action: "deny",
@@ -137,6 +151,12 @@ function denyClick(tid, pendUID) {
 	sendRequest(data, "/trip/" + tid);
 }
 
+/**
+ *  Sends a POST request to the server.
+ *
+ * @param {*} data
+ * @param {*} url
+ */
 function sendRequest(data, url) {
 	$.post(url, data, responseJSON => {
 		console.log("Response");
@@ -154,13 +174,8 @@ function drawRoute(c) {
 		"?geometries=geojson&&access_token=" +
 		mapboxgl.accessToken;
 
-	let req = new XMLHttpRequest();
-	req.responseType = "json";
-	req.open("GET", url, true);
-	req.onload = function () {
-		let jsonResponse = req.response;
-		let coords = jsonResponse.routes[0].geometry;
+	$.get(url, responseJSON => {
+		let coords = responseJSON.routes[0].geometry;
 		addRoute(coords, map);
-	};
-	req.send();
+	}, "json");
 }

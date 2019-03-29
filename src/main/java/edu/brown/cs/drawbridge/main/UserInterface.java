@@ -9,17 +9,17 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
-import com.mapbox.api.geocoding.v5.GeocodingCriteria;
-import com.mapbox.api.geocoding.v5.MapboxGeocoding;
-import com.mapbox.geojson.Point;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
-import edu.brown.cs.drawbridge.database.QueryStrings;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import freemarker.template.Configuration;
-import spark.*;
+import spark.ModelAndView;
+import spark.QueryParamsMap;
+import spark.Request;
+import spark.Response;
+import spark.Spark;
+import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
 
 /**
@@ -30,7 +30,6 @@ import spark.template.freemarker.FreeMarkerEngine;
  */
 public class UserInterface {
   private static final Gson GSON = new Gson();
-  private static final String MAPBOX_TOKEN = "pk.eyJ1IjoiYXJ2Mzk1IiwiYSI6ImNqdGpodWcwdDB6dXEzeXBrOHJyeGVpNm8ifQ.bAwH-KG_5A5kwIxCf6xCSQ";
   private static DatabaseQuery dbQuery;
 
   private static FreeMarkerEngine createEngine() {
@@ -138,8 +137,8 @@ public class UserInterface {
         return null;
       }
 
-      //TODO: switch this out
-      //Trip trip = dbQuery.getTripById(tid);
+      // TODO: switch this out
+      // Trip trip = dbQuery.getTripById(tid);
       Trip trip = dbQuery.DUMMY_TRIP;
 
       // Get user's names from the trip
@@ -160,10 +159,9 @@ public class UserInterface {
       // Return empty data to GUI when / route is called
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", String.format("Drawbridge | %s", trip.getName()))
-          .put("favicon", "images/favicon.png")
-          .put("trip", trip)
-          .put("host", host)
-          .put("members", members).put("pending", pending).build();
+          .put("favicon", "images/favicon.png").put("trip", trip)
+          .put("host", host).put("members", members).put("pending", pending)
+          .build();
       return new ModelAndView(variables, "detail.ftl");
     }
   }
@@ -228,7 +226,11 @@ public class UserInterface {
   private static class CreateGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
-      return null;
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("title", "Drawbridge | Create Trip")
+          .put("favicon", "images/favicon.png").build();
+
+      return new ModelAndView(variables, "create.ftl");
     }
   }
 

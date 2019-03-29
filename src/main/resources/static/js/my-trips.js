@@ -158,6 +158,7 @@ $(document).ready(function () {
         signInTooltip[0].show();
     }
     showHomeInfo();
+    console.log("DOM ready.");
 });
 
 /**
@@ -180,6 +181,7 @@ function onUserSignedIn() {
     $("#member").empty();
     $("#pending").empty();
     allIDs = [];
+    console.log("User signed in.");
 
     signInTooltip[0].hide();
     queryUserTrips();
@@ -200,6 +202,7 @@ function onUserSignedOut() {
     $("#trips-picture").attr({
         src: "/images/temp.png"
     });
+    console.log("User signed out.");
 
     signInTooltip[0].show();
 }
@@ -248,10 +251,7 @@ function generateTripCards(data) {
                 }
                 // Generate the trip content for each card
                 let trip = Object.keys(linkedTrips)[i];
-                result += generateTrip(linkedTrips[trip]["name"], linkedTrips[trip]["start"],
-                    linkedTrips[trip]["end"], linkedTrips[trip]["date"],
-                    linkedTrips[trip]["currentSize"], linkedTrips[trip]["maxSize"],
-                    linkedTrips[trip]["costPerPerson"]);
+                result += generateTrip(linkedTrips[trip], false);
 
                 if (i === ids.length - 1) {
                     result += `<div id="hide-${ids[0]}" style="width: 100%; text-align: right; display: none;"><i onclick="hideGroup(${ids[0]},[${ids.slice(1)}])" class="fas fa-chevron-up icon-label-large"></i></div>`;
@@ -260,10 +260,7 @@ function generateTripCards(data) {
             }
         } else {
             let trip = Object.keys(linkedTrips)[0];
-            result += `<div class="result" id="${ids[0]}">` + generateTrip(linkedTrips[trip]["name"], linkedTrips[trip]["start"],
-                linkedTrips[trip]["end"], linkedTrips[trip]["date"],
-                linkedTrips[trip]["currentSize"], linkedTrips[trip]["maxSize"],
-                linkedTrips[trip]["costPerPerson"]) + "</div>";
+            result += `<div class="result" id="${ids[0]}">` + generateTrip(linkedTrips[trip], false) + "</div>";
         }
         result += `</div>`
 
@@ -280,12 +277,23 @@ function generateTripCards(data) {
     renderTripCards(hosting, member, pending);
 }
 
+/**
+ * Render the trips in each category on the screen.
+ * @param {*} hosting
+ * @param {*} member
+ * @param {*} pending
+ */
 function renderTripCards(hosting, member, pending) {
     $("#hosting").append(hosting);
     $("#member").append(member);
     $("#pending").append(pending);
 }
 
+/**
+ * Show the group cards for a given starting trip.
+ * @param {*} startID
+ * @param {*} ids
+ */
 function showGroup(startID, ids) {
     ids.reverse().forEach(element => {
         $(`#${startID}-${element}`).animate({
@@ -297,10 +305,14 @@ function showGroup(startID, ids) {
             "z-index": "10"
         });
     });
-
-    $("#hide-" + startID).show();
+    $(`#hide-${startID}`).show();
 }
 
+/**
+ * Hide the group cards for a given starting trip.
+ * @param {*} startID
+ * @param {*} ids
+ */
 function hideGroup(startID, ids) {
     let bottom = 130;
 
@@ -315,6 +327,5 @@ function hideGroup(startID, ids) {
         });
         bottom *= 2;
     });
-
-    $("#hide-" + startID).hide();
+    $(`#hide-${startID}`).hide();
 }

@@ -62,6 +62,7 @@
     </div>
 
     <div id="map"></div>
+    <script src="/js/util.js"></script>
     <script src="/js/mapUtil.js"></script>
     <script src="/js/map.js"></script>
 </#assign>
