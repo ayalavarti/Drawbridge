@@ -168,6 +168,10 @@ public class UserInterface {
     }
   }
 
+  /**
+   * Handles various actions on the detail page including deleting a trip,
+   * joining a trip, approving/denying pending members.
+   */
   private static class DetailPostHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
