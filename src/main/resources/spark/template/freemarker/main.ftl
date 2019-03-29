@@ -42,7 +42,7 @@
     <div class="header">
       <div style="visibility: hidden;" id="profile-info" class="profile-btn dropdown">
         <div class="user-info" id = "user-name"></div>
-        <div id = "profile-picture-wrapper" data-tippy-content="">
+        <div id = "profile-picture-wrapper">
           <div class="dropdown-content">
             <a class="dropdown-filler"></a>
             <a class="dropdown-top" href="/my-trips">My Trips</a>
@@ -50,7 +50,7 @@
           </div>
         </div>
       </div>
-      <div style="visibility: hidden;" id="sign-in" class="profile-btn">
+      <div style="visibility: hidden;" id="sign-in" class="profile-btn" data-tippy-content="">
         <div class="g-signin2" data-onsuccess="onSignIn" data-onfailure="onFailure" data-longtitle="true"></div>
       </div>
     </div>
