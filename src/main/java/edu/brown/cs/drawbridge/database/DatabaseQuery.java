@@ -15,7 +15,7 @@ public class DatabaseQuery {
       "mary@gmail.com");
 
   public static final Trip DUMMY_TRIP = Trip.TripBuilder.newTripBuilder()
-      .addIdentification(0, "Mary's Carpool")
+      .addIdentification(5, "Mary's Carpool")
       .addLocations(42.038332, -72.616233, 41.827104, -71.399639)
       .addAddressNames("Six Flags New England", "Brown University, Providence, RI")
       .addTimes(1553487799, 1553494999).addDetails(7, 8.40, "(555) 867-5309",

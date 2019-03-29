@@ -79,8 +79,7 @@ function setRoute() {
 /** Sets up the button click handlers */
 function joinClick(tid) {
 	if (userProfile == undefined) {
-		$("html, body").animate(
-			{
+		$("html, body").animate({
 				scrollTop: 0
 			},
 			"slow"
@@ -98,8 +97,7 @@ function joinClick(tid) {
 
 function leaveClick(tid) {
 	if (userProfile == undefined) {
-		$("html, body").animate(
-			{
+		$("html, body").animate({
 				scrollTop: 0
 			},
 			"slow"
@@ -117,7 +115,8 @@ function leaveClick(tid) {
 
 function deleteClick(tid) {
 	const data = {
-		action: "delete"
+		action: "delete",
+		user: userProfile.getId()
 	};
 	sendRequest(data, "/trip/" + tid);
 }
@@ -139,9 +138,9 @@ function denyClick(tid, pendUID) {
 }
 
 function sendRequest(data, url) {
-	const req = new XMLHttpRequest();
-	req.open("POST", url);
-	req.send(data);
+	$.post(url, data, responseJSON => {
+		console.log("Response");
+	}, "json");
 }
 
 /**
@@ -158,7 +157,7 @@ function drawRoute(c) {
 	let req = new XMLHttpRequest();
 	req.responseType = "json";
 	req.open("GET", url, true);
-	req.onload = function() {
+	req.onload = function () {
 		let jsonResponse = req.response;
 		let coords = jsonResponse.routes[0].geometry;
 		addRoute(coords, map);
