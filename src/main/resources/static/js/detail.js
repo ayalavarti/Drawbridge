@@ -127,7 +127,8 @@ function leaveClick(tid) {
  */
 function deleteClick(tid) {
 	const data = {
-		action: "delete"
+		action: "delete",
+		user: userProfile.getId()
 	};
 	sendRequest(data, "/trip/" + tid);
 }
@@ -167,9 +168,9 @@ function denyClick(tid, pendUID) {
  * @param {*} url
  */
 function sendRequest(data, url) {
-	const req = new XMLHttpRequest();
-	req.open("POST", url);
-	req.send(data);
+	$.post(url, data, responseJSON => {
+		console.log("Response");
+	}, "json");
 }
 
 /**
