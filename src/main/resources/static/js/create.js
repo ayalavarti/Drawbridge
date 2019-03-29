@@ -182,6 +182,9 @@ function handleSubmit() {
     }
 }
 
+/**
+ * Hide all the form tooltips.
+ */
 function hideFormTooltips() {
     for (let i = 0; i < 3; i++) {
         formTooltips[i].hide();

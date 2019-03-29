@@ -283,12 +283,23 @@ function generateTripCards(data) {
     renderTripCards(hosting, member, pending);
 }
 
+/**
+ * Render the trips in each category on the screen.
+ * @param {*} hosting
+ * @param {*} member
+ * @param {*} pending
+ */
 function renderTripCards(hosting, member, pending) {
     $("#hosting").append(hosting);
     $("#member").append(member);
     $("#pending").append(pending);
 }
 
+/**
+ * Show the group cards for a given starting trip.
+ * @param {*} startID
+ * @param {*} ids
+ */
 function showGroup(startID, ids) {
     ids.reverse().forEach(element => {
         $(`#${startID}-${element}`).animate({
@@ -304,6 +315,11 @@ function showGroup(startID, ids) {
     $("#hide-" + startID).show();
 }
 
+/**
+ * Hide the group cards for a given starting trip.
+ * @param {*} startID
+ * @param {*} ids
+ */
 function hideGroup(startID, ids) {
     let bottom = 130;
 

@@ -77,7 +77,11 @@ function setRoute() {
 	drawRoute(coordinates.join(";"));
 }
 
-/** Sets up the button click handlers */
+/**
+ * Button click handler for a join request.
+ *
+ * @param {*} tid
+ */
 function joinClick(tid) {
 	if (userProfile == undefined) {
 		$("html, body").animate({
@@ -96,6 +100,11 @@ function joinClick(tid) {
 	}
 }
 
+/**
+ * Button click handler for a leave request.
+ *
+ * @param {*} tid
+ */
 function leaveClick(tid) {
 	if (userProfile == undefined) {
 		$("html, body").animate({
@@ -114,6 +123,11 @@ function leaveClick(tid) {
 	}
 }
 
+/**
+ * Button click handler for a delete request.
+ *
+ * @param {*} tid
+ */
 function deleteClick(tid) {
 	const data = {
 		action: "delete"
@@ -121,6 +135,12 @@ function deleteClick(tid) {
 	sendRequest(data, "/trip/" + tid);
 }
 
+/**
+ *  Button click handler for an approve request.
+ *
+ * @param {*} tid
+ * @param {*} pendUID
+ */
 function approveClick(tid, pendUID) {
 	const data = {
 		action: "approve",
@@ -129,6 +149,12 @@ function approveClick(tid, pendUID) {
 	sendRequest(data, "/trip/" + tid);
 }
 
+/**
+ *  Button click handler for a deny request.
+ *
+ * @param {*} tid
+ * @param {*} pendUID
+ */
 function denyClick(tid, pendUID) {
 	const data = {
 		action: "deny",
@@ -137,6 +163,12 @@ function denyClick(tid, pendUID) {
 	sendRequest(data, "/trip/" + tid);
 }
 
+/**
+ *  Sends a POST request to the server.
+ *
+ * @param {*} data
+ * @param {*} url
+ */
 function sendRequest(data, url) {
 	const req = new XMLHttpRequest();
 	req.open("POST", url);
