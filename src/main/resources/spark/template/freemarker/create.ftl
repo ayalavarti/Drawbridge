@@ -38,8 +38,8 @@
                             <span class="sub-heading">Expected Price</span>
                             <div>
                                 <i class="fas fa-dollar-sign icon-label-large"></i>
-                                <input data-tippy-content="Minimum price must be $0." class="form-tooltip price-input" id="expected-price" type="number" placeholder="Price..." />
-                                    <span style="font-size: 12px;">/person</span>
+                                <input data-tippy-content="Minimum price must be $0." class="form-tooltip price-input" id="expected-price" type="number" step="0.01" placeholder="Price..." />
+                                <span style="font-size: 12px;"><i class="addendum">/person</i></span>
                             </div>
                         </div>
                         <div>
@@ -56,7 +56,7 @@
                             <span class="sub-heading">Comments</span>
                             <div>
                                 <i class="fas fa-comments icon-label"></i>
-                                <input class="comments-input" id="comments" type="text" placeholder="Comments..." />
+                                <textarea class="comments-input" id="comments" type="text" placeholder="Comments..."></textarea>
                             </div>
                         </div>
                     </div>

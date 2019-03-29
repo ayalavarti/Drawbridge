@@ -67,6 +67,7 @@ body {
 .comments-input {
     width: 250px;
     height: auto;
+    resize: none;
 }
 
 .section-heading {
@@ -103,4 +104,9 @@ body {
 
 .search-inputs {
     text-align: center;
+}
+
+.addendum {
+    font-size: 0.9em;
+    color: #555555;
 }
