@@ -60,7 +60,7 @@ function setRoute() {
 	// Fit the map to the coordinates of the trip starting and ending coordinates
 	map.fitBounds(coordinates, {
 		padding: {
-			top: 75,
+			top: 100,
 			bottom: 100,
 			left: 75,
 			right: 75
@@ -103,21 +103,11 @@ function joinClick(tid) {
  * @param {*} tid
  */
 function leaveClick(tid) {
-	if (userProfile == undefined) {
-		$("html, body").animate({
-				scrollTop: 0
-			},
-			"slow"
-		);
-		signInTooltip[0].setContent("Sign in with your Google Account to join this trip.");
-		signInTooltip[0].show();
-	} else {
-		const data = {
-			action: "leave",
-			user: userProfile.getId()
-		};
-		sendRequest(data, "/trip/" + tid);
-	}
+	const data = {
+		action: "leave",
+		user: userProfile.getId()
+	};
+	sendRequest(data, "/trip/" + tid);
 }
 
 /**
@@ -184,13 +174,8 @@ function drawRoute(c) {
 		"?geometries=geojson&&access_token=" +
 		mapboxgl.accessToken;
 
-	let req = new XMLHttpRequest();
-	req.responseType = "json";
-	req.open("GET", url, true);
-	req.onload = function () {
-		let jsonResponse = req.response;
-		let coords = jsonResponse.routes[0].geometry;
+	$.get(url, responseJSON => {
+		let coords = responseJSON.routes[0].geometry;
 		addRoute(coords, map);
-	};
-	req.send();
+	}, "json");
 }
