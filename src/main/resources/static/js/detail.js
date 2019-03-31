@@ -21,6 +21,7 @@ $(document).ready(function () {
 		})
 });
 
+
 /**
  * Overriden function for user sign in action.
  */
@@ -53,7 +54,10 @@ function initMap() {
 		zoom: 12,
 		interactive: false
 	});
-	setRoute();
+	map.on('load', function () {
+		setRoute();
+	});
+
 	console.log("Map loaded.");
 }
 
