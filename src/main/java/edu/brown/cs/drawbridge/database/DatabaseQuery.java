@@ -16,7 +16,7 @@ public class DatabaseQuery {
 
   private static final Trip DUMMY_TRIP = Trip.TripBuilder.newTripBuilder()
       .addIdentification(0, "Mary's Carpool").addLocations(41.608550, -72.656662, 41.827104, -71.399639)
-      .addTimes(1553487799, 1553494999).addDetails(7, 8.40, "555-867-5309",
+      .addAddressNames("","").addTimes(1553487799, 1553494999).addDetails(7, 8.40, "555-867-5309",
                                                    "Uber", "We'll be meeting at the Ratty around this time, but maybe a bit later")
       .buildWithUsers("118428670975676923422", new ArrayList<>(), new ArrayList<>());
 

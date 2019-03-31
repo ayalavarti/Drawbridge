@@ -12,6 +12,8 @@ import java.util.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class DatabaseQueryTest {
 
   private static DatabaseQuery test;

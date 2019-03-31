@@ -1,9 +1,5 @@
 package edu.brown.cs.drawbridge.database;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public final class QueryStrings {
 
   protected static final String INSERT_USER = "INSERT INTO users VALUES (?, ?, ?);";
