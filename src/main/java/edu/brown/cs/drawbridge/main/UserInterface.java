@@ -18,6 +18,7 @@ import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
+import spark.Route;
 import spark.Spark;
 import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
@@ -71,7 +72,7 @@ public class UserInterface {
     FreeMarkerEngine freeMarker = createEngine();
 
     Spark.get("/", new HomeGetHandler(), freeMarker);
-
+    Spark.post("/mapboxKey", new MapboxHandler());
     Spark.get("/results", new ListGetHandler(), freeMarker);
     Spark.post("/results", new ListPostHandler(), freeMarker);
 
@@ -100,6 +101,19 @@ public class UserInterface {
           .put("favicon", "images/favicon.png").build();
 
       return new ModelAndView(variables, "map.ftl");
+    }
+  }
+
+  // ---------------------------- Home ------------------------------------
+  /**
+   * Handle requests to query the Mapbox API key.
+   */
+  private static class MapboxHandler implements Route {
+    @Override
+    public String handle(Request req, Response res) {
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("mapboxKey", System.getenv("MAPBOX_KEY")).build();
+      return GSON.toJson(variables);
     }
   }
 

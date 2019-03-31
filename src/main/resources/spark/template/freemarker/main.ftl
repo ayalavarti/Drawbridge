@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
+    <#--  Tooltips  -->
     <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
 	  <script src="https://unpkg.com/tippy.js@4"></script>
 

@@ -16,12 +16,16 @@ let formValidationTooltip;
  * When the DOM loads, initialize Mapbox and the Map object.
  */
 $(document).ready(function () {
-    initMapbox();
-    initMap();
-    initDateTime();
-    initTooltips();
-    disableTrip();
-    console.log("DOM ready.");
+    initMapbox().then(function () {
+            initMap();
+            initDateTime();
+            initTooltips();
+            disableTrip();
+            console.log("DOM ready.");
+        })
+        .catch(function (err) {
+            console.error(err);
+        })
 });
 
 /**

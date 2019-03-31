@@ -11,10 +11,20 @@ let curLong = -71.058502;
  * mapboxClient for use in Geolocating.
  */
 function initMapbox() {
-    mapboxgl.accessToken =
-        "pk.eyJ1IjoiYXJ2Mzk1IiwiYSI6ImNqdGpodWcwdDB6dXEzeXBrOHJyeGVpNm8ifQ.bAwH-KG_5A5kwIxCf6xCSQ";
-    mapboxClient = mapboxSdk({
-        accessToken: mapboxgl.accessToken
+    return new Promise(function (resolve, reject) {
+        $.post("/mapboxKey", responseJSON => {
+            const responseObject = JSON.parse(responseJSON);
+            console.log(responseJSON);
+
+            mapboxgl.accessToken = responseObject.mapboxKey;
+            mapboxClient = mapboxSdk({
+                accessToken: mapboxgl.accessToken
+            });
+            resolve();
+        }).fail(function (xhr, status, error) {
+            reject(Error(error));
+        });
+
     });
 }
 
