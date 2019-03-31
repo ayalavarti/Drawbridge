@@ -2,143 +2,120 @@ const months = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
 ];
-
-const tempData = [{
-        trips: {
-            trip1: {
-                start: "Providence, RI",
-                end: "New Haven, CT",
-                date: "1553453944862",
-                currentSize: "3",
-                maxSize: "5",
-                costPerPerson: "15",
-                id: "1",
-                name: "Jeff's Carpool 1",
-            },
-            trip2: {
-                start: "New Haven, CT",
-                end: "New York, NY",
-                date: "1553453944862",
-                currentSize: "3",
-                maxSize: "5",
-                costPerPerson: "20",
-                id: "2",
-                name: "Sam's Carpool 1",
-            },
-            trip3: {
-                start: "New York, NY",
-                end: "Marlboro, NJ",
-                date: "1553453944862",
-                currentSize: "3",
-                maxSize: "5",
-                costPerPerson: "10",
-                id: "3",
-                name: "Arvind's Carpool 1",
-            }
+const tempData = [
+    [
+        {
+            start: "Providence, RI",
+            end: "New Haven, CT",
+            date: "1553453944862",
+            currentSize: "3",
+            maxSize: "5",
+            costPerPerson: "15",
+            id: "1",
+            name: "Jeff's Carpool",
+            status: "joined"
         },
-        totalPrice: "24",
-        totalTime: "260",
-        status: "host"
-    },
-    {
-        trips: {
-            trip1: {
-                start: "Providence, RI",
-                end: "New Haven, CT",
-                date: "1553453944862",
-                currentSize: "3",
-                maxSize: "5",
-                costPerPerson: "15",
-                id: "4",
-                name: "Jeff's Carpool 2",
-            },
-            trip2: {
-                start: "New Haven, CT",
-                end: "Marlboro, NJ",
-                date: "1553453944862",
-                currentSize: "3",
-                maxSize: "5",
-                costPerPerson: "20",
-                id: "5",
-                name: "Mark's Carpool 2",
-            }
+        {
+            start: "New Haven, CT",
+            end: "New York, NY",
+            date: "1553453944862",
+            currentSize: "3",
+            maxSize: "5",
+            costPerPerson: "20",
+            id: "2",
+            name: "Sam's Carpool",
+            status: "joined"
         },
-        totalPrice: "2",
-        totalTime: "220",
-        status: "host"
-    },
-    {
-        trips: {
-            trip1: {
-                start: "Providence, RI",
-                end: "New Haven, CT",
-                date: "1553453944862",
-                currentSize: "3",
-                maxSize: "5",
-                costPerPerson: "15",
-                id: "6",
-                name: "Jeff's Carpool 3",
-            },
-            trip2: {
-                start: "New Haven, CT",
-                end: "Marlboro, NJ",
-                date: "1553453944862",
-                currentSize: "3",
-                maxSize: "5",
-                costPerPerson: "20",
-                id: "7",
-                name: "Mark's Carpool 3",
-            }
+        {
+            start: "New York, NY",
+            end: "Marlboro, NJ",
+            date: "1553453944862",
+            currentSize: "3",
+            maxSize: "5",
+            costPerPerson: "10",
+            id: "3",
+            name: "Arvind's Carpool",
+            status: "pending"
+        }
+    ],
+    [
+        {
+            start: "Providence, RI",
+            end: "New Haven, CT",
+            date: "1553453944862",
+            currentSize: "3",
+            maxSize: "5",
+            costPerPerson: "15",
+            id: "1",
+            name: "Jeff's Carpool",
+            status: "joined"
         },
-        totalPrice: "2",
-        totalTime: "220",
-        status: "member"
-    },
-    {
-        trips: {
-            trip1: {
-                start: "Providence, RI",
-                end: "New Haven, CT",
-                date: "1553453944862",
-                currentSize: "3",
-                maxSize: "5",
-                costPerPerson: "15",
-                id: "8",
-                name: "Jeff's Carpool 4",
-            },
-            trip2: {
-                start: "New Haven, CT",
-                end: "Marlboro, NJ",
-                date: "1553453944862",
-                currentSize: "3",
-                maxSize: "5",
-                costPerPerson: "20",
-                id: "7",
-                name: "Mark's Carpool 3",
-            }
-        },
-        totalPrice: "2",
-        totalTime: "220",
-        status: "pending"
-    },
-    {
-        trips: {
-            trip1: {
-                start: "Providence, RI",
-                end: "New Haven, CT",
-                date: "1553453944862",
-                currentSize: "3",
-                maxSize: "5",
-                costPerPerson: "15",
-                id: "10",
-                name: "Jeff's Carpool 5",
-            }
-        },
-        totalPrice: "2",
-        totalTime: "220",
-        status: "pending"
-    }
+        {
+            start: "New Haven, CT",
+            end: "Marlboro, NJ",
+            date: "1553453944862",
+            currentSize: "3",
+            maxSize: "5",
+            costPerPerson: "20",
+            id: "4",
+            name: "Mark's Carpool",
+            status: "pending"
+        }
+    ],
+    [
+        {
+            start: "Providence, RI",
+            end: "Springfield, MA",
+            date: "1553453944862",
+            currentSize: "1",
+            maxSize: "3",
+            costPerPerson: "24",
+            id: "5",
+            name: "Going to Airport",
+            status: "pending"
+        }
+    ],
+    [
+        {
+            start: "Providence, RI",
+            end: "Six Flags",
+            date: "1553453944862",
+            currentSize: "4",
+            maxSize: "5",
+            costPerPerson: "24",
+            id: "6",
+            name: "Six Flags Trip",
+            status: "join"
+        }
+    ],
+    [
+        {
+            start: "Boston, MA",
+            end: "Brown University",
+            date: "1553453944862",
+            currentSize: "3",
+            maxSize: "5",
+            costPerPerson: "15",
+            id: "7",
+            name: "Boston to Brown",
+            status: "join"
+        }
+    ],
+    [
+        {
+            start: "Yale University",
+            end: "Harvard University",
+            date: "1553453944862",
+            currentSize: "3",
+            maxSize: "5",
+            costPerPerson: "14",
+            id: "8",
+            name: "Yale to Harvard",
+            status: "join"
+        }
+    ]
 ];
+
 
 /**
  * When the DOM loads, set the tooltip content and check if cookies are enabled and
@@ -232,7 +209,7 @@ function generateTripCards(data) {
 
         // Get a list of the trip ids
         for (let trip in linkedTrips) {
-            ids.push(linkedTrips[trip]["id"]);
+            ids.push(trip["id"]);
         }
 
         if (ids.length > 1) {
