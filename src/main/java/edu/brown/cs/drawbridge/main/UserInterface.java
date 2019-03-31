@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,7 +70,6 @@ public class UserInterface {
     Spark.get("/", new HomeGetHandler(), freeMarker);
 
     Spark.get("/results", new ListGetHandler(), freeMarker);
-    Spark.post("/results", new ListPostHandler(), freeMarker);
 
     Spark.get("/trip/:tid", new DetailGetHandler(), freeMarker);
     Spark.post("/trip/:tid", new DetailPostHandler(), freeMarker);
@@ -101,21 +101,81 @@ public class UserInterface {
   }
 
   // ---------------------------- List ------------------------------------
+
+  /**
+   * Class to handle getting results to display; This handles all requests
+   * originating from the home page and from resubmitting the walking time
+   * values.
+   */
   private static class ListGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
+      // Get parameter values
+      QueryParamsMap qm = request.queryMap();
+
+      String uid = qm.value("userID");
+      double walkTime, waitTime;
+      if (qm.hasKey("walkTime")) {
+        walkTime = qm.get("walkTime").doubleValue();
+      } else {
+        walkTime = 15 * 60; // 15 minutes walking is the default
+      }
+
+      if (qm.hasKey("waitTime")) {
+        waitTime = qm.get("waitTime").doubleValue();
+      } else {
+        waitTime = 30 * 60; // 30 minutes is default for waiting for carpool
+      }
+
+      // TODO: replace with actual data getting.
+      List<List<Trip>> suggestions = new ArrayList<>();
+      List<Trip> s1 = new ArrayList<>();
+      s1.add(dbQuery.DUMMY_TRIP);
+      List<Trip> s2 = new ArrayList<>();
+      s2.add(dbQuery.DUMMY_TRIP);
+      s2.add(dbQuery.DUMMY_TRIP);
+      suggestions.add(s1);
+      suggestions.add(s2);
+
+      // Process suggestions into required json form
+      List<List<Map<String, String>>> tripData = new ArrayList<>();
+      for (List<Trip> sugg : suggestions) {
+        List<Map<String, String>> processedSugg = new ArrayList<>();
+
+        for (Trip trip : sugg) {
+          String status;
+          if (trip.getMemberIds().contains(uid)) {
+            status = "joined";
+          } else if (trip.getHostId().equals(uid)) {
+            status = "hosting";
+          } else if (trip.getPendingIds().contains(uid)) {
+            status = "pending";
+          } else {
+            status = "join";
+          }
+
+          Map<String, String> vars = new HashMap<String, String>();
+          vars.put("start", trip.getStartingAddress());
+          vars.put("end", trip.getEndingAddress());
+          vars.put("date", Integer.toString(trip.getDepartureTime()));
+          vars.put("currentSize", Integer.toString(trip.getCurrentSize()));
+          vars.put("maxSize", Integer.toString(trip.getMaxUsers()));
+          vars.put("costPerPerson", Double.toString(trip.getCostPerUser(uid)));
+          vars.put("id", Integer.toString(trip.getId()));
+          vars.put("name", trip.getName());
+          vars.put("status", status);
+
+          processedSugg.add(vars);
+        }
+        tripData.add(processedSugg);
+      }
+
+
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Results")
-          .put("favicon", "images/favicon.png").build();
-
+          .put("favicon", "images/favicon.png")
+          .put("data", GSON.toJson(tripData)).build();
       return new ModelAndView(variables, "results.ftl");
-    }
-  }
-
-  private static class ListPostHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request request, Response response) {
-      return null;
     }
   }
 
