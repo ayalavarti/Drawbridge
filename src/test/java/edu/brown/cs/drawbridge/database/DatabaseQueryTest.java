@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -42,15 +43,14 @@ public class DatabaseQueryTest {
   @BeforeClass
   public static void oneTimeSetUp() {
     try {
-      String username = "dev";
-      String password = "dev";
+      String username = "dev";//System.getenv("DB_USER");
+      String password = "dev";//System.getenv("DB_PASS");
       /*
       If your database denies access, run the following queries in pgadmin:
       CREATE USER dev WITH PASSWORD 'dev';
       GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO dev;
        */
       test = new DatabaseQuery("//127.0.0.1:5432/carpools", username, password);
-      test.setUp();
       test.addUser(DUMMY_U1);
       test.addUser(DUMMY_U2);
       t1 = test.createTrip(DUMMY_T1, "1");
@@ -116,12 +116,39 @@ public class DatabaseQueryTest {
 
   @Test
   public void testGetRelevantTrips() {
-
+    assertEquals(test.getConnectedTripsWithinTimeRadius(3, 3, 0, 1000, 0),
+            new ArrayList<>(Collections.singletonList(test.getTripById(t1))));
+    //location but not time
+    assertTrue(test.getConnectedTripsWithinTimeRadius(3, 3, 0, 2000, 0).isEmpty());
+    //time but not location
+    assertTrue(test.getConnectedTripsWithinTimeRadius(5, 5, 0, 1000, 0).isEmpty());
+    //all trips
+    assertEquals(test.getConnectedTripsWithinTimeRadius(1, 1, 25, 1500, 1250),
+            new ArrayList<>(Arrays.asList(test.getTripById(t1), test.getTripById(t2), test.getTripById(t3))));
+    //selective
+    assertEquals(test.getConnectedTripsWithinTimeRadius(3, 3, 2, 750, 300),
+            new ArrayList<>(Arrays.asList(test.getTripById(t1), test.getTripById(t3))));
   }
 
   @Test
   public void testGetConnectedTrips() {
-
+    //not location
+    assertTrue(test.getConnectedTripsAfterEta(5, 5, 0, 1000, 0).isEmpty());
+    //location but not time
+    assertTrue(test.getConnectedTripsAfterEta(3, 3, 0, 2000, 0).isEmpty());
+    //before eta within buffer
+    assertTrue(test.getConnectedTripsAfterEta(3, 3, 0, 1021, 25).isEmpty());
+    //after eta within buffer
+    assertEquals(test.getConnectedTripsAfterEta(3, 3, 0, 999, 25),
+            new ArrayList<>(Collections.singletonList(test.getTripById(t1))));
+    //after eta outside buffer
+    assertTrue(test.getConnectedTripsAfterEta(3, 3, 0, 1026, 25).isEmpty());
+    //all trips
+    assertEquals(test.getConnectedTripsAfterEta(1, 1, 25, 400, 800),
+            new ArrayList<>(Arrays.asList(test.getTripById(t1), test.getTripById(t2), test.getTripById(t3))));
+    //selective
+    assertEquals(test.getConnectedTripsAfterEta(1, 1, 25, 800, 150),
+            new ArrayList<>(Collections.singletonList(test.getTripById(t2))));
   }
 
   @Test

@@ -18,6 +18,9 @@ Install PGAdmin4 from https://www.pgadmin.org/download/
 as well. Open PGAdmin and create a new database named
 "carpools".
 
+Right click on the carpools database and select "restore".
+Use the carpoolsDump.tar file to build the database.
+
 Maven will automatically install the JDBC driver needed 
 to connect to the postgre database when "mvn package" is 
 run, though it can be downloaded at 
