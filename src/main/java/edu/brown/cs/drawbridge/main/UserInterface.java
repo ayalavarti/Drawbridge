@@ -266,6 +266,9 @@ public class UserInterface {
   }
 
   // ---------------------------- User ------------------------------------
+  /**
+   * Handles the display of the "my trips" page. Simply returns the template.
+   */
   private static class UserGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
@@ -277,7 +280,62 @@ public class UserInterface {
     }
   }
 
+  /**
+   * Handles getting the user's trips, split up by category.
+   */
+  private static class UserPostHandler implements Route {
+    @Override
+    public Object handle(Request request, Response response) {
+      QueryParamsMap qm = request.queryMap();
+      String uid = qm.value("userID");
+
+      // Getting the data
+      // TODO: replace with real data getting
+      List<Trip> hosting = new ArrayList<>();
+      hosting.add(dbQuery.DUMMY_TRIP);
+      List<Trip> member = new ArrayList<>();
+      member.add(dbQuery.DUMMY_TRIP);
+      member.add(dbQuery.DUMMY_TRIP);
+      List<Trip> pending = new ArrayList<>();
+
+      // Processing into JSON format
+      List<List<Map<String, String>>> data = new ArrayList<>();
+      for (Trip trip : hosting) {
+        List<Map<String, String>> innerList = new ArrayList<>();
+
+        String status;
+        if (trip.getMemberIds().contains(uid)) {
+          status = "joined";
+        } else if (trip.getHostId().equals(uid)) {
+          status = "hosting";
+        } else if (trip.getPendingIds().contains(uid)) {
+          status = "pending";
+        } else {
+          status = "join";
+        }
+
+        Map<String, String> vals = new HashMap<>();
+        vals.put("start", trip.getStartingAddress());
+        vals.put("end", trip.getEndingAddress());
+        vals.put("date", Integer.toString(trip.getDepartureTime()));
+        vals.put("currentSize", Integer.toString(trip.getCurrentSize()));
+        vals.put("maxSize", Integer.toString(trip.getMaxUsers()));
+        vals.put("costPerPerson", Double.toString(trip.getCostPerUser(uid)));
+        vals.put("id", Integer.toString(trip.getId()));
+        vals.put("name", trip.getName());
+        vals.put("status", status);
+
+        data.add(innerList);
+      }
+
+      return GSON.toJson(data);
+    }
+  }
+
   // --------------------------- Create -----------------------------------
+  /**
+   * Handles loading the "create new trip" page. Simple template serving.
+   */
   private static class CreateGetHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
@@ -289,6 +347,9 @@ public class UserInterface {
     }
   }
 
+  /**
+   * Handles create form submission and actual creation of a new trip.
+   */
   private static class CreatePostHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
@@ -312,10 +373,10 @@ public class UserInterface {
   }
 
   // --------------------------- Errors -----------------------------------
+  /**
+   * Class to handle all page not found requests.
+   */
   private static class Code404Handler implements Route {
-    /**
-     * Class to handle all page not found requests.
-     */
     @Override
     public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
