@@ -14,7 +14,6 @@ function initMapbox() {
     return new Promise(function (resolve, reject) {
         $.post("/mapboxKey", responseJSON => {
             const responseObject = JSON.parse(responseJSON);
-            console.log(responseJSON);
 
             mapboxgl.accessToken = responseObject.mapboxKey;
             mapboxClient = mapboxSdk({
