@@ -19,12 +19,6 @@ public class IsHostComparator implements ComparesUsersInTrip {
   public int compare(User user1, User user2) {
     boolean firstIsHost = trip.getHostId().equals(user1.getId());
     boolean secondIsHost = trip.getHostId().equals(user2.getId());
-    if (firstIsHost) {
-      return -1;
-    }
-    if (secondIsHost) {
-      return 1;
-    }
-    return 0;
+    return Boolean.compare(secondIsHost, firstIsHost);
   }
 }

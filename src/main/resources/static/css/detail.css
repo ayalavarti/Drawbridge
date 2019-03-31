@@ -1,0 +1,240 @@
+body {
+    width: 100%;
+}
+
+h1:after,
+h2:after {
+    background: url("../images/divider.png");
+    content: "";
+    display: block;
+    height: 4px;
+    position: relative;
+    width: 60px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 2px;
+    margin-bottom: 20px;
+}
+
+h1:after {
+    margin-bottom: 0;
+}
+
+h2:after {
+    height: 2px;
+    width: 30px;
+}
+
+h1:after {
+    left: calc(50% - 30px);
+}
+
+h2 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-weight: 400;
+}
+
+#container {
+    display: grid;
+    grid-gap: 20px;
+    max-width: 100%;
+}
+
+#title {
+    font-weight: 500;
+    justify-self: center;
+    grid-row-start: 1;
+    grid-row-end: 1;
+    grid-column-start: 1;
+    grid-column-end: 1;
+}
+
+#map-inset {
+    justify-self: center;
+    grid-row-start: 2;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 1;
+    width: 500px;
+    height: 300px;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+#basic-info {
+    justify-self: start;
+    align-self: start;
+    grid-row-start: 2;
+    grid-row-end: 2;
+    grid-column-start: 2;
+    grid-column-end: 2;
+
+    max-width: 350px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.body {
+    display: flex;
+    justify-content: center;
+}
+
+.info-box {
+    display: inline-block;
+    box-sizing: border-box;
+    background-color: #fff;
+    padding: 7px 20px;
+    margin: 3px 5px;
+    border-radius: 15px;
+    color: #555;
+    box-shadow: 0 4px 8px 0 #0000001e, 0 5px 10px 0 #00000023;
+    width: calc(100% - 10px);
+}
+
+.half-size {
+    width: calc(50% - 10px);
+    float: right;
+}
+
+.info-box span {
+    display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    top: 3px;
+    font-size: 14px;
+}
+
+.info-box i {
+    padding-right: 7px;
+    color: #555;
+}
+
+#member-list-container {
+    justify-self: center;
+    grid-row-start: 3;
+    grid-row-end: 3;
+    grid-column-start: 1;
+    grid-column-end: 1;
+    width: 100%;
+    min-width: 350px;
+    max-width: 480px;
+}
+
+#member-list {
+    background-color: #fff;
+    max-height: 300px;
+    overflow: auto;
+    padding: 7px 10px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 #0000001e, 0 5px 10px 0 #00000023;
+}
+
+.list-person,
+#button-container {
+    border-bottom: 2px solid #bbbbbb;
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+}
+
+.list-person:nth-last-child(2) {
+    border: none;
+}
+
+.user-name {
+    height: fit-content;
+    margin: auto 20px;
+}
+
+.addendum {
+    font-size: 0.6em;
+    color: #555555;
+}
+
+.leave-btn,
+.delete-btn,
+.join-btn {
+    margin: auto;
+}
+
+.member-label,
+.host-label {
+    cursor: auto;
+}
+
+#button-container {
+    border: none;
+}
+
+#comments-container {
+    justify-self: start;
+    grid-row-start: 3;
+    grid-row-end: 3;
+    grid-column-start: 2;
+    grid-column-end: 2;
+    min-width: 350px;
+    max-width: 480px;
+}
+
+#comments {
+    box-sizing: border-box;
+    padding: 15px;
+    width: 100%;
+    height: auto;
+    min-height: 220px;
+    overflow: auto;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 #0000001e, 0 5px 10px 0 #00000023;
+}
+
+#comments p {
+    font-size: 14px;
+    color: #555555;
+}
+
+@media screen and (max-width: 1030px) {
+    #basic-info {
+        justify-self: center;
+        align-self: center;
+        grid-row-start: 3;
+        grid-row-end: 3;
+        grid-column-start: 1;
+        grid-column-end: 1;
+    }
+
+    #member-list-container {
+        grid-row-start: 4;
+        grid-row-end: 4;
+        width: 65%;
+    }
+
+    #comments-container {
+        justify-self: center;
+        grid-row-start: 5;
+        grid-row-end: 5;
+        grid-column-start: 1;
+        grid-column-end: 1;
+        width: 65%;
+    }
+
+    #comments {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    #map-inset {
+        width: 100%;
+    }
+
+    #title {
+        margin-top: 80px;
+    }
+}

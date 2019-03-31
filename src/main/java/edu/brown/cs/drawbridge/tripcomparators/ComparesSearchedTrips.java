@@ -16,6 +16,6 @@ public interface ComparesSearchedTrips extends Comparator<List<Trip>> {
    * @param userId
    *          The id of the User used to compare searched lists of Trips
    */
-  void setId(String userId);
+  void setUserId(String userId);
 
 }

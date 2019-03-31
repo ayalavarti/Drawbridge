@@ -1,14 +1,22 @@
 /* -------- Global Styling -------- */
 
 html {
-	font-family: "Montserrat", sans-serif;
+	font-family: "Nunito", sans-serif;
+	letter-spacing: 0.2px;
 	background-color: #ececec;
+	height: 100%;
+	width: 100%;
 }
 
 body {}
 
 input {
-	font-family: "Montserrat", sans-serif;
+	font-family: "Nunito", sans-serif;
+	letter-spacing: 0.5px;
+}
+
+button {
+	outline: none;
 }
 
 a {
@@ -17,10 +25,13 @@ a {
 	cursor: pointer;
 }
 
-input[type="submit"],
-.modal-button {
-	font-family: "Montserrat", sans-serif;
-	color: #f5f5f5;
+input[type=number]::-moz-inner-spin-button,
+input[type=number]::-moz-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	margin: 0;
 }
 
 /* -------- Header Styles -------- */
@@ -28,7 +39,7 @@ input[type="submit"],
 .header {
 	position: absolute;
 	top: 2%;
-	right: 5%;
+	right: 80px;
 	z-index: 5;
 }
 
@@ -44,8 +55,8 @@ input[type="submit"],
 .profile-btn,
 .g-signin2 {
 	position: absolute;
-	right: 5%;
-	top: 2%;
+	right: 10px;
+	top: 0px;
 }
 
 .profile-btn {
@@ -56,7 +67,41 @@ input[type="submit"],
 	width: 200px;
 	height: 54px;
 	outline: none;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	box-shadow: 0 4px 8px 0 #0000001e, 0 6px 20px 0 #0000002f;
+}
+
+.info-btn,
+.home-btn {
+	right: 20px;
+	cursor: pointer;
+	position: absolute;
+	z-index: 100;
+	background: #fff;
+	width: 54px;
+	height: 54px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 15px;
+	box-shadow: 0 4px 8px 0 #0000001e, 0 6px 20px 0 #0000002f;
+}
+
+.approve-btn,
+.deny-btn,
+.member-label,
+.host-label,
+.host-btn,
+.join-btn,
+.leave-btn,
+.delete-btn,
+.joined-btn,
+.pending-btn,
+.submit-btn {
+	border: 0;
+	width: auto;
+	height: 50px;
+	outline: none;
+	cursor: pointer;
 }
 
 #profile-picture {
@@ -89,7 +134,7 @@ input[type="submit"],
 	background-color: #fff;
 	z-index: -1;
 	width: 200px;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	box-shadow: 0 4px 8px 0 #0000001e, 0 6px 20px 0 #0000002f;
 	border-bottom-left-radius: 25px;
 	border-bottom-right-radius: 25px;
 }
@@ -121,16 +166,85 @@ input[type="submit"],
 	display: block;
 }
 
-.section-heading {
-	font-size: 18px;
-	padding-top: 20px;
-	color: #1e3458;
+/* -------- Map Generic Styling -------- */
+
+.marker {
+	background-size: cover;
+	cursor: pointer;
 }
 
-/* -------- Body Styling -------- */
+.start-input {
+	background-image: url("../images/marker-start.png");
+	width: 30px;
+	height: 30px;
+}
 
-.body {
-	min-height: 100vh;
+.end-input {
+	background-image: url("../images/marker-end.png");
+	width: 34px;
+	height: 45px;
+}
+
+.popup-title {
+	font-size: 18px;
+	font-weight: 500;
+}
+
+.popup-content {
+	font-size: 13px;
+	font-weight: 400;
+}
+
+.mapboxgl-popup {
+	z-index: 10;
+}
+
+.mapboxgl-popup-content {
+	font-family: "Nunito", sans-serif;
+	color: #222;
+	border-radius: 10px;
+	text-align: center;
+	width: 200px;
+}
+
+.pulse {
+	border-radius: 50%;
+	animation: pulse 2s infinite;
+}
+
+.pulse:hover {
+	animation: none;
+}
+
+@-webkit-keyframes pulse {
+	0% {
+		-webkit-box-shadow: 0 0 0 0 rgba(44, 108, 204, 0.4);
+	}
+
+	70% {
+		-webkit-box-shadow: 0 0 0 20px rgba(44, 113, 204, 0);
+	}
+
+	100% {
+		-webkit-box-shadow: 0 0 0 0 rgba(44, 113, 204, 0);
+	}
+}
+
+@keyframes pulse {
+	0% {
+		-moz-box-shadow: 0 0 0 0 rgba(44, 108, 204, 0.4);
+		box-shadow: 0 0 0 0 rgba(44, 108, 204, 0.4);
+	}
+
+	70% {
+		-moz-box-shadow: 0 0 0 20px rgba(44, 113, 204, 0);
+		box-shadow: 0 0 0 20px rgba(44, 113, 204, 0);
+	}
+
+	100% {
+		-moz-box-shadow: 0 0 0 0 rgba(44, 113, 204, 0);
+		box-shadow: 0 0 0 0 rgba(44, 113, 204, 0);
+	}
 }
 
 /* -------- Footer Styling -------- */
@@ -144,21 +258,11 @@ input[type="submit"],
 .footer {
 	color: #f5f5f5;
 	text-align: center;
-	background-color: #1e3458;
+	background-color: #222;
 	height: 5%;
 	padding: 15px;
 }
 
-@media screen and (max-width: 1200px) {}
-
-@media screen and (max-width: 991px) {}
-
 @media screen and (max-width: 767px) {}
-
-@media screen and (max-width: 575px) {}
-
-@media screen and (max-width: 479px) {}
-
-@media only screen and (min-width: 500px) {}
 
 @supports (-webkit-overfloscrolling: touch) {}

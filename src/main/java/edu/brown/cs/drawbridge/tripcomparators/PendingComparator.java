@@ -13,7 +13,7 @@ public class PendingComparator implements ComparesSearchedTrips {
   private String userId;
 
   @Override
-  public void setId(String userIdentification) {
+  public void setUserId(String userIdentification) {
     this.userId = userIdentification;
   }
 

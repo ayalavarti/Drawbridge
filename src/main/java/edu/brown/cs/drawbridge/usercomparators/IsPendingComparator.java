@@ -20,16 +20,6 @@ public class IsPendingComparator implements ComparesUsersInTrip {
   public int compare(User user1, User user2) {
     boolean firstIsPending = trip.getPendingIds().contains(user1.getId());
     boolean secondIsPending = trip.getPendingIds().contains(user2.getId());
-    if (firstIsPending) {
-      if (secondIsPending) {
-        return 0;
-      } else {
-        return -1;
-      }
-    }
-    if (secondIsPending) {
-      return 1;
-    }
-    return 0;
+    Boolean.compare(secondIsPending, firstIsPending);
   }
 }

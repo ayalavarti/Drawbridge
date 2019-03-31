@@ -42,7 +42,7 @@ public class TripSearcher {
 
   private void setUser(String userId) {
     for (ComparesSearchedTrips comparator : COMPARATORS) {
-      comparator.setId(userId);
+      comparator.setUserId(userId);
     }
   }
 
@@ -81,10 +81,19 @@ public class TripSearcher {
   }
 
   private double distance(Trip trip, double endLat, double endLon) {
-    return Math.sqrt((trip.getEndingLatitude() - endLat)
-        * (trip.getEndingLatitude() - endLat)
-        + (trip.getEndingLongitude() - endLon)
-            * (trip.getEndingLongitude() - endLon));
+    double lat1 = Math.toRadians(trip.getEndingLatitude());
+    double lat2 = Math.toRadians(trip.getEndingLongitude());
+    double lon1 = Math.toRadians(endLat);
+    double lon2 = Math.toRadians(endLon);
+    double latDifference = lat2 - lat1;
+    double lonDifference = lon2 - lon1;
+    double latSquares = Math.sin(latDifference / 2)
+        * Math.sin(latDifference / 2);
+    double lonSquares = Math.sin(lonDifference / 2)
+        * Math.sin(lonDifference / 2);
+    double products = latSquares + lonSquares * Math.cos(lat1) * Math.cos(lat2);
+    return Math.toDegrees(
+        2 * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products)));
   }
 
   private boolean isWithinDestinationRadius(Trip trip, double distanceRadius,

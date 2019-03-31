@@ -13,10 +13,12 @@ public class DatabaseQuery {
   private Connection conn;
   public static final User DUMMY_USER = new User("0", "Mary",
       "mary@gmail.com");
-  public static final Trip DUMMY_TRIP = Trip.TripBuilder.newTripBuilder()
-      .addIdentification(0, "Mary's Carpool").addLocations(1.0, 2.0, 3.0, 4.0)
-      .addAddressNames("start", "end").addTimes(500, 600)
-      .addDetails(7, 8.00, "555-867-5309", "Uber", "").build();
+
+  private static final Trip DUMMY_TRIP = Trip.TripBuilder.newTripBuilder()
+      .addIdentification(0, "Mary's Carpool").addLocations(41.608550, -72.656662, 41.827104, -71.399639)
+      .addTimes(1553487799, 1553494999).addDetails(7, 8.40, "555-867-5309",
+                                                   "Uber", "We'll be meeting at the Ratty around this time, but maybe a bit later")
+      .buildWithUsers("118428670975676923422", new ArrayList<>(), new ArrayList<>());
 
   /**
    * A constructor based on the String name of the database.
