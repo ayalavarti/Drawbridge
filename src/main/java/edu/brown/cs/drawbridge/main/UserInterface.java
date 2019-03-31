@@ -10,16 +10,12 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import freemarker.template.Configuration;
-import spark.ModelAndView;
-import spark.QueryParamsMap;
-import spark.Request;
-import spark.Response;
-import spark.Spark;
-import spark.TemplateViewRoute;
+import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 
 /**
@@ -85,7 +81,8 @@ public class UserInterface {
 
     Spark.get("/help", new InfoGetHandler(), freeMarker);
 
-    Spark.get("/*", new Code404Handler(), freeMarker);
+    Spark.notFound(new Code404Handler());
+    Spark.internalServerError(new Code404Handler());
   }
 
   // ---------------------------- Home ------------------------------------
@@ -255,7 +252,7 @@ public class UserInterface {
   }
 
   // --------------------------- Errors -----------------------------------
-  private static class Code404Handler implements TemplateViewRoute {
+  private static class Code404Handler implements Route {
     /**
      * Class to handle all page not found requests.
      */
@@ -265,6 +262,7 @@ public class UserInterface {
           .put("title", "Drawbridge | Page Not Found")
           .put("favicon", "images/favicon.png").build();
 
+      response.status(404);
       return new ModelAndView(variables, "not-found.ftl");
     }
 
