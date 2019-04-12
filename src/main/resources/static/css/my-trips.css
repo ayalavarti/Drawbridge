@@ -60,28 +60,6 @@ body {
     margin: 5px;
 }
 
-.result.sub {
-    position: relative;
-}
-
-.result.main {
-    -webkit-transition: transform 0.3s ease-in-out;
-    -moz-transition: transform 0.3s ease-in-out;
-    -o-transition: transform 0.3s ease-in-out;
-    transition: transform box-shadow 0.3s ease-in-out;
-    z-index: 10;
-}
-
-.result-info {
-    margin: 0;
-}
-
-.result.main:hover {
-    cursor: pointer;
-    transform: translate3d(0px, -6px, 0px);
-    box-shadow: 0 6px 6px 0 #0000001e, 0 3px 8px 0 #00000023;
-}
-
 @media screen and (max-width: 750px) {
     .results-content {
         justify-content: center;

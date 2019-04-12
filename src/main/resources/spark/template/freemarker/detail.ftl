@@ -32,7 +32,7 @@
             <div id="member-list">
                 <div class="list-person">
                     <span class="user-name">${host.getName()}</span>
-                    <img src="/images/host-label.png" class="host-label" />
+                    <img src="/images/hosting-btn.png" class="host-label" />
                 </div>
                 <#list members as member>
                     <div class="list-person">
@@ -68,6 +68,7 @@
 <#include "main.ftl">
 
 <script type="text/javascript">
+    let mapboxToken = "${mapboxKey?js_string}"
     let coordinates = [
         [${trip.getStartingLongitude()},
          ${trip.getStartingLatitude()}],

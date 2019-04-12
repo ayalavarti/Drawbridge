@@ -3,8 +3,7 @@ const months = [
     "July", "August", "September", "October", "November", "December"
 ];
 const tempData = [
-    [
-        {
+    [{
             start: "Providence, RI",
             end: "New Haven, CT",
             date: "1553453944862",
@@ -38,8 +37,7 @@ const tempData = [
             status: "pending"
         }
     ],
-    [
-        {
+    [{
             start: "Providence, RI",
             end: "New Haven, CT",
             date: "1553453944862",
@@ -62,58 +60,50 @@ const tempData = [
             status: "pending"
         }
     ],
-    [
-        {
-            start: "Providence, RI",
-            end: "Springfield, MA",
-            date: "1553453944862",
-            currentSize: "1",
-            maxSize: "3",
-            costPerPerson: "24",
-            id: "5",
-            name: "Going to Airport",
-            status: "pending"
-        }
-    ],
-    [
-        {
-            start: "Providence, RI",
-            end: "Six Flags",
-            date: "1553453944862",
-            currentSize: "4",
-            maxSize: "5",
-            costPerPerson: "24",
-            id: "6",
-            name: "Six Flags Trip",
-            status: "join"
-        }
-    ],
-    [
-        {
-            start: "Boston, MA",
-            end: "Brown University",
-            date: "1553453944862",
-            currentSize: "3",
-            maxSize: "5",
-            costPerPerson: "15",
-            id: "7",
-            name: "Boston to Brown",
-            status: "join"
-        }
-    ],
-    [
-        {
-            start: "Yale University",
-            end: "Harvard University",
-            date: "1553453944862",
-            currentSize: "3",
-            maxSize: "5",
-            costPerPerson: "14",
-            id: "8",
-            name: "Yale to Harvard",
-            status: "join"
-        }
-    ]
+    [{
+        start: "Providence, RI",
+        end: "Springfield, MA",
+        date: "1553453944862",
+        currentSize: "1",
+        maxSize: "3",
+        costPerPerson: "24",
+        id: "5",
+        name: "Going to Airport",
+        status: "pending"
+    }],
+    [{
+        start: "Providence, RI",
+        end: "Six Flags",
+        date: "1553453944862",
+        currentSize: "4",
+        maxSize: "5",
+        costPerPerson: "24",
+        id: "6",
+        name: "Six Flags Trip",
+        status: "hosting"
+    }],
+    [{
+        start: "Boston, MA",
+        end: "Brown University",
+        date: "1553453944862",
+        currentSize: "3",
+        maxSize: "5",
+        costPerPerson: "15",
+        id: "7",
+        name: "Boston to Brown",
+        status: "hosting"
+    }],
+    [{
+        start: "Yale University",
+        end: "Harvard University",
+        date: "1553453944862",
+        currentSize: "3",
+        maxSize: "5",
+        costPerPerson: "14",
+        id: "8",
+        name: "Yale to Harvard",
+        status: "hosting"
+    }]
 ];
 
 
@@ -157,7 +147,6 @@ function onUserSignedIn() {
     $("#hosting").empty();
     $("#member").empty();
     $("#pending").empty();
-    allIDs = [];
     console.log("User signed in.");
 
     signInTooltip[0].hide();
@@ -189,7 +178,14 @@ function onUserSignedOut() {
  * trip cards for each group.
  */
 function queryUserTrips() {
-    generateTripCards(tempData);
+    const data = {
+        userID: userProfile.getId()
+    };
+    $.post("/my-trips", data, response => {
+        generateTripCards(response);
+    }, "json");
+
+    //generateTripCards(data);
 }
 
 /**
@@ -201,56 +197,21 @@ function generateTripCards(data) {
     let member = [];
     let pending = [];
 
-    // Iterate over each trip group
-    data.forEach(tripGroup => {
-        let result = `<div class="trip-group">`;
-        let ids = [];
-        let linkedTrips = tripGroup["trips"];
-
-        // Get a list of the trip ids
-        for (let trip in linkedTrips) {
-            ids.push(trip["id"]);
-        }
-
-        if (ids.length > 1) {
-            // Iterate through each trip in the group
-            for (let i = 0; i < ids.length; i++) {
-                // Apply different classes if first trip in group or subsequent trips
-                if (i === 0) {
-                    result += `<div class="result main" id="${ids[i]}" onclick="showGroup(${ids[0]},[${ids.slice(1)}]);">`;
-                } else {
-                    /**
-                     * 130*i refers to scaling the bottom position of the relatively
-                     * positioned card to create the "stacked-card" effect
-                     */
-                    result += `<div class="result sub" style="z-index: -${i};
-                        bottom: ${130*i}px" id="${ids[0]+"-"+ids[i]}">`;
-                }
-                // Generate the trip content for each card
-                let trip = Object.keys(linkedTrips)[i];
-                result += generateTrip(linkedTrips[trip], false);
-
-                if (i === ids.length - 1) {
-                    result += `<div id="hide-${ids[0]}" style="width: 100%; text-align: right; display: none;"><i onclick="hideGroup(${ids[0]},[${ids.slice(1)}])" class="fas fa-chevron-up icon-label-large"></i></div>`;
-                }
-                result += "</div>";
+    data.forEach(element => {
+        console.log(element);
+        for (let trip in element) {
+            // Add the trip to its respective list
+            console.log(element[trip]["status"])
+            if (element[trip]["status"] === "hosting") {
+                hosting.push(generateTrip(element[trip]));
+            } else if (element[trip]["status"] === "joined") {
+                member.push(generateTrip(element[trip]));
+            } else {
+                pending.push(generateTrip(element[trip]));
             }
-        } else {
-            let trip = Object.keys(linkedTrips)[0];
-            result += `<div class="result" id="${ids[0]}">` + generateTrip(linkedTrips[trip], false) + "</div>";
-        }
-        result += `</div>`
-
-        // Add the trip to its respective list
-        if (tripGroup["status"] === "host") {
-            hosting.push(result);
-        } else if (tripGroup["status"] === "member") {
-            member.push(result);
-        } else {
-            pending.push(result);
         }
     });
-    // Render the cards on the screen.s
+    // Render the cards on the screen.
     renderTripCards(hosting, member, pending);
 }
 
@@ -264,45 +225,4 @@ function renderTripCards(hosting, member, pending) {
     $("#hosting").append(hosting);
     $("#member").append(member);
     $("#pending").append(pending);
-}
-
-/**
- * Show the group cards for a given starting trip.
- * @param {*} startID
- * @param {*} ids
- */
-function showGroup(startID, ids) {
-    ids.reverse().forEach(element => {
-        $(`#${startID}-${element}`).animate({
-                bottom: "0px"
-            },
-            "slow"
-        );
-        $(`#${startID}-${element}`).css({
-            "z-index": "10"
-        });
-    });
-    $(`#hide-${startID}`).show();
-}
-
-/**
- * Hide the group cards for a given starting trip.
- * @param {*} startID
- * @param {*} ids
- */
-function hideGroup(startID, ids) {
-    let bottom = 130;
-
-    ids.forEach(element => {
-        $(`#${startID}-${element}`).animate({
-                bottom: `${bottom}px`
-            },
-            "slow"
-        );
-        $(`#${startID}-${element}`).css({
-            "z-index": `-${bottom/130}`
-        });
-        bottom *= 2;
-    });
-    $(`#hide-${startID}`).hide();
 }

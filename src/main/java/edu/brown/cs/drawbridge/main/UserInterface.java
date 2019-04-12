@@ -11,12 +11,17 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import freemarker.template.Configuration;
-import spark.*;
+import spark.ModelAndView;
+import spark.QueryParamsMap;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+import spark.Spark;
+import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
 
 /**
@@ -46,7 +51,7 @@ public class UserInterface {
    * Method to set the database to use when querying.
    *
    * @param dbName
-   *                 The name of the database.
+   *          The name of the database.
    * @return true when the set is successful; false when unsuccessful.
    */
   public static boolean setDB(String dbName) {
@@ -68,16 +73,16 @@ public class UserInterface {
     FreeMarkerEngine freeMarker = createEngine();
 
     Spark.get("/", new HomeGetHandler(), freeMarker);
-    Spark.post("/mapboxKey", new MapboxHandler());
     Spark.get("/results", new ListGetHandler(), freeMarker);
 
     Spark.get("/trip/:tid", new DetailGetHandler(), freeMarker);
-    Spark.post("/trip/:tid", new DetailPostHandler(), freeMarker);
+    Spark.post("/trip/:tid", new DetailPostHandler());
 
     Spark.get("/my-trips", new UserGetHandler(), freeMarker);
+    Spark.post("/my-trips", new UserPostHandler());
 
     Spark.get("/new", new CreateGetHandler(), freeMarker);
-    Spark.post("/new", new CreatePostHandler(), freeMarker);
+    Spark.post("/new", new CreatePostHandler());
 
     Spark.get("/help", new InfoGetHandler(), freeMarker);
 
@@ -94,22 +99,10 @@ public class UserInterface {
     public ModelAndView handle(Request req, Response res) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Home")
+          .put("mapboxKey", System.getenv("MAPBOX_KEY"))
           .put("favicon", "images/favicon.png").build();
 
       return new ModelAndView(variables, "map.ftl");
-    }
-  }
-
-  // ---------------------------- Home ------------------------------------
-  /**
-   * Handle requests to query the Mapbox API key.
-   */
-  private static class MapboxHandler implements Route {
-    @Override
-    public String handle(Request req, Response res) {
-      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("mapboxKey", System.getenv("MAPBOX_KEY")).build();
-      return GSON.toJson(variables);
     }
   }
 
@@ -141,53 +134,16 @@ public class UserInterface {
       }
 
       // TODO: replace with actual data getting.
-      List<List<Trip>> suggestions = new ArrayList<>();
       List<Trip> s1 = new ArrayList<>();
-      s1.add(dbQuery.DUMMY_TRIP);
+      s1.add(DatabaseQuery.DUMMY_TRIP);
       List<Trip> s2 = new ArrayList<>();
-      s2.add(dbQuery.DUMMY_TRIP);
-      s2.add(dbQuery.DUMMY_TRIP);
-      suggestions.add(s1);
-      suggestions.add(s2);
-
-      // Process suggestions into required json form
-      List<List<Map<String, String>>> tripData = new ArrayList<>();
-      for (List<Trip> sugg : suggestions) {
-        List<Map<String, String>> processedSugg = new ArrayList<>();
-
-        for (Trip trip : sugg) {
-          String status;
-          if (trip.getMemberIds().contains(uid)) {
-            status = "joined";
-          } else if (trip.getHostId().equals(uid)) {
-            status = "hosting";
-          } else if (trip.getPendingIds().contains(uid)) {
-            status = "pending";
-          } else {
-            status = "join";
-          }
-
-          Map<String, String> vars = new HashMap<String, String>();
-          vars.put("start", trip.getStartingAddress());
-          vars.put("end", trip.getEndingAddress());
-          vars.put("date", Integer.toString(trip.getDepartureTime()));
-          vars.put("currentSize", Integer.toString(trip.getCurrentSize()));
-          vars.put("maxSize", Integer.toString(trip.getMaxUsers()));
-          vars.put("costPerPerson", Double.toString(trip.getCostPerUser(uid)));
-          vars.put("id", Integer.toString(trip.getId()));
-          vars.put("name", trip.getName());
-          vars.put("status", status);
-
-          processedSugg.add(vars);
-        }
-        tripData.add(processedSugg);
-      }
-
+      s2.add(DatabaseQuery.DUMMY_TRIP);
+      s2.add(DatabaseQuery.DUMMY_TRIP);
 
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Results")
           .put("favicon", "images/favicon.png")
-          .put("data", GSON.toJson(tripData)).build();
+          .put("data", GSON.toJson(processToJSON(uid, s1, s2))).build();
       return new ModelAndView(variables, "results.ftl");
     }
   }
@@ -208,7 +164,7 @@ public class UserInterface {
 
       // TODO: switch this out
       // Trip trip = dbQuery.getTripById(tid);
-      Trip trip = dbQuery.DUMMY_TRIP;
+      Trip trip = DatabaseQuery.DUMMY_TRIP;
 
       // Get user's names from the trip
       // User host = dbQuery.getUserById(trip.getHostId());
@@ -229,7 +185,7 @@ public class UserInterface {
           .put("title", String.format("Drawbridge | %s", trip.getName()))
           .put("favicon", "images/favicon.png").put("trip", trip)
           .put("host", host).put("members", members).put("pending", pending)
-          .build();
+          .put("mapboxKey", System.getenv("MAPBOX_KEY")).build();
       return new ModelAndView(variables, "detail.ftl");
     }
   }
@@ -238,7 +194,7 @@ public class UserInterface {
    * Handles various actions on the detail page including deleting a trip,
    * joining a trip, approving/denying pending members.
    */
-  private static class DetailPostHandler implements TemplateViewRoute {
+  private static class DetailPostHandler implements Route {
     @Override
     public ModelAndView handle(Request request, Response response) {
       QueryParamsMap qm = request.queryMap();
@@ -305,17 +261,25 @@ public class UserInterface {
       // Getting the data
       // TODO: replace with real data getting
       List<Trip> hosting = new ArrayList<>();
-      hosting.add(dbQuery.DUMMY_TRIP);
+      hosting.add(DatabaseQuery.DUMMY_TRIP2);
       List<Trip> member = new ArrayList<>();
-      member.add(dbQuery.DUMMY_TRIP);
-      member.add(dbQuery.DUMMY_TRIP);
+      member.add(DatabaseQuery.DUMMY_TRIP);
+      member.add(DatabaseQuery.DUMMY_TRIP);
       List<Trip> pending = new ArrayList<>();
+      pending.add(DatabaseQuery.DUMMY_TRIP);
 
-      // Processing into JSON format
-      List<List<Map<String, String>>> data = new ArrayList<>();
-      for (Trip trip : hosting) {
-        List<Map<String, String>> innerList = new ArrayList<>();
+      return GSON.toJson(processToJSON(uid, hosting, member, pending));
+    }
+  }
 
+  @SafeVarargs
+  private static List<List<Map<String, String>>> processToJSON(String uid,
+      List<Trip>... preProcessed) {
+    List<List<Map<String, String>>> data = new ArrayList<>();
+    for (List<Trip> entry : preProcessed) {
+
+      List<Map<String, String>> innerList = new ArrayList<>();
+      for (Trip trip : entry) {
         String status;
         if (trip.getMemberIds().contains(uid)) {
           status = "joined";
@@ -333,16 +297,18 @@ public class UserInterface {
         vals.put("date", Integer.toString(trip.getDepartureTime()));
         vals.put("currentSize", Integer.toString(trip.getCurrentSize()));
         vals.put("maxSize", Integer.toString(trip.getMaxUsers()));
-        vals.put("costPerPerson", Double.toString(trip.getCostPerUser(uid)));
+        if (uid != null) {
+          vals.put("costPerPerson", Double.toString(trip.getCostPerUser(uid)));
+        }
         vals.put("id", Integer.toString(trip.getId()));
         vals.put("name", trip.getName());
         vals.put("status", status);
 
-        data.add(innerList);
+        innerList.add(vals);
       }
-
-      return GSON.toJson(data);
+      data.add(innerList);
     }
+    return data;
   }
 
   // --------------------------- Create -----------------------------------
@@ -363,7 +329,7 @@ public class UserInterface {
   /**
    * Handles create form submission and actual creation of a new trip.
    */
-  private static class CreatePostHandler implements TemplateViewRoute {
+  private static class CreatePostHandler implements Route {
     @Override
     public ModelAndView handle(Request request, Response response) {
       return null;

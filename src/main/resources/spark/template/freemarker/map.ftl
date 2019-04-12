@@ -11,7 +11,7 @@
         <div class="search-menu">
             <h2 class="section-heading">Search for a Carpool</h2>
             <img src="/images/divider.png" style="height: 4px; width: auto;" />
-            <form autocomplete="off" onsubmit="event.preventDefault(); handleSubmit()">
+            <form action="/results" onsubmit="return validateSubmit()">
                 <div class="search-inputs">
                     <div><i class="fas fa-dot-circle icon-label"></i>
                         <input class="address-input" id="start-input" onblur="handleInput('start-input', 0)" type="text" placeholder="Starting point..." />
@@ -62,6 +62,9 @@
     </div>
 
     <div id="map"></div>
+    <script type="text/javascript">
+        let mapboxToken = "${mapboxKey?js_string}"
+    </script>
     <script src="/js/util.js"></script>
     <script src="/js/mapUtil.js"></script>
     <script src="/js/map.js"></script>

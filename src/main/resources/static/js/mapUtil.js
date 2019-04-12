@@ -10,20 +10,10 @@ let curLong = -71.058502;
  * Initializes the Mapbox using the accessToken and sets up the
  * mapboxClient for use in Geolocating.
  */
-function initMapbox() {
-    return new Promise(function (resolve, reject) {
-        $.post("/mapboxKey", responseJSON => {
-            const responseObject = JSON.parse(responseJSON);
-
-            mapboxgl.accessToken = responseObject.mapboxKey;
-            mapboxClient = mapboxSdk({
-                accessToken: mapboxgl.accessToken
-            });
-            resolve();
-        }).fail(function (xhr, status, error) {
-            reject(Error(error));
-        });
-
+function initMapbox(mapboxToken) {
+    mapboxgl.accessToken = mapboxToken;
+    mapboxClient = mapboxSdk({
+        accessToken: mapboxgl.accessToken
     });
 }
 

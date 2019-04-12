@@ -1,4 +1,4 @@
-function generateTrip(trip, addButton) {
+function generateTrip(trip) {
 	let date = new Date(parseFloat(trip["date"]));
 	let hourLabel = "AM";
 	let hour = date.getHours();
@@ -8,14 +8,12 @@ function generateTrip(trip, addButton) {
 	}
 	let imgElement = "";
 
-	if (addButton) {
-		// If the status is "join" add hover effects and an onclick handler
-		let imgAtt = "";
-		if (trip["status"] === "join") {
-			imgAtt = `onmouseover="hover(this);" onmouseout="unhover(this);" onclick="handleJoin(${trip["id"]});"`;
-		}
-		imgElement = `<div><img src="../images/${trip["status"]}-btn.png" class="${trip["status"]}-btn" ${imgAtt}/></div>`
+	// If the status is "join" add hover effects and an onclick handler
+	let imgAtt = "";
+	if (trip["status"] === "join") {
+		imgAtt = `onmouseover="hover(this);" onmouseout="unhover(this);" onclick="handleJoin(${trip["id"]});"`;
 	}
+	imgElement = `<div><img src="../images/${trip["status"]}-btn.png" class="${trip["status"]}-btn" ${imgAtt}/></div>`
 
 	return (`<div class="result-info">
 				<div class="sub-heading">${trip["name"]}</div>

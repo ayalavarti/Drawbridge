@@ -16,16 +16,12 @@ let formValidationTooltip;
  * When the DOM loads, initialize Mapbox and the Map object.
  */
 $(document).ready(function () {
-    initMapbox().then(function () {
-            initMap();
-            initDateTime();
-            initTooltips();
-            disableTrip();
-            console.log("DOM ready.");
-        })
-        .catch(function (err) {
-            console.error(err);
-        })
+    initMapbox(mapboxToken);
+    initMap();
+    initDateTime();
+    initTooltips();
+    disableTrip();
+    console.log("DOM ready.");
 });
 
 /**
@@ -372,7 +368,7 @@ function alignTrip() {
 /**
  * Handle submit response when the submit button is pressed.
  */
-function handleSubmit() {
+function validateSubmit() {
     let dateInput = $("#date").val();
     let timeInput = $("#time").val();
     let date = new Date(`${dateInput} ${timeInput}`);
@@ -383,7 +379,9 @@ function handleSubmit() {
      */
     if (dateInput === "" || timeInput === "" || coordinates[0] === undefined || coordinates[1] === undefined) {
         showHideTooltip(formValidationTooltip[0]);
+        return false;
     } else {
+        return true;
         /**
          * If the user is logged in, send a GET request with the UID.
          * Otherwise, send null as the UID, returning generic results.
@@ -398,11 +396,12 @@ function handleSubmit() {
         const postParameters = {
             startName: addressNames[0],
             endName: addressNames[1],
-            startCoordinates: coordinates[0].slice(0).reverse(),
-            endCoordinates: coordinates[1].slice(0).reverse(),
+            startLat: coordinates[0].slice(0).reverse()[0],
+            startLon: coordinates[0].slice(0).reverse()[1],
+            endLat: coordinates[1].slice(0).reverse()[0],
+            endLon: coordinates[1].slice(0).reverse()[1],
             date: date.getTime(),
             userID: userID
         };
-        console.log(postParameters);
     }
 }

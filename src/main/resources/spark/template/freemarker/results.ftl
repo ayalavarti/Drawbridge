@@ -41,6 +41,9 @@
             <span class="trip-info-text">Carpool Search Results</span>
         </div>
     </div>
+    <script type="text/javascript">
+        let data = "${data?js_string}"
+    </script>
     <script src="/js/util.js"></script>
     <script src="/js/results.js"></script>
 </#assign>
