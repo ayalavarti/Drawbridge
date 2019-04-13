@@ -15,6 +15,7 @@ import java.util.Queue;
 import java.util.Set;
 
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
+import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.tripcomparators.ComparesSearchedTrips;
 import edu.brown.cs.drawbridge.tripcomparators.CostComparator;
@@ -128,7 +129,6 @@ public class TripSearcher {
   private List<List<Trip>> search(String userId, double startLat,
       double startLon, double endLat, double endLon, int departureTime,
       double distanceRadius, int timeRadius) {
-
     // Set the user id for all comparators
     if (userId.equals("")) {
       setUser(userId);
@@ -142,49 +142,53 @@ public class TripSearcher {
     Set<Trip> visited = new HashSet<Trip>();
     // Contains a Map from Trips to their total path weight (no heuristic)
     Map<Trip, Double> weights = new HashMap<Trip, Double>();
-
-    // Create list of paths from starting location
-    List<Trip> startingTrips = database.getConnectedTripsWithinTimeRadius(
-        startLat, startLon, distanceRadius, departureTime, timeRadius);
-    for (Trip trip : startingTrips) {
-      // Add weight to weights HashMap
-      weights.put(trip, trip.getTripDistance());
-      // Add PathNode with distance-to-destination heuristic to toVisit Queue
-      toVisit.add(new PathNode(trip, endLat, endLon, weights));
-    }
-
-    // Search for valid paths to destination
-    while (!toVisit.isEmpty() && paths.size() <= MAX_PATH_OPTIONS) {
-      PathNode visitingNode = toVisit.poll();
-      Trip visitingTrip = visitingNode.current;
-      if (visited.contains(visitingTrip)) {
-        continue;
-      } else {
-        visited.add(visitingTrip);
+    try {
+      // Create list of paths from starting location
+      List<Trip> startingTrips = database.getConnectedTripsWithinTimeRadius(startLat, startLon,
+              distanceRadius, departureTime, timeRadius);
+      for (Trip trip : startingTrips) {
+        // Add weight to weights HashMap
+        weights.put(trip, trip.getTripDistance());
+        // Add PathNode with distance-to-destination heuristic to toVisit Queue
+        toVisit.add(new PathNode(trip, endLat, endLon, weights));
       }
 
-      if (isWithinDestinationRadius(visitingTrip, distanceRadius, endLat,
-          endLon)) {
-        paths.add(unwrap(visitingNode));
-        continue;
-      } else {
-        if (visitingNode.trips.size() < MAX_TRIPS_PER_PATH - 1) {
-          for (Trip nextTrip : database.getConnectedTripsAfterEta(
-              visitingTrip.getEndingLatitude(),
-              visitingTrip.getEndingLongitude(), distanceRadius,
-              visitingTrip.getEta(), CONNECTION_WAIT_TIME)) {
-            if (weights.containsKey(nextTrip)
-                && weights.get(nextTrip) < weights.get(visitingTrip)
-                    + visitingTrip.distanceTo(nextTrip)) {
-              continue;
-            } else {
-              weights.put(nextTrip, weights.get(visitingTrip)
-                  + visitingTrip.distanceTo(nextTrip));
-              toVisit.add(new PathNode(visitingNode, nextTrip, weights));
+      // Search for valid paths to destination
+      while (!toVisit.isEmpty() && paths.size() <= MAX_PATH_OPTIONS) {
+        PathNode visitingNode = toVisit.poll();
+        Trip visitingTrip = visitingNode.current;
+        if (visited.contains(visitingTrip)) {
+          continue;
+        } else {
+          visited.add(visitingTrip);
+        }
+
+        if (isWithinDestinationRadius(visitingTrip, distanceRadius, endLat,
+                endLon)) {
+          paths.add(unwrap(visitingNode));
+          continue;
+        } else {
+          if (visitingNode.trips.size() < MAX_TRIPS_PER_PATH - 1) {
+            for (Trip nextTrip : database.getConnectedTripsAfterEta(
+                    visitingTrip.getEndingLatitude(),
+                    visitingTrip.getEndingLongitude(), distanceRadius,
+                    visitingTrip.getEta(), CONNECTION_WAIT_TIME)) {
+              if (weights.containsKey(nextTrip)
+                      && weights.get(nextTrip) < weights.get(visitingTrip)
+                      + visitingTrip.distanceTo(nextTrip)) {
+                continue;
+              } else {
+                weights.put(nextTrip, weights.get(visitingTrip)
+                        + visitingTrip.distanceTo(nextTrip));
+                toVisit.add(new PathNode(visitingNode, nextTrip, weights));
+              }
             }
           }
         }
       }
+    } catch (SQLException | MissingDataException e) {
+      assert false;
+      e.printStackTrace();
     }
     return paths;
   }
