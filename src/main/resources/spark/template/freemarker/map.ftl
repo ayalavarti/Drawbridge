@@ -11,7 +11,7 @@
         <div class="search-menu">
             <h2 class="section-heading">Search for a Carpool</h2>
             <img src="/images/divider.png" style="height: 4px; width: auto;" />
-            <form action="/results" onsubmit="return validateSubmit()">
+            <form onsubmit="event.preventDefault(); validateSubmit()">
                 <div class="search-inputs">
                     <div><i class="fas fa-dot-circle icon-label"></i>
                         <input class="address-input" id="start-input" onblur="handleInput('start-input', 0)" type="text" placeholder="Starting point..." />

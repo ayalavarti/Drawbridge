@@ -379,9 +379,7 @@ function validateSubmit() {
      */
     if (dateInput === "" || timeInput === "" || coordinates[0] === undefined || coordinates[1] === undefined) {
         showHideTooltip(formValidationTooltip[0]);
-        return false;
     } else {
-        return true;
         /**
          * If the user is logged in, send a GET request with the UID.
          * Otherwise, send null as the UID, returning generic results.
@@ -403,5 +401,8 @@ function validateSubmit() {
             date: date.getTime(),
             userID: userID
         };
+
+        let urlStr = jQuery.param(postParameters);
+        window.open(`/results?${urlStr}`);
     }
 }

@@ -86,8 +86,12 @@ public class UserInterface {
 
     Spark.get("/help", new InfoGetHandler(), freeMarker);
 
-    Spark.notFound(new Code404Handler());
-    Spark.internalServerError(new Code404Handler());
+    Spark.get("/*", new Code404Handler(), freeMarker);
+
+    Spark.internalServerError((req, res) -> {
+      res.redirect("/error");
+      return null;
+    });
   }
 
   // ---------------------------- Home ------------------------------------
@@ -357,7 +361,7 @@ public class UserInterface {
   /**
    * Class to handle all page not found requests.
    */
-  private static class Code404Handler implements Route {
+  private static class Code404Handler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()

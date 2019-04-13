@@ -198,10 +198,8 @@ function generateTripCards(data) {
     let pending = [];
 
     data.forEach(element => {
-        console.log(element);
         for (let trip in element) {
             // Add the trip to its respective list
-            console.log(element[trip]["status"])
             if (element[trip]["status"] === "hosting") {
                 hosting.push(generateTrip(element[trip]));
             } else if (element[trip]["status"] === "joined") {
