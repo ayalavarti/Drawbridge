@@ -14,6 +14,7 @@ import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.geojson.Point;
 
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
+import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import freemarker.template.Configuration;
@@ -52,7 +53,7 @@ public class UserInterface {
    * Method to set the database to use when querying.
    *
    * @param dbName
-   *                 The name of the database.
+   *          The name of the database.
    * @return true when the set is successful; false when unsuccessful.
    */
   public static boolean setDB(String dbName) {
@@ -131,7 +132,8 @@ public class UserInterface {
    */
   private static class DetailGetHandler implements TemplateViewRoute {
     @Override
-    public ModelAndView handle(Request request, Response response) {
+    public ModelAndView handle(Request request, Response response)
+        throws SQLException, MissingDataException {
       int tid;
       try {
         tid = Integer.parseInt(request.params(":tid"));
