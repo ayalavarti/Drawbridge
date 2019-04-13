@@ -70,3 +70,14 @@ hr {
     height: 100px;
     border-radius: 50%;
 }
+
+.info-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0px;
+}
+
+.info-container>p {
+    margin: 0px 20px;
+}
