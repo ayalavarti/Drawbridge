@@ -116,10 +116,10 @@ public class TripSearcher {
     return paths;
   }
 
-  public List<List<Trip>> searchWithoutId(String userId, double startLat,
-      double startLon, double endLat, double endLon, int departureTime,
-      double distanceRadius, int timeRadius) {
-    List<List<Trip>> paths = search(userId, startLat, startLon, endLat, endLon,
+  public List<List<Trip>> searchWithoutId(double startLat, double startLon,
+      double endLat, double endLon, int departureTime, double distanceRadius,
+      int timeRadius) {
+    List<List<Trip>> paths = search("", startLat, startLon, endLat, endLon,
         departureTime, distanceRadius, timeRadius);
     Collections.sort(paths, new CostComparator());
     return paths;
@@ -130,7 +130,9 @@ public class TripSearcher {
       double distanceRadius, int timeRadius) {
 
     // Set the user id for all comparators
-    setUser(userId);
+    if (userId.equals("")) {
+      setUser(userId);
+    }
 
     // Set up List of paths found and Queue of nodes to visit
     List<List<Trip>> paths = new ArrayList<List<Trip>>();
@@ -142,8 +144,8 @@ public class TripSearcher {
     Map<Trip, Double> weights = new HashMap<Trip, Double>();
 
     // Create list of paths from starting location
-    List<Trip> startingTrips = database.getConnectedTripsWithinTimeRadius(startLat, startLon,
-        distanceRadius, departureTime, timeRadius);
+    List<Trip> startingTrips = database.getConnectedTripsWithinTimeRadius(
+        startLat, startLon, distanceRadius, departureTime, timeRadius);
     for (Trip trip : startingTrips) {
       // Add weight to weights HashMap
       weights.put(trip, trip.getTripDistance());
