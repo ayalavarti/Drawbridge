@@ -1,5 +1,6 @@
 package edu.brown.cs.drawbridge.database;
 
+import com.google.gson.internal.bind.SqlDateTypeAdapter;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import org.junit.AfterClass;
@@ -44,7 +45,7 @@ public class DatabaseQueryTest {
   private static int t1, t2, t3;
 
   @BeforeClass
-  public static void oneTimeSetUp() {
+  public static void oneTimeSetUp() throws SQLException, MissingDataException {
     try {
       String username = "dev";//System.getenv("DB_USER");
       String password = "dev";//System.getenv("DB_PASS");
@@ -65,7 +66,7 @@ public class DatabaseQueryTest {
   }
 
   @Test
-  public void testAddUser() {
+  public void testAddUser() throws SQLException, MissingDataException {
     test.addUser(DUMMY_U1);
     test.addUser(DUMMY_U2);
     assertNotNull(test.getUserById("1"));
@@ -73,21 +74,22 @@ public class DatabaseQueryTest {
   }
 
   @Test
-  public void testCreateTrip() {
+  public void testCreateTrip() throws SQLException, MissingDataException {
     assertNotNull(test.getTripById(t1));
     assertNotNull(test.getTripById(t2));
     assertNotNull(test.getTripById(t3));
   }
 
   @Test
-  public void getHostByTripId() {
+  public void getHostByTripId() throws SQLException, MissingDataException {
     assertEquals(test.getHostOnTrip(t1), "1");
     assertEquals(test.getHostOnTrip(t2), "2");
     assertEquals(test.getHostOnTrip(t3), "2");
   }
 
   @Test
-  public void testDeleteTripManually() {
+  public void testDeleteTripManually()
+          throws SQLException, MissingDataException {
     Trip t = Trip.TripBuilder.newTripBuilder()
             .addIdentification(4, "extra")
             .addLocations(9, 9, 10, 12)
@@ -98,14 +100,15 @@ public class DatabaseQueryTest {
     int tx = test.createTrip(t, "1");
     assertEquals(test.getHostTripsWithUser("1").size(), 2);
     assertTrue(test.getHostTripsWithUser("1").contains(tx));
-    assertTrue(test.deleteTripManually(tx));
+    test.deleteTripManually(tx);
     assertEquals(test.getHostTripsWithUser("1").size(), 1);
     assertTrue(test.getHostTripsWithUser("1").contains(t1));
   }
 
   @Test
-  public void testDeleteTripByTime() {
-    assertTrue(test.deleteExpiredTrips());
+  public void testDeleteTripByTime() throws SQLException, MissingDataException {
+    //need to test with a trip after current time
+    test.deleteExpiredTrips();
     assertNull(test.getTripById(t1));
     assertNull(test.getTripById(t2));
     assertNull(test.getTripById(t3));
@@ -118,7 +121,7 @@ public class DatabaseQueryTest {
   }
 
   @Test
-  public void testGetRelevantTrips() {
+  public void testGetRelevantTrips() throws SQLException, MissingDataException {
     assertEquals(test.getConnectedTripsWithinTimeRadius(3, 3, 0, 1000, 0),
             new ArrayList<>(Collections.singletonList(test.getTripById(t1))));
     //location but not time
@@ -134,7 +137,7 @@ public class DatabaseQueryTest {
   }
 
   @Test
-  public void testGetConnectedTrips() {
+  public void testGetConnectedTrips() throws SQLException, MissingDataException {
     //not location
     assertTrue(test.getConnectedTripsAfterEta(5, 5, 0, 1000, 0).isEmpty());
     //location but not time
@@ -155,9 +158,9 @@ public class DatabaseQueryTest {
   }
 
   @Test
-  public void testRequest() {
-    assertTrue(test.request(t1, "1"));
-    assertTrue(test.request(t1, "2"));
+  public void testRequest() throws SQLException {
+    test.request(t1, "1");
+    test.request(t1, "2");
     assertTrue(test.getRequestsOnTrip(t1).contains("1"));
     assertTrue(test.getRequestsOnTrip(t1).contains("2"));
     assertTrue(test.getRequestTripsWithUser("1").contains(t1));
@@ -165,46 +168,46 @@ public class DatabaseQueryTest {
   }
 
   @Test
-  public void testApprove() {
-    assertTrue(test.request(t3, "1"));
-    assertTrue(test.request(t3, "2"));
+  public void testApprove() throws SQLException {
+    test.request(t3, "1");
+    test.request(t3, "2");
     assertTrue(test.getRequestsOnTrip(t3).contains("1"));
     assertTrue(test.getRequestsOnTrip(t3).contains("2"));
-    assertTrue(test.approve(t3, "1"));
-    assertTrue(test.approve(t3, "2"));
+    test.approve(t3, "1");
+    test.approve(t3, "2");
     assertTrue(test.getMembersOnTrip(t3).contains("1"));
     assertTrue(test.getMembersOnTrip(t3).contains("2"));
     assertTrue(test.getRequestsOnTrip(t3).isEmpty());
   }
 
   @Test
-  public void testReject() {
-    assertTrue(test.request(t2, "1"));
-    assertTrue(test.request(t2, "2"));
+  public void testReject() throws SQLException {
+    test.request(t2, "1");
+    test.request(t2, "2");
     assertTrue(test.getRequestsOnTrip(t2).contains("1"));
     assertTrue(test.getRequestsOnTrip(t2).contains("2"));
-    assertTrue(test.reject(t2, "1"));
-    assertTrue(test.reject(t2, "2"));
+    test.reject(t2, "1");
+    test.reject(t2, "2");
     assertTrue(test.getMembersOnTrip(t2).isEmpty());
     assertTrue(test.getRequestsOnTrip(t2).isEmpty());
   }
 
   @Test
-  public void testKick() {
-    assertTrue(test.request(t1, "1"));
-    assertTrue(test.request(t1, "2"));
-    assertTrue(test.approve(t1, "1"));
-    assertTrue(test.approve(t1, "2"));
+  public void testKick() throws SQLException {
+    test.request(t1, "1");
+    test.request(t1, "2");
+    test.approve(t1, "1");
+    test.approve(t1, "2");
     assertTrue(test.getMembersOnTrip(t1).contains("1"));
     assertTrue(test.getMembersOnTrip(t1).contains("2"));
-    assertTrue(test.kick(t1, "1"));
+    test.kick(t1, "1");
     assertTrue(test.getMembersOnTrip(t1).contains("2"));
-    assertTrue(test.kick(t1, "2"));
+    test.kick(t1, "2");
     assertTrue(test.getMembersOnTrip(t1).isEmpty());
   }
 
   @AfterClass
-  public static void oneTimeTearDown() {
+  public static void oneTimeTearDown() throws SQLException {
     test.clearData();
   }
 }
