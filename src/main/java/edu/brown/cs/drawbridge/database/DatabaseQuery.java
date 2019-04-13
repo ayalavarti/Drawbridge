@@ -32,17 +32,13 @@ public class DatabaseQuery {
    * @param username The username used to access the database.
    * @param password The password used to access the database.
    */
-  public DatabaseQuery(String db, String username, String password) {
+  public DatabaseQuery(String db, String username, String password)
+          throws ClassNotFoundException, SQLException {
     // this line loads the driver manager class, and must be
     // present for everything else to work properly
-    try {
-      Class.forName("org.postgresql.Driver");
-      String urlToDB = "jdbc:postgresql:" + db;
-      conn = DriverManager.getConnection(urlToDB, username, password);
-    } catch (ClassNotFoundException | SQLException e) {
-      assert false;
-      e.printStackTrace();
-    }
+    Class.forName("org.postgresql.Driver");
+    String urlToDB = "jdbc:postgresql:" + db;
+    conn = DriverManager.getConnection(urlToDB, username, password);
   }
 
   /**
