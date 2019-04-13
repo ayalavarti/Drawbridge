@@ -9,19 +9,13 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
-import com.mapbox.api.geocoding.v5.GeocodingCriteria;
-import com.mapbox.api.geocoding.v5.MapboxGeocoding;
-import com.mapbox.geojson.Point;
 
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
+import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import freemarker.template.Configuration;
-import spark.ModelAndView;
-import spark.Request;
-import spark.Response;
-import spark.Spark;
-import spark.TemplateViewRoute;
+import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 
 /**
@@ -131,7 +125,7 @@ public class UserInterface {
    */
   private static class DetailGetHandler implements TemplateViewRoute {
     @Override
-    public ModelAndView handle(Request request, Response response) {
+    public ModelAndView handle(Request request, Response response) throws MissingDataException, SQLException {
       int tid;
       try {
         tid = Integer.parseInt(request.params(":tid"));
@@ -139,39 +133,9 @@ public class UserInterface {
         return null;
       }
 
-      Trip trip = dbQuery.getTripById(tid);
-
-      // Get human-readable names for the addresses
-      String startName, endName;
-
-      MapboxGeocoding startGeocode = MapboxGeocoding.builder()
-          .accessToken(MAPBOX_TOKEN)
-          .query(Point.fromLngLat(trip.getStartingLongitude(),
-              trip.getStartingLatitude()))
-          .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS).build();
-      try {
-        startName = startGeocode.executeCall().body().features().get(0)
-            .placeName();
-      } catch (Exception e) {
-        String lngDir = trip.getStartingLongitude() < 0 ? "°S" : "°N";
-        String latDir = trip.getStartingLatitude() < 0 ? "°W" : "°E";
-        startName = Math.abs(trip.getStartingLatitude()) + latDir + ", "
-            + Math.abs(trip.getStartingLongitude()) + lngDir;
-      }
-
-      MapboxGeocoding endGeocode = MapboxGeocoding.builder()
-          .accessToken(MAPBOX_TOKEN)
-          .query(Point.fromLngLat(trip.getEndingLongitude(),
-              trip.getEndingLatitude()))
-          .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS).build();
-      try {
-        endName = endGeocode.executeCall().body().features().get(0).placeName();
-      } catch (Exception e) {
-        String lngDir = trip.getEndingLongitude() < 0 ? "°S" : "°N";
-        String latDir = trip.getEndingLatitude() < 0 ? "°W" : "°E";
-        endName = Math.abs(trip.getEndingLatitude()) + latDir + ", "
-            + Math.abs(trip.getEndingLongitude()) + lngDir;
-      }
+      // TODO: switch this out
+      // Trip trip = dbQuery.getTripById(tid);
+      Trip trip = dbQuery.DUMMY_TRIP;
 
       // Get user's names from the trip
       // User host = dbQuery.getUserById(trip.getHostId());
@@ -190,13 +154,58 @@ public class UserInterface {
 
       // Return empty data to GUI when / route is called
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("title", String.format("Drawbridge | %s", trip.getName()))
-          .put("favicon", "images/favicon.png").put("trip", trip)
-          .put("startName", startName).put("endName", endName).put("host", host)
-          .put("members", members).put("pending", pending).build();
+              .put("title", String.format("Drawbridge | %s", trip.getName()))
+              .put("favicon", "images/favicon.png").put("trip", trip)
+              .put("host", host).put("members", members).put("pending", pending)
+              .build();
       return new ModelAndView(variables, "detail.ftl");
     }
   }
+
+  /**
+   * Handles various actions on the detail page including deleting a trip,
+   * joining a trip, approving/denying pending members.
+   */
+  private static class DetailPostHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
+      QueryParamsMap qm = request.queryMap();
+
+      int tid = 2;
+      try {
+        tid = Integer.parseInt(request.params(":tid"));
+      } catch (NumberFormatException e) {
+        return null;
+      }
+
+      String action = qm.value("action");
+      String uid = qm.value("user");
+      System.out.println(request.body());
+
+      if (action.equals("join")) {
+        System.out.println("JOIN " + uid);
+
+      } else if (action.equals("leave")) {
+        System.out.println("LEAVE " + uid);
+
+      } else if (action.equals("delete")) {
+        System.out.println("DELETE");
+
+      } else if (action.equals("approve")) {
+        System.out.println("APPROVE " + uid);
+
+      } else if (action.equals("deny")) {
+        System.out.println("DENY " + uid);
+
+      } else {
+
+      }
+
+      response.redirect("/trip/" + tid, 303);
+      return null;
+    }
+  }
+
 
   // ---------------------------- User ------------------------------------
   private static class UserGetHandler implements TemplateViewRoute {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gson.internal.bind.SqlDateTypeAdapter;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 
@@ -14,7 +15,7 @@ public class DatabaseQuery {
   public static final User DUMMY_USER = new User("0", "Mary",
       "mary@gmail.com");
 
-  private static final Trip DUMMY_TRIP = Trip.TripBuilder.newTripBuilder()
+  public static final Trip DUMMY_TRIP = Trip.TripBuilder.newTripBuilder()
       .addIdentification(0, "Mary's Carpool").addLocations(41.608550, -72.656662, 41.827104, -71.399639)
       .addAddressNames("","").addTimes(1553487799, 1553494999).addDetails(7, 8.40, "555-867-5309",
                                                    "Uber", "We'll be meeting at the Ratty around this time, but maybe a bit later")
@@ -27,18 +28,18 @@ public class DatabaseQuery {
    *          The name of the database.
    * @param username The username used to access the database.
    * @param password The password used to access the database.
-   * @throws ClassNotFoundException
-   *           Errors involving the forName line.
-   * @throws SQLException
-   *           Errors involving the sql update.
    */
-  public DatabaseQuery(String db, String username, String password)
-          throws ClassNotFoundException, SQLException {
+  public DatabaseQuery(String db, String username, String password) {
     // this line loads the driver manager class, and must be
     // present for everything else to work properly
-    Class.forName("org.postgresql.Driver");
-    String urlToDB = "jdbc:postgresql:" + db;
-    conn = DriverManager.getConnection(urlToDB, username, password);
+    try {
+      Class.forName("org.postgresql.Driver");
+      String urlToDB = "jdbc:postgresql:" + db;
+      conn = DriverManager.getConnection(urlToDB, username, password);
+    } catch (ClassNotFoundException | SQLException e) {
+      assert false;
+      e.printStackTrace();
+    }
   }
 
   /**
