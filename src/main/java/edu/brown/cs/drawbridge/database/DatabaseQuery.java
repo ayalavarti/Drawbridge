@@ -3,6 +3,7 @@ package edu.brown.cs.drawbridge.database;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gson.internal.bind.SqlDateTypeAdapter;
@@ -12,6 +13,8 @@ import edu.brown.cs.drawbridge.models.User;
 public class DatabaseQuery {
 
   private Connection conn;
+  private static final double AVG_WALK_SPEED = 0.0014; //km per s
+  private static final int EARTH_RADIUS = 6371; //km
   public static final User DUMMY_USER = new User("0", "Mary",
       "mary@gmail.com");
 
@@ -488,8 +491,31 @@ public class DatabaseQuery {
           double lastLat, double lastLon, double walkRadius,
           int lastEta, int timeBuffer)
           throws SQLException, MissingDataException {
-    return searchTripsByTimeWindow(
-            lastLat, lastLon, walkRadius, lastEta, lastEta + timeBuffer);
+    int maxTimeShift = (int) (walkRadius / AVG_WALK_SPEED);
+    List<Trip> results = new LinkedList<>();
+    List<Trip> possibleTrips = searchTripsByTimeWindow(
+            lastLat, lastLon, walkRadius, lastEta, lastEta + timeBuffer + maxTimeShift);
+    for (Trip t: possibleTrips) {
+      double startLat = Math.toRadians(t.getStartingLatitude());
+      double startLon = Math.toRadians(t.getStartingLongitude());
+      int departure = t.getDepartureTime();
+      double prevLat = Math.toRadians(lastLat);
+      double prevLon = Math.toRadians(lastLon);
+      double latDifference = prevLat - startLat;
+      double lonDifference = prevLon - startLon;
+      double latSquares = Math.sin(latDifference / 2)
+              * Math.sin(latDifference / 2);
+      double lonSquares = Math.sin(lonDifference / 2)
+              * Math.sin(lonDifference / 2);
+      double products = latSquares + lonSquares * Math.cos(startLat) * Math.cos(prevLat);
+      double kmDist = 2 * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products)) * EARTH_RADIUS;
+      int timeStart = lastEta + (int) (kmDist / AVG_WALK_SPEED);
+      int timeEnd = timeStart + timeBuffer;
+      if (timeStart < departure && departure < timeEnd) {
+        results.add(t);
+      }
+    }
+    return results;
   }
 
   /**
