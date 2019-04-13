@@ -21,7 +21,7 @@
                     <span class="sub-heading">Walking Time</span>
                     <div>
                         <i class="fas fa-walking icon-label-large"></i>
-                        <input class="threshold-input" id="walking-input" value="15 " min="0" max="3600" type="number" placeholder="..." />min
+                        <input class="threshold-input" id="walking-input" value="15" min="0" max="3600" type="number" placeholder="..." />min
                         <span id="info" class="info-tooltip" data-tippy-content="Walking radius is how long you are willing to walk to the departure location.">
                             <img style="height: 15px; width: auto" src = "/images/info-icon.png" />
                         </span>

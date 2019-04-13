@@ -123,7 +123,13 @@ public class UserInterface {
       // Get parameter values
       QueryParamsMap qm = request.queryMap();
 
+      String startName = qm.value("startName");
+      String endName = qm.value("endName");
+      double startLat = Double.parseDouble(qm.value("startLat"));
+      double startLon = Double.parseDouble(qm.value("startLon"));
+      long datetime = Long.parseLong(qm.value("date"));
       String uid = qm.value("userID");
+
       double walkTime, waitTime;
       if (qm.hasKey("walkTime")) {
         walkTime = qm.get("walkTime").doubleValue();
@@ -148,6 +154,8 @@ public class UserInterface {
           .put("title", "Drawbridge | Results")
           .put("favicon", "images/favicon.png")
           .put("data", GSON.toJson(processToJSON(uid, s1, s2))).build();
+
+
       return new ModelAndView(variables, "results.ftl");
     }
   }

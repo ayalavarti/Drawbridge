@@ -403,6 +403,6 @@ function validateSubmit() {
         };
 
         let urlStr = jQuery.param(postParameters);
-        window.open(`/results?${urlStr}`);
+        window.open(`/results?${urlStr}`, "_self");
     }
 }
