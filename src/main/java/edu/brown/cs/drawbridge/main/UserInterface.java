@@ -299,6 +299,8 @@ public class UserInterface {
         vals.put("maxSize", Integer.toString(trip.getMaxUsers()));
         if (uid != null) {
           vals.put("costPerPerson", Double.toString(trip.getCostPerUser(uid)));
+        } else {
+          vals.put("costPerPerson", Double.toString(trip.getCostPerUser("")));
         }
         vals.put("id", Integer.toString(trip.getId()));
         vals.put("name", trip.getName());
