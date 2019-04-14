@@ -3,13 +3,18 @@
 html {
 	font-family: "Nunito", sans-serif;
 	letter-spacing: 0.3px;
-	background-color: #ececec;
+	background-color: #f5fafd;
 	height: 100%;
 	width: 100%;
+	scroll-behavior: smooth;
 }
 
-body {}
+body {
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+}
 
+textarea,
 input {
 	font-family: "Nunito", sans-serif;
 	letter-spacing: 0.5px;
@@ -19,9 +24,17 @@ button {
 	outline: none;
 }
 
-span,
+span {
+	outline: none;
+}
+
 img {
 	outline: none;
+	user-select: none !important;
+	-moz-user-select: none;
+	-webkit-user-drag: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
 }
 
 a {
@@ -36,7 +49,7 @@ input::-webkit-inner-spin-button {
 	margin: 0;
 }
 
-input[type=number] {
+input[type="number"] {
 	-moz-appearance: textfield;
 	/* Firefox */
 }
@@ -94,6 +107,7 @@ input[type=number] {
 	box-shadow: 0 2px 4px 0 #0000001e, 0 5px 10px 0 #0000002f;
 }
 
+.hosting-btn,
 .approve-btn,
 .deny-btn,
 .member-label,
@@ -119,7 +133,6 @@ input[type=number] {
 	height: 30px;
 	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.096), 0 2px 4px 0 rgba(0, 0, 0, 0.19);
 }
-
 
 #profile-picture {
 	position: absolute;
@@ -279,7 +292,7 @@ input[type=number] {
 }
 
 .tippy-tooltip.drawbridge-alt-theme {
-	color: #46B0FF;
+	color: #46b0ff;
 	padding: 10px;
 	border-radius: 10px;
 	box-shadow: 0 2px 4px 0 rgba(70, 175, 255, 0.301);

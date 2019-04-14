@@ -10,9 +10,8 @@ let curLong = -71.058502;
  * Initializes the Mapbox using the accessToken and sets up the
  * mapboxClient for use in Geolocating.
  */
-function initMapbox() {
-    mapboxgl.accessToken =
-        "pk.eyJ1IjoiYXJ2Mzk1IiwiYSI6ImNqdGpodWcwdDB6dXEzeXBrOHJyeGVpNm8ifQ.bAwH-KG_5A5kwIxCf6xCSQ";
+function initMapbox(mapboxToken) {
+    mapboxgl.accessToken = mapboxToken;
     mapboxClient = mapboxSdk({
         accessToken: mapboxgl.accessToken
     });

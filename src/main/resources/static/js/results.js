@@ -4,129 +4,108 @@ const months = [
 	"July", "August", "September", "October", "November", "December"
 ];
 
-const tempData = [{
-		trips: {
-			trip1: {
-				start: "Providence, RI",
-				end: "New Haven, CT",
-				date: "1553453944862",
-				currentSize: "3",
-				maxSize: "5",
-				costPerPerson: "15",
-				id: "1",
-				name: "Jeff's Carpool",
-				status: "joined"
-			},
-			trip2: {
-				start: "New Haven, CT",
-				end: "New York, NY",
-				date: "1553453944862",
-				currentSize: "3",
-				maxSize: "5",
-				costPerPerson: "20",
-				id: "2",
-				name: "Sam's Carpool",
-				status: "joined"
-			},
-			trip3: {
-				start: "New York, NY",
-				end: "Marlboro, NJ",
-				date: "1553453944862",
-				currentSize: "3",
-				maxSize: "5",
-				costPerPerson: "10",
-				id: "3",
-				name: "Arvind's Carpool",
-				status: "pending"
-			}
+const tempData = [
+	[{
+			start: "Providence, RI",
+			end: "New Haven, CT",
+			date: "1553453944862",
+			currentSize: "3",
+			maxSize: "5",
+			costPerPerson: "15",
+			id: "1",
+			name: "Jeff's Carpool",
+			status: "hosting"
+		},
+		{
+			start: "New Haven, CT",
+			end: "New York, NY",
+			date: "1553453944862",
+			currentSize: "3",
+			maxSize: "5",
+			costPerPerson: "20",
+			id: "2",
+			name: "Sam's Carpool",
+			status: "joined"
+		},
+		{
+			start: "New York, NY",
+			end: "Marlboro, NJ",
+			date: "1553453944862",
+			currentSize: "3",
+			maxSize: "5",
+			costPerPerson: "10",
+			id: "3",
+			name: "Arvind's Carpool",
+			status: "pending"
 		}
-	},
-	{
-		trips: {
-			trip1: {
-				start: "Providence, RI",
-				end: "New Haven, CT",
-				date: "1553453944862",
-				currentSize: "3",
-				maxSize: "5",
-				costPerPerson: "15",
-				id: "1",
-				name: "Jeff's Carpool",
-				status: "joined"
-			},
-			trip2: {
-				start: "New Haven, CT",
-				end: "Marlboro, NJ",
-				date: "1553453944862",
-				currentSize: "3",
-				maxSize: "5",
-				costPerPerson: "20",
-				id: "4",
-				name: "Mark's Carpool",
-				status: "pending"
-			}
+	],
+	[{
+			start: "Providence, RI",
+			end: "New Haven, CT",
+			date: "1553453944862",
+			currentSize: "3",
+			maxSize: "5",
+			costPerPerson: "15",
+			id: "1",
+			name: "Jeff's Carpool",
+			status: "joined"
+		},
+		{
+			start: "New Haven, CT",
+			end: "Marlboro, NJ",
+			date: "1553453944862",
+			currentSize: "3",
+			maxSize: "5",
+			costPerPerson: "20",
+			id: "4",
+			name: "Mark's Carpool",
+			status: "pending"
 		}
-	},
-	{
-		trips: {
-			trip1: {
-				start: "Providence, RI",
-				end: "Springfield, MA",
-				date: "1553453944862",
-				currentSize: "1",
-				maxSize: "3",
-				costPerPerson: "24",
-				id: "5",
-				name: "Going to Airport",
-				status: "pending"
-			}
-		}
-	},
-	{
-		trips: {
-			trip1: {
-				start: "Providence, RI",
-				end: "Six Flags",
-				date: "1553453944862",
-				currentSize: "4",
-				maxSize: "5",
-				costPerPerson: "24",
-				id: "6",
-				name: "Six Flags Trip",
-				status: "join"
-			}
-		}
-	},
-	{
-		trips: {
-			trip1: {
-				start: "Boston, MA",
-				end: "Brown University",
-				date: "1553453944862",
-				currentSize: "3",
-				maxSize: "5",
-				costPerPerson: "15",
-				id: "7",
-				name: "Boston to Brown",
-				status: "join"
-			}
-		}
-	},
-	{
-		trips: {
-			trip1: {
-				start: "Yale University",
-				end: "Harvard University",
-				date: "1553453944862",
-				currentSize: "3",
-				maxSize: "5",
-				costPerPerson: "14",
-				id: "8",
-				name: "Yale to Harvard",
-				status: "join"
-			}
-		}
-	}
+	],
+	[{
+		start: "Providence, RI",
+		end: "Springfield, MA",
+		date: "1553453944862",
+		currentSize: "1",
+		maxSize: "3",
+		costPerPerson: "24",
+		id: "5",
+		name: "Going to Airport",
+		status: "pending"
+	}],
+	[{
+		start: "Providence, RI",
+		end: "Six Flags",
+		date: "1553453944862",
+		currentSize: "4",
+		maxSize: "5",
+		costPerPerson: "24",
+		id: "6",
+		name: "Six Flags Trip",
+		status: "join"
+	}],
+	[{
+		start: "Boston, MA",
+		end: "Brown University",
+		date: "1553453944862",
+		currentSize: "3",
+		maxSize: "5",
+		costPerPerson: "15",
+		id: "7",
+		name: "Boston to Brown",
+		status: "join"
+	}],
+	[{
+		start: "Yale University",
+		end: "Harvard University",
+		date: "1553453944862",
+		currentSize: "3",
+		maxSize: "5",
+		costPerPerson: "14",
+		id: "8",
+		name: "Yale to Harvard",
+		status: "join"
+	}]
 ];
 
 /**
@@ -179,9 +158,8 @@ function queryResults() {
 	$("#end").text(tempHeading[1]);
 	$("#date").text(tempHeading[2]);
 	$("#time").text(tempHeading[3]);
-
 	// Set the trip results on the page with the resulting data
-	setTripResults(tempData);
+	setTripResults(JSON.parse(data));
 }
 
 /**
@@ -192,13 +170,9 @@ function setTripResults(data) {
 	// Iterate through each trip group
 	data.forEach(element => {
 		let result = `<div class="result"><div class="result-trips">`;
-		let e = element["trips"];
-		let ids = [];
-
 		//Iterate through each connecting trip in a trip group
-		for (let trip in e) {
-			result += generateTrip(e[trip], true);
-			ids.push(e[trip]["id"]);
+		for (let trip in element) {
+			result += generateTrip(element[trip]);
 		}
 		result += `</div></div>`
 		$(".results-content").append(result);

@@ -16,7 +16,7 @@ let formValidationTooltip;
  * When the DOM loads, initialize Mapbox and the Map object.
  */
 $(document).ready(function () {
-    initMapbox();
+    initMapbox(mapboxToken);
     initMap();
     initDateTime();
     initTooltips();
@@ -368,7 +368,7 @@ function alignTrip() {
 /**
  * Handle submit response when the submit button is pressed.
  */
-function handleSubmit() {
+function validateSubmit() {
     let dateInput = $("#date").val();
     let timeInput = $("#time").val();
     let date = new Date(`${dateInput} ${timeInput}`);
@@ -394,11 +394,15 @@ function handleSubmit() {
         const postParameters = {
             startName: addressNames[0],
             endName: addressNames[1],
-            startCoordinates: coordinates[0].slice(0).reverse(),
-            endCoordinates: coordinates[1].slice(0).reverse(),
+            startLat: coordinates[0].slice(0).reverse()[0],
+            startLon: coordinates[0].slice(0).reverse()[1],
+            endLat: coordinates[1].slice(0).reverse()[0],
+            endLon: coordinates[1].slice(0).reverse()[1],
             date: date.getTime(),
             userID: userID
         };
-        console.log(postParameters);
+
+        let urlStr = jQuery.param(postParameters);
+        window.open(`/results?${urlStr}`, "_self");
     }
 }
