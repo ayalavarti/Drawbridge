@@ -61,7 +61,7 @@
             </div>
         </div>
     </div>
-    <div style="visibility: hidden;" id="sign-in" class="profile-btn"
+    <div id="sign-in" class="profile-btn"
          data-tippy-content="">
         <div class="g-signin2" data-onsuccess="onSignIn"
              data-onfailure="onFailure" data-longtitle="true"></div>
