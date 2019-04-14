@@ -135,9 +135,7 @@ public class UserInterface {
         return null; // 404 not found
       }
 
-      DatabaseQuery database = carpools.getDatabase();
-
-      Trip trip = database.getTripById(tid);
+      Trip trip = carpools.getTrip(tid);
       List<List<User>> people = carpools.getUsers(tid);
 
       User host = people.get(0).get(0);

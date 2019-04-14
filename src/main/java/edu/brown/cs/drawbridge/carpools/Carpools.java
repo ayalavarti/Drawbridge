@@ -332,12 +332,4 @@ public final class Carpools {
       return false;
     }
   }
-
-  /**
-   * Gets the db query object.
-   * @return the database object.
-   */
-  public DatabaseQuery getDatabase() {
-    return database;
-  }
 }
