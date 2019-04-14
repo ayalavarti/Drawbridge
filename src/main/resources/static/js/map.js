@@ -17,7 +17,7 @@ let formValidationTooltip;
  */
 $(document).ready(function () {
     initMapbox(mapboxToken);
-    initMap();
+    getLocation();
     initDateTime();
     initTooltips();
     disableTrip();
@@ -39,9 +39,28 @@ function onUserSignedOut() {
 }
 
 /**
+ * Gets the current location if geolocation is enabled.
+ */
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(initMap, defaultMap);
+    } else {
+        console.log("Geolocation not enabled.");
+    }
+}
+
+function defaultMap(error) {
+    initMap(undefined);
+}
+
+/**
  * Initializes the Map.
  */
-function initMap() {
+function initMap(position) {
+    if (position !== undefined) {
+        curLat = position.coords.latitude;
+        curLong = position.coords.longitude;
+    }
     // Create map object with custom settings and add NavigationControl
     map = new mapboxgl.Map({
                                container: "map",
