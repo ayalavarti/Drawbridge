@@ -56,7 +56,7 @@ public final class Main {
     try {
       OptionSet options = parser.parse(args);
       if (options.has("gui")) {
-        runSparkServer((int) options.valueOf("port"));
+//        runSparkServer((int) options.valueOf("port"));
       }
     } catch (OptionException e) {
       System.out.println("Use one of: --gui [--port <number>] or no inputs.");

@@ -11,10 +11,13 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
+import edu.brown.cs.drawbridge.carpools.Carpools;
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
+import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import freemarker.template.Configuration;
+
 import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
@@ -32,7 +35,8 @@ import spark.template.freemarker.FreeMarkerEngine;
  */
 public class UserInterface {
   private static final Gson GSON = new Gson();
-  private static DatabaseQuery dbQuery;
+  private static final String MAPBOX_TOKEN = "pk.eyJ1IjoiYXJ2Mzk1IiwiYSI6ImNqdGpodWcwdDB6dXEzeXBrOHJyeGVpNm8ifQ.bAwH-KG_5A5kwIxCf6xCSQ";
+  private static Carpools carpools;
 
   private static FreeMarkerEngine createEngine() {
     Configuration config = new Configuration();
@@ -56,9 +60,9 @@ public class UserInterface {
    */
   public static boolean setDB(String dbName) {
     try {
-      String dbUser = System.getenv("DB_USER");
-      String dbPass = System.getenv("DB_PASS");
-      dbQuery = new DatabaseQuery(dbName, dbUser, dbPass);
+      carpools = new Carpools(dbName,
+                              System.getenv("DB_USER"),
+                              System.getenv("DB_PASS"));
       return true;
     } catch (SQLException | ClassNotFoundException e) {
       return false;
@@ -166,38 +170,34 @@ public class UserInterface {
    */
   private static class DetailGetHandler implements TemplateViewRoute {
     @Override
-    public ModelAndView handle(Request request, Response response) {
+    public ModelAndView handle(Request request, Response response)
+        throws SQLException, MissingDataException {
       int tid;
       try {
         tid = Integer.parseInt(request.params(":tid"));
       } catch (NumberFormatException e) {
-        return null;
+        return null; // 404 not found
       }
 
-      // TODO: switch this out
-      // Trip trip = dbQuery.getTripById(tid);
-      Trip trip = DatabaseQuery.DUMMY_TRIP;
+      Trip trip = carpools.getTrip(tid);
+      List<List<User>> people = carpools.getUsers(tid);
 
-      // Get user's names from the trip
-      // User host = dbQuery.getUserById(trip.getHostId());
-      User host = new User(trip.getHostId(), "Mary III", "mary@queen.com");
-      List<User> members = new ArrayList<>();
-      for (String memId : trip.getMemberIds()) {
-        members.add(dbQuery.getUserById(memId));
-      }
-      List<User> pending = new ArrayList<>();
-      for (String pendId : trip.getPendingIds()) {
-        pending.add(dbQuery.getUserById(pendId));
-      }
+      User host = people.get(0).get(0);
+      List<User> members = people.get(1);
+      List<User> pending = people.get(2);
+
       // TODO: remove this; for testing purposes only
       pending.add(new User("1", "Mark Lavrentyev", "lavrema@outlook.com"));
       members.add(new User("2", "Arvind Yalavarti", "abc@example.com"));
 
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("title", String.format("Drawbridge | %s", trip.getName()))
-          .put("favicon", "images/favicon.png").put("trip", trip)
-          .put("host", host).put("members", members).put("pending", pending)
-          .put("mapboxKey", System.getenv("MAPBOX_KEY")).build();
+              .put("title", String.format("Drawbridge | %s", trip.getName()))
+              .put("favicon", "images/favicon.png")
+              .put("trip", trip)
+              .put("host", host)
+              .put("members", members)
+              .put("pending", pending)
+              .build();
       return new ModelAndView(variables, "detail.ftl");
     }
   }

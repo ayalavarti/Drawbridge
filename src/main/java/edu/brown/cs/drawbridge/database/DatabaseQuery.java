@@ -8,26 +8,27 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
+import com.google.gson.internal.bind.SqlDateTypeAdapter;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 
 public class DatabaseQuery {
 
   private Connection conn;
-  public static final User DUMMY_USER = new User("0", "Mary", "mary@gmail.com");
+
+  private static final double AVG_WALK_SPEED = 0.0014; //km per s
+  private static final int EARTH_RADIUS = 6371; //km
+  public static final User DUMMY_USER = new User("0", "Mary",
+      "mary@gmail.com");
 
   public static final Trip DUMMY_TRIP = Trip.TripBuilder.newTripBuilder()
-      .addIdentification(5, "Mary's Carpool")
-      .addLocations(42.038332, -72.616233, 41.827104, -71.399639)
-      .addAddressNames("Six Flags New England",
-          "Brown University, Providence, RI")
-      .addTimes(1553487799, 1553494999)
-      .addDetails(7, 8.40, "(555) 867-5309", "Uber",
-          "We'll be meeting at the Ratty around this time, but maybe a bit later")
-      .buildWithUsers("118428670975676923422", new ArrayList<>(),
-          new ArrayList<>());
+      .addIdentification(0, "Mary's Carpool").addLocations(41.608550, -72.656662, 41.827104, -71.399639)
+      .addAddressNames("","").addTimes(1553487799, 1553494999).addDetails(7, 8.40, "555-867-5309",
+                                                   "Uber", "We'll be meeting at the Ratty around this time, but maybe a bit later")
+      .buildWithUsers("118428670975676923422", new ArrayList<>(), new ArrayList<>());
 
   public static final Trip DUMMY_TRIP2 = Trip.TripBuilder.newTripBuilder()
       .addIdentification(5, "Mary's Carpool")
@@ -69,8 +70,14 @@ public class DatabaseQuery {
    * @param tripId
    *          The int id of the trip.
    * @return The String id of the host.
+   * @throws SQLException
+   *           Errors involving SQL queries.
+   * @throws MissingDataException
+   *           Errors involving the database's contents.
    */
-  public String getHostOnTrip(int tripId) {
+  public String getHostOnTrip(int tripId)
+      throws SQLException, MissingDataException {
+
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.FIND_HOST_USER)) {
       prep.setInt(1, tripId);
@@ -79,10 +86,8 @@ public class DatabaseQuery {
           return rs.getString(1);
         }
       }
-    } catch (SQLException e) {
-      assert false;
     }
-    return null;
+    throw new MissingDataException("Trip has no host");
   }
 
   /**
@@ -92,8 +97,10 @@ public class DatabaseQuery {
    * @param tripId
    *          The int id of the trip.
    * @return The List of String ids of the trip's members.
+   * @throws SQLException
+   *           Errors involving SQL queries.
    */
-  public List<String> getMembersOnTrip(int tripId) {
+  public List<String> getMembersOnTrip(int tripId) throws SQLException {
     List<String> results = new ArrayList<>();
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.FIND_MEMBER_USERS)) {
@@ -103,8 +110,6 @@ public class DatabaseQuery {
           results.add(rs.getString(1));
         }
       }
-    } catch (SQLException e) {
-      assert false;
     }
     return results;
   }
@@ -115,8 +120,10 @@ public class DatabaseQuery {
    * @param tripId
    *          The int id of the trip.
    * @return The List of String ids of all requesting users for that trip.
+   * @throws SQLException
+   *           Errors involving SQL queries.
    */
-  public List<String> getRequestsOnTrip(int tripId) {
+  public List<String> getRequestsOnTrip(int tripId) throws SQLException {
     List<String> results = new ArrayList<>();
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.FIND_REQUEST_USERS)) {
@@ -126,8 +133,6 @@ public class DatabaseQuery {
           results.add(rs.getString(1));
         }
       }
-    } catch (SQLException e) {
-      assert false;
     }
     return results;
   }
@@ -138,8 +143,10 @@ public class DatabaseQuery {
    * @param userId
    *          The String id of the user.
    * @return The List of Integer ids of all trips hosted by the user.
+   * @throws SQLException
+   *           Errors involving SQL queries.
    */
-  public List<Integer> getHostTripsWithUser(String userId) {
+  public List<Integer> getHostTripsWithUser(String userId) throws SQLException {
     List<Integer> results = new ArrayList<>();
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.FIND_HOST_TRIPS)) {
@@ -149,11 +156,11 @@ public class DatabaseQuery {
           results.add(rs.getInt(1));
         }
       }
-    } catch (SQLException e) {
-      assert false;
     }
     return results;
   }
+
+
 
   /**
    * Finds the ids of all the trips that the specified user is a confirmed
@@ -162,8 +169,11 @@ public class DatabaseQuery {
    * @param userId
    *          The String id of the user.
    * @return The List of Integer ids of all trips that the user is a member of.
+   * @throws SQLException
+   *           Errors involving SQL queries.
    */
-  public List<Integer> getMemberTripsWithUser(String userId) {
+  public List<Integer> getMemberTripsWithUser(String userId)
+      throws SQLException {
     List<Integer> results = new ArrayList<>();
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.FIND_MEMBER_TRIPS)) {
@@ -173,8 +183,6 @@ public class DatabaseQuery {
           results.add(rs.getInt(1));
         }
       }
-    } catch (SQLException e) {
-      assert false;
     }
     return results;
   }
@@ -187,8 +195,11 @@ public class DatabaseQuery {
    *          The String id of the user.
    * @return The List of Integer ids of all trips that the user is requesting to
    *         join.
+   * @throws SQLException
+   *           Errors involving SQL queries.
    */
-  public List<Integer> getRequestTripsWithUser(String userId) {
+  public List<Integer> getRequestTripsWithUser(String userId)
+      throws SQLException {
     List<Integer> results = new ArrayList<>();
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.FIND_REQUEST_TRIPS)) {
@@ -198,8 +209,6 @@ public class DatabaseQuery {
           results.add(rs.getInt(1));
         }
       }
-    } catch (SQLException e) {
-      assert false;
     }
     return results;
   }
@@ -210,8 +219,14 @@ public class DatabaseQuery {
    * @param userId
    *          The String id of the user.
    * @return The User object with the specified id.
+   * @throws SQLException
+   *           Errors involving SQL queries.
+   * @throws MissingDataException
+   *           Errors involving the database's contents.
    */
-  public User getUserById(String userId) {
+  public User getUserById(String userId)
+      throws SQLException, MissingDataException {
+
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.FIND_USER_BY_ID)) {
       prep.setString(1, userId);
@@ -223,10 +238,8 @@ public class DatabaseQuery {
           return u;
         }
       }
-    } catch (SQLException e) {
-      assert false;
     }
-    return null;
+    throw new MissingDataException("User does not exist");
   }
 
   /**
@@ -235,8 +248,14 @@ public class DatabaseQuery {
    * @param tripId
    *          The int id of the trip.
    * @return The Trip object with the specified id.
+   * @throws SQLException
+   *           Errors involving SQL queries.
+   * @throws MissingDataException
+   *           Errors involving the database's contents.
    */
-  public Trip getTripById(int tripId) {
+  public Trip getTripById(int tripId)
+      throws SQLException, MissingDataException {
+
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.FIND_TRIP_BY_ID)) {
       prep.setInt(1, tripId);
@@ -254,10 +273,8 @@ public class DatabaseQuery {
                   getRequestsOnTrip(tripId));
         }
       }
-    } catch (SQLException e) {
-      assert false;
     }
-    return null;
+    throw new MissingDataException("Trip does not exist");
   }
 
   /**
@@ -265,23 +282,21 @@ public class DatabaseQuery {
    *
    * @param user
    *          The User object to add.
-   * @return True if the user was successfully added. False otherwise.
+   * @throws SQLException
+   *           Errors involving SQL queries.
    */
-  public boolean addUser(User user) {
-    if (getUserById(user.getId()) != null) {
-      return true;
-    }
-    try (PreparedStatement prep = conn
-        .prepareStatement(QueryStrings.INSERT_USER)) {
-      prep.setString(1, user.getId());
-      prep.setString(2, user.getName());
-      prep.setString(3, user.getEmail());
-      prep.addBatch();
-      prep.executeUpdate();
-      return true;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      return false;
+  public void addUser(User user) throws SQLException {
+    try {
+      getUserById(user.getId());
+    } catch (MissingDataException e) {
+      try (PreparedStatement prep = conn
+          .prepareStatement(QueryStrings.INSERT_USER)) {
+        prep.setString(1, user.getId());
+        prep.setString(2, user.getName());
+        prep.setString(3, user.getEmail());
+        prep.addBatch();
+        prep.executeUpdate();
+      }
     }
   }
 
@@ -293,12 +308,15 @@ public class DatabaseQuery {
    * @param hostId
    *          The String id of the user hosting the trip.
    * @return The database's id of the inserted trip.
+   * @throws SQLException
+   *           Errors involving SQL queries.
+   * @throws MissingDataException
+   *           Errors involving the database's contents.
    */
-  public int createTrip(Trip trip, String hostId) {
+  public int createTrip(Trip trip, String hostId)
+      throws SQLException, MissingDataException {
     int tripId = -1;
-    if (getUserById(hostId) == null) {
-      return tripId;
-    }
+    getUserById(hostId);
     // insert into trip
     try (
         PreparedStatement prep = conn.prepareStatement(QueryStrings.INSERT_TRIP,
@@ -324,9 +342,6 @@ public class DatabaseQuery {
           tripId = rs.getInt(1);
         }
       }
-    } catch (SQLException e) {
-      e.printStackTrace();
-      return tripId;
     }
     // insert into host
     try (PreparedStatement prep = conn
@@ -337,8 +352,7 @@ public class DatabaseQuery {
       prep.executeUpdate();
     } catch (SQLException e) {
       deleteTripManually(tripId);
-      assert false;
-      return tripId;
+      throw e;
     }
     return tripId;
   }
@@ -348,32 +362,27 @@ public class DatabaseQuery {
    *
    * @param tripId
    *          The int id of the trip.
-   * @return True if the trip was deleted successfully. False otherwise.
+   * @throws SQLException
+   *           Errors involving SQL queries.
    */
-  public boolean deleteTripManually(int tripId) {
+  public void deleteTripManually(int tripId) throws SQLException {
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.REMOVE_TRIP_BY_ID)) {
       prep.setInt(1, tripId);
       prep.executeUpdate();
-      return true;
-    } catch (SQLException e) {
-      return false;
     }
   }
 
   /**
    * Deletes all trips that have already departed from the database.
    *
-   * @return True if all expired trips were deleted successfully. False
-   *         otherwise.
+   * @throws SQLException
+   *           Errors involving SQL queries.
    */
-  public boolean deleteExpiredTrips() {
+  public void deleteExpiredTrips() throws SQLException {
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.REMOVE_TRIPS_BY_TIME)) {
       prep.executeUpdate();
-      return true;
-    } catch (SQLException e) {
-      return false;
     }
   }
 
@@ -393,9 +402,14 @@ public class DatabaseQuery {
    * @param end
    *          The int end of the time window in epoch time.
    * @return A List of all the trips connected to the given trip.
+   * @throws SQLException
+   *           Errors involving SQL queries.
+   * @throws MissingDataException
+   *           Errors involving the database's contents.
    */
   public List<Trip> searchTripsByTimeWindow(double lastLat, double lastLon,
-      double walkRadius, int start, int end) {
+      double walkRadius, int start, int end)
+      throws SQLException, MissingDataException {
     List<Trip> results = new ArrayList<>();
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.FIND_CONNECTED_TRIPS)) {
@@ -407,21 +421,21 @@ public class DatabaseQuery {
       prep.setInt(6, end);
       try (ResultSet rs = prep.executeQuery()) {
         while (rs.next()) {
-          results
-              .add(
-                  Trip.TripBuilder.newTripBuilder()
-                      .addIdentification(rs.getInt(1), rs.getString(2))
-                      .addLocations(rs.getDouble(4), rs.getDouble(5),
-                          rs.getDouble(7), rs.getDouble(8))
-                      .addAddressNames(rs.getString(3), rs.getString(6))
-                      .addTimes(rs.getInt(9), rs.getInt(10))
-                      .addDetails(rs.getInt(11), rs.getDouble(12),
-                          rs.getString(13), rs.getString(14), rs.getString(15))
-                      .build());
+          results.add(Trip.TripBuilder.newTripBuilder()
+              .addIdentification(rs.getInt(1), rs.getString(2))
+              .addLocations(rs.getDouble(4), rs.getDouble(5), rs.getDouble(7),
+                  rs.getDouble(8))
+              .addAddressNames(rs.getString(3), rs.getString(6))
+              .addTimes(rs.getInt(9), rs.getInt(10))
+              .addDetails(rs.getInt(11), rs.getDouble(12), rs.getString(13),
+                  rs.getString(14), rs.getString(15))
+              .buildWithUsers(getHostOnTrip(rs.getInt(1)),
+                  getMembersOnTrip(rs.getInt(1)),
+                  getRequestsOnTrip(rs.getInt(1))));
         }
       }
-    } catch (SQLException e) {
-      assert false;
+    } catch (MissingDataException e) {
+      throw new MissingDataException("Results include trips without hosts");
     }
     return results;
   }
@@ -442,11 +456,40 @@ public class DatabaseQuery {
    * @param timeBuffer
    *          The buffer for finding reasonably timed trips.
    * @return A List of all the trips connected to the given trip.
+   * @throws SQLException
+   *           Errors involving SQL queries.
+   * @throws MissingDataException
+   *           Errors involving the database's contents.
    */
-  public List<Trip> getConnectedTripsAfterEta(double lastLat, double lastLon,
-      double walkRadius, int lastEta, int timeBuffer) {
-    return searchTripsByTimeWindow(lastLat, lastLon, walkRadius, lastEta,
-        lastEta + timeBuffer);
+  public List<Trip> getConnectedTripsAfterEta(
+          double lastLat, double lastLon, double walkRadius,
+          int lastEta, int timeBuffer)
+          throws SQLException, MissingDataException {
+    int maxTimeShift = (int) (walkRadius / AVG_WALK_SPEED);
+    List<Trip> results = new LinkedList<>();
+    List<Trip> possibleTrips = searchTripsByTimeWindow(
+            lastLat, lastLon, walkRadius, lastEta, lastEta + timeBuffer + maxTimeShift);
+    for (Trip t: possibleTrips) {
+      double startLat = Math.toRadians(t.getStartingLatitude());
+      double startLon = Math.toRadians(t.getStartingLongitude());
+      int departure = t.getDepartureTime();
+      double prevLat = Math.toRadians(lastLat);
+      double prevLon = Math.toRadians(lastLon);
+      double latDifference = prevLat - startLat;
+      double lonDifference = prevLon - startLon;
+      double latSquares = Math.sin(latDifference / 2)
+              * Math.sin(latDifference / 2);
+      double lonSquares = Math.sin(lonDifference / 2)
+              * Math.sin(lonDifference / 2);
+      double products = latSquares + lonSquares * Math.cos(startLat) * Math.cos(prevLat);
+      double kmDist = 2 * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products)) * EARTH_RADIUS;
+      int timeStart = lastEta + (int) (kmDist / AVG_WALK_SPEED);
+      int timeEnd = timeStart + timeBuffer;
+      if (timeStart < departure && departure < timeEnd) {
+        results.add(t);
+      }
+    }
+    return results;
   }
 
   /**
@@ -464,12 +507,19 @@ public class DatabaseQuery {
    *          The buffer for finding reasonably timed trips.
    * @return A List of all the trips leaving around the specified location and
    *         time.
+   * @throws SQLException
+   *           Errors involving SQL queries.
+   * @throws MissingDataException
+   *           Errors involving the database's contents.
    */
   public List<Trip> getConnectedTripsWithinTimeRadius(double lat, double lon,
-      double walkRadius, int departure, int timeBuffer) {
+      double walkRadius, int departure, int timeBuffer)
+      throws SQLException, MissingDataException {
     return searchTripsByTimeWindow(lat, lon, walkRadius, departure - timeBuffer,
         departure + timeBuffer);
   }
+
+
 
   /**
    * Inserts a request relation into the database.
@@ -478,18 +528,16 @@ public class DatabaseQuery {
    *          The int id of the trip being requested.
    * @param userId
    *          The String id of the user requesting to join the trip.
-   * @return True if the request was processed successfully. False otherwise.
+   * @throws SQLException
+   *           Errors involving SQL queries.
    */
-  public boolean request(int tripId, String userId) {
+  public void request(int tripId, String userId) throws SQLException {
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.INSERT_REQUEST)) {
       prep.setInt(1, tripId);
       prep.setString(2, userId);
       prep.addBatch();
       prep.executeUpdate();
-      return true;
-    } catch (SQLException e) {
-      return false;
     }
   }
 
@@ -501,9 +549,10 @@ public class DatabaseQuery {
    *          The int id of the trip being requested.
    * @param userId
    *          The String id of the user requesting to join the trip.
-   * @return True if the approval was processed successfully. False otherwise.
+   * @throws SQLException
+   *           Errors involving SQL queries.
    */
-  public boolean approve(int tripId, String userId) {
+  public void approve(int tripId, String userId) throws SQLException {
     // insert into members
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.INSERT_MEMBER)) {
@@ -511,8 +560,6 @@ public class DatabaseQuery {
       prep.setString(2, userId);
       prep.addBatch();
       prep.executeUpdate();
-    } catch (SQLException e) {
-      return false;
     }
     // delete from requests
     try (PreparedStatement prep = conn
@@ -520,9 +567,9 @@ public class DatabaseQuery {
       prep.setInt(1, tripId);
       prep.setString(2, userId);
       prep.executeUpdate();
-      return true;
     } catch (SQLException e) {
-      return false;
+      kick(tripId, userId);
+      throw e;
     }
   }
 
@@ -533,17 +580,15 @@ public class DatabaseQuery {
    *          The int id of the trip being requested.
    * @param userId
    *          The String id of the user requesting to join the trip.
-   * @return True if the rejection was processed successfully. False otherwise.
+   * @throws SQLException
+   *           Errors involving SQL queries.
    */
-  public boolean reject(int tripId, String userId) {
+  public void reject(int tripId, String userId) throws SQLException {
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.REMOVE_REQUEST)) {
       prep.setInt(1, tripId);
       prep.setString(2, userId);
       prep.executeUpdate();
-      return true;
-    } catch (SQLException e) {
-      return false;
     }
   }
 
@@ -554,52 +599,34 @@ public class DatabaseQuery {
    *          The int id of the trip.
    * @param userId
    *          The String id of the user being kicked from the trip.
-   * @return True if the kick was processed successfully. False otherwise.
+   * @throws SQLException
+   *           Errors involving SQL queries.
    */
-  public boolean kick(int tripId, String userId) {
+  public void kick(int tripId, String userId) throws SQLException {
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.REMOVE_MEMBER)) {
       prep.setInt(1, tripId);
       prep.setString(2, userId);
       prep.executeUpdate();
-      return true;
-    } catch (SQLException e) {
-      return false;
     }
   }
 
-  /**
-   * Creates the tables in the database.
-   * 
-   * @return True if the tables have been set up successfully. False otherwise.
-   */
-  public boolean setUp() {
-    for (String query : QueryStrings.SETUP_QUERIES) {
-      try (PreparedStatement prep = conn.prepareStatement(query)) {
-        prep.executeUpdate();
-      } catch (SQLException e) {
-        return false;
-      }
-    }
-    return true;
-  }
+
 
   /**
    * Clears all data from the database.
-   * 
-   * @return True if the data has been deleted successfully. False otherwise.
+   *
+   * @throws SQLException
+   *           Errors involving SQL queries.
    */
-  public boolean clearData() {
+  public void clearData() throws SQLException {
     List<String> deleteQueries = new ArrayList<String>(
         Arrays.asList("DELETE FROM requests;", "DELETE FROM members;",
             "DELETE FROM hosts;", "DELETE FROM trips;", "DELETE FROM users;"));
     for (String query : deleteQueries) {
       try (PreparedStatement prep = conn.prepareStatement(query)) {
         prep.executeUpdate();
-      } catch (SQLException e) {
-        return false;
       }
     }
-    return true;
   }
 }
