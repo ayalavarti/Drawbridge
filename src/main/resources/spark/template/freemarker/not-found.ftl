@@ -1,32 +1,34 @@
 <#assign stylesheets>
-<style>
-	#container {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 100vh;
-		flex-wrap: wrap;
-	}
-	img {
-		width: 350px;
-	}
-</style>
+    <style>
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-wrap: wrap;
+        }
+
+        img {
+            width: 350px;
+        }
+    </style>
 </#assign>
 
 <#assign content>
     <div id="container">
-        <img src="/images/not-found.png" />
+        <img src="/images/not-found.png"/>
     </div>
 </#assign>
 <#include "main.ftl">
 
 <script type="text/javascript">
-	showHomeInfo();
-	function onUserSignedIn() {
-		console.log("User signed in.");
-	}
+    showHomeInfo();
 
-	function onUserSignedOut() {
-		console.log("User signed out.");
-	}
+    function onUserSignedIn() {
+        console.log("User signed in.");
+    }
+
+    function onUserSignedOut() {
+        console.log("User signed out.");
+    }
 </script>
