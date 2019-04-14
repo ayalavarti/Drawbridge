@@ -1,12 +1,17 @@
 let mapboxClient;
 
 /**
+ * Hardcoded starting location - will replace later.
+ */
+let curLat = 42.358188;
+let curLong = -71.058502;
+
+/**
  * Initializes the Mapbox using the accessToken and sets up the
  * mapboxClient for use in Geolocating.
  */
-function initMapbox() {
-    mapboxgl.accessToken =
-        "pk.eyJ1IjoiYXJ2Mzk1IiwiYSI6ImNqdGpodWcwdDB6dXEzeXBrOHJyeGVpNm8ifQ.bAwH-KG_5A5kwIxCf6xCSQ";
+function initMapbox(mapboxToken) {
+    mapboxgl.accessToken = mapboxToken;
     mapboxClient = mapboxSdk({
         accessToken: mapboxgl.accessToken
     });
@@ -62,32 +67,6 @@ function parseAddress(raw, index) {
         addressNames[index] = raw;
         return `<div class="popup-title">${raw}</div>`;
     }
-}
-
-/**
- * Calculates the route direction coordinates based on starting and ending locations
- * using the Mapbox directions API.
- *
- * @param {*} c
- */
-function calcRoute(c) {
-    let url =
-        "https://api.mapbox.com/directions/v5/mapbox/driving/" +
-        c +
-        "?geometries=geojson&&access_token=" +
-        mapboxgl.accessToken;
-
-    let req = new XMLHttpRequest();
-    req.responseType = "json";
-    req.open("GET", url, true);
-    req.onload = function () {
-        let jsonResponse = req.response;
-        route = [jsonResponse.routes[0].distance * 0.001, jsonResponse.routes[0].duration / 60];
-
-        let coords = jsonResponse.routes[0].geometry;
-        addRoute(coords, map);
-    };
-    req.send();
 }
 
 /**

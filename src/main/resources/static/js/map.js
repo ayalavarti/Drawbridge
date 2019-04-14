@@ -3,12 +3,6 @@
  */
 let map;
 
-/**
- * Hardcoded starting location - will replace later.
- */
-let curLat = 42.358188;
-let curLong = -71.058502;
-
 let found = [];
 let coordinates = [];
 let markers = [];
@@ -16,16 +10,33 @@ let markers = [];
 let addressNames = [];
 let route = [];
 
+let formValidationTooltip;
+
 /**
  * When the DOM loads, initialize Mapbox and the Map object.
  */
 $(document).ready(function () {
-    initMapbox();
+    initMapbox(mapboxToken);
     initMap();
     initDateTime();
+    initTooltips();
     disableTrip();
     console.log("DOM ready.");
 });
+
+/**
+ * Overriden function for user sign in action.
+ */
+function onUserSignedIn() {
+    console.log("User signed in.");
+}
+
+/**
+ * Overriden function for user sign out action.
+ */
+function onUserSignedOut() {
+    console.log("User signed out.");
+}
 
 /**
  * Initializes the Map.
@@ -69,10 +80,24 @@ function initDateTime() {
         altInput: true,
         dateFormat: "H:i"
     });
-    $(".datetime-input").on("focus", ({
-        currentTarget
-    }) => $(currentTarget).blur());
-    $(".datetime-input").prop("readonly", false);
+}
+
+/**
+ * Initialize the form validation tooltip
+ */
+function initTooltips() {
+    formValidationTooltip = tippy("#requiredTooltip", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge-alt",
+        interactive: false,
+        trigger: "manual",
+        hideOnClick: false,
+        inertia: true,
+        sticky: true,
+        placement: "top",
+    });
 }
 
 /**
@@ -184,7 +209,6 @@ function removeMarker(index) {
 function updateRoute() {
     removeRoute();
     calcRoute(coordinates.join(";"));
-    setTripInfo();
 }
 
 /**
@@ -197,6 +221,27 @@ function removeRoute() {
     } else {
         return;
     }
+}
+
+/**
+ * Calculates the route direction coordinates based on starting and ending locations
+ * using the Mapbox directions API.
+ *
+ * @param {*} c
+ */
+function calcRoute(c) {
+    let url =
+        "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+        c +
+        "?geometries=geojson&&access_token=" +
+        mapboxgl.accessToken;
+    $.get(url, responseJSON => {
+        route = [responseJSON.routes[0].distance * 0.001, responseJSON.routes[0].duration / 60];
+        setTripInfo();
+
+        let coords = responseJSON.routes[0].geometry;
+        addRoute(coords, map);
+    }, "json");
 }
 
 /**
@@ -280,7 +325,6 @@ function alignTrip() {
         let left = 250;
         let right = 150;
         let bottom = 150;
-
         /**
          * Checks if the trip positions are routed diagonally upwards or if the window
          * height is below a threshold. Then the map view is adjusted since the search
@@ -289,11 +333,9 @@ function alignTrip() {
         if (
             (coordinates[0][0] < coordinates[1][0] && coordinates[0][1] < coordinates[1][1]) ||
             (coordinates[0][0] > coordinates[1][0] && coordinates[0][1] > coordinates[1][1]) ||
-            $(window).height() < 600
-        ) {
+            $(window).height() < 600) {
             top = 150;
         }
-
         /**
          * Checks if in half screen vertical mode and adjust map view.
          */
@@ -301,7 +343,6 @@ function alignTrip() {
             right = 50;
             bottom = 50;
         }
-
         /**
          * Checks if the window width is below a threshold. Then the map view is adjusted
          * since the search menu will not cover up the trip.
@@ -311,7 +352,6 @@ function alignTrip() {
             left = 75;
             right = 75;
         }
-
         // Fits the bounds of the map to the given padding sizes.
         map.fitBounds(coordinates, {
             padding: {
@@ -328,18 +368,41 @@ function alignTrip() {
 /**
  * Handle submit response when the submit button is pressed.
  */
-function handleSubmit() {
+function validateSubmit() {
     let dateInput = $("#date").val();
     let timeInput = $("#time").val();
     let date = new Date(`${dateInput} ${timeInput}`);
 
-    const postParameters = {
-        startName: addressNames[0],
-        endName: addressNames[1],
-        startCoordinates: coordinates[0].slice(0).reverse(),
-        endCoordinates: coordinates[1].slice(0).reverse(),
-        date: date.getTime()
-    };
+    /**
+     * If any of the input entries are not filled out, show the form validation tooltip, wait
+     * 3 seconds, then hide it, prompting the user to fill out the form completely.
+     */
+    if (dateInput === "" || timeInput === "" || coordinates[0] === undefined || coordinates[1] === undefined) {
+        showHideTooltip(formValidationTooltip[0]);
+    } else {
+        /**
+         * If the user is logged in, send a GET request with the UID.
+         * Otherwise, send null as the UID, returning generic results.
+         */
+        let userID;
+        if (userProfile === undefined) {
+            userID = null;
+        } else {
+            userID = userProfile.getId();
+        }
 
-    console.log(postParameters);
+        const postParameters = {
+            startName: addressNames[0],
+            endName: addressNames[1],
+            startLat: coordinates[0].slice(0).reverse()[0],
+            startLon: coordinates[0].slice(0).reverse()[1],
+            endLat: coordinates[1].slice(0).reverse()[0],
+            endLon: coordinates[1].slice(0).reverse()[1],
+            date: date.getTime(),
+            userID: userID
+        };
+
+        let urlStr = jQuery.param(postParameters);
+        window.open(`/results?${urlStr}`, "_self");
+    }
 }

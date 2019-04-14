@@ -11,24 +11,25 @@
         <div class="search-menu">
             <h2 class="section-heading">Search for a Carpool</h2>
             <img src="/images/divider.png" style="height: 4px; width: auto;" />
-            <form autocomplete="off" onsubmit="event.preventDefault(); handleSubmit()">
+            <form onsubmit="event.preventDefault(); validateSubmit()">
                 <div class="search-inputs">
                     <div><i class="fas fa-dot-circle icon-label"></i>
-                        <input required class="address-input" id="start-input" onblur="handleInput('start-input', 0)" type="text" placeholder="Starting point..." />
+                        <input class="address-input" id="start-input" onblur="handleInput('start-input', 0)" type="text" placeholder="Starting point..." />
                         <img id="loading-start-input" src ="/images/loading.gif" class="loading-address-gif"/>
                     </div>
                     <div><i class="fas fa-map-marker-alt icon-label"></i>
-                        <input required class="address-input" id="end-input" onblur="handleInput('end-input', 1)" type="text" placeholder="Ending destination..." />
+                        <input class="address-input" id="end-input" onblur="handleInput('end-input', 1)" type="text" placeholder="Ending destination..." />
                         <img id="loading-end-input" src ="/images/loading.gif" class="loading-address-gif"/>
                     </div>
                     <div>
                         <i class="fas fa-calendar icon-label"></i>
-                        <input required class="datetime-input flatpickr flatpickr-input" id="date" type="text" placeholder="Date..." />
+                        <input class="datetime-input flatpickr flatpickr-input" id="date" type="text" placeholder="Date..." />
 
                         <i class="fas fa-clock icon-label"></i>
-                        <input required class="datetime-input flatpickr flatpickr-input" id="time" type="text" placeholder="Time..." />
+                        <input class="datetime-input flatpickr flatpickr-input" id="time" type="text" placeholder="Time..." />
                     </div>
-                    <input name="submit" alt="Submit" type="image" src="/images/submit-btn.png" class="submit-btn" onmouseover="hover(this);" onmouseout="unhover(this);"/>
+                    <input id="requiredTooltip" name="submit" alt="Submit" type="image" src="/images/submit-btn.png" class="submit-btn"
+                           data-tippy-content="Please enter all inputs." onmouseover="hover(this);" onmouseout="unhover(this);"/>
                 </div>
             </form>
         </div>
@@ -61,6 +62,10 @@
     </div>
 
     <div id="map"></div>
+    <script type="text/javascript">
+        let mapboxToken = "${mapboxKey?js_string}"
+    </script>
+    <script src="/js/util.js"></script>
     <script src="/js/mapUtil.js"></script>
     <script src="/js/map.js"></script>
 </#assign>

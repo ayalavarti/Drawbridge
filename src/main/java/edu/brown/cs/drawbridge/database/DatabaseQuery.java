@@ -18,6 +18,7 @@ import edu.brown.cs.drawbridge.models.User;
 public class DatabaseQuery {
 
   private Connection conn;
+
   private static final double AVG_WALK_SPEED = 0.0014; //km per s
   private static final int EARTH_RADIUS = 6371; //km
   public static final User DUMMY_USER = new User("0", "Mary",
@@ -28,6 +29,17 @@ public class DatabaseQuery {
       .addAddressNames("","").addTimes(1553487799, 1553494999).addDetails(7, 8.40, "555-867-5309",
                                                    "Uber", "We'll be meeting at the Ratty around this time, but maybe a bit later")
       .buildWithUsers("118428670975676923422", new ArrayList<>(), new ArrayList<>());
+
+  public static final Trip DUMMY_TRIP2 = Trip.TripBuilder.newTripBuilder()
+      .addIdentification(5, "Mary's Carpool")
+      .addLocations(42.038332, -72.616233, 41.827104, -71.399639)
+      .addAddressNames("Six Flags New England",
+          "Brown University, Providence, RI")
+      .addTimes(1553487799, 1553494999)
+      .addDetails(7, 8.40, "(555) 867-5309", "Uber",
+          "We'll be meeting at the Ratty around this time, but maybe a bit later")
+      .buildWithUsers("108134993267513125002", new ArrayList<>(),
+          new ArrayList<>());
 
   /**
    * A constructor based on the String name of the database.
@@ -65,6 +77,7 @@ public class DatabaseQuery {
    */
   public String getHostOnTrip(int tripId)
       throws SQLException, MissingDataException {
+
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.FIND_HOST_USER)) {
       prep.setInt(1, tripId);
@@ -147,88 +160,7 @@ public class DatabaseQuery {
     return results;
   }
 
-  // /**
-  // * Finds the ids of all the trips that the specified user is a confirmed
-  // * member of.
-  // *
-  // * @param userId
-  // * The String id of the user.
-  // * @return The List of Integer ids of all trips that the user is a member
-  // of.
-  // * NOTE: Group trips are NOT guaranteed to be in chronological order.
-  // * @throws SQLException Errors involving SQL queries.
-  // */
-  // public List<List<Integer>> getMemberTripsWithUser(String userId)
-  // throws SQLException {
-  // List<List<Integer>> results = new ArrayList<>();
-  // try (PreparedStatement prep = conn.prepareStatement(
-  // QueryStrings.FIND_MEMBER_TRIPS)) {
-  // prep.setString(1, userId);
-  // try (ResultSet rs = prep.executeQuery()) {
-  // int lastGroupId = -1;
-  // List<Integer> tripGroup = new ArrayList<>();
-  // while (rs.next()) {
-  // if (lastGroupId == -1) { //first group
-  // tripGroup.add(rs.getInt(1));
-  // lastGroupId = rs.getInt(2);
-  // } else if (lastGroupId != rs.getInt(2)) { //new group
-  // results.add(tripGroup);
-  // tripGroup = new ArrayList<>();
-  // tripGroup.add(rs.getInt(1));
-  // lastGroupId = rs.getInt(2);
-  // } else { //same group
-  // tripGroup.add(rs.getInt(1));
-  // }
-  // }
-  // if (!tripGroup.isEmpty()) {
-  // results.add(tripGroup);
-  // }
-  // }
-  // }
-  // return results;
-  // }
-  //
-  // /**
-  // * Finds the ids of all the trips that the specified user is requesting to
-  // * join.
-  // *
-  // * @param userId
-  // * The String id of the user.
-  // * @return The List of Integer ids of all trips that the user is requesting
-  // to
-  // * join.
-  // * NOTE: Group trips are NOT guaranteed to be in chronological order.
-  // * @throws SQLException Errors involving SQL queries.
-  // */
-  // public List<List<Integer>> getRequestTripsWithUser(String userId)
-  // throws SQLException {
-  // List<List<Integer>> results = new ArrayList<>();
-  // try (PreparedStatement prep = conn.prepareStatement(
-  // QueryStrings.FIND_REQUEST_TRIPS)) {
-  // prep.setString(1, userId);
-  // try (ResultSet rs = prep.executeQuery()) {
-  // int lastGroupId = -1;
-  // List<Integer> tripGroup = new ArrayList<>();
-  // while (rs.next()) {
-  // if (lastGroupId == -1) { //first group
-  // tripGroup.add(rs.getInt(1));
-  // lastGroupId = rs.getInt(2);
-  // } else if (lastGroupId != rs.getInt(2)) { //new group
-  // results.add(tripGroup);
-  // tripGroup = new ArrayList<>();
-  // tripGroup.add(rs.getInt(1));
-  // lastGroupId = rs.getInt(2);
-  // } else { //same group
-  // tripGroup.add(rs.getInt(1));
-  // }
-  // }
-  // if (!tripGroup.isEmpty()) {
-  // results.add(tripGroup);
-  // }
-  // }
-  // }
-  // return results;
-  // }
+
 
   /**
    * Finds the ids of all the trips that the specified user is a confirmed
@@ -294,6 +226,7 @@ public class DatabaseQuery {
    */
   public User getUserById(String userId)
       throws SQLException, MissingDataException {
+
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.FIND_USER_BY_ID)) {
       prep.setString(1, userId);
@@ -322,6 +255,7 @@ public class DatabaseQuery {
    */
   public Trip getTripById(int tripId)
       throws SQLException, MissingDataException {
+
     try (PreparedStatement prep = conn
         .prepareStatement(QueryStrings.FIND_TRIP_BY_ID)) {
       prep.setInt(1, tripId);
@@ -585,127 +519,7 @@ public class DatabaseQuery {
         departure + timeBuffer);
   }
 
-  // /**
-  // * Inserts a request relation into the database.
-  // *
-  // * @param tripIds
-  // * The list of Integer ids of the trips being requested.
-  // * @param userId
-  // * The String id of the user requesting to join the trip.
-  // * @return True if the request was processed successfully. False otherwise.
-  // */
-  // public boolean request(List<Integer> tripIds, String userId) {
-  // int groupId = 0;
-  // int[] primeSet = {2, 3, 5};
-  // for (int i = 0; i < tripIds.size(); i++) {
-  // groupId *= Math.pow(primeSet[i], tripIds.get(i));
-  // }
-  // for (int i = 0; i < tripIds.size(); i++) {
-  // try (PreparedStatement prep = conn.prepareStatement(
-  // QueryStrings.INSERT_REQUEST)) {
-  // prep.setInt(1, tripIds.get(i));
-  // prep.setString(2, userId);
-  // prep.setInt(3, groupId);
-  // prep.addBatch();
-  // prep.executeUpdate();
-  // } catch (SQLException e) {
-  // return false;
-  // }
-  // }
-  // return true;
-  // }
-  //
-  // /**
-  // * Approves a request by inserting a member relation while removing its
-  // * corresponding request relation.
-  // *
-  // * @param tripId
-  // * The int id of the trip being requested.
-  // * @param userId
-  // * The String id of the user requesting to join the trip.
-  // * @return True if the approval was processed successfully. False otherwise.
-  // */
-  // public boolean approve(int tripId, String userId) {
-  // //delete from requests
-  // int groupId = 0;
-  // try (PreparedStatement prep = conn.prepareStatement(
-  // QueryStrings.REMOVE_REQUEST)) {
-  // prep.setInt(1, tripId);
-  // prep.setString(2,userId);
-  // try (ResultSet rs = prep.executeQuery()) {
-  // while (rs.next()) {
-  // groupId = rs.getInt(1);
-  // }
-  // }
-  // } catch (SQLException e) {
-  // return false;
-  // }
-  // //insert into members
-  // try (PreparedStatement prep = conn.prepareStatement(
-  // QueryStrings.INSERT_MEMBER)) {
-  // prep.setInt(1, tripId);
-  // prep.setString(2,userId);
-  // prep.setInt(3, groupId);
-  // prep.addBatch();
-  // prep.executeUpdate();
-  // return true;
-  // } catch (SQLException e) {
-  // return false;
-  // }
-  // }
-  //
-  // /**
-  // * Rejects a request by removing its relation from the database.
-  // *
-  // * @param tripId
-  // * The int id of the trip being requested.
-  // * @param userId
-  // * The String id of the user requesting to join the trip.
-  // * @return True if the rejection was processed successfully. False
-  // otherwise.
-  // */
-  // public boolean reject(int tripId, String userId) {
-  // int groupId = 0;
-  // try (PreparedStatement prep = conn.prepareStatement(
-  // QueryStrings.REMOVE_REQUEST)) {
-  // prep.setInt(1, tripId);
-  // prep.setString(2,userId);
-  // try (ResultSet rs = prep.executeQuery()) {
-  // while (rs.next()) {
-  // groupId = rs.getInt(1);
-  // }
-  // }
-  // } catch (SQLException e) {
-  // return false;
-  // }
-  // return deleteGroup(groupId);
-  // }
-  //
-  // /**
-  // * Kicks a member by removing its relation from the database.
-  // *
-  // * @param tripId
-  // * The int id of the trip.
-  // * @param userId
-  // * The String id of the user being kicked from the trip.
-  // * @return True if the kick was processed successfully. False otherwise.
-  // */
-  // public boolean kick(int tripId, String userId) {
-  // int groupId = 0;
-  // try (PreparedStatement prep = conn.prepareStatement(
-  // QueryStrings.REMOVE_MEMBER)) {
-  // prep.setInt(1, tripId);
-  // prep.setString(2,userId);
-  // try (ResultSet rs = prep.executeQuery()) {
-  // while (rs.next()) {
-  // groupId = rs.getInt(1);
-  // }
-  // }
-  // } catch (SQLException e) {
-  // return false;
-  // }
-  // return deleteGroup(groupId);
-  // }
+
 
   /**
    * Inserts a request relation into the database.
@@ -797,25 +611,7 @@ public class DatabaseQuery {
     }
   }
 
-  // private boolean deleteGroup(int groupId) {
-  // if (groupId != 0) {
-  // try (PreparedStatement prep = conn.prepareStatement(
-  // QueryStrings.REMOVE_MEMBER_GROUP)) {
-  // prep.setInt(1, groupId);
-  // prep.executeUpdate();
-  // } catch (SQLException e) {
-  // return false;
-  // }
-  // try (PreparedStatement prep = conn.prepareStatement(
-  // QueryStrings.REMOVE_REQUEST_GROUP)) {
-  // prep.setInt(1, groupId);
-  // prep.executeUpdate();
-  // } catch (SQLException e) {
-  // return false;
-  // }
-  // }
-  // return true;
-  // }
+
 
   /**
    * Clears all data from the database.

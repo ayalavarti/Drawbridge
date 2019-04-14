@@ -21,7 +21,7 @@
 }
 
 .results-container {
-	margin-top: 40px;
+	margin-top: 50px;
 	display: flex;
 	justify-content: center;
 }
@@ -37,13 +37,13 @@
 	border-top-left-radius: 15px;
 	border-top-right-radius: 15px;
 	padding: 20px 20px;
-	box-shadow: 0 4px 8px 0 #0000001e, 0 5px 10px 0 #00000023;
+	box-shadow: 0 2px 4px 0 #0000001e, 0 3px 6px 0 #00000023;
 }
 
 .thresholds {
 	display: flex;
 	align-items: center;
-	justify-content: space-around;
+	justify-content: space-evenly;
 	flex-wrap: wrap;
 	margin-bottom: 30px;
 }
@@ -58,6 +58,11 @@
 	margin-bottom: 10px;
 }
 
+.thresholds>div>div {
+	display: flex;
+}
+
+
 .result {
 	background: #fff;
 	height: auto;
@@ -70,7 +75,7 @@
 
 	margin: 30px 10px;
 	border-radius: 15px;
-	box-shadow: 0 2px 4px 0 #0000001e, 0 3px 10px 0 #00000028;
+	box-shadow: 0 2px 4px 0 #0000001e, 0 3px 6px 0 #00000023;
 }
 
 .result-trips {
@@ -83,11 +88,23 @@
 
 .result-info {
 	width: 250px;
-	margin-bottom: 15px;
+	margin: 15px;
+	border-radius: 15px;
+	padding: 10px 20px;
+	background-color: #FFF;
+	box-shadow: 0 1px 2px 0 #0000001e, 0 2px 4px 0 #00000023;
 }
 
 .result-info>div {
 	font-size: 13px;
+	margin-bottom: 2px;
+}
+
+.icon-label-large {
+	color: #47A5FF;
+	font-size: 15px;
+	margin-bottom: 10px;
+	cursor: pointer;
 }
 
 .icon-label-medium {
@@ -101,6 +118,7 @@
 	margin-left: 10px;
 }
 
+.hosting-btn,
 .joined-btn,
 .pending-btn {
 	cursor: auto;

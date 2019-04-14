@@ -19,18 +19,32 @@
             <div class="thresholds">
                 <div>
                     <span class="sub-heading">Walking Time</span>
-                    <div><i class="fas fa-walking icon-label-large"></i>
-                    <input class="threshold-input" id="walking-input" value="30" min="0" max="3600" type="number" placeholder="..." />min</div>
+                    <div>
+                        <i class="fas fa-walking icon-label-large"></i>
+                        <input class="threshold-input" id="walking-input" value="15" min="0" max="3600" type="number" placeholder="..." />min
+                        <span id="info" class="info-tooltip" data-tippy-content="Walking radius is how long you are willing to walk to the departure location.">
+                            <img style="height: 15px; width: auto" src = "/images/info-icon.png" />
+                        </span>
+                    </div>
                 </div>
                 <div>
-                    <span class="sub-heading">Departure Threshold</span>
-                    <div><i class="far fa-circle icon-label-large"></i>
-                    <input class="threshold-input" id="walking-input" value="15" min="0" max="3600" type="number" placeholder="..." />min</div>
+                    <span class="sub-heading">Wait Time</span>
+                    <div>
+                        <i class="far fa-circle icon-label-large"></i>
+                        <input class="threshold-input" id="walking-input" value="30" min="0" max="3600" type="number" placeholder="..." />min
+                        <span id="info" class="info-tooltip" data-tippy-content="Wait time is within how many minutes of your departure time you are willing to leave.">
+                            <img style="height: 15px; width: auto" src = "/images/info-icon.png" />
+                        </span>
+                    </div>
                 </div>
             </div>
             <span class="trip-info-text">Carpool Search Results</span>
         </div>
     </div>
+    <script type="text/javascript">
+        let data = "${data?js_string}"
+    </script>
+    <script src="/js/util.js"></script>
     <script src="/js/results.js"></script>
 </#assign>
 <#include "main.ftl">

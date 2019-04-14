@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export DB_USER=$1
+export DB_PASS=$2
+export MAPBOX_KEY="pk.eyJ1IjoiYXJ2Mzk1IiwiYSI6ImNqdGpodWcwdDB6dXEzeXBrOHJyeGVpNm8ifQ.bAwH-KG_5A5kwIxCf6xCSQ"
+
+./run --gui --port 8000

@@ -1,9 +1,9 @@
-
 body {
     margin: 0 auto;
     max-width: 820px;
 }
-@media screen and (max-width: 900px){
+
+@media screen and (max-width: 900px) {
     body {
         margin: 0 10%;
     }
@@ -11,17 +11,38 @@ body {
 
 h1 {
     text-align: center;
+    font-weight: 500;
 }
-h2, h3, p {
-    font-family: "Trebuchet MS", sans-serif;
+
+h3,
+h2 {
+    font-weight: 400;
+}
+
+#container {
+    max-width: 100%;
+    margin: 80px 10px 10px 10px;
+}
+
+.title {
+    text-align: center;
 }
 
 
-.section {
+.descript {
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgb(44, 108, 204);
 }
+
+.section {}
+
+h3,
 h2 {
     margin-bottom: 0;
 }
+
 hr {
     margin-top: 0;
     border: none;
@@ -36,15 +57,27 @@ hr {
     align-content: start;
     flex-wrap: wrap;
 }
+
 .person {
     text-align: center;
     display: inline-block;
-    margin: 15px 35px;
+    margin: 10px 20px;
     width: 150px;
 }
 
-img {
+.person>img {
     width: 100px;
     height: 100px;
     border-radius: 50%;
+}
+
+.info-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0px;
+}
+
+.info-container>p {
+    margin: 0px 20px;
 }

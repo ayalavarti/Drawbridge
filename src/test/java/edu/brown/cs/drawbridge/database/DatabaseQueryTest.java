@@ -1,6 +1,8 @@
 package edu.brown.cs.drawbridge.database;
 
 import com.google.gson.internal.bind.SqlDateTypeAdapter;
+import edu.brown.cs.drawbridge.database.DatabaseQuery;
+import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import org.junit.AfterClass;

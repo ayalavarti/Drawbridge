@@ -1,12 +1,22 @@
 // Store user profile across JS files
-let userProfile;
+let userProfile = undefined;
+
+// Set up sign in tooltip for use across pages
+let signInTooltip;
 
 /**
  * When the DOM loads, check for the logged in cookie.
  */
 $(document).ready(function () {
+	// Initialize tooltip
+	initSignInTooltip();
+
+	/**
+	 * If cookies are not enabled or the user is not signed in, display
+	 * the sign in button
+	 */
 	if (navigator.cookieEnabled) {
-		if (getCookie("loggedIn") != "true") {
+		if (getCookie("loggedIn") !== "true") {
 			$("#sign-in").css({
 				visibility: "visible"
 			});
@@ -18,26 +28,55 @@ $(document).ready(function () {
 	}
 });
 
+/**
+ * Initializes the sign in tooltip below the sign in button.
+ */
+function initSignInTooltip() {
+	signInTooltip = tippy("#sign-in", {
+		animation: "scale",
+		arrow: true,
+		arrowType: "round",
+		theme: "drawbridge",
+		interactive: false,
+		trigger: "manual",
+		hideOnClick: false,
+		maxWidth: 150,
+		inertia: true,
+		sticky: true,
+		placement: "bottom",
+	});
+}
+
+/**
+ * Gets the cookie value of a given attribute
+ * @param {*} cname
+ */
 function getCookie(cname) {
 	let name = cname + "=";
 	let decodedCookie = decodeURIComponent(document.cookie);
 	let ca = decodedCookie.split(';');
 	for (let i = 0; i < ca.length; i++) {
 		let c = ca[i];
-		while (c.charAt(0) == ' ') {
+		while (c.charAt(0) === ' ') {
 			c = c.substring(1);
 		}
-		if (c.indexOf(name) == 0) {
+		if (c.indexOf(name) === 0) {
 			return c.substring(name.length, c.length);
 		}
 	}
 	return "";
 }
 
+/**
+ * Routes to the home page.
+ */
 function toHome() {
 	window.open("/", "_self");
 }
 
+/**
+ * Routes to the info page.
+ */
 function toInfo() {
 	window.open("/help", "_self");
 }
@@ -58,22 +97,23 @@ function onFailure(error) {
  */
 function onSignIn(googleUser) {
 	// Store userprofile in global variable
-	userProfile = googleUser;
-	let profile = googleUser.getBasicProfile();
-
+	userProfile = googleUser.getBasicProfile();
 	document.cookie = "loggedIn=true; path=/";
+
+	// Performs page specific actions after user has signed in
+	onUserSignedIn();
 
 	// Add profile picture
 	$("#profile-picture-wrapper").prepend(
 		$("<img>", {
 			id: "profile-picture",
-			src: `${profile.getImageUrl()}`,
-			onerror: "this.onerror=null;this.src='images/temp.png';"
+			src: `${userProfile.getImageUrl()}`,
+			onerror: "this.onerror=null;this.src='/images/temp.png';"
 		})
 	);
 
 	// Set user name
-	$("#user-name").text(profile.getGivenName());
+	$("#user-name").text(userProfile.getGivenName());
 
 	// Hide the sign in button and show the profile info button
 	$("#profile-info").css({
@@ -90,10 +130,12 @@ function onSignIn(googleUser) {
 function signOut() {
 	let auth2 = gapi.auth2.getAuthInstance();
 	auth2.signOut().then(function () {
-		console.log("User signed out.");
 		// Reset userProfile variable
 		userProfile = undefined;
 		document.cookie = "loggedIn=false; path=/";
+
+		// Performs page specific actions after user has signed out
+		onUserSignedOut();
 
 		// Hide profile info dropdown and show login button
 		$("#profile-info").css({
@@ -105,6 +147,9 @@ function signOut() {
 	});
 }
 
+/**
+ * Show the home and info buttons on the screen.
+ */
 function showHomeInfo() {
 	$("#home-btn").css({
 		visibility: "visible"
@@ -114,10 +159,18 @@ function showHomeInfo() {
 	});
 }
 
+/**
+ * Change the given image to the hovered version.
+ * @param {*} e
+ */
 function hover(e) {
 	e.setAttribute('src', `../images/${e.className}-hover.png`);
 }
 
+/**
+ * Change the given image to the un-hovered version.
+ * @param {*} e
+ */
 function unhover(e) {
 	e.setAttribute('src', `../images/${e.className}.png`);
 }
