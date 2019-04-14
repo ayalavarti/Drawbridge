@@ -413,10 +413,10 @@ public class TripTest {
         .addTimes(10, 20).addDetails(5, 20, "1234567890", "My car", "comments")
         .build();
     Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
-        .addLocations(0, 0, 3, 4).addAddressNames("start", "end")
+        .addLocations(1, 1, 3, 4).addAddressNames("start", "end")
         .addTimes(10, 20).addDetails(5, 20, "1234567890", "My car", "comments")
         .build();
-    assertEquals(trip1.distanceTo(trip2), 5, 0.1);
+    assertEquals(trip1.distanceTo(trip2), 557.97, 0.1);
   }
 
   /**
@@ -433,7 +433,7 @@ public class TripTest {
         .addTimes(10, 20).addDetails(5, 20, "1234567890", "My car", "comments")
         .build();
     assertEquals(trip1.getTripDistance(), 0, 0.1);
-    assertEquals(trip2.getTripDistance(), 5, 0.1);
+    assertEquals(trip2.getTripDistance(), 555.81, 0.1);
   }
 
   /**

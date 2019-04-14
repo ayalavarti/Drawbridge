@@ -342,6 +342,7 @@ public class Trip {
    *         plus the length of the other.
    */
   public double distanceTo(Trip other) {
+    final int earthRadius = 6371;
     double lat1 = Math.toRadians(endingLatitude);
     double lat2 = Math.toRadians(other.startingLatitude);
     double lon1 = Math.toRadians(endingLongitude);
@@ -353,10 +354,9 @@ public class Trip {
     double lonSquares = Math.sin(lonDifference / 2)
         * Math.sin(lonDifference / 2);
     double products = latSquares + lonSquares * Math.cos(lat1) * Math.cos(lat2);
-
-    double distanceFromEndToStart = Math.toDegrees(
-        2 * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products)));
-    return distanceFromEndToStart + other.getTripDistance();
+    double radiansFromEndToStart = 2
+        * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products));
+    return earthRadius * radiansFromEndToStart + other.getTripDistance();
   }
 
   /**
@@ -365,6 +365,7 @@ public class Trip {
    * @return The distance of the Trip
    */
   public double getTripDistance() {
+    final int earthRadius = 6371;
     double lat1 = Math.toRadians(startingLatitude);
     double lat2 = Math.toRadians(endingLatitude);
     double lon1 = Math.toRadians(startingLongitude);
@@ -376,8 +377,9 @@ public class Trip {
     double lonSquares = Math.sin(lonDifference / 2)
         * Math.sin(lonDifference / 2);
     double products = latSquares + lonSquares * Math.cos(lat1) * Math.cos(lat2);
-    return Math.toDegrees(
-        2 * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products)));
+    double radians = 2
+        * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products));
+    return earthRadius * radians;
   }
 
   @Override
