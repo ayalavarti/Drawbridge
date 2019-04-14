@@ -109,9 +109,21 @@ public class DatabaseQueryTest {
   public void testDeleteTripByTime() throws SQLException, MissingDataException {
     //need to test with a trip after current time
     test.deleteExpiredTrips();
-    assertNull(test.getTripById(t1));
-    assertNull(test.getTripById(t2));
-    assertNull(test.getTripById(t3));
+    try {
+      assertNull(test.getTripById(t1));
+    } catch (MissingDataException e) {
+      assert true;
+    }
+    try {
+      assertNull(test.getTripById(t2));
+    } catch (MissingDataException e) {
+      assert true;
+    }
+    try {
+      assertNull(test.getTripById(t3));
+    } catch (MissingDataException e) {
+      assert true;
+    }
     t1 = test.createTrip(DUMMY_T1, "1");
     t2 = test.createTrip(DUMMY_T2, "2");
     t3 = test.createTrip(DUMMY_T3, "2");
@@ -150,10 +162,10 @@ public class DatabaseQueryTest {
     //after eta outside buffer
     assertTrue(test.getConnectedTripsAfterEta(3, 3, 0, 1026, 25).isEmpty());
     //all trips
-    assertEquals(test.getConnectedTripsAfterEta(1, 1, 25, 400, 800),
-            new ArrayList<>(Arrays.asList(test.getTripById(t1), test.getTripById(t2), test.getTripById(t3))));
+    assertEquals(test.getConnectedTripsAfterEta(1, 1, 50, -1000000, 2000000),
+           new ArrayList<>(Arrays.asList(test.getTripById(t1), test.getTripById(t2), test.getTripById(t3))));
     //selective
-    assertEquals(test.getConnectedTripsAfterEta(1, 1, 25, 800, 150),
+    assertEquals(test.getConnectedTripsAfterEta(1, 1, 10, -112320,1000000),
             new ArrayList<>(Collections.singletonList(test.getTripById(t2))));
   }
 
