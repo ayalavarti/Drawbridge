@@ -8,24 +8,26 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
+import com.google.gson.internal.bind.SqlDateTypeAdapter;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 
 public class DatabaseQuery {
 
   private Connection conn;
-  public static final User DUMMY_USER = new User("0", "Mary", "mary@gmail.com");
+  private static final double AVG_WALK_SPEED = 0.0014; //km per s
+  private static final int EARTH_RADIUS = 6371; //km
+  public static final User DUMMY_USER = new User("0", "Mary",
+      "mary@gmail.com");
 
-  private static final Trip DUMMY_TRIP = Trip.TripBuilder.newTripBuilder()
-      .addIdentification(0, "Mary's Carpool")
-      .addLocations(41.608550, -72.656662, 41.827104, -71.399639)
-      .addAddressNames("", "").addTimes(1553487799, 1553494999)
-      .addDetails(7, 8.40, "555-867-5309", "Uber",
-          "We'll be meeting at the Ratty around this time, but maybe a bit later")
-      .buildWithUsers("118428670975676923422", new ArrayList<>(),
-          new ArrayList<>());
+  public static final Trip DUMMY_TRIP = Trip.TripBuilder.newTripBuilder()
+      .addIdentification(0, "Mary's Carpool").addLocations(41.608550, -72.656662, 41.827104, -71.399639)
+      .addAddressNames("","").addTimes(1553487799, 1553494999).addDetails(7, 8.40, "555-867-5309",
+                                                   "Uber", "We'll be meeting at the Ratty around this time, but maybe a bit later")
+      .buildWithUsers("118428670975676923422", new ArrayList<>(), new ArrayList<>());
 
   /**
    * A constructor based on the String name of the database.
@@ -525,11 +527,35 @@ public class DatabaseQuery {
    * @throws MissingDataException
    *           Errors involving the database's contents.
    */
-  public List<Trip> getConnectedTripsAfterEta(double lastLat, double lastLon,
-      double walkRadius, int lastEta, int timeBuffer)
-      throws SQLException, MissingDataException {
-    return searchTripsByTimeWindow(lastLat, lastLon, walkRadius, lastEta,
-        lastEta + timeBuffer);
+  public List<Trip> getConnectedTripsAfterEta(
+          double lastLat, double lastLon, double walkRadius,
+          int lastEta, int timeBuffer)
+          throws SQLException, MissingDataException {
+    int maxTimeShift = (int) (walkRadius / AVG_WALK_SPEED);
+    List<Trip> results = new LinkedList<>();
+    List<Trip> possibleTrips = searchTripsByTimeWindow(
+            lastLat, lastLon, walkRadius, lastEta, lastEta + timeBuffer + maxTimeShift);
+    for (Trip t: possibleTrips) {
+      double startLat = Math.toRadians(t.getStartingLatitude());
+      double startLon = Math.toRadians(t.getStartingLongitude());
+      int departure = t.getDepartureTime();
+      double prevLat = Math.toRadians(lastLat);
+      double prevLon = Math.toRadians(lastLon);
+      double latDifference = prevLat - startLat;
+      double lonDifference = prevLon - startLon;
+      double latSquares = Math.sin(latDifference / 2)
+              * Math.sin(latDifference / 2);
+      double lonSquares = Math.sin(lonDifference / 2)
+              * Math.sin(lonDifference / 2);
+      double products = latSquares + lonSquares * Math.cos(startLat) * Math.cos(prevLat);
+      double kmDist = 2 * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products)) * EARTH_RADIUS;
+      int timeStart = lastEta + (int) (kmDist / AVG_WALK_SPEED);
+      int timeEnd = timeStart + timeBuffer;
+      if (timeStart < departure && departure < timeEnd) {
+        results.add(t);
+      }
+    }
+    return results;
   }
 
   /**
