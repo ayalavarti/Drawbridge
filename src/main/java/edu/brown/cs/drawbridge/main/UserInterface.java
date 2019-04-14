@@ -219,30 +219,39 @@ public final class UserInterface {
     @Override public ModelAndView handle(Request request, Response response)
         throws SQLException {
       int tid;
+      Trip trip;
+      List<List<User>> people;
       try {
         tid = Integer.parseInt(request.params(":tid"));
-        Trip trip = carpools.getTrip(tid);
-
-        List<List<User>> people = carpools.getUsers(tid);
-
-        User host = people.get(0).get(0);
-        List<User> members = people.get(1);
-        List<User> pending = people.get(2);
-
-        // TODO: remove this; for testing purposes only
-        pending.add(new User("1", "Mark Lavrentyev", "lavrema@outlook.com"));
-        members.add(new User("2", "Arvind Yalavarti", "abc@example.com"));
-
-        Map<String, Object> variables
-            = new ImmutableMap.Builder<String, Object>()
-            .put("title", String.format("Drawbridge | %s", trip.getName()))
-            .put("favicon", "images/favicon.png").put("trip", trip)
-            .put("host", host).put("members", members).put("pending", pending)
-            .build();
-        return new ModelAndView(variables, "detail.ftl");
+        trip = carpools.getTrip(tid);
+        people = carpools.getUsers(tid);
       } catch (NumberFormatException | MissingDataException e) {
-        return null; // 404 not found
+        response.status(404);
+        Map<String, Object> variables
+                = new ImmutableMap.Builder<String, Object>()
+                 .put("title", String.format("Drawbridge | Not Found"))
+                 .put("favicon", "images/favicon.png")
+                 .build();
+        return new ModelAndView(variables, "not-found.ftl");
       }
+
+      User host = people.get(0).get(0);
+      List<User> members = people.get(1);
+      List<User> pending = people.get(2);
+
+      // TODO: remove this; for testing purposes only
+      pending.add(new User("1", "Mark Lavrentyev", "lavrema@outlook.com"));
+      members.add(new User("2", "Arvind Yalavarti", "abc@example.com"));
+
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+              .put("title", String.format("Drawbridge | %s", trip.getName()))
+              .put("favicon", "images/favicon.png")
+              .put("trip", trip)
+              .put("host", host)
+              .put("members", members)
+              .put("pending", pending)
+              .build();
+      return new ModelAndView(variables, "detail.ftl");
     }
   }
 
