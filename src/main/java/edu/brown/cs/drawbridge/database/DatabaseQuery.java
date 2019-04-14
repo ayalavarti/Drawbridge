@@ -380,6 +380,7 @@ public class DatabaseQuery {
   public int createTrip(Trip trip, String hostId)
       throws SQLException, MissingDataException {
     int tripId = -1;
+    getUserById(hostId);
     // insert into trip
     try (
         PreparedStatement prep = conn.prepareStatement(QueryStrings.INSERT_TRIP,
@@ -438,7 +439,7 @@ public class DatabaseQuery {
 
   /**
    * Deletes all trips that have already departed from the database.
-   * 
+   *
    * @throws SQLException
    *           Errors involving SQL queries.
    */
@@ -792,7 +793,7 @@ public class DatabaseQuery {
 
   /**
    * Clears all data from the database.
-   * 
+   *
    * @throws SQLException
    *           Errors involving SQL queries.
    */
