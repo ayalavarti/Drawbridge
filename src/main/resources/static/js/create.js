@@ -5,11 +5,12 @@ let formValidationTooltip;
 let formTooltips = [];
 
 /**
- * When the DOM loads, set the tooltip content and check if cookies are enabled and
- * show the home and info buttons.s
+ * When the DOM loads, set the tooltip content and check if cookies are enabled
+ * and show the home and info buttons.s
  */
 $(document).ready(function () {
-    signInTooltip[0].setContent("Sign in with your Google Account to host a trip.");
+    signInTooltip[0].setContent(
+        "Sign in with your Google Account to host a trip.");
     initMapbox();
     showHomeInfo();
     initDateTime();
@@ -95,36 +96,40 @@ function handleInput(id, index) {
         return;
     }
     $(`#loading-${id}`).css({
-        visibility: "visible"
-    });
+                                visibility: "visible"
+                            });
 
     setTimeout(function () {
         // Send network request for geocoding based on address box value
         mapboxClient.geocoding
-            .forwardGeocode({
-                query: address,
-                proximity: [curLong, curLat],
-                autocomplete: true,
-                limit: 1
-            })
-            .send()
-            .then(function (response) {
-                // If valid response
-                if (response && response.body && response.body.features && response.body.features.length) {
-                    /**
-                     * Get the first element of the suggestions, set the input box to that
-                     * value, then update the addressNames and coordinates arrays with the
-                     * feature data.
-                     * */
-                    let feature = response.body.features[0];
-                    $(`#${id}`).val(feature.place_name);
-                    coordinates[index] = feature.center;
-                    addressNames[index] = feature.place_name;
-                }
-                $(`#loading-${id}`).css({
-                    visibility: "hidden"
-                });
-            });
+                    .forwardGeocode({
+                                        query: address,
+                                        proximity: [curLong, curLat],
+                                        autocomplete: true,
+                                        limit: 1
+                                    })
+                    .send()
+                    .then(function (response) {
+                        // If valid response
+                        if (response && response.body &&
+                            response.body.features &&
+                            response.body.features.length)
+                        {
+                            /**
+                             * Get the first element of the suggestions, set
+                             * the input box to that value, then update the
+                             * addressNames and coordinates arrays with the
+                             * feature data.
+                             * */
+                            let feature = response.body.features[0];
+                            $(`#${id}`).val(feature.place_name);
+                            coordinates[index] = feature.center;
+                            addressNames[index] = feature.place_name;
+                        }
+                        $(`#loading-${id}`).css({
+                                                    visibility: "hidden"
+                                                });
+                    });
     }, 800);
 }
 
@@ -144,11 +149,14 @@ function handleSubmit() {
     let phoneRegex = new RegExp("[0-9]{3}-[0-9]{3}-[0-9]{4}");
 
     /**
-     * If any of the input entries are not filled out, show the form validation tooltip, wait
-     * 3 seconds, then hide it, prompting the user to fill out the form completely.
+     * If any of the input entries are not filled out, show the form validation
+     * tooltip, wait
+     * 3 seconds, then hide it, prompting the user to fill out the form
+     * completely.
      */
     if (dateInput === "" || timeInput === "" ||
-        sizeInput === "" || priceInput === "" || phoneInput === "") {
+        sizeInput === "" || priceInput === "" || phoneInput === "")
+    {
         showHideTooltip(formValidationTooltip[0]);
     } else {
         if (sizeInput < 1) {
@@ -159,9 +167,9 @@ function handleSubmit() {
             showHideTooltip(formTooltips[2]);
         } else if (userProfile === undefined) {
             $("html, body").animate({
-                    scrollTop: 0
-                },
-                "slow"
+                                        scrollTop: 0
+                                    },
+                                    "slow"
             );
             signInTooltip[0].show();
         } else {
