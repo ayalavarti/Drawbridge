@@ -1,15 +1,20 @@
 let mapboxClient;
 
 /**
+ * Hardcoded starting location - will replace later.
+ */
+let curLat = 42.358188;
+let curLong = -71.058502;
+
+/**
  * Initializes the Mapbox using the accessToken and sets up the
  * mapboxClient for use in Geolocating.
  */
-function initMapbox() {
-    mapboxgl.accessToken =
-        "pk.eyJ1IjoiYXJ2Mzk1IiwiYSI6ImNqdGpodWcwdDB6dXEzeXBrOHJyeGVpNm8ifQ.bAwH-KG_5A5kwIxCf6xCSQ";
+function initMapbox(mapboxToken) {
+    mapboxgl.accessToken = mapboxToken;
     mapboxClient = mapboxSdk({
-        accessToken: mapboxgl.accessToken
-    });
+                                 accessToken: mapboxgl.accessToken
+                             });
 }
 
 /**
@@ -38,10 +43,11 @@ function addMarker(lat, long, id, index, name, map) {
         markers[index].remove();
     }
     let popup = new mapboxgl.Popup({
-        offset: 25
-    }).setHTML(parseAddress(name, index));
+                                       offset: 25
+                                   }).setHTML(parseAddress(name, index));
 
-    markers[index] = new mapboxgl.Marker(el).setLngLat([long, lat]).setPopup(popup);
+    markers[index] = new mapboxgl.Marker(el).setLngLat([long, lat]).setPopup(
+        popup);
     markers[index].addTo(map);
 }
 
@@ -57,7 +63,8 @@ function parseAddress(raw, index) {
         addressNames[index] = title;
         return `<div class="popup-title">${title}</div>
                 <img src="/images/divider.png" style="height: 2px; width: auto;" />
-                <div class="popup-content">${raw.substr(raw.indexOf(",") + 1)}</div>`;
+                <div class="popup-content">${raw.substr(
+            raw.indexOf(",") + 1)}</div>`;
     } else {
         addressNames[index] = raw;
         return `<div class="popup-title">${raw}</div>`;
@@ -65,33 +72,8 @@ function parseAddress(raw, index) {
 }
 
 /**
- * Calculates the route direction coordinates based on starting and ending locations
- * using the Mapbox directions API.
- *
- * @param {*} c
- */
-function calcRoute(c) {
-    let url =
-        "https://api.mapbox.com/directions/v5/mapbox/driving/" +
-        c +
-        "?geometries=geojson&&access_token=" +
-        mapboxgl.accessToken;
-
-    let req = new XMLHttpRequest();
-    req.responseType = "json";
-    req.open("GET", url, true);
-    req.onload = function () {
-        let jsonResponse = req.response;
-        route = [jsonResponse.routes[0].distance * 0.001, jsonResponse.routes[0].duration / 60];
-
-        let coords = jsonResponse.routes[0].geometry;
-        addRoute(coords, map);
-    };
-    req.send();
-}
-
-/**
- * Adds the route visualization to the map based on the given set of coordinates.
+ * Adds the route visualization to the map based on the given set of
+ * coordinates.
  *
  * @param {*} coords
  * @param {*} map
@@ -102,25 +84,25 @@ function addRoute(coords, map) {
         map.removeSource("route");
     } else {
         map.addLayer({
-            id: "route",
-            type: "line",
-            source: {
-                type: "geojson",
-                data: {
-                    type: "Feature",
-                    properties: {},
-                    geometry: coords
-                }
-            },
-            layout: {
-                "line-join": "round",
-                "line-cap": "round"
-            },
-            paint: {
-                "line-color": "#47A5FF",
-                "line-width": 7,
-                "line-opacity": 0.7
-            }
-        });
+                         id: "route",
+                         type: "line",
+                         source: {
+                             type: "geojson",
+                             data: {
+                                 type: "Feature",
+                                 properties: {},
+                                 geometry: coords
+                             }
+                         },
+                         layout: {
+                             "line-join": "round",
+                             "line-cap": "round"
+                         },
+                         paint: {
+                             "line-color": "#47A5FF",
+                             "line-width": 7,
+                             "line-opacity": 0.7
+                         }
+                     });
     }
 }

@@ -1,0 +1,67 @@
+body {
+    width: 100%;
+}
+
+#container {
+    max-width: 100%;
+    margin: 80px 10px 10px 10px;
+}
+
+#title {
+    font-weight: 500;
+    font-size: 25px;
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#trips-picture {
+    position: static;
+    margin-right: 15px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+#my-trips-wrapper {
+    width: 80%;
+    margin: auto auto 50px auto;
+}
+
+.trip-group {
+    margin: 10px 20px 40px 0;
+    height: 140px;
+}
+
+.results-content {
+    background: none;
+    padding: 0;
+    box-shadow: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    min-height: auto;
+    margin-bottom: 40px;
+
+    max-width: none;
+    width: auto;
+}
+
+.sub-heading-left {
+    font-weight: 500;
+    font-size: 20px;
+    text-align: left;
+}
+
+.result {
+    width: 250px;
+    height: 120px;
+    margin: 5px;
+}
+
+@media screen and (max-width: 750px) {
+    .results-content {
+        justify-content: center;
+    }
+}

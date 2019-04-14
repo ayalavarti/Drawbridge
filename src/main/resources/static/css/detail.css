@@ -35,6 +35,11 @@ h2 {
     font-weight: 400;
 }
 
+i {
+    padding-right: 7px;
+    color: #555;
+}
+
 #container {
     display: grid;
     grid-gap: 20px;
@@ -109,11 +114,6 @@ h2 {
     position: relative;
     top: 3px;
     font-size: 14px;
-}
-
-.info-box i {
-    padding-right: 7px;
-    color: #555;
 }
 
 #member-list-container {

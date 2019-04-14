@@ -12,10 +12,10 @@
         </div>
         <div id="basic-info">
             <div class="info-box">
-                <span><i class="far fa-dot-circle"></i>${startName}</span>
+                <span><i class="far fa-dot-circle"></i>${trip.getStartingAddress()}</span>
             </div>
             <div class="info-box">
-                <span><i class="fas fa-map-marker-alt"></i>${endName}</span>
+                <span><i class="fas fa-map-marker-alt"></i>${trip.getEndingAddress()}</span>
             </div>
             <div class="info-box half-size">
                 <span><i class="far fa-calendar-alt"></i>${(trip.getDepartureTime()*1000)?number_to_date}</span>
@@ -32,34 +32,60 @@
             <div id="member-list">
                 <div class="list-person">
                     <span class="user-name">${host.getName()}</span>
-                    <img src="/images/host-label.png" class="host-label" />
+                    <img alt="host-label" src="/images/hosting-btn.png"
+                         class="host-label"/>
                 </div>
                 <#list members as member>
                     <div class="list-person">
                         <span class="user-name">${member.getName()}</span>
-                        <img src="/images/member-label.png" class="member-label" />
+                        <img alt="member-label" src="/images/member-label.png"
+                             class="member-label"/>
                     </div>
                 </#list>
                 <#list pending as pend>
                     <div class="list-person">
-                        <span class="user-name">${pend.getName()}<i class="addendum">(pending)</i></span>
+                        <span class="user-name">${pend.getName()}<i
+                                    class="addendum">(pending)</i></span>
                         <div class="pending">
-                            <img src="/images/approve-btn.png" class="approve-btn" onmouseover="hover(this);" onmouseout="unhover(this);"/>
-                            <img src="/images/deny-btn.png" class="deny-btn" onmouseover="hover(this);" onmouseout="unhover(this);"/>
+                            <img alt="approve-btn" src="/images/approve-btn.png"
+                                 class="approve-btn"
+                                 onclick="approveClick(${trip.getId()}, ${pend.getId()});"
+                                 onmouseover="hover(this);"
+                                 onmouseout="unhover(this);"/>
+                            <img alt="deny-btn" src="/images/deny-btn.png"
+                                 class="deny-btn"
+                                 onclick="denyClick(${trip.getId()}, ${pend.getId()});"
+                                 onmouseover="hover(this);"
+                                 onmouseout="unhover(this);"/>
                         </div>
                     </div>
                 </#list>
                 <div id="button-container">
-                    <img src="/images/join-btn.png" id="join-btn" style="display: none" class="join-btn" onmouseover="hover(this);" onmouseout="unhover(this);"/>
-                    <img src="/images/leave-btn.png" id="leave-btn" style="display: none" class="leave-btn" onmouseover="hover(this);" onmouseout="unhover(this);"/>
-                    <img src="/images/delete-btn.png" id="delete-btn" style="display: none" class="delete-btn" onmouseover="hover(this);" onmouseout="unhover(this);"/>
+                    <img alt="join-btn" src="/images/join-btn.png" id="join-btn"
+                         style="display: none" class="join-btn"
+                         onclick="joinClick(${trip.getId()});"
+                         onmouseover="hover(this);"
+                         onmouseout="unhover(this);"/>
+                    <img alt="leave-btn" src="/images/leave-btn.png"
+                         id="leave-btn"
+                         style="display: none" class="leave-btn"
+                         onclick="leaveClick(${trip.getId()});"
+                         onmouseover="hover(this);"
+                         onmouseout="unhover(this);"/>
+                    <img alt="delete-btn" src="/images/delete-btn.png"
+                         id="delete-btn"
+                         style="display: none" class="delete-btn"
+                         onclick="deleteClick(${trip.getId()});"
+                         onmouseover="hover(this);"
+                         onmouseout="unhover(this);"/>
                 </div>
             </div>
         </div>
         <div id="comments-container">
             <h2>Description</h2>
             <div id="comments">
-                <i class="fas fa-dollar-sign"></i>${trip.getCost()?string("##0.00")}<i class="addendum">/person</i>
+                <i class="fas fa-dollar-sign"></i>${trip.getCost()?string("##0.00")}
+                <i class="addendum">/person</i>
                 <p>${trip.getComments()}</p>
             </div>
         </div>
@@ -68,14 +94,19 @@
 <#include "main.ftl">
 
 <script type="text/javascript">
+    let mapboxToken = "${mapboxKey?js_string}"
     let coordinates = [
-        [${trip.getStartingLongitude()},
-         ${trip.getStartingLatitude()}],
-        [${trip.getEndingLongitude()},
-         ${trip.getEndingLatitude()}]
+        [
+            ${trip.getStartingLongitude()},
+            ${trip.getStartingLatitude()}
+        ],
+        [
+            ${trip.getEndingLongitude()},
+            ${trip.getEndingLatitude()}
+        ]
     ];
-    let startName = "${startName?js_string}";
-    let endName = "${endName?js_string}";
+    let startName = "${trip.getStartingAddress()?js_string}";
+    let endName = "${trip.getEndingAddress()?js_string}";
 
     let uid = userProfile == null ? null : userProfile.getId();
     let host = "${host.getId()?js_string}";
