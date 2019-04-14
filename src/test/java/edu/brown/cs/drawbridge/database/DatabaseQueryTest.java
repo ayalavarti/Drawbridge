@@ -163,7 +163,7 @@ public class DatabaseQueryTest {
     assertTrue(test.getConnectedTripsAfterEta(3, 3, 0, 1026, 25).isEmpty());
     //all trips
     assertEquals(test.getConnectedTripsAfterEta(1, 1, 50, -1000000, 2000000),
-           new ArrayList<>(Arrays.asList(test.getTripById(t1), test.getTripById(t2), test.getTripById(t3))));
+            new ArrayList<>(Arrays.asList(test.getTripById(t1), test.getTripById(t2), test.getTripById(t3))));
     //selective
     assertEquals(test.getConnectedTripsAfterEta(1, 1, 10, -112320,1000000),
             new ArrayList<>(Collections.singletonList(test.getTripById(t2))));
