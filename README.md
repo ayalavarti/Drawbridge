@@ -35,7 +35,15 @@ as well. Open PGAdmin and create a new database named
 "carpools".
 
 Right click on the carpools database and select "restore".
-Use the carpoolsDump.tar file to build the database.
+Use the carpoolsDump.tar file to build the database. Open
+Restore Options and select the following: "schema only",, and all options under "do not save".
+
+In the carpools database, open the query tool (lightning
+symbol), and run the following commands, consistent with
+the environment variables set up earlier:
+* CREATE USER \<username\> WITH PASSWORD '\<password\>';
+* GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO \<username\>;
+* GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO \<username\>;
 
 Maven will automatically install the JDBC driver needed 
 to connect to the postgre database when "mvn package" is 

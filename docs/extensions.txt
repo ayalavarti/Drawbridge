@@ -1,3 +1,18 @@
+//"INSERT INTO members(trip_id, user_id, group_id) VALUES (?, ?, ?);";
+
+//"INSERT INTO requests(trip_id, user_id, group_id) VALUES (?, ?, ?);";
+
+//"DELETE FROM members WHERE trip_id = ? AND user_id = ? RETURNING group_id;";
+
+//"DELETE FROM requests WHERE trip_id = ? AND user_id = ? RETURNING group_id;";
+
+  //"SELECT trip_id FROM members WHERE user_id = ? GROUP BY group_id;";
+  //"SELECT trip_id FROM requests WHERE user_id = ? GROUP BY group_id;";
+  //"SELECT user_id FROM members WHERE trip_id = ? GROUP BY group_id;";
+  //"SELECT user_id FROM requests WHERE trip_id = ? GROUP BY group_id;";
+  //lat2, lat2, lon2, walkradius, start, end
+
+
 private boolean deleteGroup(int groupId) {
   if (groupId != 0) {
     try (PreparedStatement prep = conn.prepareStatement(

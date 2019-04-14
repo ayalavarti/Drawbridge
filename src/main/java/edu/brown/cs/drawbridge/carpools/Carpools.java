@@ -1,41 +1,49 @@
 package edu.brown.cs.drawbridge.carpools;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
 import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import edu.brown.cs.drawbridge.tripcomparators.TimeComparator;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 /**
  * A class used to interact with the GUI handlers.
+ *
+ * @author Jeffrey Zhu
  */
 public final class Carpools {
 
   private static final int SECONDS_PER_MINUTE = 60;
   private static final double WALKING_SPEED = 0.084; // Kilometers per minute
-
-  private DatabaseQuery database;
   private final TripSearcher tripSearcher;
   private final Comparator<Trip> timeComparator = new TimeComparator();
+  private DatabaseQuery database;
 
   /**
    * Create a new Carpools object.
-   * @param dbName name of the database to connect to
-   * @param dbUser username to connect with
-   * @param dbPass password for dbUser
-   * @throws ClassNotFoundException when can't connect to db
-   * @throws SQLException when database throws an errors
+   *
+   * @param dbName
+   *     name of the database to connect to
+   * @param dbUser
+   *     username to connect with
+   * @param dbPass
+   *     password for dbUser
+   *
+   * @throws ClassNotFoundException
+   *     when can't connect to db
+   * @throws SQLException
+   *     when database throws an errors
    */
   public Carpools(String dbName, String dbUser, String dbPass)
-          throws ClassNotFoundException, SQLException {
-    this.database = new DatabaseQuery(dbName, dbUser, dbPass);
-    this.tripSearcher = new TripSearcher(this.database);
+      throws ClassNotFoundException, SQLException {
+    database = new DatabaseQuery(dbName, dbUser, dbPass);
+    tripSearcher = new TripSearcher(database);
   }
 
   /**
@@ -43,31 +51,32 @@ public final class Carpools {
    * a User id.
    *
    * @param userId
-   *          The id of the User that is searching
+   *     The id of the User that is searching
    * @param startLat
-   *          The latitude of the starting location
+   *     The latitude of the starting location
    * @param startLon
-   *          The longitude of the starting location
+   *     The longitude of the starting location
    * @param endLat
-   *          The latitude of the ending location
+   *     The latitude of the ending location
    * @param endLon
-   *          The longitude of the ending location
+   *     The longitude of the ending location
    * @param departureTime
-   *          The epoch departure time
+   *     The epoch departure time
    * @param walkingTime
-   *          The maximum walking time between Trips or between a Trip and the
-   *          destination (minutes)
+   *     The maximum walking time between Trips or between a Trip and the
+   *     destination (minutes)
    * @param timeRadius
-   *          The amount of time (minutes) that the Trip can leave within of the
-   *          departure time
+   *     The amount of time (minutes) that the Trip can leave within of the
+   *     departure time
+   *
    * @return A List of valid paths. Each path is a List of Trips.
    */
   public List<List<Trip>> searchWithId(String userId, double startLat,
       double startLon, double endLat, double endLon, int departureTime,
       int walkingTime, int timeRadius) {
-    return tripSearcher.searchWithId(userId, startLat, startLon, endLat, endLon,
-        departureTime, walkingTime * WALKING_SPEED,
-        timeRadius * SECONDS_PER_MINUTE);
+    return tripSearcher
+        .searchWithId(userId, startLat, startLon, endLat, endLon, departureTime,
+            walkingTime * WALKING_SPEED, timeRadius * SECONDS_PER_MINUTE);
   }
 
   /**
@@ -75,29 +84,30 @@ public final class Carpools {
    * without a User id.
    *
    * @param startLat
-   *          The latitude of the starting location
+   *     The latitude of the starting location
    * @param startLon
-   *          The longitude of the starting location
+   *     The longitude of the starting location
    * @param endLat
-   *          The latitude of the ending location
+   *     The latitude of the ending location
    * @param endLon
-   *          The longitude of the ending location
+   *     The longitude of the ending location
    * @param departureTime
-   *          The epoch departure time
+   *     The epoch departure time
    * @param walkingTime
-   *          The maximum walking time between Trips or between a Trip and the
-   *          destination (minutes)
+   *     The maximum walking time between Trips or between a Trip and the
+   *     destination (minutes)
    * @param timeRadius
-   *          The amount of time (minutes) that the Trip can leave within of the
-   *          departure time
+   *     The amount of time (minutes) that the Trip can leave within of the
+   *     departure time
+   *
    * @return A List of valid paths. Each path is a List of Trips.
    */
   public List<List<Trip>> searchWithoutId(double startLat, double startLon,
       double endLat, double endLon, int departureTime, int walkingTime,
       int timeRadius) {
-    return tripSearcher.searchWithoutId(startLat, startLon, endLat, endLon,
-        departureTime, walkingTime * WALKING_SPEED,
-        timeRadius * SECONDS_PER_MINUTE);
+    return tripSearcher
+        .searchWithoutId(startLat, startLon, endLat, endLon, departureTime,
+            walkingTime * WALKING_SPEED, timeRadius * SECONDS_PER_MINUTE);
   }
 
   /**
@@ -105,30 +115,32 @@ public final class Carpools {
    * pending.
    *
    * @param tripId
-   *          The id of the Trip
+   *     The id of the Trip
+   *
    * @return A list of size 3. Each element is a List containing the host,
-   *         members, or pending in a Trip in that order.
+   *     members, or pending in a Trip in that order.
+   *
    * @throws SQLException
-   *           If the SQL query is invalid.
+   *     If the SQL query is invalid.
    * @throws MissingDataException
-   *           If database is missing information
+   *     If database is missing information
    */
   public List<List<User>> getUsers(int tripId)
       throws SQLException, MissingDataException {
 
-    List<User> host = new ArrayList<User>();
+    List<User> host = new ArrayList<>();
     host.add(database.getUserById(database.getHostOnTrip(tripId)));
 
-    List<User> members = new ArrayList<User>();
+    List<User> members = new ArrayList<>();
     for (String memberId : database.getMembersOnTrip(tripId)) {
       members.add(database.getUserById(memberId));
     }
 
-    List<User> requesting = new ArrayList<User>();
+    List<User> requesting = new ArrayList<>();
     for (String pendingId : database.getRequestsOnTrip(tripId)) {
       requesting.add(database.getUserById(pendingId));
     }
-    List<List<User>> allUsers = new ArrayList<List<User>>();
+    List<List<User>> allUsers = new ArrayList<>();
     allUsers.add(host);
     allUsers.add(members);
     allUsers.add(requesting);
@@ -139,33 +151,35 @@ public final class Carpools {
    * Get a List of List of hosting, member, and pending Trips.
    *
    * @param userId
-   *          The id of the User
+   *     The id of the User
+   *
    * @return A list of size 3. Each element is a List of all Trips that a User
-   *         hosting, member, or pending in that order.
+   *     hosting, member, or pending in that order.
+   *
    * @throws SQLException
-   *           If the SQL query is invalid.
+   *     If the SQL query is invalid.
    * @throws MissingDataException
-   *           If database is missing information
+   *     If database is missing information
    */
   public List<List<Trip>> getTrips(String userId)
       throws SQLException, MissingDataException {
-    List<Trip> hostingTrips = new ArrayList<Trip>();
+    List<Trip> hostingTrips = new ArrayList<>();
     for (int tripId : database.getHostTripsWithUser(userId)) {
       hostingTrips.add(database.getTripById(tripId));
     }
     Collections.sort(hostingTrips, timeComparator);
-    List<Trip> memberTrips = new ArrayList<Trip>();
+    List<Trip> memberTrips = new ArrayList<>();
     for (int tripId : database.getMemberTripsWithUser(userId)) {
       memberTrips.add(database.getTripById(tripId));
     }
     Collections.sort(memberTrips, timeComparator);
-    List<Trip> pendingTrips = new ArrayList<Trip>();
+    List<Trip> pendingTrips = new ArrayList<>();
     for (int tripId : database.getRequestTripsWithUser(userId)) {
       pendingTrips.add(database.getTripById(tripId));
     }
     Collections.sort(pendingTrips, timeComparator);
 
-    List<List<Trip>> allTrips = new ArrayList<List<Trip>>();
+    List<List<Trip>> allTrips = new ArrayList<>();
     allTrips.add(hostingTrips);
     allTrips.add(memberTrips);
     allTrips.add(pendingTrips);
@@ -177,22 +191,23 @@ public final class Carpools {
    * successful.
    *
    * @param tripId
-   *          The id of the Trip
+   *     The id of the Trip
    * @param userId
-   *          The id of the User
+   *     The id of the User
+   *
    * @return True if the request was successful. False if it was unsuccessful
-   *         (the User is already host, member, or pending)
+   *     (the User is already host, member, or pending)
+   *
    * @throws SQLException
-   *           If the SQL query is invalid.
+   *     If the SQL query is invalid.
    * @throws MissingDataException
-   *           If database is missing information
+   *     If database is missing information
    */
   public boolean joinTrip(int tripId, String userId)
       throws SQLException, MissingDataException {
     Trip toJoin = database.getTripById(tripId);
-    if (toJoin.getHostId().equals(userId)
-        || toJoin.getMemberIds().contains(userId)
-        || toJoin.getPendingIds().contains(userId)) {
+    if (toJoin.getHostId().equals(userId) || toJoin.getMemberIds()
+        .contains(userId) || toJoin.getPendingIds().contains(userId)) {
       return false;
     } else {
       database.request(tripId, userId);
@@ -204,13 +219,14 @@ public final class Carpools {
    * Create a Trip with a new host.
    *
    * @param trip
-   *          The new Trip to create
+   *     The new Trip to create
    * @param hostId
-   *          The id of the new host
+   *     The id of the new host
+   *
    * @throws SQLException
-   *           If the SQL query is invalid.
+   *     If the SQL query is invalid.
    * @throws MissingDataException
-   *           If database is missing information
+   *     If database is missing information
    */
   public void createTrip(Trip trip, String hostId)
       throws SQLException, MissingDataException {
@@ -221,12 +237,14 @@ public final class Carpools {
    * Get a Trip given a tripId.
    *
    * @param tripId
-   *          The id of a Trip
+   *     The id of a Trip
+   *
    * @return The Trip
+   *
    * @throws SQLException
-   *           If the SQL query is invalid.
+   *     If the SQL query is invalid.
    * @throws MissingDataException
-   *           If database is missing information
+   *     If database is missing information
    */
   public Trip getTrip(int tripId) throws SQLException, MissingDataException {
     return database.getTripById(tripId);
@@ -236,13 +254,15 @@ public final class Carpools {
    * Remove a member from a Trip.
    *
    * @param tripId
-   *          The id of the Trip
+   *     The id of the Trip
    * @param userId
-   *          The id of the User
+   *     The id of the User
+   *
    * @return True if the removal was successful. False if it was unsuccessful
-   *         (the User is not a member)
+   *     (the User is not a member)
+   *
    * @throws SQLException
-   *           If the SQL query is invalid.
+   *     If the SQL query is invalid.
    */
   public boolean leaveTrip(int tripId, String userId) throws SQLException {
     if (database.getMembersOnTrip(tripId).contains(userId)) {
@@ -257,15 +277,17 @@ public final class Carpools {
    * Delete a trip.
    *
    * @param tripId
-   *          The id of the Trip
+   *     The id of the Trip
    * @param userId
-   *          The id of the User
+   *     The id of the User
+   *
    * @return True if the deletion was successful. False if it was unsuccessful
-   *         (the User is not the host)
+   *     (the User is not the host)
+   *
    * @throws SQLException
-   *           If the SQL query is invalid.
+   *     If the SQL query is invalid.
    * @throws MissingDataException
-   *           If database is missing information
+   *     If database is missing information
    */
   public boolean deleteTrip(int tripId, String userId)
       throws SQLException, MissingDataException {
@@ -281,23 +303,25 @@ public final class Carpools {
    * Approve a pender's request.
    *
    * @param tripId
-   *          The id of the Trip
+   *     The id of the Trip
    * @param approver
-   *          The host id
+   *     The host id
    * @param pender
-   *          The id of the user to approve
+   *     The id of the user to approve
+   *
    * @return True if the approval was successful. False if it was unsuccessful
-   *         (the approver is not the host or if the pender is not pending)
+   *     (the approver is not the host or if the pender is not pending)
+   *
    * @throws SQLException
-   *           If the SQL query is invalid.
+   *     If the SQL query is invalid.
    * @throws MissingDataException
-   *           If database is missing information
+   *     If database is missing information
    */
   public boolean approveRequest(int tripId, String approver, String pender)
       throws SQLException, MissingDataException {
     Trip trip = database.getTripById(tripId);
-    if (trip.getHostId().equals(approver)
-        && trip.getPendingIds().contains(pender)) {
+    if (trip.getHostId().equals(approver) && trip.getPendingIds()
+        .contains(pender)) {
       database.approve(tripId, pender);
       return true;
     } else {
@@ -309,23 +333,25 @@ public final class Carpools {
    * Reject a pender's request.
    *
    * @param tripId
-   *          The id of the Trip
+   *     The id of the Trip
    * @param rejector
-   *          The host id
+   *     The host id
    * @param pender
-   *          The id of the user to reject
+   *     The id of the user to reject
+   *
    * @return True if the rejection was successful. False if it was unsuccessful
-   *         (the rejector is not the host or if the pender is not pending)
+   *     (the rejector is not the host or if the pender is not pending)
+   *
    * @throws SQLException
-   *           If the SQL query is invalid.
+   *     If the SQL query is invalid.
    * @throws MissingDataException
-   *           If database is missing information
+   *     If database is missing information
    */
   public boolean rejectRequest(int tripId, String rejector, String pender)
       throws SQLException, MissingDataException {
     Trip trip = database.getTripById(tripId);
-    if (trip.getHostId().equals(rejector)
-        && trip.getPendingIds().contains(pender)) {
+    if (trip.getHostId().equals(rejector) && trip.getPendingIds()
+        .contains(pender)) {
       database.reject(tripId, pender);
       return true;
     } else {

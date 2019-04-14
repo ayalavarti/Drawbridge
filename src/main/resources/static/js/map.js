@@ -17,7 +17,7 @@ let formValidationTooltip;
  */
 $(document).ready(function () {
     initMapbox(mapboxToken);
-    initMap();
+    getLocation();
     initDateTime();
     initTooltips();
     disableTrip();
@@ -39,29 +39,48 @@ function onUserSignedOut() {
 }
 
 /**
+ * Gets the current location if geolocation is enabled.
+ */
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(initMap, defaultMap);
+    } else {
+        console.log("Geolocation not enabled.");
+    }
+}
+
+function defaultMap(error) {
+    initMap(undefined);
+}
+
+/**
  * Initializes the Map.
  */
-function initMap() {
+function initMap(position) {
+    if (position !== undefined) {
+        curLat = position.coords.latitude;
+        curLong = position.coords.longitude;
+    }
     // Create map object with custom settings and add NavigationControl
     map = new mapboxgl.Map({
-        container: "map",
-        keyboard: false,
-        maxZoom: 18,
-        style: "mapbox://styles/mapbox/streets-v11",
-        center: [curLong, curLat],
-        zoom: 12
-    });
+                               container: "map",
+                               keyboard: false,
+                               maxZoom: 18,
+                               style: "mapbox://styles/mapbox/streets-v11",
+                               center: [curLong, curLat],
+                               zoom: 12
+                           });
     map.addControl(new mapboxgl.NavigationControl());
 
     /**
      * Hide loading gif and show all initially hidden objects
      */
     $("#loading").css({
-        visibility: "hidden"
-    });
+                          visibility: "hidden"
+                      });
     $("[id=pre-load]").css({
-        visibility: "visible"
-    });
+                               visibility: "visible"
+                           });
     console.log("Map loaded.");
 }
 
@@ -118,37 +137,43 @@ function handleInput(id, index) {
     }
 
     $(`#loading-${id}`).css({
-        visibility: "visible"
-    });
+                                visibility: "visible"
+                            });
 
     setTimeout(function () {
         // Send network request for geocoding based on address box value
         mapboxClient.geocoding
-            .forwardGeocode({
-                query: address,
-                proximity: [curLong, curLat],
-                autocomplete: true,
-                limit: 1
-            })
-            .send()
-            .then(function (response) {
-                // If valid response
-                if (response && response.body && response.body.features && response.body.features.length) {
-                    /**
-                     * Get the first element of the suggestions, set the input box to that
-                     * value, then update the addressNames and coordinates arrays with the
-                     * feature data.
-                     * */
-                    let feature = response.body.features[0];
-                    $(`#${id}`).val(feature.place_name);
-                    coordinates[index] = feature.center;
-                    // Add new marker on the map with the returned feature data
-                    addStreetPoint(feature.center[1], feature.center[0], id, index, feature.place_name);
-                }
-                $(`#loading-${id}`).css({
-                    visibility: "hidden"
-                });
-            });
+                    .forwardGeocode({
+                                        query: address,
+                                        proximity: [curLong, curLat],
+                                        autocomplete: true,
+                                        limit: 1
+                                    })
+                    .send()
+                    .then(function (response) {
+                        // If valid response
+                        if (response && response.body &&
+                            response.body.features &&
+                            response.body.features.length)
+                        {
+                            /**
+                             * Get the first element of the suggestions, set
+                             * the input box to that value, then update the
+                             * addressNames and coordinates arrays with the
+                             * feature data.
+                             * */
+                            let feature = response.body.features[0];
+                            $(`#${id}`).val(feature.place_name);
+                            coordinates[index] = feature.center;
+                            // Add new marker on the map with the returned
+                            // feature data
+                            addStreetPoint(feature.center[1], feature.center[0],
+                                           id, index, feature.place_name);
+                        }
+                        $(`#loading-${id}`).css({
+                                                    visibility: "hidden"
+                                                });
+                    });
     }, 800);
 }
 
@@ -174,8 +199,8 @@ function addStreetPoint(lat, long, id, index, name) {
     found[index] = true;
 
     /**
-     * If both are found, align the map view based on the trip coordinates. Otherwise,
-     * move to the location of the given address.
+     * If both are found, align the map view based on the trip coordinates.
+     * Otherwise, move to the location of the given address.
      */
     if (found[0] && found[1]) {
         alignTrip();
@@ -224,19 +249,22 @@ function removeRoute() {
 }
 
 /**
- * Calculates the route direction coordinates based on starting and ending locations
- * using the Mapbox directions API.
+ * Calculates the route direction coordinates based on starting and ending
+ * locations using the Mapbox directions API.
  *
  * @param {*} c
  */
 function calcRoute(c) {
     let url =
-        "https://api.mapbox.com/directions/v5/mapbox/driving/" +
-        c +
-        "?geometries=geojson&&access_token=" +
-        mapboxgl.accessToken;
+            "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+            c +
+            "?geometries=geojson&&access_token=" +
+            mapboxgl.accessToken;
     $.get(url, responseJSON => {
-        route = [responseJSON.routes[0].distance * 0.001, responseJSON.routes[0].duration / 60];
+        route = [
+            responseJSON.routes[0].distance * 0.001,
+            responseJSON.routes[0].duration / 60
+        ];
         setTripInfo();
 
         let coords = responseJSON.routes[0].geometry;
@@ -249,13 +277,13 @@ function calcRoute(c) {
  */
 function disableTrip() {
     $(".trip-setting").css({
-        background: "#a5a5a5",
-        cursor: "auto"
-    });
+                               background: "#a5a5a5",
+                               cursor: "auto"
+                           });
     $("#car-icon").attr("src", "/images/car-disabled.png");
     $("#route-info").css({
-        visibility: "hidden"
-    });
+                             visibility: "hidden"
+                         });
 }
 
 /**
@@ -263,13 +291,13 @@ function disableTrip() {
  */
 function enableTrip() {
     $(".trip-setting").css({
-        background: "#fff",
-        cursor: "pointer"
-    });
+                               background: "#fff",
+                               cursor: "pointer"
+                           });
     $("#car-icon").attr("src", "/images/car-icon.png");
     $("#route-info").css({
-        visibility: "visible"
-    });
+                             visibility: "visible"
+                         });
 }
 
 /**
@@ -280,16 +308,24 @@ function setTripInfo() {
     $("#duration").text(`${route[1].toFixed(0)} min`);
 }
 
+function clearTrip(id, index) {
+    if (markers[index]) {
+        $(`#${id}`).val("");
+        removeMarker(index);
+        disableTrip();
+    }
+}
+
 /**
  * Centers the map view.
  */
 function centerMap() {
     map.flyTo({
-        center: [curLong, curLat],
-        pitch: 0,
-        bearing: 0,
-        zoom: 12
-    });
+                  center: [curLong, curLat],
+                  pitch: 0,
+                  bearing: 0,
+                  zoom: 12
+              });
 }
 
 /**
@@ -297,9 +333,9 @@ function centerMap() {
  */
 function alignMap() {
     map.flyTo({
-        pitch: 0,
-        bearing: 0
-    });
+                  pitch: 0,
+                  bearing: 0
+              });
 }
 
 /**
@@ -311,9 +347,9 @@ function alignMap() {
  */
 function moveToLocation(lat, lng) {
     map.flyTo({
-        center: [lng, lat],
-        zoom: 12
-    });
+                  center: [lng, lat],
+                  zoom: 12
+              });
 }
 
 /**
@@ -326,14 +362,17 @@ function alignTrip() {
         let right = 150;
         let bottom = 150;
         /**
-         * Checks if the trip positions are routed diagonally upwards or if the window
-         * height is below a threshold. Then the map view is adjusted since the search
-         * menu will not cover up the trip.
+         * Checks if the trip positions are routed diagonally upwards or if the
+         * window height is below a threshold. Then the map view is adjusted
+         * since the search menu will not cover up the trip.
          */
         if (
-            (coordinates[0][0] < coordinates[1][0] && coordinates[0][1] < coordinates[1][1]) ||
-            (coordinates[0][0] > coordinates[1][0] && coordinates[0][1] > coordinates[1][1]) ||
-            $(window).height() < 600) {
+            (coordinates[0][0] < coordinates[1][0] && coordinates[0][1] <
+                coordinates[1][1]) ||
+            (coordinates[0][0] > coordinates[1][0] && coordinates[0][1] >
+                coordinates[1][1]) ||
+            $(window).height() < 600)
+        {
             top = 150;
         }
         /**
@@ -344,8 +383,8 @@ function alignTrip() {
             bottom = 50;
         }
         /**
-         * Checks if the window width is below a threshold. Then the map view is adjusted
-         * since the search menu will not cover up the trip.
+         * Checks if the window width is below a threshold. Then the map view
+         * is adjusted since the search menu will not cover up the trip.
          */
         if ($(window).width() < 767) {
             top = 100;
@@ -374,10 +413,14 @@ function validateSubmit() {
     let date = new Date(`${dateInput} ${timeInput}`);
 
     /**
-     * If any of the input entries are not filled out, show the form validation tooltip, wait
-     * 3 seconds, then hide it, prompting the user to fill out the form completely.
+     * If any of the input entries are not filled out, show the form validation
+     * tooltip, wait
+     * 3 seconds, then hide it, prompting the user to fill out the form
+     * completely.
      */
-    if (dateInput === "" || timeInput === "" || coordinates[0] === undefined || coordinates[1] === undefined) {
+    if (dateInput === "" || timeInput === "" || coordinates[0] === undefined ||
+        coordinates[1] === undefined)
+    {
         showHideTooltip(formValidationTooltip[0]);
     } else {
         /**
