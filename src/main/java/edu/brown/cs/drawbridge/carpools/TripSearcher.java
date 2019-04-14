@@ -42,14 +42,10 @@ public class TripSearcher {
 
   /**
    * Creates a new TripSearcher.
+   * @param database the database object to use for queries
    */
-  public TripSearcher() {
-    try {
-      database = new DatabaseQuery("//localhost/carpools", "", "");
-    } catch (ClassNotFoundException | SQLException e) {
-      // Should not reach.
-      assert false;
-    }
+  public TripSearcher(DatabaseQuery database) {
+    this.database = database;
   }
 
   private void setUser(String userId) {

@@ -26,15 +26,16 @@ public final class Carpools {
 
   /**
    * Create a new Carpools object.
+   * @param dbName name of the database to connect to
+   * @param dbUser username to connect with
+   * @param dbPass password for dbUser
+   * @throws ClassNotFoundException when can't connect to db
+   * @throws SQLException when database throws an errors
    */
-  public Carpools() {
-    tripSearcher = new TripSearcher();
-    try {
-      database = new DatabaseQuery("//localhost/carpools", "", "");
-    } catch (ClassNotFoundException | SQLException e) {
-      // Should not reach
-      assert false;
-    }
+  public Carpools(String dbName, String dbUser, String dbPass)
+          throws ClassNotFoundException, SQLException {
+    this.database = new DatabaseQuery(dbName, dbUser, dbPass);
+    this.tripSearcher = new TripSearcher(this.database);
   }
 
   /**
@@ -114,12 +115,15 @@ public final class Carpools {
    */
   public List<List<User>> getUsers(int tripId)
       throws SQLException, MissingDataException {
+
     List<User> host = new ArrayList<User>();
     host.add(database.getUserById(database.getHostOnTrip(tripId)));
+
     List<User> members = new ArrayList<User>();
     for (String memberId : database.getMembersOnTrip(tripId)) {
       members.add(database.getUserById(memberId));
     }
+
     List<User> requesting = new ArrayList<User>();
     for (String pendingId : database.getRequestsOnTrip(tripId)) {
       requesting.add(database.getUserById(pendingId));
@@ -327,5 +331,13 @@ public final class Carpools {
     } else {
       return false;
     }
+  }
+
+  /**
+   * Gets the db query object.
+   * @return the database object.
+   */
+  public DatabaseQuery getDatabase() {
+    return database;
   }
 }
