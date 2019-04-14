@@ -1,24 +1,24 @@
 package edu.brown.cs.drawbridge.tripcomparators;
 
-import java.util.List;
-
 import edu.brown.cs.drawbridge.models.Trip;
+
+import java.util.List;
 
 /**
  * A comparator that compares Lists of Trips based on how many Trips contain the
  * User as a member.
+ *
+ * @author Jeffrey Zhu
  */
 public class MemberComparator implements ComparesSearchedTrips {
 
   private String userId;
 
-  @Override
-  public void setUserId(String userIdentification) {
-    this.userId = userIdentification;
+  @Override public void setUserId(String userIdentification) {
+    userId = userIdentification;
   }
 
-  @Override
-  public int compare(List<Trip> path1, List<Trip> path2) {
+  @Override public int compare(List<Trip> path1, List<Trip> path2) {
     int numberOfTripsMember1 = 0;
     int numberOfTripsMember2 = 0;
     for (Trip trip : path1) {

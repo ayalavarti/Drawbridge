@@ -1,8 +1,5 @@
 package edu.brown.cs.drawbridge.main;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -10,6 +7,9 @@ import spark.ExceptionHandler;
 import spark.Request;
 import spark.Response;
 import spark.Spark;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * The Main class of our project. This is where execution begins.
@@ -19,27 +19,26 @@ import spark.Spark;
 public final class Main {
 
   private static final int DEFAULT_PORT = 4567;
-
-  /**
-   * The initial method called when execution begins.
-   *
-   * @param args
-   *          An array of command line arguments
-   */
-  public static void main(String[] args) {
-    new Main(args).run();
-  }
-
   private String[] args;
 
   /**
    * Method entrypoint for CLI invocation.
    *
    * @param args
-   *          Arguments passed on the command line.
+   *     Arguments passed on the command line.
    */
   private Main(String[] args) {
     this.args = args;
+  }
+
+  /**
+   * The initial method called when execution begins.
+   *
+   * @param args
+   *     An array of command line arguments
+   */
+  public static void main(String[] args) {
+    new Main(args).run();
   }
 
   /**
@@ -56,7 +55,7 @@ public final class Main {
     try {
       OptionSet options = parser.parse(args);
       if (options.has("gui")) {
-//        runSparkServer((int) options.valueOf("port"));
+        runSparkServer((int) options.valueOf("port"));
       }
     } catch (OptionException e) {
       System.out.println("Use one of: --gui [--port <number>] or no inputs.");
@@ -69,9 +68,7 @@ public final class Main {
     Spark.exception(Exception.class, new ExceptionPrinter());
 
     // If we can't connect to the db, give up and stop the server
-    if (!UserInterface.setDB("carpools")) {
-      return;
-    } else {
+    if (UserInterface.setDB("carpools")) {
       UserInterface.setEndpoints();
     }
   }
@@ -80,8 +77,7 @@ public final class Main {
    * Display an error page when an exception occurs in the server.
    */
   private static class ExceptionPrinter implements ExceptionHandler {
-    @Override
-    public void handle(Exception e, Request req, Response res) {
+    @Override public void handle(Exception e, Request req, Response res) {
       res.status(500);
       StringWriter stacktrace = new StringWriter();
       try (PrintWriter pw = new PrintWriter(stacktrace)) {
