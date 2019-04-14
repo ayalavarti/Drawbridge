@@ -38,8 +38,8 @@ public class DatabaseQueryTest {
   @BeforeClass public static void oneTimeSetUp()
       throws SQLException, MissingDataException {
     try {
-      String username = "dev";//System.getenv("DB_USER");
-      String password = "dev";//System.getenv("DB_PASS");
+      String username = System.getenv("DB_USER");
+      String password = System.getenv("DB_PASS");
       /*
        * If your database denies access, run the following queries in pgadmin:
        * CREATE USER dev WITH PASSWORD 'dev'; GRANT ALL PRIVILEGES ON ALL TABLES

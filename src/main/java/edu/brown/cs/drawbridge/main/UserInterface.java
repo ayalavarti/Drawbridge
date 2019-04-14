@@ -237,8 +237,8 @@ public final class UserInterface {
             = new ImmutableMap.Builder<String, Object>()
             .put("title", String.format("Drawbridge | %s", trip.getName()))
             .put("favicon", "images/favicon.png").put("trip", trip)
-            .put("host", host).put("members", members).put("pending", pending)
-            .build();
+            .put("mapboxKey", MAPBOX_TOKEN).put("host", host)
+            .put("members", members).put("pending", pending).build();
         return new ModelAndView(variables, "detail.ftl");
       } catch (NumberFormatException | MissingDataException e) {
         return null; // 404 not found

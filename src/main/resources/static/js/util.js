@@ -18,7 +18,7 @@ function generateTrip(trip) {
     return (`<div class="result-info">
 				<div class="sub-heading">${trip["name"]}</div>
 				<img src="/images/divider.png" style="height: 3px; width: auto;" />
-				<div>w
+				<div>
 					<i class="fas fa-map-marker-alt icon-label-small"></i>
 						${trip["start"]} - ${trip["end"]}
 				</div>
