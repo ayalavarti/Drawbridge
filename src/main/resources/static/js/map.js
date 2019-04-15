@@ -45,12 +45,17 @@ function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(initMap, defaultMap);
     } else {
-        console.log("Geolocation not enabled.");
+        defaultMap("Browser doesn't support geolocation");
     }
 }
 
 function defaultMap(error) {
-    initMap(undefined);
+    $.get("https://jsonip.com/", function(ipData) {
+        $.get("http://ip-api.com/json/" + ipData.ip, function(locData) {
+            let position = {coords: {latitude: locData.lat, longitude: locData.lon}};
+            initMap(position);
+        });
+    });
 }
 
 /**
