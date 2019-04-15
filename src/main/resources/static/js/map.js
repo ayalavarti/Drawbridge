@@ -51,10 +51,14 @@ function getLocation() {
 
 function defaultMap(error) {
     $.get("https://jsonip.com/", function(ipData) {
-        $.get("http://ip-api.com/json/" + ipData.ip, function(locData) {
-            let position = {coords: {latitude: locData.lat, longitude: locData.lon}};
-            initMap(position);
-        });
+        if (ipData.status === "fail") {
+            initMap(undefined);
+        } else {
+            $.get("http://ip-api.com/json/" + ipData.ip, function (locData) {
+                let position = {coords: {latitude: locData.lat, longitude: locData.lon}};
+                initMap(position);
+            });
+        }
     });
 }
 
