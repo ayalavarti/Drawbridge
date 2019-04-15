@@ -41,6 +41,15 @@ a {
     cursor: pointer;
 }
 
+button {
+    font-family: "Nunito", sans-serif;
+    background: #FFF;
+    padding: 6px 10px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -120,7 +129,7 @@ input[type="number"] {
 .submit-btn {
     border: 0;
     width: auto;
-    height: 50px;
+    height: 55px;
     outline: none;
     cursor: pointer;
 }
@@ -231,7 +240,7 @@ input[type="number"] {
     color: #222;
     border-radius: 10px;
     text-align: center;
-    width: 200px;
+    width: 250px;
 }
 
 .pulse {

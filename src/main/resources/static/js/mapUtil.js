@@ -71,6 +71,19 @@ function parseAddress(raw, index) {
     }
 }
 
+function parseAddressOnClick(raw) {
+    if (raw.indexOf(",") > -1) {
+        let title = raw.substr(0, raw.indexOf(","));
+        return `<div class="popup-title">${title}</div>
+                <img src="/images/divider.png" style="height: 2px; width: auto;" />
+                <div class="popup-content">
+                    ${raw.substr(raw.indexOf(",") + 1)}
+                </div>`;
+    } else {
+        return `<div class="popup-title">${raw}</div>`;
+    }
+}
+
 /**
  * Adds the route visualization to the map based on the given set of
  * coordinates.
