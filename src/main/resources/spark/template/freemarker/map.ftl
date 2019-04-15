@@ -59,23 +59,28 @@
     </div>
 
 
-    <div id="pre-load" style="visibility: visible;"
+    <div id="pre-load" style="visibility: visible;" data-tippy-content="Align
+     Map"
          class="map-settings compass-setting" onclick="alignMap()">
         <img class="icon-img" src="/images/compass-icon.png"/>
     </div>
-    <div id="pre-load" style="visibility: visible;"
+    <div id="pre-load" style="visibility: visible;" data-tippy-content="Center
+     Map"
          class="map-settings location-setting" onclick="centerMap()">
         <img class="icon-img" src="/images/pin-icon.png"/>
     </div>
-    <div id="pre-load" style="visibility: hidden;"
+    <div id="pre-load" style="visibility: hidden;" data-tippy-content="Align
+     Trip View"
          class="map-settings trip-setting" onclick="alignTrip()">
         <img id="car-icon" class="icon-img" src="/images/car-disabled.png"/>
     </div>
-    <div id="pre-load" style="visibility: visible;"
+    <div id="pre-load" style="visibility: visible;" data-tippy-content="My
+    Trips"
          class="map-settings team-setting" onclick="toUser()">
         <img class="icon-img" src="/images/team-icon.png"/>
     </div>
     <div id="pre-load" style="visibility: visible;"
+         data-tippy-content="Drawbridge Info"
          class="map-settings info-setting" onclick="toInfo()">
         <img class="icon-img" src="/images/info-icon.png"/>
     </div>

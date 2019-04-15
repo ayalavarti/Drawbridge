@@ -20,11 +20,9 @@ input {
     letter-spacing: 0.5px;
 }
 
+span,
+div,
 button {
-    outline: none;
-}
-
-span {
     outline: none;
 }
 

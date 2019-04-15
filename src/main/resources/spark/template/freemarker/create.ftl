@@ -97,7 +97,6 @@
         </div>
     </div>
     <script src="/js/util.js"></script>
-    <script src="/js/mapUtil.js"></script>
     <script src="/js/create.js"></script>
 </#assign>
 <#include "main.ftl">

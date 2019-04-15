@@ -11,6 +11,7 @@ let addressNames = [];
 let route = [];
 
 let formValidationTooltip;
+let mapControlTooltips;
 
 /**
  * When the DOM loads, initialize Mapbox and the Map object.
@@ -113,6 +114,17 @@ function initTooltips() {
         interactive: false,
         trigger: "manual",
         hideOnClick: false,
+        inertia: true,
+        sticky: true,
+        placement: "top",
+    });
+    mapControlTooltips = tippy(".map-settings", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge-alt",
+        interactive: "true",
+        hideOnClick: true,
         inertia: true,
         sticky: true,
         placement: "top",

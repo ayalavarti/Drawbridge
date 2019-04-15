@@ -72,8 +72,12 @@ hr {
 .info-container {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     align-items: center;
     margin: 20px 0;
+}
+
+.info-container > div {
 }
 
 .info-container > p {

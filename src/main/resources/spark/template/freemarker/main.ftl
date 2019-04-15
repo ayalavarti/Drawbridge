@@ -9,7 +9,7 @@
     <#--  Google Sign In  -->
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id"
-          content="682909194982-g9daf2o99e5jtijv18i92r1pdmrjk0ec.apps.googleusercontent.com">
+          content="682909194982-und7derro321d0gpldrb746efq2ipm6p.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 
     <#--  Mapbox Scripts and Styling  -->

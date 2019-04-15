@@ -11,7 +11,6 @@ let formTooltips = [];
 $(document).ready(function () {
     signInTooltip[0].setContent(
         "Sign in with your Google Account to host a trip.");
-    initMapbox();
     showHomeInfo();
     initDateTime();
     initTooltips();
