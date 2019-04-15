@@ -433,7 +433,7 @@ public class DatabaseQuery {
    *     Errors involving the database's contents.
    */
   public List<Trip> searchTripsByTimeWindow(double lastLat, double lastLon,
-      double walkRadius, int start, int end)
+      double walkRadius, double start, double end)
       throws SQLException, MissingDataException {
     List<Trip> results = new ArrayList<>();
     try (PreparedStatement prep = conn
@@ -442,8 +442,8 @@ public class DatabaseQuery {
       prep.setDouble(2, lastLat);
       prep.setDouble(3, lastLon);
       prep.setDouble(4, walkRadius);
-      prep.setInt(5, start);
-      prep.setInt(6, end);
+      prep.setDouble(5, start);
+      prep.setDouble(6, end);
       try (ResultSet rs = prep.executeQuery()) {
         while (rs.next()) {
           results.add(Trip.TripBuilder.newTripBuilder()
@@ -530,7 +530,7 @@ public class DatabaseQuery {
    * @param walkRadius
    *     The buffer for finding reasonably distanced trips.
    * @param departure
-   *     The int time of departure.
+   *     The time of departure.
    * @param timeBuffer
    *     The buffer for finding reasonably timed trips.
    *
@@ -543,7 +543,7 @@ public class DatabaseQuery {
    *     Errors involving the database's contents.
    */
   public List<Trip> getConnectedTripsWithinTimeRadius(double lat, double lon,
-      double walkRadius, int departure, int timeBuffer)
+      double walkRadius, long departure, double timeBuffer)
       throws SQLException, MissingDataException {
     return searchTripsByTimeWindow(lat, lon, walkRadius, departure - timeBuffer,
         departure + timeBuffer);
