@@ -1,0 +1,37 @@
+Users:
+* 0 = Jenny, jenny@fakemail.com
+* 1 = Arvind, arvind@fakemail.com
+* 2 = Jeff, jeff@fakemail.com
+* 3 = Mark, mark@fakemail.com
+* 4 = Sam, sam@fakemail.com
+
+Trips:
+* id=1, HOST=Jenny, "Day Trip to Boston Aquarium": 
+CIT (41.827368, -71.399368) -> New England Aquarium (42.358991, -71.050690), 
+4/21 noon (1555848000) -> 4/21 1:30 pm (1555853400), 
+people = 4, cost = $30, 555-867-5309, car, "Fish, obviously"
+MEMBERS: Mark REQUESTS: Sam, Jeff, Arvind
+
+* id=2, HOST=Arvind, "Brown to NYC":
+Barus & Holley (41.826465, -71.399125) -> Battery Park (40.703115, -74.014491),
+4/21 12:10 pm (1555848600) -> 4/21 3:30 pm (1555860600),
+people = 4, cost = $60, 123-456-7890, car, "We leave at 12:10 sharp."
+MEMBERS: Jeff, Sam REQUESTS:
+
+* id=3, HOST=Mark, "Boston to Providence":
+Faneuil Hall (42.359727, -71.053628) -> Providence Place (41.828457, -71.415443)
+4/21 1:45 pm (1555854300) -> 4/21 3:00 pm (1555858800)
+people = 3, cost $25, 987-654-3210, car, ""
+MEMBERS: Sam REQUESTS: Arvind
+
+* id=4, HOST=Jenny, "Late Flight from TF Green":
+Rockefeller Library (41.826113, -71.404610) -> TF Green Airport (41.726362, -71.436234)
+4/21 11:45 pm (1555890300) -> 4/22 12:15 am (1555892100)
+people = 2, cost $15, 555-867-5309, uber, "Looking to share a ride to the airport. Y'all can also email me at jenny@fakemail.com" 
+MEMBERS: Arvind REQUESTS: Mark, Sam, Jeff
+
+* id=5, HOST=Jeff, "Arrival from Logan":
+Logan Airport (42.365524, -71.018308) -> Wayland House (41.825013, -71.402718)
+4/21 10:00 am (1555840800) -> 4/21 11:40 am (1555846800)
+people = 3, cost $55, 911-404-8080, uber, "If flight is delayed, may depart later."
+MEMBERS: REQUESTS: Mark
