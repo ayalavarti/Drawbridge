@@ -126,6 +126,6 @@ function handleHost() {
             "Sign in with your Google Account to host your own trip.");
         signInTooltip[0].show();
     } else {
-        console.log("HOST");
+        window.location.href = "/new";
     }
 }
