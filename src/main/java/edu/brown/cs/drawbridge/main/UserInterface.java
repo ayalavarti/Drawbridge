@@ -20,10 +20,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * An abstract class for the User Interface of the Java project. Contains
@@ -114,8 +111,7 @@ public final class UserInterface {
     }
   }
 
-  // --------------------------- Detail -----------------------------------
-
+  // ---------------------------- List ------------------------------------
   /**
    * Class to handle getting results to display; This handles all requests
    * originating from the home page and from resubmitting the walking time
@@ -130,8 +126,12 @@ public final class UserInterface {
       try {
         String startName = qm.value("startName");
         String endName = qm.value("endName");
+
         double startLat = Double.parseDouble(qm.value("startLat"));
         double startLon = Double.parseDouble(qm.value("startLon"));
+        double endLat = Double.parseDouble(qm.value("endLat"));
+        double endLon = Double.parseDouble(qm.value("endLon"));
+
         long datetime = Long.parseLong(qm.value("date"));
         String uid = qm.value("userID");
 
@@ -141,21 +141,18 @@ public final class UserInterface {
         } else {
           walkTime = 15 * 60; // 15 minutes walking is the default
         }
-
         if (qm.hasKey("waitTime")) {
           waitTime = qm.get("waitTime").doubleValue();
         } else {
           waitTime = 30 * 60; // 30 minutes is default for waiting for carpool
         }
 
-        // TODO: replace with actual data getting.
-        List<Trip> s1 = new ArrayList<>();
-        s1.add(DatabaseQuery.DUMMY_TRIP);
-        List<Trip> s2 = new ArrayList<>();
-        s2.add(DatabaseQuery.DUMMY_TRIP);
-        s2.add(DatabaseQuery.DUMMY_TRIP);
+        // Do the search
+        List<List<Trip>> results =
+                carpools.searchWithId(uid, startLat, startLon, endLat, endLon,
+                                      datetime, walkTime, waitTime);
+        data = processToJSON(uid, results);
 
-        data = processToJSON(uid, s1, s2);
       } catch (NullPointerException e) {
         data = new ArrayList<>();
       }
@@ -168,6 +165,7 @@ public final class UserInterface {
     }
   }
 
+  // --------------------------- Detail -----------------------------------
   /**
    * Handler to get information about a specific trip and display it on a page.
    */
@@ -194,20 +192,17 @@ public final class UserInterface {
       List<User> members = people.get(1);
       List<User> pending = people.get(2);
 
-      // TODO: remove this; for testing purposes only
-      pending.add(new User("1", "Mark Lavrentyev", "lavrema@outlook.com"));
-      members.add(new User("2", "Arvind Yalavarti", "abc@example.com"));
-
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", String.format("Drawbridge | %s", trip.getName()))
-          .put("favicon", "images/favicon.png").put("trip", trip)
-          .put("host", host).put("members", members).put("pending", pending)
+          .put("favicon", "images/favicon.png")
+          .put("mapboxKey", MAPBOX_TOKEN)
+          .put("trip", trip)
+          .put("host", host).put("members", members)
+          .put("pending", pending)
           .build();
       return new ModelAndView(variables, "detail.ftl");
     }
   }
-
-  // ---------------------------- User ------------------------------------
 
   /**
    * Handles various actions on the detail page including deleting a trip,
@@ -252,6 +247,7 @@ public final class UserInterface {
     }
   }
 
+  // ---------------------------- User ------------------------------------
   /**
    * Handles the display of the "my trips" page. Simply returns the template.
    */
@@ -274,16 +270,18 @@ public final class UserInterface {
       String uid = qm.value("userID");
 
       // Getting the data
-      // TODO: replace with real data getting
-      List<Trip> hosting = new ArrayList<>();
-      hosting.add(DatabaseQuery.DUMMY_TRIP2);
-      List<Trip> member = new ArrayList<>();
-      member.add(DatabaseQuery.DUMMY_TRIP);
-      member.add(DatabaseQuery.DUMMY_TRIP);
-      List<Trip> pending = new ArrayList<>();
-      pending.add(DatabaseQuery.DUMMY_TRIP);
+      try {
+        List<List<Trip>> userTrips = carpools.getTrips(uid);
 
-      return GSON.toJson(processToJSON(uid, hosting, member, pending));
+        List<Trip> hosting = userTrips.get(0);
+        List<Trip> member = userTrips.get(1);
+        List<Trip> pending = userTrips.get(2);
+
+        return GSON.toJson(processToJSON(uid, hosting, member, pending));
+      } catch (SQLException | MissingDataException e) {
+        // TODO: decide stuff to do
+        return GSON.toJson(processToJSON(uid));
+      }
     }
   }
 
