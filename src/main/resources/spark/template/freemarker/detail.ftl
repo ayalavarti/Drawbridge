@@ -110,8 +110,8 @@
 
     let uid = userProfile == null ? null : userProfile.getId();
     let host = "${host.getId()?js_string}";
-    let members = [<#list members as mem>"${mem.getId()?js_string}"</#list>];
-    let pending = [<#list pending as pen>"${pen.getId()?js_string}"</#list>];
+    let members = [<#list members as mem>"${mem.getId()?js_string}"<#if mem_has_next>,</#if></#list>];
+    let pending = [<#list pending as pen>"${pen.getId()?js_string}"<#if pen_has_next>,</#if></#list>];
 
     if (uid === host) {
         $("#delete-btn").show();
