@@ -47,34 +47,6 @@ function onUserSignedOut() {
 }
 
 /**
- * Gets the current location if geolocation is enabled.
- */
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(initMap, defaultMap);
-    } else {
-        defaultMap("Browser doesn't support geolocation");
-    }
-}
-
-function defaultMap(error) {
-    $.get("https://jsonip.com/", function (ipData) {
-        if (ipData.status === "fail") {
-            initMap(undefined);
-        } else {
-            $.get("http://ip-api.com/json/" + ipData.ip, function (locData) {
-                let position = {
-                    coords: {
-                        latitude: locData.lat, longitude: locData.lon
-                    }
-                };
-                initMap(position);
-            });
-        }
-    });
-}
-
-/**
  * Initializes the Map on the DOM.
  */
 function initMap(position) {
