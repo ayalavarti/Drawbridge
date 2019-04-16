@@ -65,10 +65,10 @@ function setRoute() {
     // coordinates
     map.fitBounds(coordinates, {
         padding: {
-            top: 100,
-            bottom: 100,
-            left: 75,
-            right: 75
+            top: 40,
+            bottom: 50,
+            left: 40,
+            right: 40
         },
         linear: false
     });

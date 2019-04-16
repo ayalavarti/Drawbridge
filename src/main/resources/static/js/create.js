@@ -154,6 +154,7 @@ function handleSubmit() {
     let timeInput = $("#time").val();
     let date = new Date(`${dateInput} ${timeInput}`);
 
+    let nameInput = $("#name").val();
     let sizeInput = $("#carpool-size").val();
     let typeInput = $("#transport-type").val();
     let priceInput = $("#expected-price").val();
@@ -167,8 +168,8 @@ function handleSubmit() {
      * 3 seconds, then hide it, prompting the user to fill out the form
      * completely.
      */
-    if (dateInput === "" || timeInput === "" || typeInput === "" ||
-        sizeInput === "" || priceInput === "" || phoneInput === "") {
+    if (dateInput === "" || timeInput === "" || typeInput === "" || nameInput
+        === "" || sizeInput === "" || priceInput === "" || phoneInput === "") {
         showHideTooltip(formValidationTooltip[0]);
     } else {
         if (sizeInput < 1) {
@@ -188,15 +189,16 @@ function handleSubmit() {
             const postParameters = {
                 startName: addressNames[0],
                 endName: addressNames[1],
-                startLat: coordinates[0].slice(0).reverse()[0],
-                startLon: coordinates[0].slice(0).reverse()[1],
-                endLat: coordinates[1].slice(0).reverse()[0],
-                endLon: coordinates[1].slice(0).reverse()[1],
+                startLat: coordinates[0][1],
+                startLon: coordinates[0][0],
+                endLat: coordinates[1][1],
+                endLon: coordinates[1][0],
                 date: date.getTime(),
                 size: sizeInput,
                 price: priceInput,
-                type: typeInput,
+                method: typeInput,
                 phone: phoneInput,
+                name: nameInput,
                 comments: commentsInput,
                 userID: userProfile.getId(),
                 eta: route[1]

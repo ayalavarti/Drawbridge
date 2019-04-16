@@ -11,6 +11,17 @@
                 width: auto;"/>
             </div>
 
+            <div class="input-info">
+                <div>
+                    <span class="sub-heading">Trip Name</span>
+                    <div>
+                        <textarea class="comments-input" id="name"
+                                  type="text"
+                                  placeholder="Name..."></textarea>
+                    </div>
+                </div>
+            </div>
+
             <div class="loading-gif" id="loading">
                 <img src="/images/loading.gif"
                      style="width: 60px; height: auto;"/>
@@ -120,8 +131,6 @@
                                        class="form-tooltip price-input"
                                        id="expected-price" type="number"
                                        step="0.01" placeholder="Price..."/>
-                                <span style="font-size: 12px;"><i
-                                            class="addendum">/person</i></span>
                             </div>
                         </div>
                         <div>

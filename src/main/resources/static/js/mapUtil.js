@@ -44,53 +44,56 @@ function defaultMap(error) {
  *            The index to use for identification (either 0 or 1)
  */
 function handleInput(id, index) {
-    // Get the address value from the correct input box
-    let address = $(`#${id}`).val();
-    if (address === "") {
-        removeMarker(index);
-        disableTrip();
-        return;
-    }
+    if (map) {
+        // Get the address value from the correct input box
+        let address = $(`#${id}`).val();
+        if (address === "") {
+            removeMarker(index);
+            disableTrip();
+            return;
+        }
 
-    $(`#loading-${id}`).css({
-        visibility: "visible"
-    });
+        $(`#loading-${id}`).css({
+            visibility: "visible"
+        });
 
-    setTimeout(function () {
-        // Send network request for geocoding based on address box value
-        mapboxClient.geocoding
-                    .forwardGeocode({
-                        query: address,
-                        proximity: [curLong, curLat],
-                        autocomplete: true,
-                        limit: 1
-                    })
-                    .send()
-                    .then(function (response) {
-                        // If valid response
-                        if (response && response.body &&
-                            response.body.features &&
-                            response.body.features.length) {
-                            /**
-                             * Get the first element of the suggestions, set
-                             * the input box to that value, then update the
-                             * addressNames and coordinates arrays with the
-                             * feature data.
-                             * */
-                            let feature = response.body.features[0];
-                            $(`#${id}`).val(feature.place_name);
-                            coordinates[index] = feature.center;
-                            addressNames[index] = feature.place_name;
-                            // Add new marker on the map with the returned
-                            // feature data
-                            addStreetPoint(feature.center[1], feature.center[0],
-                                id, index, feature.place_name);
-                        }
-                        $(`#loading-${id}`).css({
-                            visibility: "hidden"
+        setTimeout(function () {
+            // Send network request for geocoding based on address box value
+            mapboxClient.geocoding
+                        .forwardGeocode({
+                            query: address,
+                            proximity: [curLong, curLat],
+                            autocomplete: true,
+                            limit: 1
+                        })
+                        .send()
+                        .then(function (response) {
+                            // If valid response
+                            if (response && response.body &&
+                                response.body.features &&
+                                response.body.features.length) {
+                                /**
+                                 * Get the first element of the suggestions, set
+                                 * the input box to that value, then update the
+                                 * addressNames and coordinates arrays with the
+                                 * feature data.
+                                 * */
+                                let feature = response.body.features[0];
+                                $(`#${id}`).val(feature.place_name);
+                                coordinates[index] = feature.center;
+                                addressNames[index] = feature.place_name;
+                                // Add new marker on the map with the returned
+                                // feature data
+                                addStreetPoint(feature.center[1],
+                                    feature.center[0],
+                                    id, index, feature.place_name);
+                            }
+                            $(`#loading-${id}`).css({
+                                visibility: "hidden"
+                            });
                         });
-                    });
-    }, 800);
+        }, 800);
+    }
 }
 
 /**
