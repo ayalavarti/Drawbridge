@@ -1,10 +1,17 @@
 function generateTrip(trip) {
-    let date = new Date(parseFloat(trip["date"]));
+    let date = new Date(parseFloat(trip["date"]) * 1000);
+    console.log(date);
     let hourLabel = "AM";
+    let minutes;
     let hour = date.getHours();
     if (hour > 12) {
         hour = hour - 12;
         hourLabel = "PM";
+    }
+    if (date.getMinutes() < 10) {
+        minutes = `${date.getMinutes()}0`;
+    } else {
+        minutes = date.getMinutes();
     }
     // If the status is "join" add hover effects and an onclick handler
     let imgAtt = "";
@@ -26,13 +33,13 @@ function generateTrip(trip) {
 					<i class="fas fa-calendar icon-label-small"></i>
 						${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}
 					<i class="fas fa-clock icon-label-small"></i>
-						${hour}:${date.getMinutes()} ${hourLabel}
+						${hour}:${minutes} ${hourLabel}
 				</div>
 				<div>
 					<i class="fas fa-users icon-label-small"></i>
 						${trip["currentSize"]} / ${trip["maxSize"]}
 						<i class="fas fa-dollar-sign icon-label-small"></i>
-						${trip["costPerPerson"]}
+						${parseFloat(trip["costPerPerson"]).toFixed(2)}
 				</div>
 				${imgElement}
 			</div>`)

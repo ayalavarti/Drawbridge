@@ -101,7 +101,7 @@ function generateTripCards(data) {
                 hosting.push(generateTrip(element[trip]));
             } else if (element[trip]["status"] === "joined") {
                 member.push(generateTrip(element[trip]));
-            } else {
+            } else if (element[trip]["status"] === "pending") {
                 pending.push(generateTrip(element[trip]));
             }
         }

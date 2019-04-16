@@ -6,6 +6,15 @@
     <meta name="viewport"
           content="width=device-width,initial-scale=1,maximum-scale=1">
 
+    <meta property="og:url"
+          content=""/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="Drawbridge"/>
+    <meta property="og:description" content="Connecting the world. One trip a
+            time."/>
+    <meta property="og:image"
+          content=""/>
+
     <#--  Google Sign In  -->
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id"
