@@ -50,7 +50,6 @@ function initTooltips() {
  */
 function queryResults() {
     // Set the trip results on the page with the resulting data
-    console.log(data);
     setTripResults(JSON.parse(data));
 }
 

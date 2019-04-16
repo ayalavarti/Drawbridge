@@ -17,6 +17,111 @@ function initMapbox() {
 }
 
 /**
+ * Handle changes to the address input boxes whenever the input box loses focus.
+ *
+ * @param {*} id
+ *            The name of the input box (either 'start-input' or 'end-input')
+ * @param {*} index
+ *            The index to use for identification (either 0 or 1)
+ */
+function handleInput(id, index) {
+    // Get the address value from the correct input box
+    let address = $(`#${id}`).val();
+    if (address === "") {
+        removeMarker(index);
+        disableTrip();
+        return;
+    }
+
+    $(`#loading-${id}`).css({
+        visibility: "visible"
+    });
+
+    setTimeout(function () {
+        // Send network request for geocoding based on address box value
+        mapboxClient.geocoding
+                    .forwardGeocode({
+                        query: address,
+                        proximity: [curLong, curLat],
+                        autocomplete: true,
+                        limit: 1
+                    })
+                    .send()
+                    .then(function (response) {
+                        // If valid response
+                        if (response && response.body &&
+                            response.body.features &&
+                            response.body.features.length) {
+                            /**
+                             * Get the first element of the suggestions, set
+                             * the input box to that value, then update the
+                             * addressNames and coordinates arrays with the
+                             * feature data.
+                             * */
+                            let feature = response.body.features[0];
+                            $(`#${id}`).val(feature.place_name);
+                            coordinates[index] = feature.center;
+                            addressNames[index] = feature.place_name;
+                            // Add new marker on the map with the returned
+                            // feature data
+                            addStreetPoint(feature.center[1], feature.center[0],
+                                id, index, feature.place_name);
+                        }
+                        $(`#loading-${id}`).css({
+                            visibility: "hidden"
+                        });
+                    });
+    }, 800);
+}
+
+/**
+ * Add a new street point on the map after a new address is inputted.
+ *
+ * @param {*} lat
+ *            The marker center latitude.
+ * @param {*} long
+ *            The marker center longitude.
+ * @param {*} id
+ *            The name of the input box (either 'start-input' or 'end-input')
+ * @param {*} index
+ *            The index to use for identification (either 0 or 1)
+ * @param {*} name
+ *            The name of the location
+ */
+function addStreetPoint(lat, long, id, index, name) {
+    /**
+     * Add a new marker on the map then mark the associated input type as found
+     */
+    addMarker(lat, long, id, index, name, map);
+    found[index] = true;
+
+    /**
+     * If both are found, align the map view based on the trip coordinates.
+     * Otherwise, move to the location of the given address.
+     */
+    if (found[0] && found[1]) {
+        alignTrip();
+        updateRoute();
+        enableTrip();
+    } else {
+        moveToLocation(lat, long);
+    }
+}
+
+/**
+ * Clear the given trip from the input box.
+ * @param id
+ * @param index
+ */
+function clearTrip(id, index) {
+    if (markers[index]) {
+        $(`#${id}`).val("");
+        removeMarker(index);
+        disableTrip();
+    }
+}
+
+/**
  * Centers the map view.
  */
 function centerMap() {

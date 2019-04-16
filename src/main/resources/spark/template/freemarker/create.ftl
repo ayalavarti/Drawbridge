@@ -11,8 +11,27 @@
                 width: auto;"/>
             </div>
 
-            <div id="map"></div>
-
+            <div id="map">
+                <div id="route-info"
+                     style="visibility: hidden; flex-direction: column;"
+                     class="route-info">
+                    <div>Route Information</div>
+                    <img src="/images/divider.png"
+                         style="height: 2px; width: auto; margin-top: 2px; margin-bottom: 2px;"/>
+                    <div>
+                        <div><i style="font-size: 10px;"
+                                class="fas fa-clock icon-label"></i><span
+                                    style="font-size: 13px;"
+                                    id="duration"></span>
+                        </div>
+                        <div><i style="font-size: 10px;"
+                                class="fas fa-road icon-label"></i><span
+                                    style="font-size: 13px;"
+                                    id="distance"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <form autocomplete="off"
                   onsubmit="event.preventDefault(); handleSubmit()">
                 <div class="search-inputs">
