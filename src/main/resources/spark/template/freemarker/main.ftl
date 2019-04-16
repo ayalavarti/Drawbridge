@@ -77,15 +77,26 @@
     </div>
 </div>
 
-<div style="display: none; top: 2%;" id="home-btn" class="home-btn"
-     onclick="toHome();">
-    <img style="height: 15px; width: auto" src="/images/home-icon.png"/>
-</div>
+<a href="/">
+    <div style="display: none; top: 2%;" id="home-btn" class="home-btn">
+        <img style="height: 15px; width: auto" src="/images/home-icon.png"/>
+    </div>
+</a>
 
-<div style="display: none; bottom: 2%; position: fixed;" id="info-btn"
-     class="info-btn" onclick="toInfo();">
-    <img style="height: 15px; width: auto" src="/images/info-icon.png"/>
-</div>
+<a href="/help">
+    <div style="display: none; bottom: 2%; position: fixed;" id="info-btn"
+         class="info-btn">
+        <img style="height: 15px; width: auto" src="/images/info-icon.png"/>
+    </div>
+</a>
+
+<a href="/new">
+    <div style="display: none; bottom: 2%; right: 90px; position: fixed;"
+         id="new-btn"
+         class="new-btn">
+        <img style="height: 15px; width: auto" src="/images/host-icon.png"/>
+    </div>
+</a>
 
 <div class="body">
     ${content}

@@ -156,6 +156,7 @@ function signOut() {
 function showHomeInfo() {
     $("#home-btn").show();
     $("#info-btn").show();
+    $("#new-btn").show();
 }
 
 /**

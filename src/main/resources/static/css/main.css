@@ -106,6 +106,7 @@ input[type="number"] {
 }
 
 .info-tooltip,
+.new-btn,
 .info-btn,
 .home-btn {
     right: 20px;

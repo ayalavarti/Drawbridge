@@ -41,7 +41,6 @@
                     <img src="/images/divider.png"
                          style="height: 2px; width: auto; margin-top: 2px; margin-bottom: 2px;"/>
                     <div>
-                        <i class="fab fa-autoprefixer icon-label"></i>
                         <input class="name-input" id="name"
                                type="text" placeholder="Name..."/>
                     </div>
