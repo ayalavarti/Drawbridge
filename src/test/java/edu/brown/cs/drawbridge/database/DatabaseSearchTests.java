@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class DatabaseSearchTests {
 
-  private static DatabaseQuery dummyData;
+  private static DatabaseQuery teamData;
   private static DatabaseQuery searchTester;
 
   @BeforeClass
@@ -41,45 +41,9 @@ public class DatabaseSearchTests {
      * GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <username>
      * GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO <username>
      */
-    dummyData = new DatabaseQuery("//127.0.0.1:5432/dummyDatabase", username, password);
     searchTester = new DatabaseQuery("//127.0.0.1:5432/searchTester", username, password);
     final User dummyHost = new User("1", "one", "one@mail.com");
     searchTester.addUser(dummyHost);
-  }
-
-  @Test
-  public void testDummyDataExists()
-          throws SQLException, MissingDataException {
-    dummyData.getUserById("0");
-    dummyData.getUserById("1");
-    dummyData.getUserById("2");
-    dummyData.getUserById("3");
-    dummyData.getUserById("4");
-    assertNotNull(dummyData.getTripById(1));
-    assertNotNull(dummyData.getTripById(2));
-    assertNotNull(dummyData.getTripById(3));
-    assertNotNull(dummyData.getTripById(4));
-    assertNotNull(dummyData.getTripById(5));
-    assertEquals(dummyData.getHostOnTrip(1),"0");
-    assertEquals(dummyData.getHostOnTrip(2),"1");
-    assertEquals(dummyData.getHostOnTrip(3),"3");
-    assertEquals(dummyData.getHostOnTrip(4),"0");
-    assertEquals(dummyData.getHostOnTrip(5),"2");
-    assertTrue(dummyData.getMembersOnTrip(1).contains("3"));
-    assertTrue(dummyData.getMembersOnTrip(2).contains("2"));
-    assertTrue(dummyData.getMembersOnTrip(2).contains("4"));
-    assertTrue(dummyData.getMembersOnTrip(3).contains("4"));
-    assertTrue(dummyData.getMembersOnTrip(4).contains("1"));
-    assertTrue(dummyData.getMembersOnTrip(5).isEmpty());
-    assertTrue(dummyData.getRequestsOnTrip(1).contains("4"));
-    assertTrue(dummyData.getRequestsOnTrip(1).contains("2"));
-    assertTrue(dummyData.getRequestsOnTrip(1).contains("1"));
-    assertTrue(dummyData.getRequestsOnTrip(2).isEmpty());
-    assertTrue(dummyData.getRequestsOnTrip(3).contains("1"));
-    assertTrue(dummyData.getRequestsOnTrip(4).contains("2"));
-    assertTrue(dummyData.getRequestsOnTrip(4).contains("3"));
-    assertTrue(dummyData.getRequestsOnTrip(4).contains("4"));
-    assertTrue(dummyData.getRequestsOnTrip(5).contains("3"));
   }
 
   public static boolean hasAllTrips(List<String> nameList, List<Trip> trips) {

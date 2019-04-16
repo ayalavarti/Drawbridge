@@ -62,7 +62,7 @@ in total:
 * testCarpools - intended for testing interactions with
 the database; data will be inserted and deleted
 regularly
-* dummyDatabase - intended to provide a sample set of 
+* carpools - intended to provide a sample set of 
 data to display to the front end
 * searchTester - intended for specific data sets on
 which path-finding algorithms will be tested
