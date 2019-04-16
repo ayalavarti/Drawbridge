@@ -2,6 +2,7 @@ package edu.brown.cs.drawbridge.main;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import edu.brown.cs.drawbridge.carpools.Carpools;
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
 import edu.brown.cs.drawbridge.database.MissingDataException;
@@ -101,7 +102,7 @@ public final class UserInterface {
   }
 
   // ---------------------------- Home ------------------------------------
-  
+
   /**
    * Handle requests to the home screen of the website.
    */
@@ -213,7 +214,7 @@ public final class UserInterface {
    * joining a trip, approving/denying pending members.
    */
   private static class DetailPostHandler implements Route {
-    @Override public ModelAndView handle(Request request, Response response) {
+    @Override public Object handle(Request request, Response response) {
       QueryParamsMap qm = request.queryMap();
 
       int tid;
@@ -227,23 +228,39 @@ public final class UserInterface {
       String uid = qm.value("user");
       System.out.println(request.body());
 
-      if (action.equals("join")) {
-        System.out.println("JOIN " + uid);
+      boolean success = false;
+      String errorReason = "Command not found";
+      try {
+        if (action.equals("join")) {
+          errorReason = "Database connection failed";
+          success = carpools.joinTrip(tid, uid);
 
-      } else if (action.equals("leave")) {
-        System.out.println("LEAVE " + uid);
+        } else if (action.equals("leave")) {
+          errorReason = "Database connection failed";
+          success = carpools.leaveTrip(tid, uid);
 
-      } else if (action.equals("delete")) {
-        System.out.println("DELETE");
+        } else if (action.equals("delete")) {
+          errorReason = "Database connection failed";
+          success = carpools.deleteTrip(tid, uid);
 
-      } else if (action.equals("approve")) {
-        System.out.println("APPROVE " + uid);
+        } else if (action.equals("approve")) {
+          errorReason = "Database connection failed";
+          String pendingUID = qm.value("pendingUser");
+          success = carpools.approveRequest(tid, uid, pendingUID);
 
-      } else if (action.equals("deny")) {
-        System.out.println("DENY " + uid);
+        } else if (action.equals("deny")) {
+          errorReason = "Database connection failed";
+          String pendingUID = qm.value("pendingUser");
+          success = carpools.rejectRequest(tid, uid, pendingUID);
+        }
+        assert success; // Make sure the db action was completed successfully
 
-      } else {
-
+      } catch (SQLException | MissingDataException | AssertionError e) {
+        JsonObject errObj = new JsonObject();
+        errObj.addProperty("error", e.getMessage());
+        errObj.addProperty("action", action);
+        errObj.addProperty("reason", errorReason);
+        return GSON.toJson(errObj);
       }
 
       response.redirect("/trip/" + tid, 303);
