@@ -4,24 +4,12 @@
 
 <#assign content>
     <div id="container">
-        <div class="search-menu">
-            <div>
-                <h2 class="section-heading">Host a Carpool</h2>
-                <img alt="divider" src="/images/divider.png" style="height: 4px;
+        <div>
+            <h2 class="section-heading">Host a Carpool</h2>
+            <img alt="divider" src="/images/divider.png" style="height: 4px;
                 width: auto;"/>
-            </div>
-
-            <div class="input-info">
-                <div>
-                    <span class="sub-heading">Trip Name</span>
-                    <div>
-                        <textarea class="comments-input" id="name"
-                                  type="text"
-                                  placeholder="Name..."></textarea>
-                    </div>
-                </div>
-            </div>
-
+        </div>
+        <div class="search-menu">
             <div class="loading-gif" id="loading">
                 <img src="/images/loading.gif"
                      style="width: 60px; height: auto;"/>
@@ -51,21 +39,29 @@
             <form autocomplete="off"
                   onsubmit="event.preventDefault(); handleSubmit()">
                 <div class="search-inputs">
-                    <div style="display: flex; justify-content: space-evenly;
-                     flex-wrap: wrap; ">
+                    <div class="input-info">
+                        <div>
+                            <span class="sub-heading">Trip Name</span>
+                            <div>
+                        <textarea class="comments-input" id="name"
+                                  placeholder="Name..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-info" style="justify-content: center;">
                         <div>
                             <i class="fas fa-dot-circle icon-label"></i>
                             <input class="address-input" id="start-input"
                                    onblur="handleInput('start-input', 0)"
                                    type="text" placeholder="Starting point..."/>
-                            <img alt="loading" id="loading-start-input"
-                                 src="/images/loading.gif"
-                                 class="loading-address-gif"/>
                             <img class="clear-btn"
                                  onclick="clearTrip('start-input', 0)"
                                  src="/images/clear-btn.png"
                                  onmouseover="hover(this);"
                                  onmouseout="unhover(this);"/>
+                            <img alt="loading" id="loading-start-input"
+                                 src="/images/loading.gif"
+                                 class="loading-address-gif"/>
                         </div>
                         <div>
                             <i class="fas fa-map-marker-alt icon-label"></i>
@@ -73,24 +69,27 @@
                                    onblur="handleInput('end-input', 1)"
                                    type="text"
                                    placeholder="Ending destination..."/>
-                            <img alt="loading" id="loading-end-input"
-                                 src="/images/loading.gif"
-                                 class="loading-address-gif"/>
                             <img class="clear-btn"
                                  onclick="clearTrip('end-input', 1)"
                                  src="/images/clear-btn.png"
                                  onmouseover="hover(this);"
                                  onmouseout="unhover(this);"/>
+                            <img alt="loading" id="loading-end-input"
+                                 src="/images/loading.gif"
+                                 class="loading-address-gif"/>
                         </div>
                     </div>
-                    <div>
-                        <i class="fas fa-calendar icon-label"></i>
-                        <input class="datetime-input flatpickr flatpickr-input"
-                               id="date" type="text" placeholder="Date..."/>
-
-                        <i class="fas fa-clock icon-label"></i>
-                        <input class="datetime-input flatpickr flatpickr-input"
-                               id="time" type="text" placeholder="Time..."/>
+                    <div class="input-info" style="justify-content: center;">
+                        <div>
+                            <i class="fas fa-calendar icon-label"></i>
+                            <input class="datetime-input flatpickr flatpickr-input"
+                                   id="date" type="text" placeholder="Date..."/>
+                        </div>
+                        <div>
+                            <i class="fas fa-clock icon-label"></i>
+                            <input class="datetime-input flatpickr flatpickr-input"
+                                   id="time" type="text" placeholder="Time..."/>
+                        </div>
                     </div>
 
                     <div class="input-info">
@@ -151,7 +150,6 @@
                             <div>
                                 <i class="fas fa-comments icon-label"></i>
                                 <textarea class="comments-input" id="comments"
-                                          type="text"
                                           placeholder="Comments..."></textarea>
                             </div>
                         </div>
