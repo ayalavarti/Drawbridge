@@ -58,12 +58,16 @@ function getLocation() {
 }
 
 function defaultMap(error) {
-    $.get("https://jsonip.com/", function(ipData) {
+    $.get("https://jsonip.com/", function (ipData) {
         if (ipData.status === "fail") {
             initMap(undefined);
         } else {
             $.get("http://ip-api.com/json/" + ipData.ip, function (locData) {
-                let position = {coords: {latitude: locData.lat, longitude: locData.lon}};
+                let position = {
+                    coords: {
+                        latitude: locData.lat, longitude: locData.lon
+                    }
+                };
                 initMap(position);
             });
         }
@@ -289,10 +293,10 @@ function validateSubmit() {
         const postParameters = {
             startName: addressNames[0],
             endName: addressNames[1],
-            startLat: coordinates[0].slice(0).reverse()[0],
-            startLon: coordinates[0].slice(0).reverse()[1],
-            endLat: coordinates[1].slice(0).reverse()[0],
-            endLon: coordinates[1].slice(0).reverse()[1],
+            startLat: coordinates[0][1],
+            startLon: coordinates[0][0],
+            endLat: coordinates[1][1],
+            endLon: coordinates[1][0],
             date: date.getTime(),
             userID: userID,
             eta: route[1]

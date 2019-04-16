@@ -30,7 +30,7 @@
                         <input class="address-input" id="end-input"
                                onblur="handleInput('end-input', 1)" type="text"
                                placeholder="Ending destination..."/>
-                        <img src="/images/loading.gif"
+                        <img id="loading-end-input" src="/images/loading.gif"
                              class="loading-address-gif"/>
                         <img class="clear-btn"
                              onclick="clearTrip('end-input', 1)"
