@@ -297,7 +297,8 @@ public final class UserInterface {
     @Override public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Create Trip")
-          .put("favicon", "images/favicon.png").build();
+          .put("mapboxKey", MAPBOX_TOKEN).put("favicon", "images/favicon.png")
+          .build();
 
       return new ModelAndView(variables, "create.ftl");
     }

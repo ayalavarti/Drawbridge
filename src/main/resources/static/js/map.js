@@ -11,12 +11,15 @@ let addressNames = [];
 let route = [];
 
 let formValidationTooltip;
+let mapControlTooltips;
+
+let droppedPin;
 
 /**
  * When the DOM loads, initialize Mapbox and the Map object.
  */
 $(document).ready(function () {
-    initMapbox(mapboxToken);
+    initMapbox();
     getLocation();
     initDateTime();
     initTooltips();
@@ -91,6 +94,9 @@ function initMap(position) {
                                visibility: "visible"
                            });
     console.log("Map loaded.");
+    map.on("click", function (event) {
+        handleClick(event.lngLat);
+    });
 }
 
 /**
@@ -122,6 +128,17 @@ function initTooltips() {
         interactive: false,
         trigger: "manual",
         hideOnClick: false,
+        inertia: true,
+        sticky: true,
+        placement: "top",
+    });
+    mapControlTooltips = tippy(".map-settings", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge-alt",
+        interactive: "true",
+        hideOnClick: true,
         inertia: true,
         sticky: true,
         placement: "top",
@@ -184,6 +201,59 @@ function handleInput(id, index) {
                                                 });
                     });
     }, 800);
+}
+
+function handleClick(coord) {
+    setTimeout(function () {
+        // Send network request for reverse geocoding based on clicked location
+        mapboxClient.geocoding
+                    .reverseGeocode({
+                                        query: [coord["lng"], coord["lat"]],
+                                        limit: 1
+                                    })
+                    .send()
+                    .then(function (response) {
+                        // If valid response
+                        if (response && response.body &&
+                            response.body.features &&
+                            response.body.features.length)
+                        {
+                            let feature = response.body.features[0];
+                            console.log(feature);
+
+                            droppedPin = new mapboxgl.Popup()
+                            .setLngLat(feature["center"])
+                            .setHTML(`
+                                ${parseAddressOnClick(feature.place_name)}
+                                <button onclick="updateAddress('start-input', 0,
+                                    '${feature.place_name}', '${feature.center[1]}',
+                                    '${feature.center[0]}');" 
+                                    class="setLocation-btn">
+                                    Set Starting
+                                </button>
+                                
+                                <button onclick="updateAddress('end-input', 1,
+                                    '${feature.place_name}', '${feature.center[1]}',
+                                    '${feature.center[0]}');" 
+                                    class="setLocation-btn">
+                                    Set Ending
+                                </button>
+                            `)
+                            .addTo(map);
+                        }
+                    });
+    }, 800);
+}
+
+function updateAddress(id, index, featureName, featureLat, featureLng) {
+    droppedPin.remove();
+    $(`#${id}`).val(featureName);
+    coordinates[index] = [featureLng, featureLat];
+    /**
+     * Add new marker on the map with the returned feature data
+     */
+    addStreetPoint(featureLat, featureLng,
+                   id, index, featureName);
 }
 
 /**

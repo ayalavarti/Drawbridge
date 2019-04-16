@@ -109,7 +109,6 @@ function handleJoin(ids) {
 
 /**
  * Handles a host button press.
- * @param {*} id
  */
 function handleHost() {
     /**
@@ -126,6 +125,6 @@ function handleHost() {
             "Sign in with your Google Account to host your own trip.");
         signInTooltip[0].show();
     } else {
-        window.location.href = "/new";
+        window.open("/new", "_self");
     }
 }

@@ -16,15 +16,11 @@ $(document).ready(function () {
      * the sign in button
      */
     if (navigator.cookieEnabled) {
-        if (getCookie("loggedIn") !== "true") {
+        if (getCookie("loggedIn") === "true") {
             $("#sign-in").css({
-                                  visibility: "visible"
+                                  visibility: "hidden"
                               });
         }
-    } else {
-        $("#sign-in").css({
-                              visibility: "visible"
-                          });
     }
 });
 

@@ -60,6 +60,7 @@
 
 .thresholds > div > div {
     display: flex;
+    align-items: center;
 }
 
 .empty-results {
@@ -67,7 +68,7 @@
 }
 
 .empty-results > img {
-    width: 350px;
+    width: 280px;
     height: auto;
 }
 
@@ -111,8 +112,6 @@
 .icon-label-large {
     color: #47A5FF;
     font-size: 15px;
-    margin-bottom: 10px;
-    cursor: pointer;
 }
 
 .icon-label-medium {

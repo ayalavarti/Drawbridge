@@ -143,6 +143,7 @@ function handleSubmit() {
     let date = new Date(`${dateInput} ${timeInput}`);
 
     let sizeInput = $("#carpool-size").val();
+    let typeInput = $("#transport-type").val();
     let priceInput = $("#expected-price").val();
     let phoneInput = $("#contact-number").val();
     let commentsInput = $("#comments").val();
@@ -154,7 +155,7 @@ function handleSubmit() {
      * 3 seconds, then hide it, prompting the user to fill out the form
      * completely.
      */
-    if (dateInput === "" || timeInput === "" ||
+    if (dateInput === "" || timeInput === "" || typeInput === "" ||
         sizeInput === "" || priceInput === "" || phoneInput === "")
     {
         showHideTooltip(formValidationTooltip[0]);
@@ -176,16 +177,23 @@ function handleSubmit() {
             const postParameters = {
                 startName: addressNames[0],
                 endName: addressNames[1],
-                startCoordinates: coordinates[0].slice(0).reverse(),
-                endCoordinates: coordinates[1].slice(0).reverse(),
+                startLat: coordinates[0].slice(0).reverse()[0],
+                startLon: coordinates[0].slice(0).reverse()[1],
+                endLat: coordinates[1].slice(0).reverse()[0],
+                endLon: coordinates[1].slice(0).reverse()[1],
                 date: date.getTime(),
                 size: sizeInput,
                 price: priceInput,
+                type: typeInput,
                 phone: phoneInput,
                 comments: commentsInput,
                 userID: userProfile.getId()
             };
             console.log(postParameters);
+
+            $.post("/new", postParameters, responseJSON => {
+                console.log("Response");
+            }, "json");
         }
     }
 }
