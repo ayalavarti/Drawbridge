@@ -60,8 +60,7 @@
                                         id="transport-type"
                                         name="transport-type">
                                     <option value="" disabled selected hidden>
-                                        Select
-                                        your option
+                                        Select...
                                     </option>
                                     <option value="personal">Personal
                                         Car
