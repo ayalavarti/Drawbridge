@@ -38,8 +38,8 @@ public class DatabaseQueryTest {
   @BeforeClass public static void oneTimeSetUp()
       throws SQLException, MissingDataException {
     try {
-      String username = System.getenv("DB_USER");
-      String password = System.getenv("DB_PASS");
+      String username = "dev";//System.getenv("DB_USER");
+      String password = "dev";//System.getenv("DB_PASS");
       /*
        * Run the following queries in pgadmin:
        * CREATE USER <username> WITH PASSWORD '<password>'
@@ -132,12 +132,12 @@ public class DatabaseQueryTest {
     assertTrue(
         test.getConnectedTripsWithinTimeRadius(5, 5, 0, 1000, 0).isEmpty());
     //all trips
-    assertEquals(test.getConnectedTripsWithinTimeRadius(1, 1, 25, 1500, 1250),
+    assertEquals(test.getConnectedTripsWithinTimeRadius(1, 1, 330, 1500, 1250),
         new ArrayList<>(Arrays
             .asList(test.getTripById(t1), test.getTripById(t2),
                 test.getTripById(t3))));
     //selective
-    assertEquals(test.getConnectedTripsWithinTimeRadius(3, 3, 2, 750, 300),
+    assertEquals(test.getConnectedTripsWithinTimeRadius(3, 3, 112, 750, 300),
         new ArrayList<>(
             Arrays.asList(test.getTripById(t1), test.getTripById(t3))));
   }
@@ -156,12 +156,12 @@ public class DatabaseQueryTest {
     //after eta outside buffer
     assertTrue(test.getConnectedTripsAfterEta(3, 3, 0, 1026, 25).isEmpty());
     //all trips
-    assertEquals(test.getConnectedTripsAfterEta(1, 1, 50, -1000000, 2000000),
+    assertEquals(test.getConnectedTripsAfterEta(1, 1, 330, -100000000, 2000000000),
         new ArrayList<>(Arrays
             .asList(test.getTripById(t1), test.getTripById(t2),
                 test.getTripById(t3))));
     //selective
-    assertEquals(test.getConnectedTripsAfterEta(1, 1, 10, -112320, 1000000),
+    assertEquals(test.getConnectedTripsAfterEta(1, 1, 158, -112320, 1000000),
         new ArrayList<>(Collections.singletonList(test.getTripById(t2))));
   }
 
@@ -210,48 +210,4 @@ public class DatabaseQueryTest {
     assertTrue(test.getMembersOnTrip(t1).isEmpty());
   }
 
-  private static DatabaseQuery dummyData;
-
-  @Test public void testDummyDataExists()
-          throws SQLException, ClassNotFoundException, MissingDataException {
-    String username = System.getenv("DB_USER");
-    String password = System.getenv("DB_PASS");
-    /*
-     * Run the following queries in pgadmin:
-     * CREATE USER <username> WITH PASSWORD '<password>'
-     * GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <username>
-     * GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO <username>
-     */
-    dummyData = new DatabaseQuery("//127.0.0.1:5432/dummyDatabase", username, password);
-    dummyData.getUserById("0");
-    dummyData.getUserById("1");
-    dummyData.getUserById("2");
-    dummyData.getUserById("3");
-    dummyData.getUserById("4");
-    assertNotNull(dummyData.getTripById(1));
-    assertNotNull(dummyData.getTripById(2));
-    assertNotNull(dummyData.getTripById(3));
-    assertNotNull(dummyData.getTripById(4));
-    assertNotNull(dummyData.getTripById(5));
-    assertEquals(dummyData.getHostOnTrip(1),"0");
-    assertEquals(dummyData.getHostOnTrip(2),"1");
-    assertEquals(dummyData.getHostOnTrip(3),"3");
-    assertEquals(dummyData.getHostOnTrip(4),"0");
-    assertEquals(dummyData.getHostOnTrip(5),"2");
-    assertTrue(dummyData.getMembersOnTrip(1).contains("3"));
-    assertTrue(dummyData.getMembersOnTrip(2).contains("2"));
-    assertTrue(dummyData.getMembersOnTrip(2).contains("4"));
-    assertTrue(dummyData.getMembersOnTrip(3).contains("4"));
-    assertTrue(dummyData.getMembersOnTrip(4).contains("1"));
-    assertTrue(dummyData.getMembersOnTrip(5).isEmpty());
-    assertTrue(dummyData.getRequestsOnTrip(1).contains("4"));
-    assertTrue(dummyData.getRequestsOnTrip(1).contains("2"));
-    assertTrue(dummyData.getRequestsOnTrip(1).contains("1"));
-    assertTrue(dummyData.getRequestsOnTrip(2).isEmpty());
-    assertTrue(dummyData.getRequestsOnTrip(3).contains("1"));
-    assertTrue(dummyData.getRequestsOnTrip(4).contains("2"));
-    assertTrue(dummyData.getRequestsOnTrip(4).contains("3"));
-    assertTrue(dummyData.getRequestsOnTrip(4).contains("4"));
-    assertTrue(dummyData.getRequestsOnTrip(5).contains("3"));
-  }
 }
