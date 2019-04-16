@@ -350,8 +350,8 @@ public class DatabaseQuery {
       prep.setString(5, trip.getEndingAddress());
       prep.setDouble(6, trip.getEndingLatitude());
       prep.setDouble(7, trip.getEndingLongitude());
-      prep.setInt(8, trip.getDepartureTime());
-      prep.setInt(9, trip.getEta());
+      prep.setLong(8, trip.getDepartureTime());
+      prep.setLong(9, trip.getEta());
       prep.setInt(10, trip.getMaxUsers());
       prep.setDouble(11, trip.getCost());
       prep.setString(12, trip.getPhoneNumber());
@@ -489,7 +489,7 @@ public class DatabaseQuery {
    *     Errors involving the database's contents.
    */
   public List<Trip> getConnectedTripsAfterEta(double lastLat, double lastLon,
-      double walkRadius, int lastEta, int timeBuffer)
+      double walkRadius, long lastEta, double timeBuffer)
       throws SQLException, MissingDataException {
     int maxTimeShift = (int) (walkRadius / AVG_WALK_SPEED);
     List<Trip> results = new LinkedList<>();
@@ -498,7 +498,7 @@ public class DatabaseQuery {
     for (Trip t : possibleTrips) {
       double startLat = Math.toRadians(t.getStartingLatitude());
       double startLon = Math.toRadians(t.getStartingLongitude());
-      int departure = t.getDepartureTime();
+      long departure = t.getDepartureTime();
       double prevLat = Math.toRadians(lastLat);
       double prevLon = Math.toRadians(lastLon);
       double latDifference = prevLat - startLat;
@@ -511,8 +511,8 @@ public class DatabaseQuery {
           .cos(prevLat);
       double kmDist = 2 * Math
           .atan2(Math.sqrt(products), Math.sqrt(1 - products)) * EARTH_RADIUS;
-      int timeStart = lastEta + (int) (kmDist / AVG_WALK_SPEED);
-      int timeEnd = timeStart + timeBuffer;
+      long timeStart = lastEta + (int) (kmDist / AVG_WALK_SPEED);
+      double timeEnd = timeStart + timeBuffer;
       if (timeStart < departure && departure < timeEnd) {
         results.add(t);
       }
