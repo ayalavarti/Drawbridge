@@ -34,6 +34,7 @@ public class DatabaseQueryTest {
       .addDetails(3, 16.00, "333-333-3333", "car", "").build();
   private static DatabaseQuery test;
   private static int t1, t2, t3;
+  private static DatabaseQuery dummyData;
 
   @BeforeClass public static void oneTimeSetUp()
       throws SQLException, MissingDataException {
@@ -46,7 +47,7 @@ public class DatabaseQueryTest {
        * GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <username>
        * GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO <username>
        */
-      test = new DatabaseQuery("//127.0.0.1:5432/testCarpools", username, password);
+      test = new DatabaseQuery("//127.0.0.1:5432/carpools", username, password);
     } catch (ClassNotFoundException | SQLException e) {
       assert false;
     }
@@ -209,5 +210,4 @@ public class DatabaseQueryTest {
     test.kick(t1, "2");
     assertTrue(test.getMembersOnTrip(t1).isEmpty());
   }
-
 }

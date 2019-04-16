@@ -108,7 +108,7 @@ public class DatabaseSearchTests {
                 .addIdentification(-1, nameList.get(i))
                 .addLocations(lat1List[i], lon1List[i], lat2List[i], lon2List[i])
                 .addAddressNames("","")
-                .addTimes((int) departureList[i], (int) etaList[i])
+                .addTimes(departureList[i], etaList[i])
                 .addDetails(2, 2.00, "", "", "")
                 .build(), "1");
       }
@@ -200,7 +200,7 @@ public class DatabaseSearchTests {
                 .addIdentification(-1, nameList.get(i))
                 .addLocations(lat1List[i], lon1List[i], lat2List[i], lon2List[i])
                 .addAddressNames("","")
-                .addTimes((int) departureList[i], (int) etaList[i])
+                .addTimes(departureList[i], etaList[i])
                 .addDetails(2, 2.00, "", "", "")
                 .build(), "1");
       }
