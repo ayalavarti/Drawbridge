@@ -101,6 +101,7 @@ public final class UserInterface {
   }
 
   // ---------------------------- Home ------------------------------------
+  
   /**
    * Handle requests to the home screen of the website.
    */

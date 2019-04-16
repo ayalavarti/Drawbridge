@@ -434,6 +434,7 @@ public class DatabaseQuery {
    */
   public List<Trip> searchTripsByTimeWindow(double lastLat, double lastLon,
       double walkRadius, double start, double end)
+
       throws SQLException, MissingDataException {
     List<Trip> results = new ArrayList<>();
     try (PreparedStatement prep = conn
@@ -444,6 +445,7 @@ public class DatabaseQuery {
       prep.setDouble(4, walkRadius);
       prep.setDouble(5, start);
       prep.setDouble(6, end);
+
       try (ResultSet rs = prep.executeQuery()) {
         while (rs.next()) {
           results.add(Trip.TripBuilder.newTripBuilder()
@@ -490,6 +492,7 @@ public class DatabaseQuery {
    */
   public List<Trip> getConnectedTripsAfterEta(double lastLat, double lastLon,
       double walkRadius, long lastEta, double timeBuffer)
+
       throws SQLException, MissingDataException {
     int maxTimeShift = (int) (walkRadius / AVG_WALK_SPEED);
     List<Trip> results = new LinkedList<>();
@@ -511,8 +514,10 @@ public class DatabaseQuery {
           .cos(prevLat);
       double kmDist = 2 * Math
           .atan2(Math.sqrt(products), Math.sqrt(1 - products)) * EARTH_RADIUS;
+      
       long timeStart = lastEta + (int) (kmDist / AVG_WALK_SPEED);
       double timeEnd = timeStart + timeBuffer;
+
       if (timeStart < departure && departure < timeEnd) {
         results.add(t);
       }
@@ -544,6 +549,7 @@ public class DatabaseQuery {
    */
   public List<Trip> getConnectedTripsWithinTimeRadius(double lat, double lon,
       double walkRadius, long departure, double timeBuffer)
+
       throws SQLException, MissingDataException {
     return searchTripsByTimeWindow(lat, lon, walkRadius, departure - timeBuffer,
         departure + timeBuffer);
