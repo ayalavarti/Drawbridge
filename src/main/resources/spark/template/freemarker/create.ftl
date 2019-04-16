@@ -40,35 +40,38 @@
             <form autocomplete="off"
                   onsubmit="event.preventDefault(); handleSubmit()">
                 <div class="search-inputs">
-                    <div>
-                        <i class="fas fa-dot-circle icon-label"></i>
-                        <input class="address-input" id="start-input"
-                               onblur="handleInput('start-input', 0)"
-                               type="text" placeholder="Starting point..."/>
-                        <img alt="loading" id="loading-start-input"
-                             src="/images/loading.gif"
-                             class="loading-address-gif"/>
-                        <img class="clear-btn"
-                             onclick="clearTrip('start-input', 0)"
-                             src="/images/clear-btn.png"
-                             onmouseover="hover(this);"
-                             onmouseout="unhover(this);"/>
+                    <div style="display: flex; justify-content: space-evenly;
+                     flex-wrap: wrap; ">
+                        <div>
+                            <i class="fas fa-dot-circle icon-label"></i>
+                            <input class="address-input" id="start-input"
+                                   onblur="handleInput('start-input', 0)"
+                                   type="text" placeholder="Starting point..."/>
+                            <img alt="loading" id="loading-start-input"
+                                 src="/images/loading.gif"
+                                 class="loading-address-gif"/>
+                            <img class="clear-btn"
+                                 onclick="clearTrip('start-input', 0)"
+                                 src="/images/clear-btn.png"
+                                 onmouseover="hover(this);"
+                                 onmouseout="unhover(this);"/>
+                        </div>
+                        <div>
+                            <i class="fas fa-map-marker-alt icon-label"></i>
+                            <input class="address-input" id="end-input"
+                                   onblur="handleInput('end-input', 1)"
+                                   type="text"
+                                   placeholder="Ending destination..."/>
+                            <img alt="loading" id="loading-end-input"
+                                 src="/images/loading.gif"
+                                 class="loading-address-gif"/>
+                            <img class="clear-btn"
+                                 onclick="clearTrip('end-input', 1)"
+                                 src="/images/clear-btn.png"
+                                 onmouseover="hover(this);"
+                                 onmouseout="unhover(this);"/>
+                        </div>
                     </div>
-                    <div>
-                        <i class="fas fa-map-marker-alt icon-label"></i>
-                        <input class="address-input" id="end-input"
-                               onblur="handleInput('end-input', 1)" type="text"
-                               placeholder="Ending destination..."/>
-                        <img alt="loading" id="loading-end-input"
-                             src="/images/loading.gif"
-                             class="loading-address-gif"/>
-                        <img class="clear-btn"
-                             onclick="clearTrip('end-input', 1)"
-                             src="/images/clear-btn.png"
-                             onmouseover="hover(this);"
-                             onmouseout="unhover(this);"/>
-                    </div>
-
                     <div>
                         <i class="fas fa-calendar icon-label"></i>
                         <input class="datetime-input flatpickr flatpickr-input"
