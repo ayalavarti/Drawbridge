@@ -17,6 +17,25 @@ function initMapbox() {
 }
 
 /**
+ * Gets the current location if geolocation is enabled.
+ */
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(initMap, defaultMap);
+    } else {
+        console.log("Geolocation not enabled.");
+    }
+}
+
+/**
+ * Initializes the map if geolocation is not enabled.
+ * @param error
+ */
+function defaultMap(error) {
+    initMap(undefined);
+}
+
+/**
  * Handle changes to the address input boxes whenever the input box loses focus.
  *
  * @param {*} id

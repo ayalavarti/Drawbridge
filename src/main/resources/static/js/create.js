@@ -24,7 +24,7 @@ $(document).ready(function () {
     signInTooltip[0].setContent(
         "Sign in with your Google Account to host a trip.");
     initMapbox();
-    initMap();
+    getLocation();
     showHomeInfo();
     initDateTime();
     initTooltips();
@@ -51,14 +51,23 @@ function onUserSignedOut() {
 /**
  * Initializes the Map.
  */
-function initMap() {
+function initMap(position) {
+    /**
+     * If the position is valid from the navigator, set the current latitude
+     * and longitude to the positions latitude and longitude.
+     */
+    if (position !== undefined) {
+        curLat = position.coords.latitude;
+        curLong = position.coords.longitude;
+    }
+
     // Create map object with custom settings and add NavigationControl
     map = new mapboxgl.Map({
         container: "map",
         keyboard: false,
         maxZoom: 18,
         style: "mapbox://styles/mapbox/streets-v11",
-        center: [-71.058502, 42.358188],
+        center: [curLong, curLat],
         zoom: 12,
         interactive: false
     });

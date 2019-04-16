@@ -47,25 +47,6 @@ function onUserSignedOut() {
 }
 
 /**
- * Gets the current location if geolocation is enabled.
- */
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(initMap, defaultMap);
-    } else {
-        console.log("Geolocation not enabled.");
-    }
-}
-
-/**
- * Initializes the map if geolocation is not enabled.
- * @param error
- */
-function defaultMap(error) {
-    initMap(undefined);
-}
-
-/**
  * Initializes the Map on the DOM.
  */
 function initMap(position) {
