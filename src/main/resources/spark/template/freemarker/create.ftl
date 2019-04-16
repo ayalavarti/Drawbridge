@@ -24,6 +24,13 @@
                         <img alt="loading" id="loading-start-input"
                              src="/images/loading.gif"
                              class="loading-address-gif"/>
+                        <img class="clear-btn"
+                             onclick="clearTrip('start-input', 0)"
+                             src="/images/clear-btn.png"
+                             onmouseover="hover(this);"
+                             onmouseout="unhover(this);"/>
+                    </div>
+                    <div>
                         <i class="fas fa-map-marker-alt icon-label"></i>
                         <input class="address-input" id="end-input"
                                onblur="handleInput('end-input', 1)" type="text"
@@ -31,6 +38,11 @@
                         <img alt="loading" id="loading-end-input"
                              src="/images/loading.gif"
                              class="loading-address-gif"/>
+                        <img class="clear-btn"
+                             onclick="clearTrip('end-input', 1)"
+                             src="/images/clear-btn.png"
+                             onmouseover="hover(this);"
+                             onmouseout="unhover(this);"/>
                     </div>
 
                     <div>

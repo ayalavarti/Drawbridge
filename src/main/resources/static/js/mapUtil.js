@@ -12,8 +12,8 @@ let curLong = -71.058502;
  */
 function initMapbox() {
     mapboxClient = mapboxSdk({
-                                 accessToken: mapboxgl.accessToken
-                             });
+        accessToken: mapboxgl.accessToken
+    });
 }
 
 /**
@@ -21,11 +21,11 @@ function initMapbox() {
  */
 function centerMap() {
     map.flyTo({
-                  center: [curLong, curLat],
-                  pitch: 0,
-                  bearing: 0,
-                  zoom: 12
-              });
+        center: [curLong, curLat],
+        pitch: 0,
+        bearing: 0,
+        zoom: 12
+    });
 }
 
 /**
@@ -33,9 +33,9 @@ function centerMap() {
  */
 function alignMap() {
     map.flyTo({
-                  pitch: 0,
-                  bearing: 0
-              });
+        pitch: 0,
+        bearing: 0
+    });
 }
 
 /**
@@ -47,9 +47,9 @@ function alignMap() {
  */
 function moveToLocation(lat, lng) {
     map.flyTo({
-                  center: [lng, lat],
-                  zoom: 12
-              });
+        center: [lng, lat],
+        zoom: 12
+    });
 }
 
 /**
@@ -71,8 +71,7 @@ function alignTrip() {
                 coordinates[1][1]) ||
             (coordinates[0][0] > coordinates[1][0] && coordinates[0][1] >
                 coordinates[1][1]) ||
-            $(window).height() < 600)
-        {
+            $(window).height() < 600) {
             top = 150;
         }
         /**
@@ -130,6 +129,38 @@ function updateRoute() {
 }
 
 /**
+ * Calculates the route direction coordinates based on starting and ending
+ * locations using the Mapbox directions API.
+ *
+ * @param {*} c
+ */
+function calcRoute(c) {
+    let url =
+            "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+            c +
+            "?geometries=geojson&&access_token=" +
+            mapboxgl.accessToken;
+    $.get(url, responseJSON => {
+        route = [
+            responseJSON.routes[0].distance * 0.001,
+            responseJSON.routes[0].duration / 60
+        ];
+        setTripInfo();
+
+        let coords = responseJSON.routes[0].geometry;
+        addRoute(coords, map);
+    }, "json");
+}
+
+/**
+ * Sets the trip info test boxes to the appropriate distance and duration
+ */
+function setTripInfo() {
+    $("#distance").text(`${((route[0]) * 0.621371).toFixed(2)} mi`);
+    $("#duration").text(`${route[1].toFixed(0)} min`);
+}
+
+/**
  * Removes the route visualization from the map.
  */
 function removeRoute() {
@@ -160,15 +191,15 @@ function removeRoute() {
 function addMarker(lat, long, id, index, name, map) {
     let el = document.createElement("div");
     el.className = `marker ${id}`;
-    if (id == "start-input") {
+    if (id === "start-input") {
         el.className = el.className + " pulse";
     }
     if (markers[index]) {
         markers[index].remove();
     }
     let popup = new mapboxgl.Popup({
-                                       offset: 25
-                                   }).setHTML(parseAddress(name, index));
+        offset: 25
+    }).setHTML(parseAddress(name, index));
 
     markers[index] = new mapboxgl.Marker(el).setLngLat([long, lat]).setPopup(
         popup);
@@ -219,25 +250,25 @@ function addRoute(coords, map) {
         map.removeSource("route");
     } else {
         map.addLayer({
-                         id: "route",
-                         type: "line",
-                         source: {
-                             type: "geojson",
-                             data: {
-                                 type: "Feature",
-                                 properties: {},
-                                 geometry: coords
-                             }
-                         },
-                         layout: {
-                             "line-join": "round",
-                             "line-cap": "round"
-                         },
-                         paint: {
-                             "line-color": "#47A5FF",
-                             "line-width": 7,
-                             "line-opacity": 0.7
-                         }
-                     });
+            id: "route",
+            type: "line",
+            source: {
+                type: "geojson",
+                data: {
+                    type: "Feature",
+                    properties: {},
+                    geometry: coords
+                }
+            },
+            layout: {
+                "line-join": "round",
+                "line-cap": "round"
+            },
+            paint: {
+                "line-color": "#47A5FF",
+                "line-width": 7,
+                "line-opacity": 0.7
+            }
+        });
     }
 }

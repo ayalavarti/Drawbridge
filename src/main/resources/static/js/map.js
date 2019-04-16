@@ -79,24 +79,24 @@ function initMap(position) {
     }
     // Create map object with custom settings and add NavigationControl
     map = new mapboxgl.Map({
-                               container: "map",
-                               keyboard: false,
-                               maxZoom: 18,
-                               style: "mapbox://styles/mapbox/streets-v11",
-                               center: [curLong, curLat],
-                               zoom: 12
-                           });
+        container: "map",
+        keyboard: false,
+        maxZoom: 18,
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: [curLong, curLat],
+        zoom: 12
+    });
     map.addControl(new mapboxgl.NavigationControl());
 
     /**
      * Hide loading gif and show all initially hidden objects
      */
     $("#loading").css({
-                          visibility: "hidden"
-                      });
+        visibility: "hidden"
+    });
     $("[id=pre-load]").css({
-                               visibility: "visible"
-                           });
+        visibility: "visible"
+    });
     console.log("Map loaded.");
 
     /**
@@ -171,25 +171,24 @@ function handleInput(id, index) {
     }
 
     $(`#loading-${id}`).css({
-                                visibility: "visible"
-                            });
+        visibility: "visible"
+    });
 
     setTimeout(function () {
         // Send network request for geocoding based on address box value
         mapboxClient.geocoding
                     .forwardGeocode({
-                                        query: address,
-                                        proximity: [curLong, curLat],
-                                        autocomplete: true,
-                                        limit: 1
-                                    })
+                        query: address,
+                        proximity: [curLong, curLat],
+                        autocomplete: true,
+                        limit: 1
+                    })
                     .send()
                     .then(function (response) {
                         // If valid response
                         if (response && response.body &&
                             response.body.features &&
-                            response.body.features.length)
-                        {
+                            response.body.features.length) {
                             /**
                              * Get the first element of the suggestions, set
                              * the input box to that value, then update the
@@ -203,11 +202,11 @@ function handleInput(id, index) {
                             // Add new marker on the map with the returned
                             // feature data
                             addStreetPoint(feature.center[1], feature.center[0],
-                                           id, index, feature.place_name);
+                                id, index, feature.place_name);
                         }
                         $(`#loading-${id}`).css({
-                                                    visibility: "hidden"
-                                                });
+                            visibility: "hidden"
+                        });
                     });
     }, 800);
 }
@@ -222,16 +221,15 @@ function handleClick(coord) {
         // Send network request for reverse geocoding based on clicked location
         mapboxClient.geocoding
                     .reverseGeocode({
-                                        query: [coord["lng"], coord["lat"]],
-                                        limit: 1
-                                    })
+                        query: [coord["lng"], coord["lat"]],
+                        limit: 1
+                    })
                     .send()
                     .then(function (response) {
                         // If valid response
                         if (response && response.body &&
                             response.body.features &&
-                            response.body.features.length)
-                        {
+                            response.body.features.length) {
                             let feature = response.body.features[0];
                             /**
                              * Drop the pin on the map, parse the resulting
@@ -281,7 +279,7 @@ function updateAddress(id, index, featureName, featureLat, featureLng) {
      * Add new marker on the map with the returned feature data
      */
     addStreetPoint(featureLat, featureLng,
-                   id, index, featureName);
+        id, index, featureName);
 }
 
 /**
@@ -319,41 +317,17 @@ function addStreetPoint(lat, long, id, index, name) {
 }
 
 /**
- * Calculates the route direction coordinates based on starting and ending
- * locations using the Mapbox directions API.
- *
- * @param {*} c
- */
-function calcRoute(c) {
-    let url =
-            "https://api.mapbox.com/directions/v5/mapbox/driving/" +
-            c +
-            "?geometries=geojson&&access_token=" +
-            mapboxgl.accessToken;
-    $.get(url, responseJSON => {
-        route = [
-            responseJSON.routes[0].distance * 0.001,
-            responseJSON.routes[0].duration / 60
-        ];
-        setTripInfo();
-
-        let coords = responseJSON.routes[0].geometry;
-        addRoute(coords, map);
-    }, "json");
-}
-
-/**
  * Disable the trip realign button and hide route information modal
  */
 function disableTrip() {
     $(".trip-setting").css({
-                               background: "#a5a5a5",
-                               cursor: "auto"
-                           });
+        background: "#a5a5a5",
+        cursor: "auto"
+    });
     $("#car-icon").attr("src", "/images/car-disabled.png");
     $("#route-info").css({
-                             visibility: "hidden"
-                         });
+        visibility: "hidden"
+    });
 }
 
 /**
@@ -361,21 +335,13 @@ function disableTrip() {
  */
 function enableTrip() {
     $(".trip-setting").css({
-                               background: "#fff",
-                               cursor: "pointer"
-                           });
+        background: "#fff",
+        cursor: "pointer"
+    });
     $("#car-icon").attr("src", "/images/car-icon.png");
     $("#route-info").css({
-                             visibility: "visible"
-                         });
-}
-
-/**
- * Sets the trip info test boxes to the appropriate distance and duration
- */
-function setTripInfo() {
-    $("#distance").text(`${((route[0]) * 0.621371).toFixed(2)} mi`);
-    $("#duration").text(`${route[1].toFixed(0)} min`);
+        visibility: "visible"
+    });
 }
 
 /**
@@ -406,8 +372,7 @@ function validateSubmit() {
      * completely.
      */
     if (dateInput === "" || timeInput === "" || coordinates[0] === undefined ||
-        coordinates[1] === undefined)
-    {
+        coordinates[1] === undefined) {
         showHideTooltip(formValidationTooltip[0]);
     } else {
         /**

@@ -32,7 +32,7 @@ $(document).ready(function () {
 });
 
 /**
- * Overriden function for user sign in action.
+ * Overridden function for user sign in action.
  */
 function onUserSignedIn() {
     console.log("User signed in.");
@@ -40,7 +40,7 @@ function onUserSignedIn() {
 }
 
 /**
- * Overriden function for user sign out action.
+ * Overridden function for user sign out action.
  */
 function onUserSignedOut() {
     console.log("User signed out.");
@@ -53,14 +53,14 @@ function onUserSignedOut() {
 function initMap() {
     // Create map object with custom settings and add NavigationControl
     map = new mapboxgl.Map({
-                               container: "map",
-                               keyboard: false,
-                               maxZoom: 18,
-                               style: "mapbox://styles/mapbox/streets-v11",
-                               center: [-71.058502, 42.358188],
-                               zoom: 12,
-                               interactive: false
-                           });
+        container: "map",
+        keyboard: false,
+        maxZoom: 18,
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: [-71.058502, 42.358188],
+        zoom: 12,
+        interactive: false
+    });
     map.on('load', function () {
     });
 
@@ -130,25 +130,24 @@ function handleInput(id, index) {
         return;
     }
     $(`#loading-${id}`).css({
-                                visibility: "visible"
-                            });
+        visibility: "visible"
+    });
 
     setTimeout(function () {
         // Send network request for geocoding based on address box value
         mapboxClient.geocoding
                     .forwardGeocode({
-                                        query: address,
-                                        proximity: [curLong, curLat],
-                                        autocomplete: true,
-                                        limit: 1
-                                    })
+                        query: address,
+                        proximity: [curLong, curLat],
+                        autocomplete: true,
+                        limit: 1
+                    })
                     .send()
                     .then(function (response) {
                         // If valid response
                         if (response && response.body &&
                             response.body.features &&
-                            response.body.features.length)
-                        {
+                            response.body.features.length) {
                             /**
                              * Get the first element of the suggestions, set
                              * the input box to that value, then update the
@@ -162,11 +161,11 @@ function handleInput(id, index) {
                             // Add new marker on the map with the returned
                             // feature data
                             addStreetPoint(feature.center[1], feature.center[0],
-                                           id, index, feature.place_name);
+                                id, index, feature.place_name);
                         }
                         $(`#loading-${id}`).css({
-                                                    visibility: "hidden"
-                                                });
+                            visibility: "hidden"
+                        });
                     });
     }, 800);
 }
@@ -204,29 +203,6 @@ function addStreetPoint(lat, long, id, index, name) {
     }
 }
 
-/**
- * Calculates the route direction coordinates based on starting and ending
- * locations using the Mapbox directions API.
- *
- * @param {*} c
- */
-function calcRoute(c) {
-    let url =
-            "https://api.mapbox.com/directions/v5/mapbox/driving/" +
-            c +
-            "?geometries=geojson&&access_token=" +
-            mapboxgl.accessToken;
-    $.get(url, responseJSON => {
-        route = [
-            responseJSON.routes[0].distance * 0.001,
-            responseJSON.routes[0].duration / 60
-        ];
-
-        let coords = responseJSON.routes[0].geometry;
-        addRoute(coords, map);
-    }, "json");
-}
-
 function clearTrip(id, index) {
     if (markers[index]) {
         $(`#${id}`).val("");
@@ -257,8 +233,7 @@ function handleSubmit() {
      * completely.
      */
     if (dateInput === "" || timeInput === "" || typeInput === "" ||
-        sizeInput === "" || priceInput === "" || phoneInput === "")
-    {
+        sizeInput === "" || priceInput === "" || phoneInput === "") {
         showHideTooltip(formValidationTooltip[0]);
     } else {
         if (sizeInput < 1) {
@@ -269,9 +244,9 @@ function handleSubmit() {
             showHideTooltip(formTooltips[2]);
         } else if (userProfile === undefined) {
             $("html, body").animate({
-                                        scrollTop: 0
-                                    },
-                                    "slow"
+                    scrollTop: 0
+                },
+                "slow"
             );
             signInTooltip[0].show();
         } else {

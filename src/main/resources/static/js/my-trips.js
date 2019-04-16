@@ -26,7 +26,7 @@ $(document).ready(function () {
 });
 
 /**
- * Overriden function for user sign in action.
+ * Overridden function for user sign in action.
  */
 function onUserSignedIn() {
     /**
@@ -35,12 +35,12 @@ function onUserSignedIn() {
      * from the server.
      */
     $("#my-trips-wrapper").css({
-                                   display: "block"
-                               });
+        display: "block"
+    });
     $("#trips-picture").attr({
-                                 src: `${userProfile.getImageUrl()}`,
-                                 onerror: "this.onerror=null;this.src='/images/temp.png';"
-                             });
+        src: `${userProfile.getImageUrl()}`,
+        onerror: "this.onerror=null;this.src='/images/temp.png';"
+    });
     $("#hosting").empty();
     $("#member").empty();
     $("#pending").empty();
@@ -51,7 +51,7 @@ function onUserSignedIn() {
 }
 
 /**
- * Overriden function for user sign out action.
+ * Overridden function for user sign out action.
  */
 function onUserSignedOut() {
     /**
@@ -60,11 +60,11 @@ function onUserSignedOut() {
      */
 
     $("#my-trips-wrapper").css({
-                                   display: "none"
-                               });
+        display: "none"
+    });
     $("#trips-picture").attr({
-                                 src: "/images/temp.png"
-                             });
+        src: "/images/temp.png"
+    });
     console.log("User signed out.");
 
     signInTooltip[0].show();
