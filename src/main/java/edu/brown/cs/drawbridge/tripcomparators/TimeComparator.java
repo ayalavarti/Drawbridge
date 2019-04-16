@@ -12,7 +12,7 @@ import java.util.Comparator;
 public class TimeComparator implements Comparator<Trip> {
 
   @Override public int compare(Trip t1, Trip t2) {
-    return Integer.compare(t1.getDepartureTime(), t2.getDepartureTime());
+    return Long.compare(t1.getDepartureTime(), t2.getDepartureTime());
   }
 
 }
