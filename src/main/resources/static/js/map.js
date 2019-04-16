@@ -10,9 +10,14 @@ let markers = [];
 let addressNames = [];
 let route = [];
 
+/**
+ * Set up tooltips for map page, both form validation and map control
+ * tooltips
+ */
 let formValidationTooltip;
 let mapControlTooltips;
 
+// Set up reference to the dropped pin on map press
 let droppedPin;
 
 /**
@@ -28,14 +33,14 @@ $(document).ready(function () {
 });
 
 /**
- * Overriden function for user sign in action.
+ * Overridden function for user sign in action.
  */
 function onUserSignedIn() {
     console.log("User signed in.");
 }
 
 /**
- * Overriden function for user sign out action.
+ * Overridden function for user sign out action.
  */
 function onUserSignedOut() {
     console.log("User signed out.");
@@ -52,14 +57,22 @@ function getLocation() {
     }
 }
 
+/**
+ * Initializes the map if geolocation is not enabled.
+ * @param error
+ */
 function defaultMap(error) {
     initMap(undefined);
 }
 
 /**
- * Initializes the Map.
+ * Initializes the Map on the DOM.
  */
 function initMap(position) {
+    /**
+     * If the position is valid from the navigator, set the current latitude
+     * and longitude to the positions latitude and longitude.
+     */
     if (position !== undefined) {
         curLat = position.coords.latitude;
         curLong = position.coords.longitude;
@@ -85,6 +98,10 @@ function initMap(position) {
                                visibility: "visible"
                            });
     console.log("Map loaded.");
+
+    /**
+     * Set up binding for map onclick event
+     */
     map.on("click", function (event) {
         handleClick(event.lngLat);
     });
@@ -195,6 +212,11 @@ function handleInput(id, index) {
     }, 800);
 }
 
+/**
+ * Handles onclick events on the map element to set up a popup. Lets the user
+ * choose whether to set the pin location as their starting or ending location.
+ * @param coord
+ */
 function handleClick(coord) {
     setTimeout(function () {
         // Send network request for reverse geocoding based on clicked location
@@ -211,8 +233,12 @@ function handleClick(coord) {
                             response.body.features.length)
                         {
                             let feature = response.body.features[0];
-                            console.log(feature);
-
+                            /**
+                             * Drop the pin on the map, parse the resulting
+                             * feature address and create a popup with
+                             * buttons that let the user select where to use
+                             * the new address in their route.
+                             */
                             droppedPin = new mapboxgl.Popup()
                             .setLngLat(feature["center"])
                             .setHTML(`
@@ -237,6 +263,16 @@ function handleClick(coord) {
     }, 800);
 }
 
+/**
+ * Update the address on when click "Set Starting" or "Set Ending" on a
+ * given map popup.
+ *
+ * @param id
+ * @param index
+ * @param featureName
+ * @param featureLat
+ * @param featureLng
+ */
 function updateAddress(id, index, featureName, featureLat, featureLng) {
     droppedPin.remove();
     $(`#${id}`).val(featureName);
@@ -342,6 +378,11 @@ function setTripInfo() {
     $("#duration").text(`${route[1].toFixed(0)} min`);
 }
 
+/**
+ * Clear the given trip from the input box.
+ * @param id
+ * @param index
+ */
 function clearTrip(id, index) {
     if (markers[index]) {
         $(`#${id}`).val("");

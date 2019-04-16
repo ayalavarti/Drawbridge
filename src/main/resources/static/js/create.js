@@ -10,6 +10,9 @@ let markers = [];
 let addressNames = [];
 let route = [];
 
+/**
+ * Set up tooltips for map page.
+ */
 let formValidationTooltip;
 let formTooltips = [];
 
@@ -122,7 +125,7 @@ function initTooltips() {
 function handleInput(id, index) {
     // Get the address value from the correct input box
     let address = $(`#${id}`).val();
-    if (address === "" || address === addressNames[index]) {
+    if (address === "") {
         removeMarker(index);
         return;
     }
