@@ -19,7 +19,7 @@ $(document).ready(function () {
 
 
 /**
- * Overriden function for user sign in action.
+ * Overridden function for user sign in action.
  */
 function onUserSignedIn() {
     /**
@@ -30,7 +30,7 @@ function onUserSignedIn() {
 }
 
 /**
- * Overriden function for user sign out action.
+ * Overridden function for user sign out action.
  */
 function onUserSignedOut() {
     console.log("User signed out.");
@@ -42,14 +42,14 @@ function onUserSignedOut() {
 function initMap() {
     // Create map object with custom settings and add NavigationControl
     map = new mapboxgl.Map({
-                               container: "map",
-                               keyboard: false,
-                               maxZoom: 18,
-                               style: "mapbox://styles/mapbox/streets-v11",
-                               center: coordinates[0],
-                               zoom: 12,
-                               interactive: false
-                           });
+        container: "map",
+        keyboard: false,
+        maxZoom: 18,
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: coordinates[0],
+        zoom: 12,
+        interactive: false
+    });
     map.on('load', function () {
         setRoute();
     });
@@ -75,9 +75,9 @@ function setRoute() {
 
     // Add the two markers and draw the route
     addMarker(coordinates[0][1], coordinates[0][0], "start-input", 0, startName,
-              map);
+        map);
     addMarker(coordinates[1][1], coordinates[1][0], "end-input", 1, endName,
-              map);
+        map);
     drawRoute(coordinates.join(";"));
 }
 
@@ -89,9 +89,9 @@ function setRoute() {
 function joinClick(tid) {
     if (userProfile == undefined) {
         $("html, body").animate({
-                                    scrollTop: 0
-                                },
-                                "slow"
+                scrollTop: 0
+            },
+            "slow"
         );
         signInTooltip[0].setContent(
             "Sign in with your Google Account to join this trip.");

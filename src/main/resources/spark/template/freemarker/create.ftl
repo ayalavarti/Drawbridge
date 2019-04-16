@@ -11,26 +11,67 @@
                 width: auto;"/>
             </div>
 
+            <div class="loading-gif" id="loading">
+                <img src="/images/loading.gif"
+                     style="width: 60px; height: auto;"/>
+            </div>
+
+            <div id="map">
+                <div id="route-info"
+                     style="visibility: hidden; flex-direction: column;"
+                     class="route-info">
+                    <div>Route Information</div>
+                    <img src="/images/divider.png"
+                         style="height: 2px; width: auto; margin-top: 2px; margin-bottom: 2px;"/>
+                    <div>
+                        <div><i style="font-size: 10px;"
+                                class="fas fa-clock icon-label"></i><span
+                                    style="font-size: 13px;"
+                                    id="duration"></span>
+                        </div>
+                        <div><i style="font-size: 10px;"
+                                class="fas fa-road icon-label"></i><span
+                                    style="font-size: 13px;"
+                                    id="distance"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <form autocomplete="off"
                   onsubmit="event.preventDefault(); handleSubmit()">
                 <div class="search-inputs">
-                    <div>
-                        <i class="fas fa-dot-circle icon-label"></i>
-                        <input class="address-input" id="start-input"
-                               onblur="handleInput('start-input', 0)"
-                               type="text" placeholder="Starting point..."/>
-                        <img alt="loading" id="loading-start-input"
-                             src="/images/loading.gif"
-                             class="loading-address-gif"/>
-                        <i class="fas fa-map-marker-alt icon-label"></i>
-                        <input class="address-input" id="end-input"
-                               onblur="handleInput('end-input', 1)" type="text"
-                               placeholder="Ending destination..."/>
-                        <img alt="loading" id="loading-end-input"
-                             src="/images/loading.gif"
-                             class="loading-address-gif"/>
+                    <div style="display: flex; justify-content: space-evenly;
+                     flex-wrap: wrap; ">
+                        <div>
+                            <i class="fas fa-dot-circle icon-label"></i>
+                            <input class="address-input" id="start-input"
+                                   onblur="handleInput('start-input', 0)"
+                                   type="text" placeholder="Starting point..."/>
+                            <img alt="loading" id="loading-start-input"
+                                 src="/images/loading.gif"
+                                 class="loading-address-gif"/>
+                            <img class="clear-btn"
+                                 onclick="clearTrip('start-input', 0)"
+                                 src="/images/clear-btn.png"
+                                 onmouseover="hover(this);"
+                                 onmouseout="unhover(this);"/>
+                        </div>
+                        <div>
+                            <i class="fas fa-map-marker-alt icon-label"></i>
+                            <input class="address-input" id="end-input"
+                                   onblur="handleInput('end-input', 1)"
+                                   type="text"
+                                   placeholder="Ending destination..."/>
+                            <img alt="loading" id="loading-end-input"
+                                 src="/images/loading.gif"
+                                 class="loading-address-gif"/>
+                            <img class="clear-btn"
+                                 onclick="clearTrip('end-input', 1)"
+                                 src="/images/clear-btn.png"
+                                 onmouseover="hover(this);"
+                                 onmouseout="unhover(this);"/>
+                        </div>
                     </div>
-
                     <div>
                         <i class="fas fa-calendar icon-label"></i>
                         <input class="datetime-input flatpickr flatpickr-input"
@@ -107,9 +148,9 @@
                         </div>
                     </div>
 
-                    <input id="requiredTooltip" name="submit" alt="Submit"
-                           type="image" src="/images/submit-btn.png"
-                           class="submit-btn"
+                    <input id="requiredTooltip" name="host" alt="Host"
+                           type="image" src="/images/host-btn.png"
+                           class="host-btn"
                            data-tippy-content="Please enter all inputs."
                            onmouseover="hover(this);"
                            onmouseout="unhover(this);"/>

@@ -18,8 +18,8 @@ $(document).ready(function () {
     if (navigator.cookieEnabled) {
         if (getCookie("loggedIn") === "true") {
             $("#sign-in").css({
-                                  visibility: "hidden"
-                              });
+                visibility: "hidden"
+            });
         }
     }
 });
@@ -120,11 +120,11 @@ function onSignIn(googleUser) {
 
     // Hide the sign in button and show the profile info button
     $("#profile-info").css({
-                               visibility: "visible"
-                           });
+        visibility: "visible"
+    });
     $("#sign-in").css({
-                          visibility: "hidden"
-                      });
+        visibility: "hidden"
+    });
 }
 
 /**
@@ -142,11 +142,11 @@ function signOut() {
 
         // Hide profile info dropdown and show login button
         $("#profile-info").css({
-                                   visibility: "hidden"
-                               });
+            visibility: "hidden"
+        });
         $("#sign-in").css({
-                              visibility: "visible"
-                          });
+            visibility: "visible"
+        });
     });
 }
 
@@ -155,11 +155,11 @@ function signOut() {
  */
 function showHomeInfo() {
     $("#home-btn").css({
-                           visibility: "visible"
-                       });
+        visibility: "visible"
+    });
     $("#info-btn").css({
-                           visibility: "visible"
-                       });
+        visibility: "visible"
+    });
 }
 
 /**

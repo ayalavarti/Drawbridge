@@ -22,7 +22,7 @@
                              class="loading-address-gif"/>
                         <img class="clear-btn"
                              onclick="clearTrip('start-input', 0)"
-                             src="/images/clear-btn.png" class=""
+                             src="/images/clear-btn.png"
                              onmouseover="hover(this);"
                              onmouseout="unhover(this);"/>
                     </div>
@@ -34,7 +34,7 @@
                              class="loading-address-gif"/>
                         <img class="clear-btn"
                              onclick="clearTrip('end-input', 1)"
-                             src="/images/clear-btn.png" class=""
+                             src="/images/clear-btn.png"
                              onmouseover="hover(this);"
                              onmouseout="unhover(this);"/>
                     </div>

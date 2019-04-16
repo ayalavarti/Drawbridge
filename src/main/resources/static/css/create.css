@@ -6,16 +6,42 @@ form {
     width: 100%;
 }
 
+canvas {
+    position: static !important;
+}
+
 #container {
     margin-top: 100px;
     max-width: 100%;
     text-align: center;
 }
 
+#map {
+    margin: 20px 0;
+    width: 500px;
+    height: 300px;
+}
+
 .loading-address-gif {
     width: 20px;
     height: auto;
     visibility: hidden;
+}
+
+.route-info {
+    position: absolute;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    width: 200px !important;
+    height: 75px;
+    padding: 15px 0;
+    bottom: 10px;
+    left: 10px;
+    z-index: 5;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .search-menu {
@@ -37,6 +63,10 @@ form {
     margin-left: auto;
     margin-right: auto;
     outline: none;
+}
+
+.search-menu > div {
+    width: 100%;
 }
 
 .datetime-input,
@@ -133,5 +163,9 @@ form {
 @media screen and (max-width: 767px) {
     #container {
         margin: 100px 0 0 0;
+    }
+
+    .search-menu {
+        width: auto;
     }
 }

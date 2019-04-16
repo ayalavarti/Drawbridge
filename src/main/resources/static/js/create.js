@@ -1,6 +1,18 @@
-let addressNames = [];
-let coordinates = [];
+/**
+ * Set up global variables for use in all map actions.
+ */
+let map;
 
+let found = [];
+let coordinates = [];
+let markers = [];
+
+let addressNames = [];
+let route = [];
+
+/**
+ * Set up tooltips for map page.
+ */
 let formValidationTooltip;
 let formTooltips = [];
 
@@ -12,14 +24,16 @@ $(document).ready(function () {
     signInTooltip[0].setContent(
         "Sign in with your Google Account to host a trip.");
     initMapbox();
+    getLocation();
     showHomeInfo();
     initDateTime();
     initTooltips();
+    disableTrip();
     console.log("DOM ready.");
 });
 
 /**
- * Overriden function for user sign in action.
+ * Overridden function for user sign in action.
  */
 function onUserSignedIn() {
     console.log("User signed in.");
@@ -27,11 +41,43 @@ function onUserSignedIn() {
 }
 
 /**
- * Overriden function for user sign out action.
+ * Overridden function for user sign out action.
  */
 function onUserSignedOut() {
     console.log("User signed out.");
     signInTooltip[0].show();
+}
+
+/**
+ * Initializes the Map.
+ */
+function initMap(position) {
+    /**
+     * If the position is valid from the navigator, set the current latitude
+     * and longitude to the positions latitude and longitude.
+     */
+    if (position !== undefined) {
+        curLat = position.coords.latitude;
+        curLong = position.coords.longitude;
+    }
+
+    // Create map object with custom settings and add NavigationControl
+    map = new mapboxgl.Map({
+        container: "map",
+        keyboard: false,
+        maxZoom: 18,
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: [curLong, curLat],
+        zoom: 12,
+        interactive: false
+    });
+    /**
+     * Hide loading gif and show all initially hidden objects
+     */
+    $("#loading").css({
+        visibility: "hidden"
+    });
+    console.log("Map loaded.");
 }
 
 /**
@@ -59,7 +105,7 @@ function initTooltips() {
         animation: "scale",
         arrow: true,
         arrowType: "round",
-        theme: "drawbridge-alt",
+        theme: "drawbridge-alt2",
         interactive: false,
         trigger: "manual",
         hideOnClick: false,
@@ -82,55 +128,21 @@ function initTooltips() {
 }
 
 /**
- * Handle changes to the address input boxes whenever the input box loses focus.
- *
- * @param {*} id
- *            The name of the input box (either 'start-input' or 'end-input')
- * @param {*} index
- *            The index to use for identification (either 0 or 1)
+ * Disable the trip realign button and hide route information modal
  */
-function handleInput(id, index) {
-    // Get the address value from the correct input box
-    let address = $(`#${id}`).val();
-    if (address === "" || address === addressNames[index]) {
-        return;
-    }
-    $(`#loading-${id}`).css({
-                                visibility: "visible"
-                            });
+function disableTrip() {
+    $("#route-info").css({
+        visibility: "hidden"
+    });
+}
 
-    setTimeout(function () {
-        // Send network request for geocoding based on address box value
-        mapboxClient.geocoding
-                    .forwardGeocode({
-                                        query: address,
-                                        proximity: [curLong, curLat],
-                                        autocomplete: true,
-                                        limit: 1
-                                    })
-                    .send()
-                    .then(function (response) {
-                        // If valid response
-                        if (response && response.body &&
-                            response.body.features &&
-                            response.body.features.length)
-                        {
-                            /**
-                             * Get the first element of the suggestions, set
-                             * the input box to that value, then update the
-                             * addressNames and coordinates arrays with the
-                             * feature data.
-                             * */
-                            let feature = response.body.features[0];
-                            $(`#${id}`).val(feature.place_name);
-                            coordinates[index] = feature.center;
-                            addressNames[index] = feature.place_name;
-                        }
-                        $(`#loading-${id}`).css({
-                                                    visibility: "hidden"
-                                                });
-                    });
-    }, 800);
+/**
+ * Enable the trip realign button and show route information modal
+ */
+function enableTrip() {
+    $("#route-info").css({
+        visibility: "visible"
+    });
 }
 
 /**
@@ -156,8 +168,7 @@ function handleSubmit() {
      * completely.
      */
     if (dateInput === "" || timeInput === "" || typeInput === "" ||
-        sizeInput === "" || priceInput === "" || phoneInput === "")
-    {
+        sizeInput === "" || priceInput === "" || phoneInput === "") {
         showHideTooltip(formValidationTooltip[0]);
     } else {
         if (sizeInput < 1) {
@@ -168,9 +179,9 @@ function handleSubmit() {
             showHideTooltip(formTooltips[2]);
         } else if (userProfile === undefined) {
             $("html, body").animate({
-                                        scrollTop: 0
-                                    },
-                                    "slow"
+                    scrollTop: 0
+                },
+                "slow"
             );
             signInTooltip[0].show();
         } else {
@@ -187,7 +198,8 @@ function handleSubmit() {
                 type: typeInput,
                 phone: phoneInput,
                 comments: commentsInput,
-                userID: userProfile.getId()
+                userID: userProfile.getId(),
+                eta: route[1]
             };
             console.log(postParameters);
 
