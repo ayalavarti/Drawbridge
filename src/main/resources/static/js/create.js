@@ -1,5 +1,14 @@
-let addressNames = [];
+/**
+ * Set up global variables for use in all map actions.
+ */
+let map;
+
+let found = [];
 let coordinates = [];
+let markers = [];
+
+let addressNames = [];
+let route = [];
 
 let formValidationTooltip;
 let formTooltips = [];
@@ -12,6 +21,7 @@ $(document).ready(function () {
     signInTooltip[0].setContent(
         "Sign in with your Google Account to host a trip.");
     initMapbox();
+    initMap();
     showHomeInfo();
     initDateTime();
     initTooltips();
@@ -32,6 +42,26 @@ function onUserSignedIn() {
 function onUserSignedOut() {
     console.log("User signed out.");
     signInTooltip[0].show();
+}
+
+/**
+ * Initializes the Map.
+ */
+function initMap() {
+    // Create map object with custom settings and add NavigationControl
+    map = new mapboxgl.Map({
+                               container: "map",
+                               keyboard: false,
+                               maxZoom: 18,
+                               style: "mapbox://styles/mapbox/streets-v11",
+                               center: [-71.058502, 42.358188],
+                               zoom: 12,
+                               interactive: false
+                           });
+    map.on('load', function () {
+    });
+
+    console.log("Map loaded.");
 }
 
 /**
@@ -93,6 +123,7 @@ function handleInput(id, index) {
     // Get the address value from the correct input box
     let address = $(`#${id}`).val();
     if (address === "" || address === addressNames[index]) {
+        removeMarker(index);
         return;
     }
     $(`#loading-${id}`).css({
@@ -125,12 +156,79 @@ function handleInput(id, index) {
                             $(`#${id}`).val(feature.place_name);
                             coordinates[index] = feature.center;
                             addressNames[index] = feature.place_name;
+                            // Add new marker on the map with the returned
+                            // feature data
+                            addStreetPoint(feature.center[1], feature.center[0],
+                                           id, index, feature.place_name);
                         }
                         $(`#loading-${id}`).css({
                                                     visibility: "hidden"
                                                 });
                     });
     }, 800);
+}
+
+/**
+ * Add a new street point on the map after a new address is inputted.
+ *
+ * @param {*} lat
+ *            The marker center latitude.
+ * @param {*} long
+ *            The marker center longitude.
+ * @param {*} id
+ *            The name of the input box (either 'start-input' or 'end-input')
+ * @param {*} index
+ *            The index to use for identification (either 0 or 1)
+ * @param {*} name
+ *            The name of the location
+ */
+function addStreetPoint(lat, long, id, index, name) {
+    /**
+     * Add a new marker on the map then mark the associated input type as found
+     */
+    addMarker(lat, long, id, index, name, map);
+    found[index] = true;
+
+    /**
+     * If both are found, align the map view based on the trip coordinates.
+     * Otherwise, move to the location of the given address.
+     */
+    if (found[0] && found[1]) {
+        alignTrip();
+        updateRoute();
+    } else {
+        moveToLocation(lat, long);
+    }
+}
+
+/**
+ * Calculates the route direction coordinates based on starting and ending
+ * locations using the Mapbox directions API.
+ *
+ * @param {*} c
+ */
+function calcRoute(c) {
+    let url =
+            "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+            c +
+            "?geometries=geojson&&access_token=" +
+            mapboxgl.accessToken;
+    $.get(url, responseJSON => {
+        route = [
+            responseJSON.routes[0].distance * 0.001,
+            responseJSON.routes[0].duration / 60
+        ];
+
+        let coords = responseJSON.routes[0].geometry;
+        addRoute(coords, map);
+    }, "json");
+}
+
+function clearTrip(id, index) {
+    if (markers[index]) {
+        $(`#${id}`).val("");
+        removeMarker(index);
+    }
 }
 
 /**

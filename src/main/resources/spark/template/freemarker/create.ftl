@@ -11,6 +11,8 @@
                 width: auto;"/>
             </div>
 
+            <div id="map"></div>
+
             <form autocomplete="off"
                   onsubmit="event.preventDefault(); handleSubmit()">
                 <div class="search-inputs">

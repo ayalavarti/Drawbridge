@@ -17,6 +17,131 @@ function initMapbox() {
 }
 
 /**
+ * Centers the map view.
+ */
+function centerMap() {
+    map.flyTo({
+                  center: [curLong, curLat],
+                  pitch: 0,
+                  bearing: 0,
+                  zoom: 12
+              });
+}
+
+/**
+ * Realigns the map view to north and 0 tilt.
+ */
+function alignMap() {
+    map.flyTo({
+                  pitch: 0,
+                  bearing: 0
+              });
+}
+
+/**
+ * Moves the map view to a new center location with the
+ * provided arguments.
+ *
+ * @param {*} lat
+ * @param {*} lng
+ */
+function moveToLocation(lat, lng) {
+    map.flyTo({
+                  center: [lng, lat],
+                  zoom: 12
+              });
+}
+
+/**
+ * Realigns the map view based on the current trip coordinates.
+ */
+function alignTrip() {
+    if (found[0] && found[1]) {
+        let top = 400;
+        let left = 250;
+        let right = 150;
+        let bottom = 150;
+        /**
+         * Checks if the trip positions are routed diagonally upwards or if the
+         * window height is below a threshold. Then the map view is adjusted
+         * since the search menu will not cover up the trip.
+         */
+        if (
+            (coordinates[0][0] < coordinates[1][0] && coordinates[0][1] <
+                coordinates[1][1]) ||
+            (coordinates[0][0] > coordinates[1][0] && coordinates[0][1] >
+                coordinates[1][1]) ||
+            $(window).height() < 600)
+        {
+            top = 150;
+        }
+        /**
+         * Checks if in half screen vertical mode and adjust map view.
+         */
+        if ($(window).height() < 600 && $(window).width() >= 767) {
+            right = 50;
+            bottom = 50;
+        }
+        /**
+         * Checks if the window width is below a threshold. Then the map view
+         * is adjusted since the search menu will not cover up the trip.
+         */
+        if ($(window).width() < 767) {
+            top = 100;
+            left = 75;
+            right = 75;
+        }
+        // Fits the bounds of the map to the given padding sizes.
+        map.fitBounds(coordinates, {
+            padding: {
+                top: top,
+                bottom: bottom,
+                left: left,
+                right: right
+            },
+            linear: false
+        });
+    }
+}
+
+/**
+ * Removes a marker from the map given index to remove.
+ *
+ * @param {*} index
+ *            Index to remove
+ */
+function removeMarker(index) {
+    if (markers[index]) {
+        markers[index].remove();
+        delete markers[index];
+        delete coordinates[index];
+        route = [];
+        removeRoute();
+        found[index] = false;
+    }
+}
+
+/**
+ * Updates the route visualization on the map.
+ */
+function updateRoute() {
+    removeRoute();
+    calcRoute(coordinates.join(";"));
+}
+
+/**
+ * Removes the route visualization from the map.
+ */
+function removeRoute() {
+    if (map.getSource("route")) {
+        map.removeLayer("route");
+        map.removeSource("route");
+    } else {
+        return;
+    }
+}
+
+/**
  * Add marker on the map with the given parameters.
  *
  * @param {*} lat
@@ -59,13 +184,11 @@ function addMarker(lat, long, id, index, name, map) {
 function parseAddress(raw, index) {
     if (raw.indexOf(",") > -1) {
         let title = raw.substr(0, raw.indexOf(","));
-        addressNames[index] = title;
         return `<div class="popup-title">${title}</div>
                 <img src="/images/divider.png" style="height: 2px; width: auto;" />
                 <div class="popup-content">${raw.substr(
             raw.indexOf(",") + 1)}</div>`;
     } else {
-        addressNames[index] = raw;
         return `<div class="popup-title">${raw}</div>`;
     }
 }
