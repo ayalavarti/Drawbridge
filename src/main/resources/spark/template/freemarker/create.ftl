@@ -140,9 +140,9 @@
                         </div>
                     </div>
 
-                    <input id="requiredTooltip" name="submit" alt="Submit"
-                           type="image" src="/images/submit-btn.png"
-                           class="submit-btn"
+                    <input id="requiredTooltip" name="host" alt="Host"
+                           type="image" src="/images/host-btn.png"
+                           class="host-btn"
                            data-tippy-content="Please enter all inputs."
                            onmouseover="hover(this);"
                            onmouseout="unhover(this);"/>

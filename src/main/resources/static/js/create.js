@@ -102,7 +102,7 @@ function initTooltips() {
         animation: "scale",
         arrow: true,
         arrowType: "round",
-        theme: "drawbridge-alt",
+        theme: "drawbridge-alt2",
         interactive: false,
         trigger: "manual",
         hideOnClick: false,

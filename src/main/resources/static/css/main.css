@@ -298,6 +298,7 @@ input[type="number"] {
 
 /* -------- Tooltip Styling -------- */
 
+.tippy-tooltip.drawbridge-alt2-theme,
 .tippy-tooltip.drawbridge-alt-theme,
 .tippy-tooltip.drawbridge-theme {
     background-color: #fff;
@@ -305,11 +306,17 @@ input[type="number"] {
     font-family: "Nunito", sans-serif;
     font-size: 14px;
     font-weight: 400;
-    text-align: left;
     padding: 15px 20px;
     text-align: center;
     border-radius: 20px;
     box-shadow: 0 2px 4px 0 rgba(99, 100, 100, 0.397);
+}
+
+.tippy-tooltip.drawbridge-alt2-theme {
+    color: #53D8AC;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px 0 rgba(119, 255, 203, 0.3);
 }
 
 .tippy-tooltip.drawbridge-alt-theme {
@@ -319,16 +326,19 @@ input[type="number"] {
     box-shadow: 0 2px 4px 0 rgba(70, 175, 255, 0.301);
 }
 
+.tippy-tooltip.drawbridge-alt2-theme[data-animatefill],
 .tippy-tooltip.drawbridge-alt-theme[data-animatefill],
 .tippy-tooltip.drawbridge-theme[data-animatefill] {
     background-color: transparent;
 }
 
+.tippy-tooltip.drawbridge-alt2-theme .tippy-backdrop,
 .tippy-tooltip.drawbridge-alt-theme .tippy-backdrop,
 .tippy-tooltip.drawbridge-theme .tippy-backdrop {
     background-color: #fff;
 }
 
+.tippy-tooltip.drawbridge-alt2-theme .tippy-roundarrow,
 .tippy-tooltip.drawbridge-alt-theme .tippy-roundarrow,
 .tippy-tooltip.drawbridge-theme .tippy-roundarrow {
     fill: #fff;
