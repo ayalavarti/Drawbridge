@@ -72,12 +72,8 @@ function initMap(position) {
     /**
      * Hide loading gif and show all initially hidden objects
      */
-    $("#loading").css({
-        visibility: "hidden"
-    });
-    $("[id=pre-load]").css({
-        visibility: "visible"
-    });
+    $("#loading").hide();
+    $("[id=pre-load]").fadeIn(200);
     console.log("Map loaded.");
 
     /**
@@ -214,9 +210,7 @@ function disableTrip() {
         cursor: "auto"
     });
     $("#car-icon").attr("src", "/images/car-disabled.png");
-    $("#route-info").css({
-        visibility: "hidden"
-    });
+    $("#route-info").fadeOut(200);
 }
 
 /**
@@ -228,9 +222,7 @@ function enableTrip() {
         cursor: "pointer"
     });
     $("#car-icon").attr("src", "/images/car-icon.png");
-    $("#route-info").css({
-        visibility: "visible"
-    });
+    $("#route-info").fadeIn(200);
 }
 
 /**

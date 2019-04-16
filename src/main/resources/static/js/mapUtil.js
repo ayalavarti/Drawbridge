@@ -62,9 +62,7 @@ function handleInput(id, index) {
             return;
         }
 
-        $(`#loading-${id}`).css({
-            visibility: "visible"
-        });
+        $(`#loading-${id}`).show();
 
         setTimeout(function () {
             // Send network request for geocoding based on address box value
@@ -97,9 +95,7 @@ function handleInput(id, index) {
                                     feature.center[0],
                                     id, index, feature.place_name);
                             }
-                            $(`#loading-${id}`).css({
-                                visibility: "hidden"
-                            });
+                            $(`#loading-${id}`).hide();
                         });
         }, 800);
     }

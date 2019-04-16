@@ -87,7 +87,7 @@ function setRoute() {
  * @param {*} tid
  */
 function joinClick(tid) {
-    if (userProfile == undefined) {
+    if (userProfile === undefined) {
         $("html, body").animate({
                 scrollTop: 0
             },

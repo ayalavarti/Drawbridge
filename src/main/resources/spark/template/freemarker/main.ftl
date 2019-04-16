@@ -50,7 +50,7 @@
 
 <body>
 <div class="header">
-    <div style="visibility: hidden;" id="profile-info"
+    <div style="display: none;" id="profile-info"
          class="profile-btn dropdown">
         <div class="user-info" id="user-name"></div>
         <div id="profile-picture-wrapper">
@@ -68,12 +68,12 @@
     </div>
 </div>
 
-<div style="visibility: hidden; top: 2%;" id="home-btn" class="home-btn"
+<div style="display: none; top: 2%;" id="home-btn" class="home-btn"
      onclick="toHome();">
     <img style="height: 15px; width: auto" src="/images/home-icon.png"/>
 </div>
 
-<div style="visibility: hidden; bottom: 2%; position: fixed;" id="info-btn"
+<div style="display: none; bottom: 2%; position: fixed;" id="info-btn"
      class="info-btn" onclick="toInfo();">
     <img style="height: 15px; width: auto" src="/images/info-icon.png"/>
 </div>

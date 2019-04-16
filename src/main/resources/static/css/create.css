@@ -30,6 +30,7 @@ canvas {
     visibility: hidden;
 }
 
+.trip-name-input,
 .route-info {
     position: absolute;
     background: #fff;
@@ -44,6 +45,10 @@ canvas {
     left: 10px;
     z-index: 5;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.trip-name-input {
+    top: 10px;
 }
 
 .search-menu {
