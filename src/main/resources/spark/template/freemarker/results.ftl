@@ -27,7 +27,9 @@
                                value="15" min="0" max="3600" type="number"
                                placeholder="..."/>min
                         <span id="info" class="info-tooltip"
-                              data-tippy-content="Walking radius is how long you are willing to walk to the departure location.">
+                              data-tippy-content="Walking time is how long you
+                              are willing to walk to the departure location,
+                              in any one of the carpool trips.">
                             <img style="height: 15px; width: auto"
                                  src="/images/info-icon.png"/>
                         </span>
@@ -36,12 +38,14 @@
                 <div>
                     <span class="sub-heading">Wait Time</span>
                     <div>
-                        <i class="far fa-circle icon-label-large"></i>
+                        <i class="far fa-clock icon-label-large"></i>
                         <input class="threshold-input" id="walking-input"
                                value="30" min="0" max="3600" type="number"
                                placeholder="..."/>min
                         <span id="info" class="info-tooltip"
-                              data-tippy-content="Wait time is within how many minutes of your departure time you are willing to leave.">
+                              data-tippy-content="Wait time is within how
+                              many minutes of your departure time you are
+                              willing to leave in any of of the carpool trips.">
                             <img style="height: 15px; width: auto"
                                  src="/images/info-icon.png"/>
                         </span>

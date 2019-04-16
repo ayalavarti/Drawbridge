@@ -67,7 +67,7 @@
 }
 
 .empty-results > img {
-    width: 350px;
+    width: 280px;
     height: auto;
 }
 
@@ -133,6 +133,7 @@
 }
 
 .threshold-input {
+    padding-bottom: 10px;
     outline: 0;
     border: 0;
     color: #222;
