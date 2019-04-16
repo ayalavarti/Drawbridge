@@ -71,9 +71,12 @@ function initMap(position) {
         zoom: 12,
         interactive: false
     });
-    map.on('load', function () {
+    /**
+     * Hide loading gif and show all initially hidden objects
+     */
+    $("#loading").css({
+        visibility: "hidden"
     });
-
     console.log("Map loaded.");
 }
 

@@ -11,6 +11,11 @@
                 width: auto;"/>
             </div>
 
+            <div class="loading-gif" id="loading">
+                <img src="/images/loading.gif"
+                     style="width: 60px; height: auto;"/>
+            </div>
+
             <div id="map">
                 <div id="route-info"
                      style="visibility: hidden; flex-direction: column;"
