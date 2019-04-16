@@ -73,7 +73,7 @@ function initMap(position) {
      * Hide loading gif and show all initially hidden objects
      */
     $("#loading").hide();
-    $("[id=pre-load]").fadeIn(200);
+    $("[id=pre-load]").fadeIn(FADE_SPEED);
     console.log("Map loaded.");
 
     /**
@@ -210,7 +210,7 @@ function disableTrip() {
         cursor: "auto"
     });
     $("#car-icon").attr("src", "/images/car-disabled.png");
-    $("#route-info").fadeOut(200);
+    $("#route-info").fadeOut(FADE_SPEED);
 }
 
 /**
@@ -222,7 +222,7 @@ function enableTrip() {
         cursor: "pointer"
     });
     $("#car-icon").attr("src", "/images/car-icon.png");
-    $("#route-info").fadeIn(200);
+    $("#route-info").fadeIn(FADE_SPEED);
 }
 
 /**

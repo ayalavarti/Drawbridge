@@ -1,3 +1,5 @@
+const FADE_SPEED = 500;
+
 // Store user profile across JS files
 let userProfile = undefined;
 

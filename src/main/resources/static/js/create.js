@@ -75,7 +75,7 @@ function initMap(position) {
      * Hide loading gif and show all initially hidden objects
      */
     $("#loading").hide();
-    $("#trip-name-input").fadeIn(200);
+    $("#trip-name-input").fadeIn(FADE_SPEED);
 
     console.log("Map loaded.");
 }
@@ -131,14 +131,14 @@ function initTooltips() {
  * Disable the trip realign button and hide route information modal
  */
 function disableTrip() {
-    $("#route-info").fadeOut(200);
+    $("#route-info").fadeOut(FADE_SPEED);
 }
 
 /**
  * Enable the trip realign button and show route information modal
  */
 function enableTrip() {
-    $("#route-info").fadeIn(200);
+    $("#route-info").fadeIn(FADE_SPEED);
 }
 
 /**
