@@ -34,6 +34,7 @@ public class DatabaseQueryTest {
       .addDetails(3, 16.00, "333-333-3333", "car", "").build();
   private static DatabaseQuery test;
   private static int t1, t2, t3;
+  private static DatabaseQuery dummyData;
 
   @BeforeClass public static void oneTimeSetUp()
       throws SQLException, MissingDataException {
@@ -46,7 +47,7 @@ public class DatabaseQueryTest {
        * GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <username>
        * GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO <username>
        */
-      test = new DatabaseQuery("//127.0.0.1:5432/testCarpools", username, password);
+      test = new DatabaseQuery("//127.0.0.1:5432/carpools", username, password);
     } catch (ClassNotFoundException | SQLException e) {
       assert false;
     }
@@ -210,10 +211,8 @@ public class DatabaseQueryTest {
     assertTrue(test.getMembersOnTrip(t1).isEmpty());
   }
 
-  private static DatabaseQuery dummyData;
-
   @Test public void testDummyDataExists()
-          throws SQLException, ClassNotFoundException, MissingDataException {
+      throws SQLException, ClassNotFoundException, MissingDataException {
     String username = System.getenv("DB_USER");
     String password = System.getenv("DB_PASS");
     /*
@@ -222,7 +221,8 @@ public class DatabaseQueryTest {
      * GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <username>
      * GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO <username>
      */
-    dummyData = new DatabaseQuery("//127.0.0.1:5432/dummyDatabase", username, password);
+    dummyData = new DatabaseQuery("//127.0.0.1:5432/dummyDatabase", username,
+        password);
     dummyData.getUserById("0");
     dummyData.getUserById("1");
     dummyData.getUserById("2");
@@ -233,11 +233,11 @@ public class DatabaseQueryTest {
     assertNotNull(dummyData.getTripById(3));
     assertNotNull(dummyData.getTripById(4));
     assertNotNull(dummyData.getTripById(5));
-    assertEquals(dummyData.getHostOnTrip(1),"0");
-    assertEquals(dummyData.getHostOnTrip(2),"1");
-    assertEquals(dummyData.getHostOnTrip(3),"3");
-    assertEquals(dummyData.getHostOnTrip(4),"0");
-    assertEquals(dummyData.getHostOnTrip(5),"2");
+    assertEquals(dummyData.getHostOnTrip(1), "0");
+    assertEquals(dummyData.getHostOnTrip(2), "1");
+    assertEquals(dummyData.getHostOnTrip(3), "3");
+    assertEquals(dummyData.getHostOnTrip(4), "0");
+    assertEquals(dummyData.getHostOnTrip(5), "2");
     assertTrue(dummyData.getMembersOnTrip(1).contains("3"));
     assertTrue(dummyData.getMembersOnTrip(2).contains("2"));
     assertTrue(dummyData.getMembersOnTrip(2).contains("4"));

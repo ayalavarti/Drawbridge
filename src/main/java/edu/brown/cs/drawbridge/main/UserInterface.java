@@ -124,7 +124,7 @@ public final class UserInterface {
         Map<String, String> vals = new HashMap<>();
         vals.put("start", trip.getStartingAddress());
         vals.put("end", trip.getEndingAddress());
-        vals.put("date", Integer.toString(trip.getDepartureTime()));
+        vals.put("date", Long.toString(trip.getDepartureTime()));
         vals.put("currentSize", Integer.toString(trip.getCurrentSize()));
         vals.put("maxSize", Integer.toString(trip.getMaxUsers()));
         if (uid != null) {

@@ -140,8 +140,8 @@ public class TripSearcher {
    * @return A List of valid paths. Each path is a List of Trips.
    */
   public List<List<Trip>> searchWithId(String userId, double startLat,
-      double startLon, double endLat, double endLon, int departureTime,
-      double distanceRadius, int timeRadius) {
+      double startLon, double endLat, double endLon, long departureTime,
+      double distanceRadius, long timeRadius) {
     List<List<Trip>> paths = search(userId, startLat, startLon, endLat, endLon,
         departureTime, distanceRadius, timeRadius);
     Collections.sort(paths, TRIP_COMPARATOR);
@@ -171,7 +171,7 @@ public class TripSearcher {
    * @return A List of valid paths. Each path is a List of Trips.
    */
   public List<List<Trip>> searchWithoutId(double startLat, double startLon,
-      double endLat, double endLon, int departureTime, double distanceRadius,
+      double endLat, double endLon, long departureTime, double distanceRadius,
       int timeRadius) {
     List<List<Trip>> paths = search("", startLat, startLon, endLat, endLon,
         departureTime, distanceRadius, timeRadius);
@@ -204,8 +204,8 @@ public class TripSearcher {
    * @return A List of valid paths. Each path is a List of Trips.
    */
   private List<List<Trip>> search(String userId, double startLat,
-      double startLon, double endLat, double endLon, int departureTime,
-      double distanceRadius, int timeRadius) {
+      double startLon, double endLat, double endLon, long departureTime,
+      double distanceRadius, long timeRadius) {
     // Set the user id for all comparators
     setUser(userId);
 
