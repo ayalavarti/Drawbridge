@@ -34,6 +34,9 @@ public final class UserInterface {
   private static final String MAPBOX_TOKEN = System.getenv("MAPBOX_KEY");
   private static Carpools carpools;
 
+  /**
+   * Default constructor made private since UserInterface is a utility class.
+   */
   private UserInterface() {
   }
 
@@ -304,7 +307,43 @@ public final class UserInterface {
    * Handles create form submission and actual creation of a new trip.
    */
   private static class CreatePostHandler implements Route {
-    @Override public ModelAndView handle(Request request, Response response) {
+    @Override public ModelAndView handle(Request request, Response response)
+            throws SQLException, MissingDataException {
+      QueryParamsMap qm = request.queryMap();
+
+      // Read inputted values from request
+      String tripName = qm.value("tripName");
+      String startName = qm.value("startName");
+      String endName = qm.value("endName");
+
+      double startLat = Double.parseDouble(qm.value("startLat"));
+      double startLon = Double.parseDouble(qm.value("startLon"));
+      double endLat = Double.parseDouble(qm.value("endLat"));
+      double endLon = Double.parseDouble(qm.value("endLon"));
+
+      long departureTime = Long.parseLong(qm.value("date"));
+      long eta = Long.parseLong(qm.value("eta"));
+      int maxSize = Integer.parseInt(qm.value("size"));
+      double totalPrice = Double.parseDouble(qm.value("price"));
+
+      String phone = qm.value("phone");
+      String comments = qm.value("comments");
+      String method = qm.value("method");
+
+      String hostID = qm.value("userID");
+
+      // Create a new trip through the carpool class
+      Trip newTrip = Trip.TripBuilder.newTripBuilder()
+              .addIdentification(-1, tripName)
+              .addLocations(startLat, startLon, endLat, endLon)
+              .addAddressNames(startName, endName)
+              .addTimes(departureTime, eta)
+              .addDetails(maxSize, totalPrice, phone, method, comments)
+              .buildWithUsers(hostID, new ArrayList<>(), new ArrayList<>());
+
+      int tid = carpools.createTrip(newTrip, hostID);
+
+      response.redirect("/trip/" + tid, 303);
       return null;
     }
   }
@@ -384,7 +423,7 @@ public final class UserInterface {
         Map<String, String> vals = new HashMap<>();
         vals.put("start", trip.getStartingAddress());
         vals.put("end", trip.getEndingAddress());
-        vals.put("date", Integer.toString(trip.getDepartureTime()));
+        vals.put("date", Long.toString(trip.getDepartureTime()));
         vals.put("currentSize", Integer.toString(trip.getCurrentSize()));
         vals.put("maxSize", Integer.toString(trip.getMaxUsers()));
         if (uid != null) {
