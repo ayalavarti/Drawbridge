@@ -101,7 +101,7 @@
 
     <div id="map"></div>
     <script type="text/javascript">
-        let mapboxToken = "${mapboxKey?js_string}"
+        mapboxgl.accessToken = "${mapboxKey?js_string}";
     </script>
     <script src="/js/util.js"></script>
     <script src="/js/mapUtil.js"></script>

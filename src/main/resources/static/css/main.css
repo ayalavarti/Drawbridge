@@ -20,9 +20,11 @@ input {
     letter-spacing: 0.5px;
 }
 
+select,
 span,
 div,
 button {
+    font-family: "Nunito", sans-serif;
     outline: none;
 }
 

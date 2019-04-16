@@ -94,7 +94,7 @@
 <#include "main.ftl">
 
 <script type="text/javascript">
-    let mapboxToken = "${mapboxKey?js_string}"
+    mapboxgl.accessToken = "${mapboxKey?js_string}";
     let coordinates = [
         [
             ${trip.getStartingLongitude()},

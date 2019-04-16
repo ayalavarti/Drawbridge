@@ -19,7 +19,7 @@ let droppedPin;
  * When the DOM loads, initialize Mapbox and the Map object.
  */
 $(document).ready(function () {
-    initMapbox(mapboxToken);
+    initMapbox();
     getLocation();
     initDateTime();
     initTooltips();

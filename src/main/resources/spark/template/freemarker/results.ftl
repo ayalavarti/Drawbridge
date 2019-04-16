@@ -12,8 +12,8 @@
             <i class="fas fa-map-marker-alt icon-label-medium"></i>
             <span id="end" class="trip-info-text"></span>
         </div>
-        <span class="sub-heading"><span id="date">Mar 14 2019</span> at <span
-                    id="time">1:59 PM</span></span>
+        <span class="sub-heading"><span id="date"></span> at <span
+                    id="time"></span></span>
     </div>
 
     <div class="results-container">
