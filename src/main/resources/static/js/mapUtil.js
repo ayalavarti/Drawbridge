@@ -62,7 +62,9 @@ function handleInput(id, index) {
             return;
         }
 
-        $(`#loading-${id}`).show();
+        $(`#loading-${id}`).css({
+            visibility: "visible"
+        });
 
         setTimeout(function () {
             // Send network request for geocoding based on address box value
@@ -95,7 +97,9 @@ function handleInput(id, index) {
                                     feature.center[0],
                                     id, index, feature.place_name);
                             }
-                            $(`#loading-${id}`).hide();
+                            $(`#loading-${id}`).css({
+                                visibility: "hidden"
+                            });
                         });
         }, 800);
     }
@@ -133,6 +137,30 @@ function addStreetPoint(lat, long, id, index, name) {
     } else {
         moveToLocation(lat, long);
     }
+}
+
+/**
+ * Disable the trip realign button and hide route information modal
+ */
+function disableTrip() {
+    $(".trip-setting").css({
+        background: "#a5a5a5",
+        cursor: "auto"
+    });
+    $("#car-icon").attr("src", "/images/car-disabled.png");
+    $("#route-info").fadeOut(FADE_SPEED);
+}
+
+/**
+ * Enable the trip realign button and show route information modal
+ */
+function enableTrip() {
+    $(".trip-setting").css({
+        background: "#fff",
+        cursor: "pointer"
+    });
+    $("#car-icon").attr("src", "/images/car-icon.png");
+    $("#route-info").fadeIn(FADE_SPEED);
 }
 
 /**
@@ -190,7 +218,7 @@ function moveToLocation(lat, lng) {
 function alignTrip() {
     if (found[0] && found[1]) {
         let top = 400;
-        let left = 250;
+        let left = 275;
         let right = 150;
         let bottom = 150;
         /**
@@ -203,13 +231,13 @@ function alignTrip() {
                 coordinates[1][1]) ||
             (coordinates[0][0] > coordinates[1][0] && coordinates[0][1] >
                 coordinates[1][1]) ||
-            $(window).height() < 600) {
+            $("#map").height() < 600) {
             top = 150;
         }
         /**
          * Checks if in half screen vertical mode and adjust map view.
          */
-        if ($(window).height() < 600 && $(window).width() >= 767) {
+        if ($("#map").height() < 600 && $("#map").width() >= 767) {
             right = 50;
             bottom = 50;
         }
@@ -217,7 +245,7 @@ function alignTrip() {
          * Checks if the window width is below a threshold. Then the map view
          * is adjusted since the search menu will not cover up the trip.
          */
-        if ($(window).width() < 767) {
+        if ($("#map").width() < 767) {
             top = 100;
             left = 75;
             right = 75;

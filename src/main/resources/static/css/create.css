@@ -47,8 +47,52 @@ canvas {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.trip-name-input > div,
+.route-info > div {
+    font-size: 15px;
+}
+
 .trip-name-input {
     top: 10px;
+    width: 300px !important;
+    height: 50px;
+}
+
+.icon-img {
+    height: 15px;
+    width: auto;
+}
+
+.map-settings {
+    cursor: pointer;
+    position: absolute;
+    z-index: 5;
+    background: #fff;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.location-setting,
+.compass-setting,
+.trip-setting {
+    bottom: 30px;
+}
+
+.location-setting {
+    right: 10px;
+}
+
+.compass-setting {
+    right: 60px;
+}
+
+.trip-setting {
+    right: 110px;
 }
 
 .search-menu {
@@ -94,6 +138,7 @@ canvas {
     width: 100px;
 }
 
+.name-input,
 .transport-type,
 .comments-input,
 .phone-input,
@@ -123,6 +168,11 @@ canvas {
     width: 250px;
     height: 20px;
     resize: none;
+}
+
+.name-input {
+    width: 150px;
+    margin-bottom: 5px;
 }
 
 .section-heading {

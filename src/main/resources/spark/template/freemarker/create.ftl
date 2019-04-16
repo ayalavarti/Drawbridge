@@ -37,36 +37,37 @@
                 </div>
                 <div id="trip-name-input" style="display: none; flex-direction:
                     column;" class="trip-name-input">
-                    <div>Route Information</div>
+                    <div>Trip Name</div>
                     <img src="/images/divider.png"
                          style="height: 2px; width: auto; margin-top: 2px; margin-bottom: 2px;"/>
                     <div>
-                        <div><i style="font-size: 10px;"
-                                class="fas fa-clock icon-label"></i><span
-                                    style="font-size: 13px;"
-                                    id="duration"></span>
-                        </div>
-                        <div><i style="font-size: 10px;"
-                                class="fas fa-road icon-label"></i><span
-                                    style="font-size: 13px;"
-                                    id="distance"></span>
-                        </div>
+                        <i class="fab fa-autoprefixer icon-label"></i>
+                        <input class="name-input" id="name"
+                               type="text" placeholder="Name..."/>
                     </div>
+                </div>
+                <div id="pre-load" style="display: none;" data-tippy-content="Align
+                    Map"
+                     class="map-settings compass-setting" onclick="alignMap()">
+                    <img class="icon-img" src="/images/compass-icon.png"/>
+                </div>
+                <div id="pre-load" style="display: none;" data-tippy-content="Center
+                     Map"
+                     class="map-settings location-setting"
+                     onclick="centerMap()">
+                    <img class="icon-img" src="/images/pin-icon.png"/>
+                </div>
+                <div id="pre-load" style="display: none;" data-tippy-content="Align
+                    Trip View"
+                     class="map-settings trip-setting" onclick="alignTrip();">
+                    <img id="car-icon" class="icon-img"
+                         src="/images/car-disabled.png"/>
                 </div>
 
             </div>
             <form autocomplete="off"
                   onsubmit="event.preventDefault(); handleSubmit()">
                 <div class="search-inputs">
-                    <div class="input-info">
-                        <div>
-                            <span class="sub-heading">Trip Name</span>
-                            <div>
-                        <textarea class="comments-input" id="name"
-                                  placeholder="Name..."></textarea>
-                            </div>
-                        </div>
-                    </div>
                     <div class="input-info" style="justify-content: center;">
                         <div>
                             <i class="fas fa-dot-circle icon-label"></i>

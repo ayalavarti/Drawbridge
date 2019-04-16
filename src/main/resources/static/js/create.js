@@ -69,13 +69,15 @@ function initMap(position) {
         style: "mapbox://styles/mapbox/streets-v11",
         center: [curLong, curLat],
         zoom: 12,
-        interactive: false
     });
+    map.addControl(new mapboxgl.NavigationControl());
+
     /**
      * Hide loading gif and show all initially hidden objects
      */
     $("#loading").hide();
     $("#trip-name-input").fadeIn(FADE_SPEED);
+    $("[id=pre-load]").fadeIn(FADE_SPEED);
 
     console.log("Map loaded.");
 }
@@ -125,20 +127,6 @@ function initTooltips() {
         placement: "bottom",
     });
 
-}
-
-/**
- * Disable the trip realign button and hide route information modal
- */
-function disableTrip() {
-    $("#route-info").fadeOut(FADE_SPEED);
-}
-
-/**
- * Enable the trip realign button and show route information modal
- */
-function enableTrip() {
-    $("#route-info").fadeIn(FADE_SPEED);
 }
 
 /**

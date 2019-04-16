@@ -193,36 +193,12 @@ function handleClick(coord) {
 function updateAddress(id, index, featureName, featureLat, featureLng) {
     droppedPin.remove();
     $(`#${id}`).val(featureName);
-    coordinates[index] = [featureLng, featureLat];
+    coordinates[index] = [parseFloat(featureLng), parseFloat(featureLat)];
     /**
      * Add new marker on the map with the returned feature data
      */
     addStreetPoint(featureLat, featureLng,
         id, index, featureName);
-}
-
-/**
- * Disable the trip realign button and hide route information modal
- */
-function disableTrip() {
-    $(".trip-setting").css({
-        background: "#a5a5a5",
-        cursor: "auto"
-    });
-    $("#car-icon").attr("src", "/images/car-disabled.png");
-    $("#route-info").fadeOut(FADE_SPEED);
-}
-
-/**
- * Enable the trip realign button and show route information modal
- */
-function enableTrip() {
-    $(".trip-setting").css({
-        background: "#fff",
-        cursor: "pointer"
-    });
-    $("#car-icon").attr("src", "/images/car-icon.png");
-    $("#route-info").fadeIn(FADE_SPEED);
 }
 
 /**
