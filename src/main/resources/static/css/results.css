@@ -104,6 +104,10 @@
     box-shadow: 0 1px 2px 0 #0000001e, 0 2px 4px 0 #00000023;
 }
 
+.result-info:hover {
+    cursor: pointer;
+}
+
 .result-info > div {
     font-size: 13px;
     margin-bottom: 2px;

@@ -85,6 +85,14 @@ function toUser() {
 }
 
 /**
+ * Routes to a given trip detail page.
+ */
+function toTrip(id) {
+    window.open(`/trip/${id}`, "_self");
+}
+
+
+/**
  * Handles sign in errors.
  *
  * @param {*} error

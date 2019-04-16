@@ -1,6 +1,6 @@
 function generateTrip(trip) {
     let date = new Date(parseFloat(trip["date"]) * 1000);
-    console.log(date);
+    console.log(trip);
     let hourLabel = "AM";
     let minutes;
     let hour = date.getHours();
@@ -22,7 +22,7 @@ function generateTrip(trip) {
     let imgElement
             = `<div><img src="../images/${trip["status"]}-btn.png" class="${trip["status"]}-btn" ${imgAtt}/></div>`;
 
-    return (`<div class="result-info">
+    return (`<a href='/trip/${trip["id"]}'><div class="result-info">
 				<div class="sub-heading">${trip["name"]}</div>
 				<img src="/images/divider.png" style="height: 3px; width: auto;" />
 				<div>
@@ -42,7 +42,7 @@ function generateTrip(trip) {
 						${parseFloat(trip["costPerPerson"]).toFixed(2)}
 				</div>
 				${imgElement}
-			</div>`)
+			</div></a>`)
 }
 
 function showHideTooltip(tooltip) {
