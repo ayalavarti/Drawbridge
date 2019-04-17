@@ -3,7 +3,8 @@ body {
 }
 
 h1:after,
-h2:after {
+h2:after,
+h3:after {
     background: url("../images/divider.png");
     content: "";
     display: block;
@@ -29,6 +30,7 @@ h1:after {
     left: calc(50% - 30px);
 }
 
+h3,
 h2 {
     margin-top: 0;
     margin-bottom: 5px;
@@ -44,6 +46,7 @@ i {
     display: grid;
     grid-gap: 20px;
     max-width: 100%;
+    margin-bottom: 50px;
 }
 
 #title {
@@ -96,7 +99,7 @@ i {
     margin: 3px 5px;
     border-radius: 15px;
     color: #555;
-    box-shadow: 0 4px 8px 0 #0000001e, 0 5px 10px 0 #00000023;
+    box-shadow: 0 2px 4px 0 #0000001e, 0 3px 6px 0 #00000023;
     width: calc(100% - 10px);
 }
 
@@ -133,7 +136,7 @@ i {
     overflow: auto;
     padding: 7px 10px;
     border-radius: 15px;
-    box-shadow: 0 4px 8px 0 #0000001e, 0 5px 10px 0 #00000023;
+    box-shadow: 0 2px 4px 0 #0000001e, 0 3px 6px 0 #00000023;
 }
 
 .list-person,
@@ -192,7 +195,7 @@ i {
     overflow: auto;
     background-color: #fff;
     border-radius: 15px;
-    box-shadow: 0 4px 8px 0 #0000001e, 0 5px 10px 0 #00000023;
+    box-shadow: 0 2px 4px 0 #0000001e, 0 3px 6px 0 #00000023;
 }
 
 #comments p {
@@ -216,6 +219,10 @@ i {
         width: 65%;
     }
 
+    #container {
+        margin-bottom: 0;
+    }
+
     #comments-container {
         justify-self: center;
         grid-row-start: 5;
@@ -236,5 +243,6 @@ i {
 
     #title {
         margin-top: 80px;
+        text-align: center;
     }
 }

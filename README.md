@@ -56,3 +56,23 @@ to connect to the postgre database when "mvn package" is
 run, though it can be downloaded at 
 https://jdbc.postgresql.org/download.html
 and manually imported as an external jar file.
+
+Recommended: For testing purposes, create 4 databases
+in total:
+* testCarpools - intended for testing interactions with
+the database; data will be inserted and deleted
+regularly. _Restore carpools schema only_
+* carpools - intended to provide a sample set of 
+data to display to the front end. 
+_Restore carpools schema, then teamDataDump_
+* searchTester - intended for specific data sets on
+which path-finding algorithms will be tested. 
+_Restore carpools schema, then testSearchData_
+* massData - intended for testing speed on massive
+sets of data. _Restore carpools schema, then massData 
+(will be added soon)_
+
+(If you do not intend to run tests over the databases,
+comment out all the test files in the database
+package; alternatively, set up the urls
+to your specific database structure)
