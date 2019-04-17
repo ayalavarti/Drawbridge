@@ -12,7 +12,7 @@ let addressNames = [];
  */
 $(document).ready(function () {
     showHomeInfo();
-    initMapbox(mapboxToken);
+    initMapbox();
     initMap();
     console.log("DOM ready.");
 });

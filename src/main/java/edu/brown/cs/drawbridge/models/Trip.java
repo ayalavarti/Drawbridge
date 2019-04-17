@@ -13,7 +13,7 @@ public class Trip {
   private double startingLatitude, startingLongitude, endingLatitude,
       endingLongitude;
   private String startAddress, endAddress;
-  private int departureTime, eta;
+  private long departureTime, eta;
   private int maxUsers;
   private double cost;
   private String phoneNumber, methodOfTransportation, comments;
@@ -74,7 +74,7 @@ public class Trip {
    * @param endTime
    *          The epoch estimated time of arrival
    */
-  private void setTimes(int startTime, int endTime) {
+  private void setTimes(long startTime, long endTime) {
     departureTime = startTime;
     eta = endTime;
   }
@@ -194,7 +194,7 @@ public class Trip {
    *
    * @return The departure time of the Trip
    */
-  public int getDepartureTime() {
+  public long getDepartureTime() {
     return departureTime;
   }
 
@@ -203,7 +203,7 @@ public class Trip {
    *
    * @return The eta of the Trip
    */
-  public int getEta() {
+  public long getEta() {
     return eta;
   }
 
@@ -504,7 +504,7 @@ public class Trip {
        *
        * @return A DetailsStep containing the new time data
        */
-      DetailsStep addTimes(int departuretime, int eta);
+      DetailsStep addTimes(long departuretime, long eta);
     }
 
     /**
@@ -574,7 +574,7 @@ public class Trip {
       // Address names
       private String startAddress, endAddress;
       // Time
-      private int departureTime, eta;
+      private long departureTime, eta;
       // Details
       private int maxUsers;
       private double cost;
@@ -606,7 +606,7 @@ public class Trip {
       }
 
       @Override
-      public DetailsStep addTimes(int startTime, int endTime) {
+      public DetailsStep addTimes(long startTime, long endTime) {
         departureTime = startTime;
         eta = endTime;
         return this;

@@ -10,8 +10,7 @@ let curLong = -71.058502;
  * Initializes the Mapbox using the accessToken and sets up the
  * mapboxClient for use in Geolocating.
  */
-function initMapbox(mapboxToken) {
-    mapboxgl.accessToken = mapboxToken;
+function initMapbox() {
     mapboxClient = mapboxSdk({
                                  accessToken: mapboxgl.accessToken
                              });
@@ -67,6 +66,19 @@ function parseAddress(raw, index) {
             raw.indexOf(",") + 1)}</div>`;
     } else {
         addressNames[index] = raw;
+        return `<div class="popup-title">${raw}</div>`;
+    }
+}
+
+function parseAddressOnClick(raw) {
+    if (raw.indexOf(",") > -1) {
+        let title = raw.substr(0, raw.indexOf(","));
+        return `<div class="popup-title">${title}</div>
+                <img src="/images/divider.png" style="height: 2px; width: auto;" />
+                <div class="popup-content">
+                    ${raw.substr(raw.indexOf(",") + 1)}
+                </div>`;
+    } else {
         return `<div class="popup-title">${raw}</div>`;
     }
 }

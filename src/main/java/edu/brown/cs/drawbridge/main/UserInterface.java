@@ -124,7 +124,7 @@ public final class UserInterface {
         Map<String, String> vals = new HashMap<>();
         vals.put("start", trip.getStartingAddress());
         vals.put("end", trip.getEndingAddress());
-        vals.put("date", Integer.toString(trip.getDepartureTime()));
+        vals.put("date", Long.toString(trip.getDepartureTime()));
         vals.put("currentSize", Integer.toString(trip.getCurrentSize()));
         vals.put("maxSize", Integer.toString(trip.getMaxUsers()));
         if (uid != null) {
@@ -340,7 +340,8 @@ public final class UserInterface {
     @Override public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Create Trip")
-          .put("favicon", "images/favicon.png").build();
+          .put("mapboxKey", MAPBOX_TOKEN).put("favicon", "images/favicon.png")
+          .build();
 
       return new ModelAndView(variables, "create.ftl");
     }

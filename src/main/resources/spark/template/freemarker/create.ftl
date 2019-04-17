@@ -5,22 +5,24 @@
 <#assign content>
     <div id="container">
         <div class="search-menu">
-            <h2 class="section-heading">Host a Carpool</h2>
-            <img alt="divider" src="/images/divider.png" style="height: 4px;
-            width: auto;
-"/>
+            <div>
+                <h2 class="section-heading">Host a Carpool</h2>
+                <img alt="divider" src="/images/divider.png" style="height: 4px;
+                width: auto;"/>
+            </div>
+
             <form autocomplete="off"
                   onsubmit="event.preventDefault(); handleSubmit()">
                 <div class="search-inputs">
-                    <div><i class="fas fa-dot-circle icon-label"></i>
+                    <div>
+                        <i class="fas fa-dot-circle icon-label"></i>
                         <input class="address-input" id="start-input"
                                onblur="handleInput('start-input', 0)"
                                type="text" placeholder="Starting point..."/>
                         <img alt="loading" id="loading-start-input"
                              src="/images/loading.gif"
                              class="loading-address-gif"/>
-                    </div>
-                    <div><i class="fas fa-map-marker-alt icon-label"></i>
+                        <i class="fas fa-map-marker-alt icon-label"></i>
                         <input class="address-input" id="end-input"
                                onblur="handleInput('end-input', 1)" type="text"
                                placeholder="Ending destination..."/>
@@ -51,9 +53,28 @@
                             </div>
                         </div>
                         <div>
+                            <span class='sub-heading'>Transport Type</span>
+                            <div>
+                                <i class="fas fa-car icon-label"></i>
+                                <select class="transport-type"
+                                        id="transport-type"
+                                        name="transport-type">
+                                    <option value="" disabled selected hidden>
+                                        Select...
+                                    </option>
+                                    <option value="personal">Personal
+                                        Car
+                                    </option>
+                                    <option value="uber">Uber</option>
+                                    <option value="lyft">Lyft</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
                             <span class="sub-heading">Expected Price</span>
                             <div>
-                                <i class="fas fa-dollar-sign icon-label-large"></i>
+                                <i class="fas fa-dollar-sign icon-label"></i>
                                 <input data-tippy-content="Minimum price must be $0."
                                        class="form-tooltip price-input"
                                        id="expected-price" type="number"
@@ -65,7 +86,7 @@
                         <div>
                             <span class="sub-heading">Contact Number</span>
                             <div>
-                                <i class="fas fa-phone icon-label-large"></i>
+                                <i class="fas fa-phone icon-label"></i>
                                 <input data-tippy-content="Required phone format is 123-456-7890."
                                        class="form-tooltip phone-input"
                                        id="contact-number" type="tel"
@@ -96,8 +117,11 @@
             </form>
         </div>
     </div>
-    <script src="/js/util.js"></script>
+    <script type="text/javascript">
+        mapboxgl.accessToken = "${mapboxKey?js_string}";
+    </script>
     <script src="/js/mapUtil.js"></script>
+    <script src="/js/util.js"></script>
     <script src="/js/create.js"></script>
 </#assign>
 <#include "main.ftl">
