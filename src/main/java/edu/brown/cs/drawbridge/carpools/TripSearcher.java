@@ -1,15 +1,5 @@
 package edu.brown.cs.drawbridge.carpools;
 
-import edu.brown.cs.drawbridge.database.DatabaseQuery;
-import edu.brown.cs.drawbridge.database.MissingDataException;
-import edu.brown.cs.drawbridge.models.Trip;
-import edu.brown.cs.drawbridge.tripcomparators.ComparesSearchedTrips;
-import edu.brown.cs.drawbridge.tripcomparators.CostComparator;
-import edu.brown.cs.drawbridge.tripcomparators.HostComparator;
-import edu.brown.cs.drawbridge.tripcomparators.MemberComparator;
-import edu.brown.cs.drawbridge.tripcomparators.MultipleTripComparator;
-import edu.brown.cs.drawbridge.tripcomparators.PendingComparator;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +14,16 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
+import edu.brown.cs.drawbridge.database.DatabaseQuery;
+import edu.brown.cs.drawbridge.database.MissingDataException;
+import edu.brown.cs.drawbridge.models.Trip;
+import edu.brown.cs.drawbridge.tripcomparators.ComparesSearchedTrips;
+import edu.brown.cs.drawbridge.tripcomparators.CostComparator;
+import edu.brown.cs.drawbridge.tripcomparators.HostComparator;
+import edu.brown.cs.drawbridge.tripcomparators.MemberComparator;
+import edu.brown.cs.drawbridge.tripcomparators.MultipleTripComparator;
+import edu.brown.cs.drawbridge.tripcomparators.PendingComparator;
+
 /**
  * A class to search for valid paths from a starting to ending location.
  *
@@ -34,18 +34,19 @@ public class TripSearcher {
   private static final int CONNECTION_WAIT_TIME = 30;
   private static final int MAX_TRIPS_PER_PATH = 3;
   private static final int MAX_PATH_OPTIONS = 5;
-  private static final List<ComparesSearchedTrips> COMPARATORS = Arrays
-      .asList(new HostComparator(), new MemberComparator(),
-          new PendingComparator(), new CostComparator());
-  private static final Comparator<List<Trip>> TRIP_COMPARATOR
-      = new MultipleTripComparator(COMPARATORS);
+  private static final ComparesSearchedTrips COST_COMPARATOR = new CostComparator();
+  private static final List<ComparesSearchedTrips> COMPARATORS = Arrays.asList(
+      new HostComparator(), new MemberComparator(), new PendingComparator(),
+      COST_COMPARATOR);
+  private static final Comparator<List<Trip>> TRIP_COMPARATOR = new MultipleTripComparator(
+      COMPARATORS);
   private DatabaseQuery database;
 
   /**
    * Creates a new TripSearcher.
    *
    * @param database
-   *     the database object to use for queries
+   *          the database object to use for queries
    */
   public TripSearcher(DatabaseQuery database) {
     this.database = database;
@@ -61,29 +62,29 @@ public class TripSearcher {
    * Calculate the distance (km) from a Trip's ending location to a destination.
    *
    * @param trip
-   *     The Trip to calculate destination distance from
+   *          The Trip to calculate destination distance from
    * @param endLat
-   *     The latitude of the destination
+   *          The latitude of the destination
    * @param endLon
-   *     The longitude of the destination
+   *          The longitude of the destination
    *
    * @return
    */
-  private double distance(Trip trip, double endLat, double endLon) {
+  public double distance(Trip trip, double endLat, double endLon) {
     final int earthRadius = 6371;
     double lat1 = Math.toRadians(trip.getEndingLatitude());
-    double lat2 = Math.toRadians(trip.getEndingLongitude());
-    double lon1 = Math.toRadians(endLat);
+    double lat2 = Math.toRadians(endLat);
+    double lon1 = Math.toRadians(trip.getEndingLongitude());
     double lon2 = Math.toRadians(endLon);
     double latDifference = lat2 - lat1;
     double lonDifference = lon2 - lon1;
-    double latSquares = Math.sin(latDifference / 2) * Math
-        .sin(latDifference / 2);
-    double lonSquares = Math.sin(lonDifference / 2) * Math
-        .sin(lonDifference / 2);
+    double latSquares = Math.sin(latDifference / 2)
+        * Math.sin(latDifference / 2);
+    double lonSquares = Math.sin(lonDifference / 2)
+        * Math.sin(lonDifference / 2);
     double products = latSquares + lonSquares * Math.cos(lat1) * Math.cos(lat2);
-    double radians = 2 * Math
-        .atan2(Math.sqrt(products), Math.sqrt(1 - products));
+    double radians = 2
+        * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products));
     return earthRadius * radians;
   }
 
@@ -92,17 +93,17 @@ public class TripSearcher {
    * destination.
    *
    * @param trip
-   *     A Trip that may be within the required radius of the destination
+   *          A Trip that may be within the required radius of the destination
    * @param distanceRadius
-   *     The required radius that the Trip must be within of the
-   *     destination (km)
+   *          The required radius that the Trip must be within of the
+   *          destination (km)
    * @param endLat
-   *     The latitude of the destination
+   *          The latitude of the destination
    * @param endLon
-   *     The longitude of the destination
+   *          The longitude of the destination
    *
    * @return True if the Trip is within the required radius of the destination.
-   *     False otherwise
+   *         False otherwise
    */
   private boolean isWithinDestinationRadius(Trip trip, double distanceRadius,
       double endLat, double endLon) {
@@ -110,7 +111,7 @@ public class TripSearcher {
   }
 
   private List<Trip> unwrap(PathNode node) {
-    List<Trip> trips = node.trips;
+    List<Trip> trips = new ArrayList<Trip>(node.trips);
     trips.add(node.current);
     return trips;
   }
@@ -119,23 +120,23 @@ public class TripSearcher {
    * Search for valid paths from a starting location to an ending location.
    *
    * @param userId
-   *     The id of the User that is searching
+   *          The id of the User that is searching
    * @param startLat
-   *     The latitude of the starting location
+   *          The latitude of the starting location
    * @param startLon
-   *     The longitude of the starting location
+   *          The longitude of the starting location
    * @param endLat
-   *     The latitude of the ending location
+   *          The latitude of the ending location
    * @param endLon
-   *     The longitude of the ending location
+   *          The longitude of the ending location
    * @param departureTime
-   *     The epoch departure time
+   *          The epoch departure time
    * @param distanceRadius
-   *     The maximum walking distance between Trips or between a Trip and
-   *     the destination (km)
+   *          The maximum walking distance between Trips or between a Trip and
+   *          the destination (km)
    * @param timeRadius
-   *     The amount of time (seconds) that the Trip can leave within of the
-   *     departure time
+   *          The amount of time (seconds) that the Trip can leave within of the
+   *          departure time
    *
    * @return A List of valid paths. Each path is a List of Trips.
    */
@@ -152,30 +153,30 @@ public class TripSearcher {
    * Search for valid paths from a starting location to an ending location.
    *
    * @param startLat
-   *     The latitude of the starting location
+   *          The latitude of the starting location
    * @param startLon
-   *     The longitude of the starting location
+   *          The longitude of the starting location
    * @param endLat
-   *     The latitude of the ending location
+   *          The latitude of the ending location
    * @param endLon
-   *     The longitude of the ending location
+   *          The longitude of the ending location
    * @param departureTime
-   *     The epoch departure time
+   *          The epoch departure time
    * @param distanceRadius
-   *     The maximum walking distance between Trips or between a Trip and
-   *     the destination (km)
+   *          The maximum walking distance between Trips or between a Trip and
+   *          the destination (km)
    * @param timeRadius
-   *     The amount of time (seconds) that the Trip can leave within of the
-   *     departure time
+   *          The amount of time (seconds) that the Trip can leave within of the
+   *          departure time
    *
    * @return A List of valid paths. Each path is a List of Trips.
    */
   public List<List<Trip>> searchWithoutId(double startLat, double startLon,
-      double endLat, double endLon, int departureTime, double distanceRadius,
-      int timeRadius) {
+      double endLat, double endLon, long departureTime, double distanceRadius,
+      long timeRadius) {
     List<List<Trip>> paths = search("", startLat, startLon, endLat, endLon,
         departureTime, distanceRadius, timeRadius);
-    Collections.sort(paths, new CostComparator());
+    Collections.sort(paths, COST_COMPARATOR);
     return paths;
   }
 
@@ -183,29 +184,29 @@ public class TripSearcher {
    * Search for valid paths from a starting location to an ending location.
    *
    * @param userId
-   *     The id of the User that is searching
+   *          The id of the User that is searching
    * @param startLat
-   *     The latitude of the starting location
+   *          The latitude of the starting location
    * @param startLon
-   *     The longitude of the starting location
+   *          The longitude of the starting location
    * @param endLat
-   *     The latitude of the ending location
+   *          The latitude of the ending location
    * @param endLon
-   *     The longitude of the ending location
+   *          The longitude of the ending location
    * @param departureTime
-   *     The epoch departure time
+   *          The epoch departure time
    * @param distanceRadius
-   *     The maximum walking distance between Trips or between a Trip and
-   *     the destination (km)
+   *          The maximum walking distance between Trips or between a Trip and
+   *          the destination (km)
    * @param timeRadius
-   *     The amount of time (seconds) that the Trip can leave within of the
-   *     departure time
+   *          The amount of time (seconds) that the Trip can leave within of the
+   *          departure time
    *
    * @return A List of valid paths. Each path is a List of Trips.
    */
   private List<List<Trip>> search(String userId, double startLat,
-      double startLon, double endLat, double endLon, int departureTime,
-      double distanceRadius, int timeRadius) {
+      double startLon, double endLat, double endLon, long departureTime,
+      double distanceRadius, long timeRadius) {
     // Set the user id for all comparators
     setUser(userId);
 
@@ -219,9 +220,8 @@ public class TripSearcher {
     Map<Trip, Double> weights = new HashMap<>();
     try {
       // Create list of paths from starting location
-      List<Trip> startingTrips = database
-          .getConnectedTripsWithinTimeRadius(startLat, startLon, distanceRadius,
-              departureTime, timeRadius);
+      List<Trip> startingTrips = database.getConnectedTripsWithinTimeRadius(
+          startLat, startLon, distanceRadius, departureTime, timeRadius);
       for (Trip trip : startingTrips) {
         // Add weight to weights HashMap
         weights.put(trip, trip.getTripDistance());
@@ -231,40 +231,46 @@ public class TripSearcher {
 
       // Search for valid paths to destination
       while (!toVisit.isEmpty() && paths.size() <= MAX_PATH_OPTIONS) {
+        // System.out.println("Queue: ");
+        // for (PathNode p : toVisit) {
+        // System.out.println("Path: ");
+        // for (Trip t : p.trips) {
+        // System.out.println(t.getName());
+        // }
+        // System.out.println(p.current.getName());
+        // }
+
         PathNode visitingNode = toVisit.poll();
         Trip visitingTrip = visitingNode.current;
+        if (isWithinDestinationRadius(visitingTrip, distanceRadius, endLat,
+            endLon)) {
+          paths.add(unwrap(visitingNode));
+          continue;
+        }
         if (visited.contains(visitingTrip)) {
           continue;
         } else {
           visited.add(visitingTrip);
         }
-
-        if (isWithinDestinationRadius(visitingTrip, distanceRadius, endLat,
-            endLon)) {
-          paths.add(unwrap(visitingNode));
-          continue;
-        } else {
-          if (visitingNode.trips.size() < MAX_TRIPS_PER_PATH - 1) {
-            for (Trip nextTrip : database
-                .getConnectedTripsAfterEta(visitingTrip.getEndingLatitude(),
-                    visitingTrip.getEndingLongitude(), distanceRadius,
-                    visitingTrip.getEta(), CONNECTION_WAIT_TIME)) {
-              if (weights.containsKey(nextTrip) && weights.get(nextTrip)
-                  < weights.get(visitingTrip) + visitingTrip
-                  .distanceTo(nextTrip)) {
-                continue;
-              } else {
-                weights.put(nextTrip, weights.get(visitingTrip) + visitingTrip
-                    .distanceTo(nextTrip));
-                toVisit.add(new PathNode(visitingNode, nextTrip, weights));
-              }
+        if (visitingNode.trips.size() < MAX_TRIPS_PER_PATH - 1) {
+          for (Trip nextTrip : database.getConnectedTripsAfterEta(
+              visitingTrip.getEndingLatitude(),
+              visitingTrip.getEndingLongitude(), distanceRadius,
+              visitingTrip.getEta(), CONNECTION_WAIT_TIME)) {
+            if (weights.containsKey(nextTrip)
+                && weights.get(nextTrip) < weights.get(visitingTrip)
+                    + visitingTrip.distanceTo(nextTrip)) {
+              continue;
+            } else {
+              weights.put(nextTrip, weights.get(visitingTrip)
+                  + visitingTrip.distanceTo(nextTrip));
+              toVisit.add(new PathNode(visitingNode, nextTrip, weights));
             }
           }
         }
       }
     } catch (SQLException | MissingDataException e) {
       assert false;
-      e.printStackTrace();
     }
     return paths;
   }
@@ -286,13 +292,13 @@ public class TripSearcher {
      * distance heuristic.
      *
      * @param trip
-     *     The Trip reached
+     *          The Trip reached
      * @param endLat
-     *     The latitude of the destination
+     *          The latitude of the destination
      * @param endLon
-     *     The longitude of the destination
+     *          The longitude of the destination
      * @param weights
-     *     A Map containing information about path weights
+     *          A Map containing information about path weights
      */
     PathNode(Trip trip, double endLat, double endLon,
         Map<Trip, Double> weights) {
@@ -308,14 +314,14 @@ public class TripSearcher {
      * Construct a new PathNode by adding a new Trip to an existing PathNode.
      *
      * @param old
-     *     The old PathNode
+     *          The old PathNode
      * @param newTrip
-     *     The new Trip reached
+     *          The new Trip reached
      * @param weights
-     *     A Map containing information about path weights
+     *          A Map containing information about path weights
      */
     PathNode(PathNode old, Trip newTrip, Map<Trip, Double> weights) {
-      trips = old.trips;
+      trips = new ArrayList<Trip>(old.trips);
       trips.add(old.current);
       current = newTrip;
       endLat = old.endLat;
@@ -324,7 +330,8 @@ public class TripSearcher {
       totalWeight = weights.get(newTrip) + distance(newTrip, endLat, endLon);
     }
 
-    @Override public int compareTo(PathNode o) {
+    @Override
+    public int compareTo(PathNode o) {
       return Double.compare(totalWeight, o.totalWeight);
     }
   }
