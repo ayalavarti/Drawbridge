@@ -69,24 +69,27 @@
                              class="member-label"/>
                     </div>
                 </#list>
-                <#list pending as pend>
-                    <div class="list-person">
+                <div id="pending" style="display: none;">
+                    <#list pending as pend>
+                        <div class="list-person">
                         <span class="user-name">${pend.getName()}<i
                                     class="addendum">(pending)</i></span>
-                        <div class="pending">
-                            <img alt="approve-btn" src="/images/approve-btn.png"
-                                 class="approve-btn"
-                                 onclick="approveClick(${trip.getId()}, ${pend.getId()});"
-                                 onmouseover="hover(this);"
-                                 onmouseout="unhover(this);"/>
-                            <img alt="deny-btn" src="/images/deny-btn.png"
-                                 class="deny-btn"
-                                 onclick="denyClick(${trip.getId()}, ${pend.getId()});"
-                                 onmouseover="hover(this);"
-                                 onmouseout="unhover(this);"/>
+                            <div class="pending">
+                                <img alt="approve-btn"
+                                     src="/images/approve-btn.png"
+                                     class="approve-btn"
+                                     onclick="approveClick(${trip.getId()}, ${pend.getId()});"
+                                     onmouseover="hover(this);"
+                                     onmouseout="unhover(this);"/>
+                                <img alt="deny-btn" src="/images/deny-btn.png"
+                                     class="deny-btn"
+                                     onclick="denyClick(${trip.getId()}, ${pend.getId()});"
+                                     onmouseover="hover(this);"
+                                     onmouseout="unhover(this);"/>
+                            </div>
                         </div>
-                    </div>
-                </#list>
+                    </#list>
+                </div>
                 <div id="button-container">
                     <img alt="join-btn" src="/images/join-btn.png" id="join-btn"
                          style="display: none" class="join-btn"
@@ -105,6 +108,10 @@
                          onclick="deleteClick(${trip.getId()});"
                          onmouseover="hover(this);"
                          onmouseout="unhover(this);"/>
+                    <img alt="pending-label" src="/images/pending-btn.png"
+                         id="pending-label"
+                         style="display: none" class="delete-btn"
+                    />
                 </div>
             </div>
         </div>
@@ -135,28 +142,14 @@
     let startName = "${trip.getStartingAddress()?js_string}";
     let endName = "${trip.getEndingAddress()?js_string}";
 
-    let uid = userProfile == null ? null : userProfile.getId();
     let host = "${host.getId()?js_string}";
     let members = [
         <#list members as mem>"${mem.getId()?js_string}"<#if mem_has_next>,
         </#if></#list>
     ];
+
     let pending = [
         <#list pending as pen>"${pen.getId()?js_string}"<#if pen_has_next>,
         </#if></#list>
     ];
-
-    if (uid === host) {
-        $("#delete-btn").show();
-        $("#join-btn").hide();
-        $("#leave-btn").hide();
-    } else if (uid in members || uid in pending) {
-        $("#delete-btn").hide();
-        $("#join-btn").show();
-        $("#leave-btn").hide();
-    } else {
-        $("#delete-btn").hide();
-        $("#join-btn").show();
-        $("#leave-btn").hide();
-    }
 </script>

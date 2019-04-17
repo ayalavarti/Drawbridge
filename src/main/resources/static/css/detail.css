@@ -159,14 +159,12 @@ i {
 
 .list-person,
 #button-container {
-    border-bottom: 2px solid #bbbbbb;
     display: flex;
     justify-content: space-between;
     height: 50px;
 }
 
 .list-person:nth-last-child(2) {
-    border: none;
 }
 
 .user-name {
