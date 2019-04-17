@@ -14,7 +14,7 @@ $(document).ready(function () {
 });
 
 /**
- * Overriden function for user sign in action.
+ * Overridden function for user sign in action.
  */
 function onUserSignedIn() {
     console.log("User signed in.");
@@ -23,7 +23,7 @@ function onUserSignedIn() {
 }
 
 /**
- * Overriden function for user sign out action.
+ * Overridden function for user sign out action.
  */
 function onUserSignedOut() {
     console.log("User signed out.");
@@ -50,7 +50,6 @@ function initTooltips() {
  */
 function queryResults() {
     // Set the trip results on the page with the resulting data
-    console.log(data);
     setTripResults(JSON.parse(data));
 }
 
@@ -97,8 +96,8 @@ function handleJoin(ids) {
      */
     if (userProfile === undefined) {
         $("html, body").animate({
-                                    scrollTop: 0
-                                }, "slow");
+            scrollTop: 0
+        }, "slow");
         signInTooltip[0].setContent(
             "Sign in with your Google Account to join an existing trip.");
         signInTooltip[0].show();
@@ -119,8 +118,8 @@ function handleHost() {
      */
     if (userProfile === undefined) {
         $("html, body").animate({
-                                    scrollTop: 0
-                                }, "slow");
+            scrollTop: 0
+        }, "slow");
         signInTooltip[0].setContent(
             "Sign in with your Google Account to host your own trip.");
         signInTooltip[0].show();

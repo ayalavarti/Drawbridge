@@ -72,8 +72,8 @@ public final class Carpools {
    * @return A List of valid paths. Each path is a List of Trips.
    */
   public List<List<Trip>> searchWithId(String userId, double startLat,
-      double startLon, double endLat, double endLon, int departureTime,
-      int walkingTime, int timeRadius) {
+      double startLon, double endLat, double endLon, long departureTime,
+      double walkingTime, double timeRadius) {
     return tripSearcher
         .searchWithId(userId, startLat, startLon, endLat, endLon, departureTime,
             walkingTime * WALKING_SPEED, timeRadius * SECONDS_PER_MINUTE);
@@ -103,8 +103,8 @@ public final class Carpools {
    * @return A List of valid paths. Each path is a List of Trips.
    */
   public List<List<Trip>> searchWithoutId(double startLat, double startLon,
-      double endLat, double endLon, int departureTime, int walkingTime,
-      int timeRadius) {
+      double endLat, double endLon, long departureTime, double walkingTime,
+      double timeRadius) {
     return tripSearcher
         .searchWithoutId(startLat, startLon, endLat, endLon, departureTime,
             walkingTime * WALKING_SPEED, timeRadius * SECONDS_PER_MINUTE);
@@ -222,15 +222,15 @@ public final class Carpools {
    *     The new Trip to create
    * @param hostId
    *     The id of the new host
-   *
+   * @return The id of the new created trip
    * @throws SQLException
    *     If the SQL query is invalid.
    * @throws MissingDataException
    *     If database is missing information
    */
-  public void createTrip(Trip trip, String hostId)
+  public int createTrip(Trip trip, String hostId)
       throws SQLException, MissingDataException {
-    database.createTrip(trip, hostId);
+    return database.createTrip(trip, hostId);
   }
 
   /**

@@ -1,8 +1,11 @@
+const FADE_SPEED = 200;
+
 // Store user profile across JS files
 let userProfile = undefined;
 
 // Set up sign in tooltip for use across pages
 let signInTooltip;
+let infoTooltips;
 
 /**
  * When the DOM loads, check for the logged in cookie.
@@ -15,12 +18,8 @@ $(document).ready(function () {
      * If cookies are not enabled or the user is not signed in, display
      * the sign in button
      */
-    if (navigator.cookieEnabled) {
-        if (getCookie("loggedIn") === "true") {
-            $("#sign-in").css({
-                                  visibility: "hidden"
-                              });
-        }
+    if (navigator.cookieEnabled && getCookie("loggedIn") === "true") {
+        $("#sign-in").css({visibility: "visible"});
     }
 });
 
@@ -41,6 +40,18 @@ function initSignInTooltip() {
         sticky: true,
         placement: "bottom",
     });
+    infoTooltips = tippy(".fixed-controls", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge-alt",
+        interactive: "true",
+        hideOnClick: true,
+        inertia: true,
+        sticky: true,
+        placement: "top",
+    });
+
 }
 
 /**
@@ -61,27 +72,6 @@ function getCookie(cname) {
         }
     }
     return "";
-}
-
-/**
- * Routes to the home page.
- */
-function toHome() {
-    window.open("/", "_self");
-}
-
-/**
- * Routes to the info page.
- */
-function toInfo() {
-    window.open("/help", "_self");
-}
-
-/**
- * Routes to the user trips page.
- */
-function toUser() {
-    window.open("/my-trips", "_self");
 }
 
 /**
@@ -119,12 +109,8 @@ function onSignIn(googleUser) {
     $("#user-name").text(userProfile.getGivenName());
 
     // Hide the sign in button and show the profile info button
-    $("#profile-info").css({
-                               visibility: "visible"
-                           });
-    $("#sign-in").css({
-                          visibility: "hidden"
-                      });
+    $("#profile-info").css({visibility: "visible"});
+    $("#sign-in").css({visibility: "hidden "});
 }
 
 /**
@@ -141,12 +127,8 @@ function signOut() {
         onUserSignedOut();
 
         // Hide profile info dropdown and show login button
-        $("#profile-info").css({
-                                   visibility: "hidden"
-                               });
-        $("#sign-in").css({
-                              visibility: "visible"
-                          });
+        $("#profile-info").css({visibility: "hidden"});
+        $("#sign-in").css({visibility: "visible"});
     });
 }
 
@@ -154,12 +136,9 @@ function signOut() {
  * Show the home and info buttons on the screen.
  */
 function showHomeInfo() {
-    $("#home-btn").css({
-                           visibility: "visible"
-                       });
-    $("#info-btn").css({
-                           visibility: "visible"
-                       });
+    $("#home-btn").show();
+    $("#info-btn").show();
+    $("#new-btn").show();
 }
 
 /**
