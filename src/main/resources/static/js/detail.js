@@ -186,3 +186,6 @@ function drawRoute(c) {
         addRoute(coords, map);
     }, "json");
 }
+
+function copyToClipboard() {
+}

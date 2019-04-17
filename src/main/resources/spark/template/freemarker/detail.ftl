@@ -30,12 +30,25 @@
                 <h3 style="margin-top: 30px;">Share this Trip</h3>
                 <div style="display: flex; flex-wrap: wrap; justify-content:
                 center; align-items: center;">
-                    <i class="fas fa-phone"></i>
-                    <a href="https://twitter
-                .com/share?ref_src=twsrc%5Etfw"
-                       class="twitter-share-button" data-size="large"
-                       data-hashtags="drawbridge" data-lang="en"
-                       data-show-count="false">Tweet</a>
+                    <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fwww.yoururl.com&text=Join%20My%20Carpool!">
+                        <div class="share-tooltip">
+                            <img style="height: 15px; width: auto"
+                                 src="/images/twitter-icon.png"/>
+                        </div>
+                    </a>
+                    <div class="share-tooltip">
+                        <img style="height: 15px; width: auto"
+                             src="/images/facebook-icon.png"/>
+                    </div>
+                    <div class="share-tooltip">
+                        <img style="height: 15px; width: auto"
+                             src="/images/mail-icon.png"/>
+                    </div>
+                    <div class="share-tooltip" onclick="copyToClipboard()">
+                        <img style="height: 15px; width: auto"
+                             src="/images/copy-icon.png"/>
+                    </div>
+
                     <script async src="https://platform.twitter.com/widgets.js"
                             charset="utf-8"></script>
                 </div>
