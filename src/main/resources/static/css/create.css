@@ -11,7 +11,7 @@ canvas {
 }
 
 #container {
-    margin-top: 100px;
+    margin-top: 65px;
     max-width: 100%;
     text-align: center;
 }
@@ -30,7 +30,7 @@ canvas {
     visibility: hidden;
 }
 
-.trip-name-input,
+.trip-loc-input,
 .route-info {
     position: absolute;
     background: #fff;
@@ -47,15 +47,15 @@ canvas {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.096), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.trip-name-input > div,
+.trip-loc-input > div,
 .route-info > div {
     font-size: 15px;
 }
 
-.trip-name-input {
+.trip-loc-input {
     top: 10px;
-    width: 300px !important;
-    height: 50px;
+    width: 280px !important;
+    height: 115px;
 }
 
 .icon-img {
@@ -134,6 +134,12 @@ canvas {
     margin-bottom: 10px;
 }
 
+.address-input {
+    font-size: 12px;
+    width: 150px;
+    margin: 0;
+}
+
 .datetime-input {
     width: 100px;
 }
@@ -209,6 +215,7 @@ canvas {
 
 .search-inputs {
     text-align: center;
+    margin: 0 20px;
 }
 
 .addendum {
@@ -218,10 +225,11 @@ canvas {
 
 @media screen and (max-width: 767px) {
     #container {
-        margin: 100px 0 0 0;
+        margin: 65px 0 0 0;
     }
 
     .search-menu {
         width: auto;
     }
+
 }

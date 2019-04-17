@@ -85,15 +85,16 @@
 
 <a href="/help">
     <div style="display: none; bottom: 2%; position: fixed;" id="info-btn"
-         class="info-btn">
+         data-tippy-content="Drawbridge Info"
+         class="fixed-controls info-btn">
         <img style="height: 15px; width: auto" src="/images/info-icon.png"/>
     </div>
 </a>
 
 <a href="/new">
     <div style="display: none; bottom: 2%; right: 90px; position: fixed;"
-         id="new-btn"
-         class="new-btn">
+         id="new-btn" data-tippy-content="Host a Carpool"
+         class="fixed-controls new-btn">
         <img style="height: 15px; width: auto" src="/images/host-icon.png"/>
     </div>
 </a>

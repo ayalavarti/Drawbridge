@@ -146,6 +146,7 @@ input[type="number"] {
 .clear-btn {
     width: 20px;
     height: auto;
+    margin-right: 10px;
 }
 
 .info-tooltip {
@@ -326,14 +327,14 @@ input[type="number"] {
 }
 
 .tippy-tooltip.drawbridge-alt2-theme {
-    color: #53D8AC;
+    color: #45bc96;
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 2px 4px 0 rgba(119, 255, 203, 0.3);
 }
 
 .tippy-tooltip.drawbridge-alt-theme {
-    color: #46b0ff;
+    color: #3493ff;
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 2px 4px 0 rgba(70, 175, 255, 0.301);

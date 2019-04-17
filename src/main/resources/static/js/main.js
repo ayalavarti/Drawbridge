@@ -5,6 +5,7 @@ let userProfile = undefined;
 
 // Set up sign in tooltip for use across pages
 let signInTooltip;
+let infoTooltips;
 
 /**
  * When the DOM loads, check for the logged in cookie.
@@ -39,6 +40,18 @@ function initSignInTooltip() {
         sticky: true,
         placement: "bottom",
     });
+    infoTooltips = tippy(".fixed-controls", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge-alt",
+        interactive: "true",
+        hideOnClick: true,
+        inertia: true,
+        sticky: true,
+        placement: "top",
+    });
+
 }
 
 /**
@@ -97,7 +110,7 @@ function onSignIn(googleUser) {
 
     // Hide the sign in button and show the profile info button
     $("#profile-info").css({visibility: "visible"});
-    $("#sign-in").css({visibility: "hidden"});
+    $("#sign-in").css({visibility: "hidden "});
 }
 
 /**

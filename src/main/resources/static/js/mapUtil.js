@@ -89,8 +89,8 @@ function handleInput(id, index) {
                                  * */
                                 let feature = response.body.features[0];
                                 $(`#${id}`).val(feature.place_name);
+                                console.log(feature);
                                 coordinates[index] = feature.center;
-                                addressNames[index] = feature.place_name;
                                 // Add new marker on the map with the returned
                                 // feature data
                                 addStreetPoint(feature.center[1],
@@ -375,11 +375,13 @@ function addMarker(lat, long, id, index, name, map) {
 function parseAddress(raw, index) {
     if (raw.indexOf(",") > -1) {
         let title = raw.substr(0, raw.indexOf(","));
+        addressNames[index] = title;
         return `<div class="popup-title">${title}</div>
                 <img src="/images/divider.png" style="height: 2px; width: auto;" />
                 <div class="popup-content">${raw.substr(
             raw.indexOf(",") + 1)}</div>`;
     } else {
+        addressNames[index] = raw;
         return `<div class="popup-title">${raw}</div>`;
     }
 }

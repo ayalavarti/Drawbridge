@@ -74,9 +74,10 @@
          class="map-settings trip-setting" onclick="alignTrip()">
         <img id="car-icon" class="icon-img" src="/images/car-disabled.png"/>
     </div>
-    <a href="/my-trips">
-        <div data-tippy-content="My Trips" class="map-settings team-setting">
-            <img class="icon-img" src="/images/team-icon.png"/>
+    <a href="/new">
+        <div data-tippy-content="Host a Carpool" class="map-settings
+        team-setting">
+            <img class="icon-img" src="/images/host-icon.png"/>
         </div>
     </a>
     <a href="/help">

@@ -35,16 +35,44 @@
                         </div>
                     </div>
                 </div>
-                <div id="trip-name-input" style="display: none; flex-direction:
-                    column;" class="trip-name-input">
-                    <div>Trip Name</div>
-                    <img src="/images/divider.png"
-                         style="height: 2px; width: auto; margin-top: 2px; margin-bottom: 2px;"/>
+                <div id="trip-loc-input" style="display: none; flex-wrap: wrap;"
+                     class="trip-loc-input">
                     <div>
-                        <input class="name-input" id="name"
-                               type="text" placeholder="Name..."/>
+                        Starting / Ending Points<br/>
+                        <img src="/images/divider.png"
+                             style="height: 2px; width: auto; margin-top: 2px; margin-bottom: 2px;"/>
+                    </div>
+                    <div>
+                        <i class="fas fa-dot-circle icon-label"></i>
+                        <input class="address-input" id="start-input"
+                               onblur="handleInput('start-input', 0)"
+                               type="text" placeholder="Starting point..."/>
+                        <img alt="loading" id="loading-start-input"
+                             src="/images/loading.gif"
+                             class="loading-address-gif"/>
+                        <img class="clear-btn"
+                             onclick="clearTrip('start-input', 0)"
+                             src="/images/clear-btn.png"
+                             onmouseover="hover(this);"
+                             onmouseout="unhover(this);"/>
+                    </div>
+                    <div>
+                        <i class="fas fa-map-marker-alt icon-label"></i>
+                        <input class="address-input" id="end-input"
+                               onblur="handleInput('end-input', 1)"
+                               type="text"
+                               placeholder="Ending destination..."/>
+                        <img alt="loading" id="loading-end-input"
+                             src="/images/loading.gif"
+                             class="loading-address-gif"/>
+                        <img class="clear-btn"
+                             onclick="clearTrip('end-input', 1)"
+                             src="/images/clear-btn.png"
+                             onmouseover="hover(this);"
+                             onmouseout="unhover(this);"/>
                     </div>
                 </div>
+
                 <div id="pre-load" style="display: none;" data-tippy-content="Align
                     Map"
                      class="map-settings compass-setting" onclick="alignMap()">
@@ -69,36 +97,10 @@
                 <div class="search-inputs">
                     <div class="input-info" style="justify-content: center;">
                         <div>
-                            <i class="fas fa-dot-circle icon-label"></i>
-                            <input class="address-input" id="start-input"
-                                   onblur="handleInput('start-input', 0)"
-                                   type="text" placeholder="Starting point..."/>
-                            <img class="clear-btn"
-                                 onclick="clearTrip('start-input', 0)"
-                                 src="/images/clear-btn.png"
-                                 onmouseover="hover(this);"
-                                 onmouseout="unhover(this);"/>
-                            <img alt="loading" id="loading-start-input"
-                                 src="/images/loading.gif"
-                                 class="loading-address-gif"/>
+                            <i class="fas fa-font icon-label"></i>
+                            <input class="name-input" id="name"
+                                   type="text" placeholder="Name..."/>
                         </div>
-                        <div>
-                            <i class="fas fa-map-marker-alt icon-label"></i>
-                            <input class="address-input" id="end-input"
-                                   onblur="handleInput('end-input', 1)"
-                                   type="text"
-                                   placeholder="Ending destination..."/>
-                            <img class="clear-btn"
-                                 onclick="clearTrip('end-input', 1)"
-                                 src="/images/clear-btn.png"
-                                 onmouseover="hover(this);"
-                                 onmouseout="unhover(this);"/>
-                            <img alt="loading" id="loading-end-input"
-                                 src="/images/loading.gif"
-                                 class="loading-address-gif"/>
-                        </div>
-                    </div>
-                    <div class="input-info" style="justify-content: center;">
                         <div>
                             <i class="fas fa-calendar icon-label"></i>
                             <input class="datetime-input flatpickr flatpickr-input"

@@ -15,6 +15,7 @@ let route = [];
  */
 let formValidationTooltip;
 let formTooltips = [];
+let mapControlTooltips = [];
 
 /**
  * When the DOM loads, set the tooltip content and check if cookies are enabled
@@ -76,7 +77,7 @@ function initMap(position) {
      * Hide loading gif and show all initially hidden objects
      */
     $("#loading").hide();
-    $("#trip-name-input").fadeIn(FADE_SPEED);
+    $("#trip-loc-input").fadeIn(FADE_SPEED);
     $("[id=pre-load]").fadeIn(FADE_SPEED);
 
     console.log("Map loaded.");
@@ -126,7 +127,17 @@ function initTooltips() {
         inertia: true,
         placement: "bottom",
     });
-
+    mapControlTooltips = tippy(".map-settings", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge-alt",
+        interactive: "true",
+        hideOnClick: true,
+        inertia: true,
+        sticky: true,
+        placement: "top",
+    });
 }
 
 /**
