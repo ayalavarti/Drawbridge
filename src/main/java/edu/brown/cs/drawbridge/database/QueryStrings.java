@@ -59,7 +59,7 @@ public final class QueryStrings {
           + "cos(radians(start_latitude)) * cos(radians(?)) * "
           + "sin(radians(? - start_longitude) / 2)^2)) <= ?) "
           + "AND (departure BETWEEN ? AND ?);";
-
-  private QueryStrings() {
-  }
+  protected static final String[] RESET_DATABASE =
+          {"TRUNCATE trips RESTART IDENTITY CASCADE;",
+                  "TRUNCATE users CASCADE;"};
 }

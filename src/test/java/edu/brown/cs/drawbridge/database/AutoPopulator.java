@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
+import retrofit2.http.Query;
 
 /**
  * Contains a Test that populates the database.
@@ -17,8 +18,8 @@ public class AutoPopulator {
 
   private static DatabaseQuery test;
 
-  private static final int NUM_TRIPS = 100;
-  private static final int NUM_USERS = 10;
+  private static final int NUM_TRIPS = 10000;
+  private static final int NUM_USERS = 1000;
 
   /**
    * Populate all tables in the database.
@@ -30,15 +31,36 @@ public class AutoPopulator {
    * @throws MissingDataException
    *           If database is missing information
    */
-  @Test
-  public void populateAll()
+  //@Test
+  public void populateUsers()
       throws ClassNotFoundException, SQLException, MissingDataException {
-    String username = "";
-    String password = "";
-    test = new DatabaseQuery("//127.0.0.1:5432/carpools", username, password);
+    String username = "dev";
+    String password = "dev";
+    test = new DatabaseQuery("//127.0.0.1:5432/massData", username, password);
     populateUsers(test);
+  }
+
+  //@Test
+  public void populateTrips() throws SQLException, ClassNotFoundException, MissingDataException {
+    String username = "dev";
+    String password = "dev";
+    test = new DatabaseQuery("//127.0.0.1:5432/massData", username, password);
     populateTrips(test);
+  }
+
+  //@Test
+  public void populateRequests() throws SQLException, ClassNotFoundException, MissingDataException {
+    String username = "dev";
+    String password = "dev";
+    test = new DatabaseQuery("//127.0.0.1:5432/massData", username, password);
     populatePending(test);
+  }
+
+  //@Test
+  public void populateMembers() throws SQLException, ClassNotFoundException, MissingDataException {
+    String username = "dev";
+    String password = "dev";
+    test = new DatabaseQuery("//127.0.0.1:5432/massData", username, password);
     populateMembers(test);
   }
 
@@ -165,5 +187,10 @@ public class AutoPopulator {
     long min = System.currentTimeMillis() / millisecondsPerSecond;
     long max = min + secondsPerTenDays;
     return (long) Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  private void truncateAndReset() {
+    String[] queries = {"TRUNCATE trips RESTART IDENTITY CASCADE;",
+            "TRUNCATE users CASCADE;"};
   }
 }
