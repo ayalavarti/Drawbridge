@@ -17,10 +17,8 @@ $(document).ready(function () {
      * If cookies are not enabled or the user is not signed in, display
      * the sign in button
      */
-    if (navigator.cookieEnabled) {
-        if (getCookie("loggedIn") === "true") {
-            $("#sign-in").show();
-        }
+    if (navigator.cookieEnabled && getCookie("loggedIn") === "true") {
+        $("#sign-in").css({visibility: "visible"});
     }
 });
 
@@ -64,35 +62,6 @@ function getCookie(cname) {
 }
 
 /**
- * Routes to the home page.
- */
-function toHome() {
-    window.open("/", "_self");
-}
-
-/**
- * Routes to the info page.
- */
-function toInfo() {
-    window.open("/help", "_self");
-}
-
-/**
- * Routes to the user trips page.
- */
-function toUser() {
-    window.open("/my-trips", "_self");
-}
-
-/**
- * Routes to a given trip detail page.
- */
-function toTrip(id) {
-    window.open(`/trip/${id}`, "_self");
-}
-
-
-/**
  * Handles sign in errors.
  *
  * @param {*} error
@@ -127,8 +96,8 @@ function onSignIn(googleUser) {
     $("#user-name").text(userProfile.getGivenName());
 
     // Hide the sign in button and show the profile info button
-    $("#profile-info").show();
-    $("#sign-in").hide();
+    $("#profile-info").css({visibility: "visible"});
+    $("#sign-in").css({visibility: "hidden"});
 }
 
 /**
@@ -145,8 +114,8 @@ function signOut() {
         onUserSignedOut();
 
         // Hide profile info dropdown and show login button
-        $("#profile-info").hide();
-        $("#sign-in").show();
+        $("#profile-info").css({visibility: "hidden"});
+        $("#sign-in").css({visibility: "visible"});
     });
 }
 

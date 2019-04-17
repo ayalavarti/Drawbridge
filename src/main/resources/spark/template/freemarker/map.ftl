@@ -74,15 +74,17 @@
          class="map-settings trip-setting" onclick="alignTrip()">
         <img id="car-icon" class="icon-img" src="/images/car-disabled.png"/>
     </div>
-    <div data-tippy-content="My Trips" class="map-settings team-setting"
-         onclick="toUser()">
-        <img class="icon-img" src="/images/team-icon.png"/>
-    </div>
-    <div data-tippy-content="Drawbridge Info"
-         class="map-settings info-setting" onclick="toInfo()">
-        <img class="icon-img" src="/images/info-icon.png"/>
-    </div>
-
+    <a href="/my-trips">
+        <div data-tippy-content="My Trips" class="map-settings team-setting">
+            <img class="icon-img" src="/images/team-icon.png"/>
+        </div>
+    </a>
+    <a href="/help">
+        <div data-tippy-content="Drawbridge Info"
+             class="map-settings info-setting">
+            <img class="icon-img" src="/images/info-icon.png"/>
+        </div>
+    </a>
     <div id="route-info" style="display: none; flex-direction: column;"
          class="route-info">
         <div>Route Information</div>

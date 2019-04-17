@@ -59,7 +59,7 @@
 
 <body>
 <div class="header">
-    <div style="display: none;" id="profile-info"
+    <div style="visibility: hidden;" id="profile-info"
          class="profile-btn dropdown">
         <div class="user-info" id="user-name"></div>
         <div id="profile-picture-wrapper">
