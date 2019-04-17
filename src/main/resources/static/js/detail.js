@@ -87,15 +87,12 @@ function setRoute() {
  * @param {*} tid
  */
 function joinClick(tid) {
-    if (userProfile === undefined) {
-        $("html, body").animate({
-                scrollTop: 0
-            },
-            "slow"
-        );
+    if (userProfile == undefined) {
+        $("html, body").animate({scrollTop: 0}, "slow");
         signInTooltip[0].setContent(
             "Sign in with your Google Account to join this trip.");
         signInTooltip[0].show();
+
     } else {
         const data = {
             action: "join",
@@ -140,9 +137,8 @@ function deleteClick(tid) {
 function approveClick(tid, pendUID) {
     const data = {
         action: "approve",
-        user: pendUID,
-        host: userProfile.getId()
-
+        user: userProfile.getId(),
+        pendingUser: pendUID
     };
     sendRequest(data, "/trip/" + tid);
 }
@@ -156,8 +152,8 @@ function approveClick(tid, pendUID) {
 function denyClick(tid, pendUID) {
     const data = {
         action: "deny",
-        user: pendUID,
-        user: userProfile.getId()
+        user: userProfile.getId(),
+        pendingUser: pendUID
     };
     sendRequest(data, "/trip/" + tid);
 }
