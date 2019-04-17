@@ -208,7 +208,7 @@ public final class UserInterface {
       return new ModelAndView(variables, "detail.ftl");
     }
   }
-  
+
   /**
    * Handles various actions on the detail page including deleting a trip,
    * joining a trip, approving/denying pending members.
@@ -267,7 +267,7 @@ public final class UserInterface {
       return null;
     }
   }
-  
+
 
   // ---------------------------- User ------------------------------------
 
@@ -308,7 +308,7 @@ public final class UserInterface {
     }
   }
 
-  
+
 
   // --------------------------- Create -----------------------------------
 
@@ -325,8 +325,6 @@ public final class UserInterface {
       return new ModelAndView(variables, "create.ftl");
     }
   }
-
-  // --------------------------- Errors -----------------------------------
 
   /**
    * Handles create form submission and actual creation of a new trip.
@@ -371,7 +369,7 @@ public final class UserInterface {
       return null;
     }
   }
-  
+
   // ---------------------------- Info ------------------------------------
 
   /**
@@ -387,7 +385,7 @@ public final class UserInterface {
     }
   }
 
-  // --------------------------- Helpers -----------------------------------
+  // --------------------------- Errors -----------------------------------
   /**
    * Class to handle all page not found requests.
    */
@@ -402,8 +400,10 @@ public final class UserInterface {
     }
 
   }
-  
-   /**
+
+  // --------------------------- Helpers -----------------------------------
+
+  /**
    * Overloaded method to provide an alternate signature for the
    * JSON-processing method.
    *
@@ -419,7 +419,7 @@ public final class UserInterface {
 
     return processToJSON(uid, Arrays.asList(tripGroups));
   }
-  
+
   /**
    * Method to help process a list of trip-groups into a JSON-encodable format.
    *

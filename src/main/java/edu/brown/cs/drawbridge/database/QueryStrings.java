@@ -55,9 +55,9 @@ public final class QueryStrings {
           + "FROM requests) WHERE group_id = ?;";
   protected static final String FIND_CONNECTED_TRIPS =
       "SELECT * FROM trips WHERE "
-          + "(degrees(2 * asin(sqrt(sin(radians(? - start_latitude) / 2)^2 + "
+          + "(2 * 6371 * asin(sqrt(sin(radians(? - start_latitude) / 2)^2 + "
           + "cos(radians(start_latitude)) * cos(radians(?)) * "
-          + "sin(radians(? - start_longitude) / 2)^2))) <= ?) "
+          + "sin(radians(? - start_longitude) / 2)^2)) <= ?) "
           + "AND (departure BETWEEN ? AND ?);";
 
   private QueryStrings() {
