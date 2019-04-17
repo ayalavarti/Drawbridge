@@ -26,6 +26,20 @@
             <div class="info-box">
                 <span><i class="fas fa-phone"></i>Contact host at ${trip.getPhoneNumber()}</span>
             </div>
+            <div>
+                <h3 style="margin-top: 30px;">Share this Trip</h3>
+                <div style="display: flex; flex-wrap: wrap; justify-content:
+                center; align-items: center;">
+                    <i class="fas fa-phone"></i>
+                    <a href="https://twitter
+                .com/share?ref_src=twsrc%5Etfw"
+                       class="twitter-share-button" data-size="large"
+                       data-hashtags="drawbridge" data-lang="en"
+                       data-show-count="false">Tweet</a>
+                    <script async src="https://platform.twitter.com/widgets.js"
+                            charset="utf-8"></script>
+                </div>
+            </div>
         </div>
         <div id="member-list-container">
             <h2>Carpool Members</h2>
@@ -110,8 +124,14 @@
 
     let uid = userProfile == null ? null : userProfile.getId();
     let host = "${host.getId()?js_string}";
-    let members = [<#list members as mem>"${mem.getId()?js_string}"<#if mem_has_next>,</#if></#list>];
-    let pending = [<#list pending as pen>"${pen.getId()?js_string}"<#if pen_has_next>,</#if></#list>];
+    let members = [
+        <#list members as mem>"${mem.getId()?js_string}"<#if mem_has_next>,
+        </#if></#list>
+    ];
+    let pending = [
+        <#list pending as pen>"${pen.getId()?js_string}"<#if pen_has_next>,
+        </#if></#list>
+    ];
 
     if (uid === host) {
         $("#delete-btn").show();

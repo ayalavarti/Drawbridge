@@ -1,3 +1,5 @@
+const FADE_SPEED = 200;
+
 // Store user profile across JS files
 let userProfile = undefined;
 
@@ -17,9 +19,7 @@ $(document).ready(function () {
      */
     if (navigator.cookieEnabled) {
         if (getCookie("loggedIn") === "true") {
-            $("#sign-in").css({
-                                  visibility: "hidden"
-                              });
+            $("#sign-in").show();
         }
     }
 });
@@ -85,6 +85,14 @@ function toUser() {
 }
 
 /**
+ * Routes to a given trip detail page.
+ */
+function toTrip(id) {
+    window.open(`/trip/${id}`, "_self");
+}
+
+
+/**
  * Handles sign in errors.
  *
  * @param {*} error
@@ -119,12 +127,8 @@ function onSignIn(googleUser) {
     $("#user-name").text(userProfile.getGivenName());
 
     // Hide the sign in button and show the profile info button
-    $("#profile-info").css({
-                               visibility: "visible"
-                           });
-    $("#sign-in").css({
-                          visibility: "hidden"
-                      });
+    $("#profile-info").show();
+    $("#sign-in").hide();
 }
 
 /**
@@ -141,12 +145,8 @@ function signOut() {
         onUserSignedOut();
 
         // Hide profile info dropdown and show login button
-        $("#profile-info").css({
-                                   visibility: "hidden"
-                               });
-        $("#sign-in").css({
-                              visibility: "visible"
-                          });
+        $("#profile-info").hide();
+        $("#sign-in").show();
     });
 }
 
@@ -154,12 +154,9 @@ function signOut() {
  * Show the home and info buttons on the screen.
  */
 function showHomeInfo() {
-    $("#home-btn").css({
-                           visibility: "visible"
-                       });
-    $("#info-btn").css({
-                           visibility: "visible"
-                       });
+    $("#home-btn").show();
+    $("#info-btn").show();
+    $("#new-btn").show();
 }
 
 /**
