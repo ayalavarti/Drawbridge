@@ -216,7 +216,7 @@ public class DatabaseQueryTest {
   public void testTeamDataExists()
           throws SQLException, MissingDataException {
     String[] teamIds = {"0", //'Jenny'
-            "108134993267513125002", // Arvind
+            "108134993267513125002", //Arvind
             "105528985214845949817", //Jeff
             "118428670975676923422", //Mark
             "106748572580441940868"}; //Sam
