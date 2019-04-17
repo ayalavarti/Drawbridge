@@ -39,16 +39,18 @@ public class DatabaseQueryTest {
   @BeforeClass public static void oneTimeSetUp()
       throws SQLException, MissingDataException {
     try {
-      String username = "dev";//System.getenv("DB_USER");
-      String password = "dev";//System.getenv("DB_PASS");
+      String username = System.getenv("DB_USER");
+      String password = System.getenv("DB_PASS");
       /*
        * Run the following queries in pgadmin:
        * CREATE USER <username> WITH PASSWORD '<password>'
        * GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <username>
        * GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO <username>
        */
-      test = new DatabaseQuery("//127.0.0.1:5432/testCarpools", username, password);
-      teamData = new DatabaseQuery("//127.0.0.1:5432/carpools", username, password);
+      test = new DatabaseQuery("//127.0.0.1:5432/testCarpools", username,
+          password);
+      teamData = new DatabaseQuery("//127.0.0.1:5432/carpools", username,
+          password);
     } catch (ClassNotFoundException | SQLException e) {
       assert false;
     }
@@ -158,7 +160,8 @@ public class DatabaseQueryTest {
     //after eta outside buffer
     assertTrue(test.getConnectedTripsAfterEta(3, 3, 0, 1026, 25).isEmpty());
     //all trips
-    assertEquals(test.getConnectedTripsAfterEta(1, 1, 330, -100000000, 2000000000),
+    assertEquals(
+        test.getConnectedTripsAfterEta(1, 1, 330, -100000000, 2000000000),
         new ArrayList<>(Arrays
             .asList(test.getTripById(t1), test.getTripById(t2),
                 test.getTripById(t3))));
@@ -230,11 +233,11 @@ public class DatabaseQueryTest {
     assertNotNull(teamData.getTripById(3));
     assertNotNull(teamData.getTripById(4));
     assertNotNull(teamData.getTripById(5));
-    assertEquals(teamData.getHostOnTrip(1),teamIds[0]);
-    assertEquals(teamData.getHostOnTrip(2),teamIds[1]);
-    assertEquals(teamData.getHostOnTrip(3),teamIds[3]);
-    assertEquals(teamData.getHostOnTrip(4),teamIds[0]);
-    assertEquals(teamData.getHostOnTrip(5),teamIds[2]);
+    assertEquals(teamData.getHostOnTrip(1), teamIds[0]);
+    assertEquals(teamData.getHostOnTrip(2), teamIds[1]);
+    assertEquals(teamData.getHostOnTrip(3), teamIds[3]);
+    assertEquals(teamData.getHostOnTrip(4), teamIds[0]);
+    assertEquals(teamData.getHostOnTrip(5), teamIds[2]);
     assertTrue(teamData.getMembersOnTrip(1).contains(teamIds[3]));
     assertTrue(teamData.getMembersOnTrip(2).contains(teamIds[2]));
     assertTrue(teamData.getMembersOnTrip(2).contains(teamIds[4]));
