@@ -94,6 +94,8 @@ public final class UserInterface {
     Spark.get("/new", new CreateGetHandler(), freeMarker);
     Spark.post("/new", new CreatePostHandler());
 
+    Spark.post("/login", new UserLoginHandler());
+
     Spark.get("/help", new InfoGetHandler(), freeMarker);
     Spark.get("/error", new ServerErrorHandler(), freeMarker);
 
@@ -448,7 +450,10 @@ public final class UserInterface {
   }
 
   // -------------------------- My Trips ----------------------------------
-
+  /**
+   * Handler for checking if a logged-in user is already in the database or
+   * if they need to be added.
+   */
   private static class UserLoginHandler implements Route {
     @Override
     public Object handle(Request request, Response response) {
