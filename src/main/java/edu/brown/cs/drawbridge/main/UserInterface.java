@@ -319,6 +319,8 @@ public final class UserInterface {
           errorReason = "Database connection failed";
           success = carpools.deleteTrip(tid, uid);
 
+          response.redirect("/my-trips", 303);
+
         } else if (action.equals("approve")) {
           errorReason = "Database connection failed";
           String pendingUID = qm.value("pendingUser");
@@ -410,7 +412,7 @@ public final class UserInterface {
       QueryParamsMap qm = request.queryMap();
 
       // Read inputted values from request
-      String tripName = qm.value("tripName");
+      String tripName = qm.value("name");
       String startName = qm.value("startName");
       String endName = qm.value("endName");
 

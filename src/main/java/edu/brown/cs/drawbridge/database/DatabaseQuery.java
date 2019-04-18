@@ -286,7 +286,7 @@ public class DatabaseQuery {
               .addLocations(rs.getDouble(4), rs.getDouble(5), rs.getDouble(7),
                   rs.getDouble(8))
               .addAddressNames(rs.getString(3), rs.getString(6))
-              .addTimes(rs.getInt(9), rs.getInt(10))
+              .addTimes(rs.getLong(9), rs.getLong(10))
               .addDetails(rs.getInt(11), rs.getDouble(12), rs.getString(13),
                   rs.getString(14), rs.getString(15))
               .buildWithUsers(getHostOnTrip(tripId), getMembersOnTrip(tripId),
