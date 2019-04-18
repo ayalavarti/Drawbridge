@@ -272,7 +272,7 @@ public final class Carpools {
   }
 
   /**
-   * Remove a member from a Trip.
+   * Remove a member from a Trip (both from requests and from members).
    *
    * @param tripId
    *          The id of the Trip
@@ -289,9 +289,13 @@ public final class Carpools {
     if (database.getMembersOnTrip(tripId).contains(userId)) {
       database.kick(tripId, userId);
       return true;
-    } else {
-      return false;
     }
+    if (database.getRequestsOnTrip(tripId).contains(userId)) {
+      database.reject(tripId, userId);
+      return true;
+    }
+
+    return false;
   }
 
   /**
