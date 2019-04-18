@@ -111,6 +111,11 @@ function onSignIn(googleUser) {
     // Hide the sign in button and show the profile info button
     $("#profile-info").css({visibility: "visible"});
     $("#sign-in").css({visibility: "hidden "});
+
+    /**
+     * TODO add post request to server to create new user account if one
+     * does not already exist in the database
+     */
 }
 
 /**

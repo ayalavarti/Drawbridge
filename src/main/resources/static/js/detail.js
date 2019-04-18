@@ -5,6 +5,7 @@ let map;
 
 let markers = [];
 let addressNames = [];
+let copyTooltip;
 
 /**
  * When the DOM is ready, show home and info buttons, initialize the
@@ -14,6 +15,8 @@ $(document).ready(function () {
     showHomeInfo();
     initMapbox();
     initMap();
+    initTooltips();
+    $("#join-btn").show();
     console.log("DOM ready.");
 });
 
@@ -27,6 +30,46 @@ function onUserSignedIn() {
      */
     console.log("User signed in.");
     signInTooltip[0].hide();
+    let uid = userProfile.getId();
+
+    if (uid === host) {
+        $("#delete-btn").show();
+        $("#join-btn").hide();
+        $("#leave-btn").hide();
+        $("#pending").show();
+        $("#action-btn").show();
+    } else if (containsUser(members, uid)) {
+        $("#delete-btn").hide();
+        $("#join-btn").hide();
+        $("#leave-btn").show();
+        $("#pending").hide();
+        $("#action-btn").hide();
+    } else if (containsUser(pending, uid)) {
+        $("#delete-btn").hide();
+        $("#join-btn").hide();
+        $("#leave-btn").hide();
+        $("#pending").hide();
+        $("#action-btn").hide();
+        $("#pending-label").show();
+    } else {
+        $("#join-btn").show();
+    }
+}
+
+/**
+ * Checks if a given user is in the given list of users.
+ *
+ * @param list
+ * @param uid
+ * @returns {boolean}
+ */
+function containsUser(list, uid) {
+    for (let m in list) {
+        if (uid === list[m]) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
@@ -34,6 +77,11 @@ function onUserSignedIn() {
  */
 function onUserSignedOut() {
     console.log("User signed out.");
+    $("#delete-btn").hide();
+    $("#join-btn").show();
+    $("#leave-btn").hide();
+    $("#pending").hide();
+    $("#pending-label").hide();
 }
 
 /**
@@ -55,6 +103,22 @@ function initMap() {
     });
 
     console.log("Map loaded.");
+}
+
+function initTooltips() {
+    copyTooltip = tippy("#clipboardTooltip", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge-alt",
+        interactive: false,
+        trigger: "manual",
+        hideOnClick: false,
+        maxWidth: 250,
+        inertia: true,
+        sticky: true,
+        placement: "bottom",
+    });
 }
 
 /**
@@ -185,4 +249,13 @@ function drawRoute(c) {
         let coords = responseJSON.routes[0].geometry;
         addRoute(coords, map);
     }, "json");
+}
+
+function copyToClipboard() {
+    let text = `localhost:8000/trip/${tid}`;
+    navigator.clipboard.writeText(text).then(function () {
+        showHideTooltip(copyTooltip[0]);
+    }, function (err) {
+        console.error('Async: Could not copy text: ', err);
+    });
 }
