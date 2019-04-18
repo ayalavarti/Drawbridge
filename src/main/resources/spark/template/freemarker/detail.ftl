@@ -1,6 +1,7 @@
 <#assign stylesheets>
     <link rel="stylesheet" href="/css/detail.css" type="text/css">
     <script src="/js/mapUtil.js"></script>
+    <script src="/js/util.js"></script>
     <script src="/js/detail.js"></script>
 </#assign>
 
@@ -36,15 +37,16 @@
                                  src="/images/twitter-icon.png"/>
                         </div>
                     </a>
-                    <div class="share-tooltip">
-                        <img style="height: 15px; width: auto"
-                             src="/images/facebook-icon.png"/>
-                    </div>
-                    <div class="share-tooltip">
-                        <img style="height: 15px; width: auto"
-                             src="/images/mail-icon.png"/>
-                    </div>
-                    <div class="share-tooltip" onclick="copyToClipboard()">
+                    <a href="mailto:?Subject=Join%20My%20Carpool!"
+                       target="_top">
+                        <div class="share-tooltip">
+                            <img style="height: 15px; width: auto"
+                                 src="/images/mail-icon.png"/>
+                        </div>
+                    </a>
+                    <div class="share-tooltip" id="clipboardTooltip"
+                         data-tippy-content="Trip URL copied to clipboard!"
+                         onclick="copyToClipboard()">
                         <img style="height: 15px; width: auto"
                              src="/images/copy-icon.png"/>
                     </div>
@@ -141,6 +143,7 @@
     ];
     let startName = "${trip.getStartingAddress()?js_string}";
     let endName = "${trip.getEndingAddress()?js_string}";
+    let tid = "${trip.getId()?js_string}";
 
     let host = "${host.getId()?js_string}";
     let members = [

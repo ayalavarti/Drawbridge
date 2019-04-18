@@ -5,6 +5,7 @@ let map;
 
 let markers = [];
 let addressNames = [];
+let copyTooltip;
 
 /**
  * When the DOM is ready, show home and info buttons, initialize the
@@ -14,6 +15,7 @@ $(document).ready(function () {
     showHomeInfo();
     initMapbox();
     initMap();
+    initTooltips();
     $("#join-btn").show();
     console.log("DOM ready.");
 });
@@ -54,6 +56,13 @@ function onUserSignedIn() {
     }
 }
 
+/**
+ * Checks if a given user is in the given list of users.
+ *
+ * @param list
+ * @param uid
+ * @returns {boolean}
+ */
 function containsUser(list, uid) {
     for (let m in list) {
         if (uid === list[m]) {
@@ -94,6 +103,22 @@ function initMap() {
     });
 
     console.log("Map loaded.");
+}
+
+function initTooltips() {
+    copyTooltip = tippy("#clipboardTooltip", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge-alt",
+        interactive: false,
+        trigger: "manual",
+        hideOnClick: false,
+        maxWidth: 250,
+        inertia: true,
+        sticky: true,
+        placement: "bottom",
+    });
 }
 
 /**
@@ -227,4 +252,10 @@ function drawRoute(c) {
 }
 
 function copyToClipboard() {
+    let text = `localhost:8000/trip/${tid}`;
+    navigator.clipboard.writeText(text).then(function () {
+        showHideTooltip(copyTooltip[0]);
+    }, function (err) {
+        console.error('Async: Could not copy text: ', err);
+    });
 }

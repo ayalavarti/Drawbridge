@@ -21,12 +21,14 @@ input {
     letter-spacing: 0.5px;
 }
 
+a,
+img,
 select,
 span,
 div,
 button {
     font-family: "Nunito", sans-serif;
-    outline: none;
+    outline: none !important;
 }
 
 select {
