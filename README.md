@@ -39,13 +39,14 @@ Use the carpoolsDump.tar file to build the database. Open
 Restore Options and select the following: "Only schema",
 and all options under "do not save".
 
-In the carpools database, open the query tool (lightning
+*In the carpools database, open the query tool (lightning
 symbol), and run the following commands, consistent with
-the environment variables set up earlier:
-* CREATE USER \<username\> WITH PASSWORD '\<password\>';
-* GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO \<username\>;
-* GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO \<username\>;
-
+the environment variables set up earlier:*
+```postgresql
+CREATE USER <username> WITH PASSWORD '<password>';
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <username>;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO <username>;
+```
 To restore data to your database, select "restore" and
 use one of the data files (dummyDataDump, for example).
 Under "Restore Options," select "Only data" and all options
@@ -69,10 +70,17 @@ _Restore carpools schema, then teamDataDump_
 which path-finding algorithms will be tested. 
 _Restore carpools schema, then testSearchData_
 * massData - intended for testing speed on massive
-sets of data. _Restore carpools schema, then massData 
-(will be added soon)_
+sets of data. _Restore carpools schema, then massData_
 
 (If you do not intend to run tests over the databases,
 comment out all the test files in the database
 package; alternatively, set up the urls
 to your specific database structure)
+
+*If you already have data existing data in the database
+run the following command to clear your database 
+before restoring data:*
+```postgresql
+TRUNCATE users, trips RESTART IDENTITY CASCADE;
+```
+
