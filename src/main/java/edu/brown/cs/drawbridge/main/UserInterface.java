@@ -2,8 +2,8 @@ package edu.brown.cs.drawbridge.main;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import edu.brown.cs.drawbridge.carpools.Carpools;
-import edu.brown.cs.drawbridge.database.DatabaseQuery;
 import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,9 @@ public final class UserInterface {
   private static final String MAPBOX_TOKEN = System.getenv("MAPBOX_KEY");
   private static Carpools carpools;
 
+  /**
+   * Default constructor made private since UserInterface is a utility class.
+   */
   private UserInterface() {
   }
 
@@ -91,6 +95,7 @@ public final class UserInterface {
     Spark.post("/new", new CreatePostHandler());
 
     Spark.get("/help", new InfoGetHandler(), freeMarker);
+    Spark.get("/error", new ServerErrorHandler(), freeMarker);
 
     Spark.get("/*", new Code404Handler(), freeMarker);
 
@@ -102,11 +107,39 @@ public final class UserInterface {
 
   // ---------------------------- Home ------------------------------------
 
-  @SafeVarargs
+  /**
+   * Overloaded method to provide an alternate signature for the
+   * JSON-processing method.
+   *
+   * @param uid
+   *     The user id for which to create this JSON object.
+   * @param tripGroups
+   *     a trip-group array.
+   *
+   * @return A JSON-encodable data structure for trip-groups.
+   */
+  @SafeVarargs private static List<List<Map<String, String>>> processToJSON(
+      String uid, List<Trip>... tripGroups) {
+
+    return processToJSON(uid, Arrays.asList(tripGroups));
+  }
+
+  // ---------------------------- List ------------------------------------
+
+  /**
+   * Method to help process a list of trip-groups into a JSON-encodable format.
+   *
+   * @param uid
+   *     The user id this is being compiled for.
+   * @param tripGroupList
+   *     The list of troup-grips.
+   *
+   * @return A JSON-encodable list of groups of trip objects.
+   */
   private static List<List<Map<String, String>>> processToJSON(String uid,
-      List<Trip>... preProcessed) {
+      List<List<Trip>> tripGroupList) {
     List<List<Map<String, String>>> data = new ArrayList<>();
-    for (List<Trip> entry : preProcessed) {
+    for (List<Trip> entry : tripGroupList) {
 
       List<Map<String, String>> innerList = new ArrayList<>();
       for (Trip trip : entry) {
@@ -143,7 +176,7 @@ public final class UserInterface {
     return data;
   }
 
-  // ---------------------------- List ------------------------------------
+  // --------------------------- Detail -----------------------------------
 
   /**
    * Handle requests to the home screen of the website.
@@ -157,8 +190,6 @@ public final class UserInterface {
       return new ModelAndView(variables, "map.ftl");
     }
   }
-
-  // --------------------------- Detail -----------------------------------
 
   /**
    * Class to handle getting results to display; This handles all requests
@@ -174,8 +205,12 @@ public final class UserInterface {
       try {
         String startName = qm.value("startName");
         String endName = qm.value("endName");
+
         double startLat = Double.parseDouble(qm.value("startLat"));
         double startLon = Double.parseDouble(qm.value("startLon"));
+        double endLat = Double.parseDouble(qm.value("endLat"));
+        double endLon = Double.parseDouble(qm.value("endLon"));
+
         long datetime = Long.parseLong(qm.value("date"));
         String uid = qm.value("userID");
 
@@ -185,21 +220,18 @@ public final class UserInterface {
         } else {
           walkTime = 15 * 60; // 15 minutes walking is the default
         }
-
         if (qm.hasKey("waitTime")) {
           waitTime = qm.get("waitTime").doubleValue();
         } else {
           waitTime = 30 * 60; // 30 minutes is default for waiting for carpool
         }
 
-        // TODO: replace with actual data getting.
-        List<Trip> s1 = new ArrayList<>();
-        s1.add(DatabaseQuery.DUMMY_TRIP);
-        List<Trip> s2 = new ArrayList<>();
-        s2.add(DatabaseQuery.DUMMY_TRIP);
-        s2.add(DatabaseQuery.DUMMY_TRIP);
+        // Do the search
+        List<List<Trip>> results = carpools
+            .searchWithId(uid, startLat, startLon, endLat, endLon, datetime,
+                walkTime, waitTime);
+        data = processToJSON(uid, results);
 
-        data = processToJSON(uid, s1, s2);
       } catch (NullPointerException e) {
         data = new ArrayList<>();
       }
@@ -211,6 +243,8 @@ public final class UserInterface {
       return new ModelAndView(variables, "results.ftl");
     }
   }
+
+  // ---------------------------- User ------------------------------------
 
   /**
    * Handler to get information about a specific trip and display it on a page.
@@ -238,27 +272,21 @@ public final class UserInterface {
       List<User> members = people.get(1);
       List<User> pending = people.get(2);
 
-      // TODO: remove this; for testing purposes only
-      pending.add(new User("1", "Mark Lavrentyev", "lavrema@outlook.com"));
-      members.add(new User("2", "Arvind Yalavarti", "abc@example.com"));
-
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", String.format("Drawbridge | %s", trip.getName()))
-          .put("favicon", "images/favicon.png").put("trip", trip)
-          .put("host", host).put("members", members).put("pending", pending)
-          .build();
+          .put("favicon", "images/favicon.png").put("mapboxKey", MAPBOX_TOKEN)
+          .put("trip", trip).put("host", host).put("members", members)
+          .put("pending", pending).build();
       return new ModelAndView(variables, "detail.ftl");
     }
   }
-
-  // ---------------------------- User ------------------------------------
 
   /**
    * Handles various actions on the detail page including deleting a trip,
    * joining a trip, approving/denying pending members.
    */
   private static class DetailPostHandler implements Route {
-    @Override public ModelAndView handle(Request request, Response response) {
+    @Override public Object handle(Request request, Response response) {
       QueryParamsMap qm = request.queryMap();
 
       int tid;
@@ -272,29 +300,47 @@ public final class UserInterface {
       String uid = qm.value("user");
       System.out.println(request.body());
 
-      if (action.equals("join")) {
-        System.out.println("JOIN " + uid);
+      boolean success = false;
+      String errorReason = "Command not found";
+      try {
+        if (action.equals("join")) {
+          errorReason = "Database connection failed";
+          success = carpools.joinTrip(tid, uid);
 
-      } else if (action.equals("leave")) {
-        System.out.println("LEAVE " + uid);
+        } else if (action.equals("leave")) {
+          errorReason = "Database connection failed";
+          success = carpools.leaveTrip(tid, uid);
 
-      } else if (action.equals("delete")) {
-        System.out.println("DELETE");
+        } else if (action.equals("delete")) {
+          errorReason = "Database connection failed";
+          success = carpools.deleteTrip(tid, uid);
 
-      } else if (action.equals("approve")) {
-        System.out.println("APPROVE " + uid);
+        } else if (action.equals("approve")) {
+          errorReason = "Database connection failed";
+          String pendingUID = qm.value("pendingUser");
+          success = carpools.approveRequest(tid, uid, pendingUID);
 
-      } else if (action.equals("deny")) {
-        System.out.println("DENY " + uid);
+        } else if (action.equals("deny")) {
+          errorReason = "Database connection failed";
+          String pendingUID = qm.value("pendingUser");
+          success = carpools.rejectRequest(tid, uid, pendingUID);
+        }
+        assert success; // Make sure the db action was completed successfully
 
-      } else {
-
+      } catch (SQLException | MissingDataException | AssertionError e) {
+        JsonObject errObj = new JsonObject();
+        errObj.addProperty("error", e.getMessage());
+        errObj.addProperty("action", action);
+        errObj.addProperty("reason", errorReason);
+        return GSON.toJson(errObj);
       }
 
       response.redirect("/trip/" + tid, 303);
       return null;
     }
   }
+
+  // --------------------------- Create -----------------------------------
 
   /**
    * Handles the display of the "my trips" page. Simply returns the template.
@@ -318,20 +364,22 @@ public final class UserInterface {
       String uid = qm.value("userID");
 
       // Getting the data
-      // TODO: replace with real data getting
-      List<Trip> hosting = new ArrayList<>();
-      hosting.add(DatabaseQuery.DUMMY_TRIP2);
-      List<Trip> member = new ArrayList<>();
-      member.add(DatabaseQuery.DUMMY_TRIP);
-      member.add(DatabaseQuery.DUMMY_TRIP);
-      List<Trip> pending = new ArrayList<>();
-      pending.add(DatabaseQuery.DUMMY_TRIP);
+      try {
+        List<List<Trip>> userTrips = carpools.getTrips(uid);
 
-      return GSON.toJson(processToJSON(uid, hosting, member, pending));
+        List<Trip> hosting = userTrips.get(0);
+        List<Trip> member = userTrips.get(1);
+        List<Trip> pending = userTrips.get(2);
+
+        return GSON.toJson(processToJSON(uid, hosting, member, pending));
+      } catch (SQLException | MissingDataException e) {
+        // TODO: decide stuff to do
+        return GSON.toJson(processToJSON(uid));
+      }
     }
   }
 
-  // --------------------------- Create -----------------------------------
+  // ---------------------------- Info ------------------------------------
 
   /**
    * Handles loading the "create new trip" page. Simple template serving.
@@ -347,16 +395,51 @@ public final class UserInterface {
     }
   }
 
+  // --------------------------- Errors -----------------------------------
+
   /**
    * Handles create form submission and actual creation of a new trip.
    */
   private static class CreatePostHandler implements Route {
-    @Override public ModelAndView handle(Request request, Response response) {
+    @Override public ModelAndView handle(Request request, Response response)
+        throws SQLException, MissingDataException {
+      QueryParamsMap qm = request.queryMap();
+
+      // Read inputted values from request
+      String tripName = qm.value("tripName");
+      String startName = qm.value("startName");
+      String endName = qm.value("endName");
+
+      double startLat = Double.parseDouble(qm.value("startLat"));
+      double startLon = Double.parseDouble(qm.value("startLon"));
+      double endLat = Double.parseDouble(qm.value("endLat"));
+      double endLon = Double.parseDouble(qm.value("endLon"));
+
+      long departureTime = Long.parseLong(qm.value("date"));
+      long eta = (long) (Double.parseDouble(qm.value("eta")) * 60);
+      int maxSize = Integer.parseInt(qm.value("size"));
+      double totalPrice = Double.parseDouble(qm.value("price"));
+
+      String phone = qm.value("phone");
+      String comments = qm.value("comments");
+      String method = qm.value("method");
+
+      String hostID = qm.value("userID");
+
+      // Create a new trip through the carpool class
+      Trip newTrip = Trip.TripBuilder.newTripBuilder()
+          .addIdentification(-1, tripName)
+          .addLocations(startLat, startLon, endLat, endLon)
+          .addAddressNames(startName, endName).addTimes(departureTime, eta)
+          .addDetails(maxSize, totalPrice, phone, method, comments)
+          .buildWithUsers(hostID, new ArrayList<>(), new ArrayList<>());
+
+      int tid = carpools.createTrip(newTrip, hostID);
+
+      response.redirect("/trip/" + tid, 303);
       return null;
     }
   }
-
-  // ---------------------------- Info ------------------------------------
 
   /**
    * Class to handle get requests to faq/help/info static page.
@@ -371,7 +454,7 @@ public final class UserInterface {
     }
   }
 
-  // --------------------------- Errors -----------------------------------
+  // --------------------------- Helpers -----------------------------------
 
   /**
    * Class to handle all page not found requests.
@@ -385,6 +468,19 @@ public final class UserInterface {
       response.status(404);
       return new ModelAndView(variables, "not-found.ftl");
     }
+  }
 
+  /**
+   * Class to handle all page not found requests.
+   */
+  private static class ServerErrorHandler implements TemplateViewRoute {
+    @Override public ModelAndView handle(Request request, Response response) {
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("title", "Drawbridge | Page Not Found")
+          .put("favicon", "images/favicon.png").build();
+
+      response.status(500);
+      return new ModelAndView(variables, "server-error.ftl");
+    }
   }
 }
