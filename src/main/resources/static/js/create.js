@@ -164,7 +164,8 @@ function handleSubmit() {
      * completely.
      */
     if (dateInput === "" || timeInput === "" || typeInput === "" || nameInput
-        === "" || sizeInput === "" || priceInput === "" || phoneInput === "") {
+        === "" || sizeInput === "" || priceInput === "" || phoneInput === "" || !coordinates[0] || !coordinates[1]
+        || coordinates[0].length !== 2 || coordinates[1].length !== 2) {
         showHideTooltip(formValidationTooltip[0]);
     } else {
         if (sizeInput < 1) {

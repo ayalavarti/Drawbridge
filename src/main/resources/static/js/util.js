@@ -49,5 +49,5 @@ function showHideTooltip(tooltip) {
     tooltip.show();
     setTimeout(function () {
         tooltip.hide();
-    }, 3000);
+    }, 1500);
 }
