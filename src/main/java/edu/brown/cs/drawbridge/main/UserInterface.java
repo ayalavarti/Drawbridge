@@ -95,6 +95,7 @@ public final class UserInterface {
     Spark.post("/new", new CreatePostHandler());
 
     Spark.get("/help", new InfoGetHandler(), freeMarker);
+    Spark.get("/error", new ServerErrorHandler(), freeMarker);
 
     Spark.get("/*", new Code404Handler(), freeMarker);
 
@@ -105,6 +106,78 @@ public final class UserInterface {
   }
 
   // ---------------------------- Home ------------------------------------
+
+  /**
+   * Overloaded method to provide an alternate signature for the
+   * JSON-processing method.
+   *
+   * @param uid
+   *     The user id for which to create this JSON object.
+   * @param tripGroups
+   *     a trip-group array.
+   *
+   * @return A JSON-encodable data structure for trip-groups.
+   */
+  @SafeVarargs private static List<List<Map<String, String>>> processToJSON(
+      String uid, List<Trip>... tripGroups) {
+
+    return processToJSON(uid, Arrays.asList(tripGroups));
+  }
+
+  // ---------------------------- List ------------------------------------
+
+  /**
+   * Method to help process a list of trip-groups into a JSON-encodable format.
+   *
+   * @param uid
+   *     The user id this is being compiled for.
+   * @param tripGroupList
+   *     The list of troup-grips.
+   *
+   * @return A JSON-encodable list of groups of trip objects.
+   */
+  private static List<List<Map<String, String>>> processToJSON(String uid,
+      List<List<Trip>> tripGroupList) {
+    List<List<Map<String, String>>> data = new ArrayList<>();
+    for (List<Trip> entry : tripGroupList) {
+
+      List<Map<String, String>> innerList = new ArrayList<>();
+      for (Trip trip : entry) {
+        String status;
+        if (trip.getMemberIds().contains(uid)) {
+          status = "joined";
+        } else if (trip.getHostId().equals(uid)) {
+          status = "hosting";
+        } else if (trip.getPendingIds().contains(uid)) {
+          status = "pending";
+        } else {
+          status = "join";
+        }
+
+        Map<String, String> vals = new HashMap<>();
+        vals.put("start", trip.getStartingAddress());
+        vals.put("end", trip.getEndingAddress());
+        vals.put("date", Long.toString(trip.getDepartureTime()));
+        vals.put("currentSize", Integer.toString(trip.getCurrentSize()));
+        vals.put("maxSize", Integer.toString(trip.getMaxUsers()));
+        if (uid != null) {
+          vals.put("costPerPerson", Double.toString(trip.getCostPerUser(uid)));
+        } else {
+          vals.put("costPerPerson", Double.toString(trip.getCostPerUser("")));
+        }
+        vals.put("id", Integer.toString(trip.getId()));
+        vals.put("name", trip.getName());
+        vals.put("status", status);
+
+        innerList.add(vals);
+      }
+      data.add(innerList);
+    }
+    return data;
+  }
+
+  // --------------------------- Detail -----------------------------------
+
   /**
    * Handle requests to the home screen of the website.
    */
@@ -118,8 +191,7 @@ public final class UserInterface {
     }
   }
 
-  // ---------------------------- List ------------------------------------
-/**
+  /**
    * Class to handle getting results to display; This handles all requests
    * originating from the home page and from resubmitting the walking time
    * values.
@@ -172,7 +244,7 @@ public final class UserInterface {
     }
   }
 
-  // --------------------------- Detail -----------------------------------
+  // ---------------------------- User ------------------------------------
 
   /**
    * Handler to get information about a specific trip and display it on a page.
@@ -268,8 +340,7 @@ public final class UserInterface {
     }
   }
 
-
-  // ---------------------------- User ------------------------------------
+  // --------------------------- Create -----------------------------------
 
   /**
    * Handles the display of the "my trips" page. Simply returns the template.
@@ -308,9 +379,7 @@ public final class UserInterface {
     }
   }
 
-
-
-  // --------------------------- Create -----------------------------------
+  // ---------------------------- Info ------------------------------------
 
   /**
    * Handles loading the "create new trip" page. Simple template serving.
@@ -325,6 +394,8 @@ public final class UserInterface {
       return new ModelAndView(variables, "create.ftl");
     }
   }
+
+  // --------------------------- Errors -----------------------------------
 
   /**
    * Handles create form submission and actual creation of a new trip.
@@ -370,8 +441,6 @@ public final class UserInterface {
     }
   }
 
-  // ---------------------------- Info ------------------------------------
-
   /**
    * Class to handle get requests to faq/help/info static page.
    */
@@ -385,7 +454,8 @@ public final class UserInterface {
     }
   }
 
-  // --------------------------- Errors -----------------------------------
+  // --------------------------- Helpers -----------------------------------
+
   /**
    * Class to handle all page not found requests.
    */
@@ -398,75 +468,19 @@ public final class UserInterface {
       response.status(404);
       return new ModelAndView(variables, "not-found.ftl");
     }
-
-  }
-
-  // --------------------------- Helpers -----------------------------------
-
-  /**
-   * Overloaded method to provide an alternate signature for the
-   * JSON-processing method.
-   *
-   * @param uid
-   *     The user id for which to create this JSON object.
-   * @param tripGroups
-   *     a trip-group array.
-   *
-   * @return A JSON-encodable data structure for trip-groups.
-   */
-  @SafeVarargs private static List<List<Map<String, String>>> processToJSON(
-      String uid, List<Trip>... tripGroups) {
-
-    return processToJSON(uid, Arrays.asList(tripGroups));
   }
 
   /**
-   * Method to help process a list of trip-groups into a JSON-encodable format.
-   *
-   * @param uid
-   *     The user id this is being compiled for.
-   * @param tripGroupList
-   *     The list of troup-grips.
-   *
-   * @return A JSON-encodable list of groups of trip objects.
+   * Class to handle all page not found requests.
    */
-  private static List<List<Map<String, String>>> processToJSON(String uid,
-      List<List<Trip>> tripGroupList) {
-    List<List<Map<String, String>>> data = new ArrayList<>();
-    for (List<Trip> entry : tripGroupList) {
+  private static class ServerErrorHandler implements TemplateViewRoute {
+    @Override public ModelAndView handle(Request request, Response response) {
+      Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("title", "Drawbridge | Page Not Found")
+          .put("favicon", "images/favicon.png").build();
 
-      List<Map<String, String>> innerList = new ArrayList<>();
-      for (Trip trip : entry) {
-        String status;
-        if (trip.getMemberIds().contains(uid)) {
-          status = "joined";
-        } else if (trip.getHostId().equals(uid)) {
-          status = "hosting";
-        } else if (trip.getPendingIds().contains(uid)) {
-          status = "pending";
-        } else {
-          status = "join";
-        }
-
-        Map<String, String> vals = new HashMap<>();
-        vals.put("start", trip.getStartingAddress());
-        vals.put("end", trip.getEndingAddress());
-        vals.put("date", Long.toString(trip.getDepartureTime()));
-        vals.put("currentSize", Integer.toString(trip.getCurrentSize()));
-        vals.put("maxSize", Integer.toString(trip.getMaxUsers()));
-        if (uid != null) {
-          vals.put("costPerPerson", Double.toString(trip.getCostPerUser(uid)));
-        } else {
-          vals.put("costPerPerson", Double.toString(trip.getCostPerUser("")));
-        }
-        vals.put("id", Integer.toString(trip.getId()));
-        vals.put("name", trip.getName());
-        vals.put("status", status);
-
-        innerList.add(vals);
-      }
-      data.add(innerList);
+      response.status(500);
+      return new ModelAndView(variables, "server-error.ftl");
     }
-    return data;
   }
 }
