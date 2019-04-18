@@ -189,7 +189,7 @@ function handleSubmit() {
                 startLon: coordinates[0][0],
                 endLat: coordinates[1][1],
                 endLon: coordinates[1][0],
-                date: date.getTime(),
+                date: date.getTime()/1000,
                 size: sizeInput,
                 price: priceInput,
                 method: typeInput,
@@ -197,7 +197,7 @@ function handleSubmit() {
                 name: nameInput,
                 comments: commentsInput,
                 userID: userProfile.getId(),
-                eta: route[1]
+                eta: route[1] + date.getTime()/1000
             };
             console.log(postParameters);
 
