@@ -282,13 +282,13 @@ public class DatabaseQuery {
       try (ResultSet rs = prep.executeQuery()) {
         if (rs.next()) {
           return Trip.TripBuilder.newTripBuilder()
-              .addIdentification(tripId, rs.getString(2))
-              .addLocations(rs.getDouble(4), rs.getDouble(5), rs.getDouble(7),
-                  rs.getDouble(8))
-              .addAddressNames(rs.getString(3), rs.getString(6))
-              .addTimes(rs.getInt(9), rs.getInt(10))
-              .addDetails(rs.getInt(11), rs.getDouble(12), rs.getString(13),
-                  rs.getString(14), rs.getString(15))
+              .addIdentification(tripId, rs.getString(1))
+              .addLocations(rs.getDouble(3), rs.getDouble(4), rs.getDouble(6),
+                  rs.getDouble(7))
+              .addAddressNames(rs.getString(2), rs.getString(5))
+              .addTimes(rs.getInt(8), rs.getInt(9))
+              .addDetails(rs.getInt(10), rs.getDouble(11), rs.getString(12),
+                  rs.getString(13), rs.getString(14))
               .buildWithUsers(getHostOnTrip(tripId), getMembersOnTrip(tripId),
                   getRequestsOnTrip(tripId));
         }

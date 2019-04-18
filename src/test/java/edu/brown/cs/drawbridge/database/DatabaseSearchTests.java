@@ -27,7 +27,6 @@ import static org.junit.Assert.assertTrue;
  */
 public class DatabaseSearchTests {
 
-  private static DatabaseQuery teamData;
   private static DatabaseQuery searchTester;
 
   @BeforeClass public static void oneTimeSetUp()

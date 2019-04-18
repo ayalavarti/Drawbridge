@@ -35,9 +35,14 @@ public final class QueryStrings {
   protected static final String REMOVE_REQUEST_GROUP
       = "DELETE FROM requests WHERE group_id = ?";
   protected static final String FIND_USER_BY_ID
-      = "SELECT * FROM users WHERE id = ?;";
+      = "SELECT name, email FROM users WHERE id = ?;";
   protected static final String FIND_TRIP_BY_ID
-      = "SELECT * FROM trips WHERE id = ?;";
+      = "SELECT name, start_name, " +
+          "start_latitude, start_longitude, end_name, end_latitude, " +
+          "end_longitude, " +
+          "departure, eta, max_people, total_cost, phone_number, " +
+          "transportation, " +
+          "description FROM trips WHERE id = ?;";
   protected static final String FIND_HOST_TRIPS
       = "SELECT trip_id FROM hosts WHERE user_id = ?;";
   protected static final String FIND_MEMBER_TRIPS
@@ -59,7 +64,7 @@ public final class QueryStrings {
           + "cos(radians(start_latitude)) * cos(radians(?)) * "
           + "sin(radians(? - start_longitude) / 2)^2)) <= ?) "
           + "AND (departure BETWEEN ? AND ?);";
-
-  private QueryStrings() {
-  }
+  protected static final String[] RESET_DATABASE =
+          {"TRUNCATE trips RESTART IDENTITY CASCADE;",
+                  "TRUNCATE users CASCADE;"};
 }
