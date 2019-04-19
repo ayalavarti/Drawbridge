@@ -118,7 +118,7 @@ public class DatabaseSearchTests {
               .addTimes(50, 1000).addDetails(2, 2.00, "", "", "").build(), "1");
       searchTester.createTrip(
           Trip.TripBuilder.newTripBuilder().addIdentification(-1, "2E")
-              .addLocations(0.0361, 0.0361, 0.71, 0.75).addAddressNames("", "")
+              .addLocations(0.361, 0.361, 0.71, 0.75).addAddressNames("", "")
               .addTimes(1500, 3000).addDetails(2, 2.00, "", "", "").build(),
           "1");
       searchTester.createTrip(
