@@ -235,8 +235,16 @@ function denyClick(tid, pendUID) {
  * @param {*} url
  */
 function sendRequest(data, url) {
-    $.post(url, data, responseJSON => {
-        console.log(responseJSON);
+    $.post(url, data, response => {
+        if (response.success) {
+            if (response.redirect) {
+                window.location.replace(response.redirect);
+            } else {
+                window.location.reload(true);
+            }
+        } else {
+            window.location.replace("/error");
+        }
     }, "json");
 }
 

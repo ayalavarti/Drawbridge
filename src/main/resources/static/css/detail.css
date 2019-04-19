@@ -46,7 +46,7 @@ i {
 #container {
     display: grid;
     grid-gap: 20px;
-    max-width: 100%;
+    width: 100%;
     margin-bottom: 50px;
 }
 
@@ -268,5 +268,11 @@ i {
     #title {
         margin-top: 80px;
         text-align: center;
+    }
+}
+
+@media screen and (max-width: 1030px) and (min-width: 550px) {
+    #container {
+        max-width: 500px;
     }
 }

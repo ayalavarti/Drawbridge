@@ -306,46 +306,51 @@ public final class UserInterface {
       String uid = qm.value("user");
       System.out.println(request.body());
 
+      /* Response will have the following:
+       *   success - whether the action was successful
+       *   payload - inputted data with {action, userID, tripID}
+       *   redirect - if need to redirect, redirect to this url
+       *   error - if success false, error message
+       */
+      JsonObject responseData = new JsonObject();
+
+      JsonObject payload = new JsonObject();
+      payload.addProperty("action", action);
+      payload.addProperty("userID", uid);
+      payload.addProperty("tripID", tid);
+      responseData.add("payload", payload);
+
+
       boolean success = false;
-      String errorReason = "Command not found";
       try {
         if (action.equals("join")) {
-          errorReason = "Database connection failed";
           success = carpools.joinTrip(tid, uid);
 
         } else if (action.equals("leave")) {
-          errorReason = "Database connection failed";
           success = carpools.leaveTrip(tid, uid);
           success &= carpools.rejectRequest(tid, uid, uid);
 
         } else if (action.equals("delete")) {
-          errorReason = "Database connection failed";
           success = carpools.deleteTrip(tid, uid);
-
-          response.redirect("/my-trips", 303);
+          responseData.addProperty("redirect", "/my-trips");
 
         } else if (action.equals("approve")) {
-          errorReason = "Database connection failed";
           String pendingUID = qm.value("pendingUser");
           success = carpools.approveRequest(tid, uid, pendingUID);
 
         } else if (action.equals("deny")) {
-          errorReason = "Database connection failed";
           String pendingUID = qm.value("pendingUser");
           success = carpools.rejectRequest(tid, uid, pendingUID);
         }
         assert success; // Make sure the db action was completed successfully
+        responseData.addProperty("success", true);
 
       } catch (SQLException | MissingDataException | AssertionError e) {
-        JsonObject errObj = new JsonObject();
-        errObj.addProperty("error", e.getMessage());
-        errObj.addProperty("action", action);
-        errObj.addProperty("reason", errorReason);
-        return GSON.toJson(errObj);
+        responseData.addProperty("success", false);
+        responseData.addProperty("error", e.getMessage());
       }
 
-      response.redirect("/trip/" + tid, 303);
-      return null;
+      return GSON.toJson(responseData);
     }
   }
 
@@ -410,7 +415,7 @@ public final class UserInterface {
    */
   private static class CreatePostHandler implements Route {
     @Override
-    public ModelAndView handle(Request request, Response response)
+    public Object handle(Request request, Response response)
         throws SQLException, MissingDataException {
       QueryParamsMap qm = request.queryMap();
 
@@ -445,8 +450,10 @@ public final class UserInterface {
 
       int tid = carpools.createTrip(newTrip, hostID);
 
-      response.redirect("/trip/" + tid, 303);
-      return null;
+      JsonObject responseData = new JsonObject();
+      responseData.addProperty("success", true);
+      responseData.addProperty("redirect", "/trip/" + tid);
+      return GSON.toJson(responseData);
     }
   }
 
@@ -477,8 +484,12 @@ public final class UserInterface {
           // User already exists in database
           responseData.addProperty("isNewUser", false);
         }
+
+        responseData.addProperty("success", true);
+
       } catch (SQLException e) {
-        response.redirect("/error", 500);
+        responseData.addProperty("success", false);
+        responseData.addProperty("error", e.getMessage());
       }
 
       return GSON.toJson(responseData);

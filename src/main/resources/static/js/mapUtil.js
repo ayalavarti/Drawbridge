@@ -39,12 +39,46 @@ function getLocation() {
         }
     });
 
+    let fallback = function(xhr, textStatus, error) {
+        geolocateLoc();
+    };
+    let maxTime = 1500;
+
+    $.ajax({
+        type: "GET",
+        url: "https://jsonip.com/",
+        timeout: maxTime,
+        error: fallback,
+        dataType: "json",
+        success: function(ipData, textStatus, xhr) {
+            if (ipData.status === "fail") {
+                geolocateLoc();
+            } else {
+                $.ajax({
+                    type: "GET",
+                    url: "http://ip-api.com/json/" + ipData.ip,
+                    timeout: maxTime,
+                    error: fallback,
+                    dataType: "json",
+                    success: function (locData, textStatus, xhr) {
+                        if (locData.status === "fail") {
+                            geolocateLoc();
+                        } else {
+                            let position = {coords: {latitude: locData.lat, longitude: locData.lon}};
+                            initMap(position);
+                        }
+                    }
+                });
+            }
+        }
+    });
+
 
 }
 
 function geolocateLoc() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(initMap, defaultMap);
+        navigator.geolocation.getCurrentPosition(initMap, defaultMap, {timeout: 4000});
     } else {
         const defaultPosition = {
             coords: {latitude: curLat, longitude: curLong}

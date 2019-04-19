@@ -117,17 +117,23 @@ function onSignIn(googleUser) {
     $("#profile-info").css({visibility: "visible"});
     $("#sign-in").css({visibility: "hidden "});
 
-
     const loginData = {
         userID: userProfile.getId(),
         name: userProfile.getName(),
         email: userProfile.getEmail()
     };
-    $.post("/login", loginData, function (response) {
-        const isNewUser = JSON.parse(response).isNewUser;
-        if (isNewUser && true) {
-            newUserModal.show();
-            modalOpen = true;
+  
+    $.post("/login", loginData, function(response) {
+        const responseData = JSON.parse(response);
+        if (responseData.success) {
+            const isNewUser = responseData.isNewUser;
+            if (isNewUser && true) {
+                newUserModal.show();
+                modalOpen = true;
+            }
+        } else {
+            window.location.replace("/error");
+            console.log("ERROR logging in");
         }
     });
 }

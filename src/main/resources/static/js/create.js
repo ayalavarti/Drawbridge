@@ -201,9 +201,13 @@ function handleSubmit() {
                 eta: route[1] + date.getTime() / 1000
             };
 
-            $.post("/new", postParameters, responseJSON => {
-                console.log(responseJSON);
-                window.open(`/trip/${responseJSON["tid"]}`, "_self");
+            $.post("/new", postParameters, responseData => {
+                // const responseData = JSON.parse(responseJSON);
+                if (responseData.success && responseData.redirect) {
+                    window.location.replace(responseData.redirect);
+                } else {
+                    window.location.replace("/error");
+                }
             }, "json");
         }
     }
