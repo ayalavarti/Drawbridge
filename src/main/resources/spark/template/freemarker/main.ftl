@@ -99,6 +99,20 @@
     </div>
 </a>
 
+<div id="newUserModal" tabindex='-1' class="modal">
+    <div class="modal-content">
+        <div class="modal-body">
+            <p class="justify info-text">
+            </p>
+        </div>
+        <img class="close-btn"
+             onclick="closeModal();"
+             onmouseover="hover(this);"
+             onmouseout="unhover(this);"
+             src="/images/close-btn.png"/>
+    </div>
+</div>
+
 <div class="body">
     ${content}
 </div>

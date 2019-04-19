@@ -7,6 +7,9 @@ let userProfile = undefined;
 let signInTooltip;
 let infoTooltips;
 
+let newUserModal;
+let modalOpen;
+
 /**
  * When the DOM loads, check for the logged in cookie.
  */
@@ -21,6 +24,8 @@ $(document).ready(function () {
     if (navigator.cookieEnabled && getCookie("loggedIn") === "true") {
         $("#sign-in").css({visibility: "hidden"});
     }
+    newUserModal = $("#newUserModal");
+    modalOpen = false;
 });
 
 /**
@@ -118,10 +123,13 @@ function onSignIn(googleUser) {
         name: userProfile.getName(),
         email: userProfile.getEmail()
     };
-    $.post("/login", loginData, function(response) {
-        // TODO: fill in anything new here that you need
+    $.post("/login", loginData, function (response) {
+        newUserModal.show();
+        modalOpen = true;
         const isNewUser = response.isNewUser;
-        if (isNewUser) {console.log("Welcome new user");}
+        if (isNewUser) {
+            console.log("Welcome new user");
+        }
     });
 }
 
@@ -168,3 +176,17 @@ function hover(e) {
 function unhover(e) {
     e.setAttribute('src', `../images/${e.className}.png`);
 }
+
+function closeModal() {
+    if (modalOpen) {
+        newUserModal.hide();
+        modalOpen = false;
+    }
+}
+
+$(document).keyup(function (e) {
+    if (e.key === "Escape" && modalOpen) {
+        newUserModal.hide();
+        modalOpen = false;
+    }
+});

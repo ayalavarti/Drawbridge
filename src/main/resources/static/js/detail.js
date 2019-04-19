@@ -116,7 +116,7 @@ function initTooltips() {
         animation: "scale",
         arrow: true,
         arrowType: "round",
-        theme: "drawbridge-alt",
+        theme: "drawbridge-alt2",
         interactive: false,
         trigger: "manual",
         hideOnClick: false,
@@ -157,7 +157,7 @@ function setRoute() {
  * @param {*} tid
  */
 function joinClick(tid) {
-    if (userProfile == undefined) {
+    if (userProfile === undefined) {
         $("html, body").animate({scrollTop: 0}, "slow");
         signInTooltip[0].setContent(
             "Sign in with your Google Account to join this trip.");

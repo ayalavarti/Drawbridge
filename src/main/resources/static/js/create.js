@@ -164,7 +164,8 @@ function handleSubmit() {
      * completely.
      */
     if (dateInput === "" || timeInput === "" || typeInput === "" || nameInput
-        === "" || sizeInput === "" || priceInput === "" || phoneInput === "" || !coordinates[0] || !coordinates[1]
+        === "" || sizeInput === "" || priceInput === "" || phoneInput === "" ||
+        !coordinates[0] || !coordinates[1]
         || coordinates[0].length !== 2 || coordinates[1].length !== 2) {
         showHideTooltip(formValidationTooltip[0]);
     } else {
@@ -189,7 +190,7 @@ function handleSubmit() {
                 startLon: coordinates[0][0],
                 endLat: coordinates[1][1],
                 endLon: coordinates[1][0],
-                date: date.getTime()/1000,
+                date: date.getTime() / 1000,
                 size: sizeInput,
                 price: priceInput,
                 method: typeInput,
@@ -197,12 +198,12 @@ function handleSubmit() {
                 name: nameInput,
                 comments: commentsInput,
                 userID: userProfile.getId(),
-                eta: route[1] + date.getTime()/1000
+                eta: route[1] + date.getTime() / 1000
             };
-            console.log(postParameters);
 
             $.post("/new", postParameters, responseJSON => {
-                console.log("Response");
+                console.log(responseJSON);
+                window.open(`/trip/${responseJSON["tid"]}`, "_self");
             }, "json");
         }
     }

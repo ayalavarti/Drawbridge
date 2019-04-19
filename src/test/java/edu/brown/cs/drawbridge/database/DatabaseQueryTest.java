@@ -66,8 +66,6 @@ public class DatabaseQueryTest {
   }
 
   @Test public void testAddUser() throws SQLException, MissingDataException {
-    test.addUser(DUMMY_U1);
-    test.addUser(DUMMY_U2);
     assertNotNull(test.getUserById("1"));
     assertNotNull(test.getUserById("2"));
   }
