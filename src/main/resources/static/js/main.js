@@ -119,9 +119,14 @@ function onSignIn(googleUser) {
         email: userProfile.getEmail()
     };
     $.post("/login", loginData, function(response) {
-        // TODO: fill in anything new here that you need
-        const isNewUser = response.isNewUser;
-        if (isNewUser) {console.log("Welcome new user");}
+        const responseData = JSON.parse(response);
+        if (responseData.success) {
+            const isNewUser = responseData.isNewUser;
+            // TODO: fill in anything new here that you need
+        } else {
+            window.location.replace("/error");
+            console.log("ERROR logging in");
+        }
     });
 }
 

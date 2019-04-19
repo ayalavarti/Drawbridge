@@ -482,8 +482,12 @@ public final class UserInterface {
           // User already exists in database
           responseData.addProperty("isNewUser", false);
         }
+
+        responseData.addProperty("success", true);
+
       } catch (SQLException e) {
-        response.redirect("/error", 500);
+        responseData.addProperty("success", false);
+        responseData.addProperty("error", e.getMessage());
       }
 
       return GSON.toJson(responseData);
