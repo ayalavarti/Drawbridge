@@ -17,8 +17,8 @@ public class SpeedTester {
 
   @BeforeClass
   public static void oneTimeSetUp() throws SQLException, ClassNotFoundException {
-    String username = "dev";
-    String password = "dev";
+    String username = System.getenv("DB_USER");
+    String password = System.getenv("DB_PASS");
     /*
      * Run the following queries in pgadmin:
      * CREATE USER <username> WITH PASSWORD '<password>'

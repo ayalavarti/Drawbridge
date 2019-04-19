@@ -34,8 +34,8 @@ public class AutoPopulator {
   //@Test
   public void populateUsers()
       throws ClassNotFoundException, SQLException, MissingDataException {
-    String username = "dev";
-    String password = "dev";
+    String username = System.getenv("DB_USER");
+    String password = System.getenv("DB_PASS");
     test = new DatabaseQuery("//127.0.0.1:5432/massData", username, password);
     populateUsers(test);
   }
