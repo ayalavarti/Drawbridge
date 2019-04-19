@@ -105,11 +105,11 @@
             <p class="justify info-text">
             </p>
         </div>
-        <img class="close-btn"
+        <img class="clear-btn" id="close"
              onclick="closeModal();"
              onmouseover="hover(this);"
              onmouseout="unhover(this);"
-             src="/images/close-btn.png"/>
+             src="/images/clear-btn.png"/>
     </div>
 </div>
 

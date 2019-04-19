@@ -124,11 +124,12 @@ function onSignIn(googleUser) {
         email: userProfile.getEmail()
     };
     $.post("/login", loginData, function (response) {
-        newUserModal.show();
-        modalOpen = true;
-        const isNewUser = response.isNewUser;
+        const isNewUser = JSON.parse(response).isNewUser;
+        console.log(isNewUser);
         if (isNewUser) {
             console.log("Welcome new user");
+            newUserModal.show();
+            modalOpen = true;
         }
     });
 }
