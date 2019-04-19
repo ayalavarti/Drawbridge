@@ -422,9 +422,9 @@ public class DatabaseQuery {
    * @param walkRadius
    *          The buffer for finding reasonably distanced trips.
    * @param start
-   *          The int beginning of the time window in epoch time.
+   *          The long beginning of the time window in epoch time.
    * @param end
-   *          The int end of the time window in epoch time.
+   *          The long end of the time window in epoch time.
    *
    * @return A List of all the trips connected to the given trip.
    *
@@ -478,7 +478,7 @@ public class DatabaseQuery {
    * @param walkRadius
    *          The buffer for finding reasonably distanced trips.
    * @param lastEta
-   *          The int expected arrival time of the last trip.
+   *          The long expected arrival time of the last trip.
    * @param timeBuffer
    *          The buffer for finding reasonably timed trips.
    *
@@ -531,7 +531,7 @@ public class DatabaseQuery {
    * @param walkRadius
    *          The buffer for finding reasonably distanced trips.
    * @param departure
-   *          The int time of departure.
+   *          The long time of departure.
    * @param timeBuffer
    *          The buffer for finding reasonably timed trips.
    *
