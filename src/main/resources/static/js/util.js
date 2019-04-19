@@ -19,8 +19,7 @@ function generateTrip(trip) {
         imgAtt
             = `onmouseover="hover(this);" onmouseout="unhover(this);" onclick="handleJoin(${trip["id"]});"`;
     }
-    let imgElement
-            = `<div><img src="../images/${trip["status"]}-btn.png" class="${trip["status"]}-btn" ${imgAtt}/></div>`;
+    let imgElement = `<div><img src="../images/${trip["status"]}-btn.png" class="${trip["status"]}-btn" ${imgAtt}/></div>`;
 
     return (`<a href='/trip/${trip["id"]}'><div class="result-info">
 				<div class="sub-heading">${trip["name"]}</div>
@@ -49,5 +48,5 @@ function showHideTooltip(tooltip) {
     tooltip.show();
     setTimeout(function () {
         tooltip.hide();
-    }, 2000);
+    }, 1500);
 }

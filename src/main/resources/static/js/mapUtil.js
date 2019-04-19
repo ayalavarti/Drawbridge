@@ -20,29 +20,39 @@ function initMapbox() {
  * Gets the current location if geolocation is enabled.
  */
 function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(initMap, defaultMap);
-    } else {
-        defaultMap("Browser doesn't support geolocation");
-    }
-}
 
-function defaultMap(error) {
+    // Default to using ip lookup (faster + no popups)
     $.get("https://jsonip.com/", function (ipData) {
         if (ipData.status === "fail") {
-            initMap(undefined);
+            // Fallback to using browser geolocation
+            geolocateLoc();
         } else {
             $.get("http://ip-api.com/json/" + ipData.ip, function (locData) {
+                if (locData.status === "fail") {
+                    geolocateLoc();
+                }
                 let position = {
-                    coords: {
-                        latitude: locData.lat, longitude: locData.lon
-                    }
+                    coords: {latitude: locData.lat, longitude: locData.lon}
                 };
                 initMap(position);
             });
         }
     });
+
+
 }
+
+function geolocateLoc() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(initMap, defaultMap);
+    } else {
+        const defaultPosition = {
+            coords: {latitude: curLat, longitude: curLong}
+        };
+        initMap(defaultPosition);
+    }
+}
+
 
 /**
  * Handle changes to the address input boxes whenever the input box loses focus.

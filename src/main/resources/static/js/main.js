@@ -112,10 +112,17 @@ function onSignIn(googleUser) {
     $("#profile-info").css({visibility: "visible"});
     $("#sign-in").css({visibility: "hidden "});
 
-    /**
-     * TODO add post request to server to create new user account if one
-     * does not already exist in the database
-     */
+
+    const loginData = {
+        userID: userProfile.getId(),
+        name: userProfile.getName(),
+        email: userProfile.getEmail()
+    };
+    $.post("/login", loginData, function(response) {
+        // TODO: fill in anything new here that you need
+        const isNewUser = response.isNewUser;
+        if (isNewUser) {console.log("Welcome new user");}
+    });
 }
 
 /**

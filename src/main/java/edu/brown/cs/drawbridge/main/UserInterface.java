@@ -88,11 +88,13 @@ public final class UserInterface {
     Spark.get("/trip/:tid", new DetailGetHandler(), freeMarker);
     Spark.post("/trip/:tid", new DetailPostHandler());
 
-    Spark.get("/my-trips", new UserGetHandler(), freeMarker);
-    Spark.post("/my-trips", new UserPostHandler());
+    Spark.get("/my-trips", new MyTripsGetHandler(), freeMarker);
+    Spark.post("/my-trips", new MyTripsPostHandler());
 
     Spark.get("/new", new CreateGetHandler(), freeMarker);
     Spark.post("/new", new CreatePostHandler());
+
+    Spark.post("/login", new UserLoginHandler());
 
     Spark.get("/help", new InfoGetHandler(), freeMarker);
     Spark.get("/error", new ServerErrorHandler(), freeMarker);
@@ -105,8 +107,8 @@ public final class UserInterface {
     });
   }
 
-  // ---------------------------- Home ------------------------------------
 
+  // --------------------------- Helpers -----------------------------------
   /**
    * Overloaded method to provide an alternate signature for the
    * JSON-processing method.
@@ -124,7 +126,6 @@ public final class UserInterface {
     return processToJSON(uid, Arrays.asList(tripGroups));
   }
 
-  // ---------------------------- List ------------------------------------
 
   /**
    * Method to help process a list of trip-groups into a JSON-encodable format.
@@ -176,13 +177,14 @@ public final class UserInterface {
     return data;
   }
 
-  // --------------------------- Detail -----------------------------------
 
+  // ---------------------------- Home ------------------------------------
   /**
    * Handle requests to the home screen of the website.
    */
   private static class HomeGetHandler implements TemplateViewRoute {
-    @Override public ModelAndView handle(Request req, Response res) {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Home").put("mapboxKey", MAPBOX_TOKEN)
           .put("favicon", "images/favicon.png").build();
@@ -191,13 +193,15 @@ public final class UserInterface {
     }
   }
 
+  // ---------------------------- List ------------------------------------
   /**
    * Class to handle getting results to display; This handles all requests
    * originating from the home page and from resubmitting the walking time
    * values.
    */
   private static class ListGetHandler implements TemplateViewRoute {
-    @Override public ModelAndView handle(Request request, Response response) {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
       // Get parameter values
       QueryParamsMap qm = request.queryMap();
       List<List<Map<String, String>>> data;
@@ -244,13 +248,14 @@ public final class UserInterface {
     }
   }
 
-  // ---------------------------- User ------------------------------------
 
+  // --------------------------- Detail -----------------------------------
   /**
    * Handler to get information about a specific trip and display it on a page.
    */
   private static class DetailGetHandler implements TemplateViewRoute {
-    @Override public ModelAndView handle(Request request, Response response)
+    @Override
+    public ModelAndView handle(Request request, Response response)
         throws SQLException {
       int tid;
       Trip trip;
@@ -286,7 +291,8 @@ public final class UserInterface {
    * joining a trip, approving/denying pending members.
    */
   private static class DetailPostHandler implements Route {
-    @Override public Object handle(Request request, Response response) {
+    @Override
+    public Object handle(Request request, Response response) {
       QueryParamsMap qm = request.queryMap();
 
       int tid;
@@ -310,10 +316,13 @@ public final class UserInterface {
         } else if (action.equals("leave")) {
           errorReason = "Database connection failed";
           success = carpools.leaveTrip(tid, uid);
+          success &= carpools.rejectRequest(tid, uid, uid);
 
         } else if (action.equals("delete")) {
           errorReason = "Database connection failed";
           success = carpools.deleteTrip(tid, uid);
+
+          response.redirect("/my-trips", 303);
 
         } else if (action.equals("approve")) {
           errorReason = "Database connection failed";
@@ -340,13 +349,13 @@ public final class UserInterface {
     }
   }
 
-  // --------------------------- Create -----------------------------------
-
+  // -------------------------- My Trips ----------------------------------
   /**
    * Handles the display of the "my trips" page. Simply returns the template.
    */
-  private static class UserGetHandler implements TemplateViewRoute {
-    @Override public ModelAndView handle(Request request, Response response) {
+  private static class MyTripsGetHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | My Trips")
           .put("favicon", "images/favicon.png").build();
@@ -358,8 +367,9 @@ public final class UserInterface {
   /**
    * Handles getting the user's trips, split up by category.
    */
-  private static class UserPostHandler implements Route {
-    @Override public Object handle(Request request, Response response) {
+  private static class MyTripsPostHandler implements Route {
+    @Override
+    public Object handle(Request request, Response response) {
       QueryParamsMap qm = request.queryMap();
       String uid = qm.value("userID");
 
@@ -379,13 +389,13 @@ public final class UserInterface {
     }
   }
 
-  // ---------------------------- Info ------------------------------------
-
+  // --------------------------- Create -----------------------------------
   /**
    * Handles loading the "create new trip" page. Simple template serving.
    */
   private static class CreateGetHandler implements TemplateViewRoute {
-    @Override public ModelAndView handle(Request request, Response response) {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Create Trip")
           .put("mapboxKey", MAPBOX_TOKEN).put("favicon", "images/favicon.png")
@@ -395,18 +405,17 @@ public final class UserInterface {
     }
   }
 
-  // --------------------------- Errors -----------------------------------
-
   /**
    * Handles create form submission and actual creation of a new trip.
    */
   private static class CreatePostHandler implements Route {
-    @Override public ModelAndView handle(Request request, Response response)
+    @Override
+    public ModelAndView handle(Request request, Response response)
         throws SQLException, MissingDataException {
       QueryParamsMap qm = request.queryMap();
 
       // Read inputted values from request
-      String tripName = qm.value("tripName");
+      String tripName = qm.value("name");
       String startName = qm.value("startName");
       String endName = qm.value("endName");
 
@@ -441,11 +450,48 @@ public final class UserInterface {
     }
   }
 
+  // -------------------------- My Trips ----------------------------------
+  /**
+   * Handler for checking if a logged-in user is already in the database or
+   * if they need to be added.
+   */
+  private static class UserLoginHandler implements Route {
+    @Override
+    public Object handle(Request request, Response response) {
+      QueryParamsMap qm = request.queryMap();
+
+      String uid = qm.value("userID");
+      String name = qm.value("name");
+      String email = qm.value("email");
+
+      User user = new User(uid, name, email);
+
+      JsonObject responseData = new JsonObject();
+      responseData.addProperty("uid", uid);
+
+      try {
+        if (carpools.addUser(user)) {
+          // User successfully added to database
+          responseData.addProperty("isNewUser", true);
+        } else {
+          // User already exists in database
+          responseData.addProperty("isNewUser", false);
+        }
+      } catch (SQLException e) {
+        response.redirect("/error", 500);
+      }
+
+      return GSON.toJson(responseData);
+    }
+  }
+
+  // ---------------------------- Info ------------------------------------
   /**
    * Class to handle get requests to faq/help/info static page.
    */
   private static class InfoGetHandler implements TemplateViewRoute {
-    @Override public ModelAndView handle(Request request, Response response) {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Info")
           .put("favicon", "images/favicon.png").build();
@@ -454,7 +500,8 @@ public final class UserInterface {
     }
   }
 
-  // --------------------------- Helpers -----------------------------------
+
+  // --------------------------- Errors -----------------------------------
 
   /**
    * Class to handle all page not found requests.
@@ -474,7 +521,8 @@ public final class UserInterface {
    * Class to handle all page not found requests.
    */
   private static class ServerErrorHandler implements TemplateViewRoute {
-    @Override public ModelAndView handle(Request request, Response response) {
+    @Override
+    public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Page Not Found")
           .put("favicon", "images/favicon.png").build();
