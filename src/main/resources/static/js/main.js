@@ -22,7 +22,7 @@ $(document).ready(function () {
      * the sign in button
      */
     if (navigator.cookieEnabled && getCookie("loggedIn") === "true") {
-        $("#sign-in").css({visibility: "hidden"});
+        $("#sign-in").css({visibility: "visible"});
     }
     newUserModal = $("#newUserModal");
     modalOpen = false;
