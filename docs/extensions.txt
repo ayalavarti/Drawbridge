@@ -12,6 +12,16 @@
   //"SELECT user_id FROM requests WHERE trip_id = ? GROUP BY group_id;";
   //lat2, lat2, lon2, walkradius, start, end
 
+  protected static final String REMOVE_MEMBER_GROUP
+            = "DELETE FROM members WHERE group_id = ?";
+    protected static final String REMOVE_REQUEST_GROUP
+            = "DELETE FROM requests WHERE group_id = ?";
+    protected static final String FIND_GROUP_TRIP =
+            "SELECT trip_id FROM (SELECT * FROM members UNION SELECT * "
+                    + "FROM requests) WHERE group_id = ?;";
+    protected static final String RESET_DATABASE =
+            "TRUNCATE trips, users RESTART IDENTITY CASCADE;";
+
 
 private boolean deleteGroup(int groupId) {
   if (groupId != 0) {

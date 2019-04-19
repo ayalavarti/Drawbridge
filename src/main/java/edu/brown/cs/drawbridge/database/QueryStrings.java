@@ -30,10 +30,6 @@ public final class QueryStrings {
       = "DELETE FROM members WHERE trip_id = ? AND user_id = ?;";
   protected static final String REMOVE_REQUEST
       = "DELETE FROM requests WHERE trip_id = ? AND user_id = ?;";
-  protected static final String REMOVE_MEMBER_GROUP
-      = "DELETE FROM members WHERE group_id = ?";
-  protected static final String REMOVE_REQUEST_GROUP
-      = "DELETE FROM requests WHERE group_id = ?";
   protected static final String FIND_USER_BY_ID
       = "SELECT name, email FROM users WHERE id = ?;";
   protected static final String FIND_TRIP_BY_ID
@@ -55,9 +51,6 @@ public final class QueryStrings {
       = "SELECT user_id FROM members WHERE trip_id = ?;";
   protected static final String FIND_REQUEST_USERS
       = "SELECT user_id FROM requests WHERE trip_id = ?;";
-  protected static final String FIND_GROUP_TRIP =
-      "SELECT trip_id FROM (SELECT * FROM members UNION SELECT * "
-          + "FROM requests) WHERE group_id = ?;";
   protected static final String FIND_CONNECTED_TRIPS_BY_WINDOW =
       "SELECT * FROM trips WHERE "
           + "(2 * 6371 * asin(sqrt(sin(radians(? - start_latitude) / 2)^2 + "
@@ -70,6 +63,4 @@ public final class QueryStrings {
                   + " AND (departure BETWEEN ((haversine(start_latitude, start_longitude, ?, ?) / 0.014) + ?) "
                   + " AND (haversine(start_latitude, start_longitude, ?, ?) / 0.014) + ?);";
   //lat, lon, distRadius, lat, lon, lastEta, lat, lon, lastEta + buffer
-  protected static final String RESET_DATABASE =
-          "TRUNCATE trips, users RESTART IDENTITY CASCADE;";
 }
