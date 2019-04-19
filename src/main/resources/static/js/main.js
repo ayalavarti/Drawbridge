@@ -22,7 +22,8 @@ $(document).ready(function () {
      * the sign in button
      */
     if (navigator.cookieEnabled && getCookie("loggedIn") === "true") {
-        $("#sign-in").css({visibility: "hidden"});
+        console.log("HIDE");
+        $("#sign-in").css({visibility: "visible"});
     }
     newUserModal = $("#newUserModal");
     modalOpen = false;
@@ -122,7 +123,7 @@ function onSignIn(googleUser) {
         name: userProfile.getName(),
         email: userProfile.getEmail()
     };
-  
+
     $.post("/login", loginData, function(response) {
         const responseData = JSON.parse(response);
         if (responseData.success) {
