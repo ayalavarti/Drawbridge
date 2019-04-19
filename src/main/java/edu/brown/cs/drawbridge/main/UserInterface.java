@@ -244,7 +244,7 @@ public final class UserInterface {
         // Do the search
         List<List<Trip>> results = carpools
             .searchWithId(uid, startLat, startLon, endLat, endLon, datetime,
-                walkTime, waitTime);
+                    (long) walkTime, (long) waitTime);
         data = processToJSON(uid, results);
 
       } catch (NullPointerException e) {

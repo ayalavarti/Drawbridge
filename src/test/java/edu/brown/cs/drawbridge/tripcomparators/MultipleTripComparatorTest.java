@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,8 +23,8 @@ public class MultipleTripComparatorTest {
    */
   @Test
   public void testConstructor() {
-    List<ComparesSearchedTrips> comparators;
-    comparators = new ArrayList<ComparesSearchedTrips>();
+    List<Comparator<List<Trip>>> comparators;
+    comparators = new ArrayList<Comparator<List<Trip>>>();
     assertNotNull(new MultipleTripComparator(comparators));
   }
 
@@ -33,12 +34,20 @@ public class MultipleTripComparatorTest {
    */
   @Test
   public void testHost() {
-    List<ComparesSearchedTrips> comparators;
-    comparators = new ArrayList<ComparesSearchedTrips>(
-        Arrays.asList(new HostComparator(), new MemberComparator(),
-            new PendingComparator(), new CostComparator()));
+    List<Comparator<List<Trip>>> comparators;
+    Comparator<List<Trip>> hostComparator = new HostComparator();
+    Comparator<List<Trip>> memberComparator = new MemberComparator();
+    Comparator<List<Trip>> pendingComparator = new PendingComparator();
+    Comparator<List<Trip>> lengthComparator = new LengthComparator();
+    Comparator<List<Trip>> costComparator = new CostComparator();
+    comparators = new ArrayList<Comparator<List<Trip>>>(
+        Arrays.asList(hostComparator, memberComparator, pendingComparator,
+            lengthComparator, costComparator));
+    List<Identifiable> identifiable = new ArrayList<Identifiable>(Arrays.asList(
+        (Identifiable) hostComparator, (Identifiable) memberComparator,
+        (Identifiable) pendingComparator, (Identifiable) costComparator));
     String userId = "0";
-    for (ComparesSearchedTrips comparator : comparators) {
+    for (Identifiable comparator : identifiable) {
       comparator.setUserId(userId);
     }
     MultipleTripComparator c = new MultipleTripComparator(comparators);
@@ -73,12 +82,20 @@ public class MultipleTripComparatorTest {
    */
   @Test
   public void testMember() {
-    List<ComparesSearchedTrips> comparators;
-    comparators = new ArrayList<ComparesSearchedTrips>(
-        Arrays.asList(new HostComparator(), new MemberComparator(),
-            new PendingComparator(), new CostComparator()));
+    List<Comparator<List<Trip>>> comparators;
+    Comparator<List<Trip>> hostComparator = new HostComparator();
+    Comparator<List<Trip>> memberComparator = new MemberComparator();
+    Comparator<List<Trip>> pendingComparator = new PendingComparator();
+    Comparator<List<Trip>> lengthComparator = new LengthComparator();
+    Comparator<List<Trip>> costComparator = new CostComparator();
+    comparators = new ArrayList<Comparator<List<Trip>>>(
+        Arrays.asList(hostComparator, memberComparator, pendingComparator,
+            lengthComparator, costComparator));
+    List<Identifiable> identifiable = new ArrayList<Identifiable>(Arrays.asList(
+        (Identifiable) hostComparator, (Identifiable) memberComparator,
+        (Identifiable) pendingComparator, (Identifiable) costComparator));
     String userId = "10";
-    for (ComparesSearchedTrips comparator : comparators) {
+    for (Identifiable comparator : identifiable) {
       comparator.setUserId(userId);
     }
     MultipleTripComparator c = new MultipleTripComparator(comparators);
@@ -113,12 +130,20 @@ public class MultipleTripComparatorTest {
    */
   @Test
   public void testPending() {
-    List<ComparesSearchedTrips> comparators;
-    comparators = new ArrayList<ComparesSearchedTrips>(
-        Arrays.asList(new HostComparator(), new MemberComparator(),
-            new PendingComparator(), new CostComparator()));
+    List<Comparator<List<Trip>>> comparators;
+    Comparator<List<Trip>> hostComparator = new HostComparator();
+    Comparator<List<Trip>> memberComparator = new MemberComparator();
+    Comparator<List<Trip>> pendingComparator = new PendingComparator();
+    Comparator<List<Trip>> lengthComparator = new LengthComparator();
+    Comparator<List<Trip>> costComparator = new CostComparator();
+    comparators = new ArrayList<Comparator<List<Trip>>>(
+        Arrays.asList(hostComparator, memberComparator, pendingComparator,
+            lengthComparator, costComparator));
+    List<Identifiable> identifiable = new ArrayList<Identifiable>(Arrays.asList(
+        (Identifiable) hostComparator, (Identifiable) memberComparator,
+        (Identifiable) pendingComparator, (Identifiable) costComparator));
     String userId = "10";
-    for (ComparesSearchedTrips comparator : comparators) {
+    for (Identifiable comparator : identifiable) {
       comparator.setUserId(userId);
     }
     MultipleTripComparator c = new MultipleTripComparator(comparators);
@@ -149,16 +174,73 @@ public class MultipleTripComparatorTest {
   }
 
   /**
+   * Test compare method given a Trip with more trips than the other.
+   */
+  @Test
+  public void testLength() {
+    List<Comparator<List<Trip>>> comparators;
+    Comparator<List<Trip>> hostComparator = new HostComparator();
+    Comparator<List<Trip>> memberComparator = new MemberComparator();
+    Comparator<List<Trip>> pendingComparator = new PendingComparator();
+    Comparator<List<Trip>> lengthComparator = new LengthComparator();
+    Comparator<List<Trip>> costComparator = new CostComparator();
+    comparators = new ArrayList<Comparator<List<Trip>>>(
+        Arrays.asList(hostComparator, memberComparator, pendingComparator,
+            lengthComparator, costComparator));
+    List<Identifiable> identifiable = new ArrayList<Identifiable>(Arrays.asList(
+        (Identifiable) hostComparator, (Identifiable) memberComparator,
+        (Identifiable) pendingComparator, (Identifiable) costComparator));
+    String userId = "1";
+    for (Identifiable comparator : identifiable) {
+      comparator.setUserId(userId);
+    }
+    MultipleTripComparator c = new MultipleTripComparator(comparators);
+    Trip trip1 = Trip.TripBuilder.newTripBuilder().addIdentification(1, "name1")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 99, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
+    Trip trip2 = Trip.TripBuilder.newTripBuilder().addIdentification(2, "name2")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
+    Trip trip3 = Trip.TripBuilder.newTripBuilder().addIdentification(3, "name3")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
+    Trip trip4 = Trip.TripBuilder.newTripBuilder().addIdentification(4, "name4")
+        .addLocations(0, 0, 0, 0).addAddressNames("start", "end")
+        .addTimes(10, 20).addDetails(5, 100, "1234567890", "My car", "comments")
+        .buildWithUsers("0", new LinkedList<String>(),
+            new LinkedList<String>());
+    List<Trip> path1 = new ArrayList<Trip>(Arrays.asList(trip1));
+    List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip2, trip3, trip4));
+
+    assertTrue(c.compare(path1, path2) < 0);
+    assertTrue(c.compare(path2, path1) > 0);
+  }
+
+  /**
    * Test compare method given a Trip with cost higher than the other.
    */
   @Test
   public void testCost() {
-    List<ComparesSearchedTrips> comparators;
-    comparators = new ArrayList<ComparesSearchedTrips>(
-        Arrays.asList(new HostComparator(), new MemberComparator(),
-            new PendingComparator(), new CostComparator()));
-    String userId = "10";
-    for (ComparesSearchedTrips comparator : comparators) {
+    List<Comparator<List<Trip>>> comparators;
+    Comparator<List<Trip>> hostComparator = new HostComparator();
+    Comparator<List<Trip>> memberComparator = new MemberComparator();
+    Comparator<List<Trip>> pendingComparator = new PendingComparator();
+    Comparator<List<Trip>> lengthComparator = new LengthComparator();
+    Comparator<List<Trip>> costComparator = new CostComparator();
+    comparators = new ArrayList<Comparator<List<Trip>>>(
+        Arrays.asList(hostComparator, memberComparator, pendingComparator,
+            lengthComparator, costComparator));
+    List<Identifiable> identifiable = new ArrayList<Identifiable>(Arrays.asList(
+        (Identifiable) hostComparator, (Identifiable) memberComparator,
+        (Identifiable) pendingComparator, (Identifiable) costComparator));
+    String userId = "0";
+    for (Identifiable comparator : identifiable) {
       comparator.setUserId(userId);
     }
     MultipleTripComparator c = new MultipleTripComparator(comparators);

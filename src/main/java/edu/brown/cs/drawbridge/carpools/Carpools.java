@@ -14,12 +14,10 @@ import edu.brown.cs.drawbridge.tripcomparators.TimeComparator;
 
 /**
  * A class used to interact with the GUI handlers.
- *
- * @author Jeffrey Zhu
  */
 public final class Carpools {
 
-  private static final int SECONDS_PER_MINUTE = 60;
+  private static final long SECONDS_PER_MINUTE = 60;
   private static final double WALKING_SPEED = 0.084; // Kilometers per minute
   private final TripSearcher tripSearcher;
   private final Comparator<Trip> timeComparator = new TimeComparator();
@@ -93,10 +91,10 @@ public final class Carpools {
    */
   public List<List<Trip>> searchWithId(String userId, double startLat,
       double startLon, double endLat, double endLon, long departureTime,
-      double walkingTime, double timeRadius) {
+      long walkingTime, double timeRadius) {
     return tripSearcher.searchWithId(userId, startLat, startLon, endLat, endLon,
-                                     departureTime, walkingTime * WALKING_SPEED,
-                                     timeRadius * SECONDS_PER_MINUTE);
+        departureTime, walkingTime * WALKING_SPEED,
+        timeRadius * SECONDS_PER_MINUTE);
   }
 
   /**
@@ -124,10 +122,10 @@ public final class Carpools {
    */
   public List<List<Trip>> searchWithoutId(double startLat, double startLon,
       double endLat, double endLon, long departureTime, double walkingTime,
-      double timeRadius) {
-    return tripSearcher.searchWithoutId(startLat, startLon, endLat, endLon, departureTime,
-                                        walkingTime * WALKING_SPEED,
-                                        timeRadius * SECONDS_PER_MINUTE);
+      long timeRadius) {
+    return tripSearcher.searchWithoutId(startLat, startLon, endLat, endLon,
+        departureTime, walkingTime * WALKING_SPEED,
+        timeRadius * SECONDS_PER_MINUTE);
   }
 
   /**
@@ -242,8 +240,11 @@ public final class Carpools {
    * @param trip
    *          The new Trip to create
    * @param hostId
-   *     The id of the new host
-   * @return The id of the new created trip
+   *          <<<<<<< HEAD The id of the new host
+   *
+   *          ======= The id of the new host
+   * @return The id of the new created trip >>>>>>>
+   *         0098abd148d443b06657231536a4107c8f74607c
    * @throws SQLException
    *           If the SQL query is invalid.
    * @throws MissingDataException
