@@ -125,6 +125,10 @@ i {
     background: #38A1F3;
 }
 
+.share-tooltip.copy {
+    background: #43c4e2;
+}
+
 .share-tooltip > i {
     padding: 0;
 }

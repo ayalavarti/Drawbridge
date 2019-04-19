@@ -236,7 +236,7 @@ function denyClick(tid, pendUID) {
  */
 function sendRequest(data, url) {
     $.post(url, data, responseJSON => {
-        console.log("Response");
+        console.log(responseJSON);
     }, "json");
 }
 
