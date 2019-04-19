@@ -125,9 +125,7 @@ function onSignIn(googleUser) {
     };
     $.post("/login", loginData, function (response) {
         const isNewUser = JSON.parse(response).isNewUser;
-        console.log(isNewUser);
-        if (isNewUser) {
-            console.log("Welcome new user");
+        if (isNewUser && true) {
             newUserModal.show();
             modalOpen = true;
         }
@@ -178,6 +176,9 @@ function unhover(e) {
     e.setAttribute('src', `../images/${e.className}.png`);
 }
 
+/**
+ * Close the modal on button click.
+ */
 function closeModal() {
     if (modalOpen) {
         newUserModal.hide();
@@ -185,6 +186,9 @@ function closeModal() {
     }
 }
 
+/**
+ * Listen for keyup escape to close modal if it is open.
+ */
 $(document).keyup(function (e) {
     if (e.key === "Escape" && modalOpen) {
         newUserModal.hide();

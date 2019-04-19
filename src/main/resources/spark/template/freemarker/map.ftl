@@ -75,13 +75,16 @@
         <img id="car-icon" class="icon-img" src="/images/car-disabled.png"/>
     </div>
     <a href="/new">
-        <div data-tippy-content="Host a Carpool" class="map-settings
+        <div data-tippy-content="Host a Carpool" id="pre-load"
+             style="display: none;"
+             class="map-settings
         team-setting">
             <img class="icon-img" src="/images/host-icon.png"/>
         </div>
     </a>
     <a href="/help">
-        <div data-tippy-content="Drawbridge Info"
+        <div data-tippy-content="Drawbridge Info" id="pre-load"
+             style="display: none;"
              class="map-settings info-setting">
             <img class="icon-img" src="/images/info-icon.png"/>
         </div>
