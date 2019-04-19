@@ -316,6 +316,7 @@ public final class UserInterface {
         } else if (action.equals("leave")) {
           errorReason = "Database connection failed";
           success = carpools.leaveTrip(tid, uid);
+          success &= carpools.rejectRequest(tid, uid, uid);
 
         } else if (action.equals("delete")) {
           errorReason = "Database connection failed";
