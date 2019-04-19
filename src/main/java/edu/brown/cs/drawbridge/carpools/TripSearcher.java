@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -17,29 +15,41 @@ import java.util.Set;
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
 import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.models.Trip;
-import edu.brown.cs.drawbridge.tripcomparators.ComparesSearchedTrips;
 import edu.brown.cs.drawbridge.tripcomparators.CostComparator;
 import edu.brown.cs.drawbridge.tripcomparators.HostComparator;
+import edu.brown.cs.drawbridge.tripcomparators.Identifiable;
+import edu.brown.cs.drawbridge.tripcomparators.LengthComparator;
 import edu.brown.cs.drawbridge.tripcomparators.MemberComparator;
 import edu.brown.cs.drawbridge.tripcomparators.MultipleTripComparator;
 import edu.brown.cs.drawbridge.tripcomparators.PendingComparator;
 
 /**
  * A class to search for valid paths from a starting to ending location.
- *
- * @author Jeffrey Zhu
  */
 public class TripSearcher {
 
-  private static final int CONNECTION_WAIT_TIME = 30;
+  // Seconds between switching Trips
+  private static final long CONNECTION_WAIT_TIME = 1800;
   private static final int MAX_TRIPS_PER_PATH = 3;
-  private static final int MAX_PATH_OPTIONS = 5;
-  private static final ComparesSearchedTrips COST_COMPARATOR = new CostComparator();
-  private static final List<ComparesSearchedTrips> COMPARATORS = Arrays.asList(
-      new HostComparator(), new MemberComparator(), new PendingComparator(),
-      COST_COMPARATOR);
+  private static final int MAX_PATH_OPTIONS = 10;
+  private static final int MAX_PATH_FOUND = 15;
+  // Higher multipler means better quality, lower multipler means better
+  // quantity; higher multipler reaches best point faster and marks more nodes
+  // as visited
+  private static final double HEURISTIC_MULTIPLIER = 0.9;
+
+  private static final Comparator<List<Trip>> HOST_COMPARATOR = new HostComparator();
+  private static final Comparator<List<Trip>> MEMBER_COMPARATOR = new MemberComparator();
+  private static final Comparator<List<Trip>> PENDING_COMPARATOR = new PendingComparator();
+  private static final Comparator<List<Trip>> COST_COMPARATOR = new CostComparator();
+  private static final Comparator<List<Trip>> LENGTH_COMPARATOR = new LengthComparator();
+  private static final List<Identifiable> IDENTIFIABLE = Arrays.asList(
+      (Identifiable) HOST_COMPARATOR, (Identifiable) MEMBER_COMPARATOR,
+      (Identifiable) PENDING_COMPARATOR, (Identifiable) COST_COMPARATOR);
   private static final Comparator<List<Trip>> TRIP_COMPARATOR = new MultipleTripComparator(
-      COMPARATORS);
+      Arrays.asList(HOST_COMPARATOR, MEMBER_COMPARATOR, PENDING_COMPARATOR,
+          LENGTH_COMPARATOR, COST_COMPARATOR));
+
   private DatabaseQuery database;
 
   /**
@@ -53,7 +63,7 @@ public class TripSearcher {
   }
 
   private void setUser(String userId) {
-    for (ComparesSearchedTrips comparator : COMPARATORS) {
+    for (Identifiable comparator : IDENTIFIABLE) {
       comparator.setUserId(userId);
     }
   }
@@ -70,12 +80,31 @@ public class TripSearcher {
    *
    * @return
    */
-  public double distance(Trip trip, double endLat, double endLon) {
+  private double distance(Trip trip, double endLat, double endLon) {
+    return distance(trip.getEndingLatitude(), endLat, trip.getEndingLongitude(),
+        endLon);
+  }
+
+  /**
+   * Get the distance between two points in km.
+   *
+   * @param latitude1
+   *          The latitude of the first point
+   * @param latitude2
+   *          The latitude of the second point
+   * @param longitude1
+   *          The longitude of the first point
+   * @param longitude2
+   *          The longitude of the second point
+   * @return The distance between the two points in km
+   */
+  public static double distance(double latitude1, double latitude2,
+      double longitude1, double longitude2) {
+    double lat1 = Math.toRadians(latitude1);
+    double lat2 = Math.toRadians(latitude2);
+    double lon1 = Math.toRadians(longitude1);
+    double lon2 = Math.toRadians(longitude2);
     final int earthRadius = 6371;
-    double lat1 = Math.toRadians(trip.getEndingLatitude());
-    double lat2 = Math.toRadians(endLat);
-    double lon1 = Math.toRadians(trip.getEndingLongitude());
-    double lon2 = Math.toRadians(endLon);
     double latDifference = lat2 - lat1;
     double lonDifference = lon2 - lon1;
     double latSquares = Math.sin(latDifference / 2)
@@ -147,7 +176,7 @@ public class TripSearcher {
     List<List<Trip>> paths = search(userId, startLat, startLon, endLat, endLon,
         departureTime, distanceRadius, timeRadius);
     Collections.sort(paths, TRIP_COMPARATOR);
-    return paths;
+    return paths.subList(0, Math.min(paths.size(), MAX_PATH_OPTIONS));
   }
 
   /**
@@ -179,7 +208,7 @@ public class TripSearcher {
     List<List<Trip>> paths = search("", startLat, startLon, endLat, endLon,
         departureTime, distanceRadius, timeRadius);
     Collections.sort(paths, COST_COMPARATOR);
-    return paths;
+    return paths.subList(0, Math.min(paths.size(), MAX_PATH_OPTIONS));
   }
 
   /**
@@ -220,29 +249,17 @@ public class TripSearcher {
     // Contains a Set of visited Trips
     Set<Trip> visited = new HashSet<>();
     // Contains a Map from Trips to their total path weight (no heuristic)
-    Map<Trip, Double> weights = new HashMap<>();
     try {
       // Create list of paths from starting location
       List<Trip> startingTrips = database.getConnectedTripsWithinTimeRadius(
           startLat, startLon, distanceRadius, departureTime, timeRadius);
       for (Trip trip : startingTrips) {
-        // Add weight to weights HashMap
-        weights.put(trip, trip.getTripDistance());
         // Add PathNode with distance-to-destination heuristic to toVisit Queue
-        toVisit.add(new PathNode(trip, endLat, endLon, weights));
+        toVisit.add(new PathNode(trip, endLat, endLon));
       }
 
-      // Search for valid paths to destination
-      while (!toVisit.isEmpty() && paths.size() <= MAX_PATH_OPTIONS) {
-        // System.out.println("Queue: ");
-        // for (PathNode p : toVisit) {
-        // System.out.println("Path: ");
-        // for (Trip t : p.trips) {
-        // System.out.println(t.getName());
-        // }
-        // System.out.println(p.current.getName());
-        // }
-
+      // Search for at most 5 valid paths to destination
+      while (!toVisit.isEmpty() && paths.size() < MAX_PATH_FOUND) {
         PathNode visitingNode = toVisit.poll();
         Trip visitingTrip = visitingNode.current;
         if (isWithinDestinationRadius(visitingTrip, distanceRadius, endLat,
@@ -260,15 +277,7 @@ public class TripSearcher {
               visitingTrip.getEndingLatitude(),
               visitingTrip.getEndingLongitude(), distanceRadius,
               visitingTrip.getEta(), CONNECTION_WAIT_TIME)) {
-            if (weights.containsKey(nextTrip)
-                && weights.get(nextTrip) < weights.get(visitingTrip)
-                    + visitingTrip.distanceTo(nextTrip)) {
-              continue;
-            } else {
-              weights.put(nextTrip, weights.get(visitingTrip)
-                  + visitingTrip.distanceTo(nextTrip));
-              toVisit.add(new PathNode(visitingNode, nextTrip, weights));
-            }
+            toVisit.add(new PathNode(visitingNode, nextTrip));
           }
         }
       }
@@ -285,7 +294,10 @@ public class TripSearcher {
   private class PathNode implements Comparable<PathNode> {
     private List<Trip> trips; // Previous trips in the path
     private Trip current; // Current trip in the path
-    private double totalWeight; // Total weight of the path with the heuristic
+    private double actualWeight; // Total weight of the path without the
+                                 // heuristic
+    private double heuristicWeight; // Total weight of the path with the
+                                    // heuristic
 
     // The ending latitude and longitude of the destination
     private double endLat, endLon;
@@ -300,17 +312,16 @@ public class TripSearcher {
      *          The latitude of the destination
      * @param endLon
      *          The longitude of the destination
-     * @param weights
-     *          A Map containing information about path weights
      */
-    PathNode(Trip trip, double endLat, double endLon,
-        Map<Trip, Double> weights) {
+    PathNode(Trip trip, double endLat, double endLon) {
       trips = new LinkedList<>();
       current = trip;
-      // Actual weight + heuristic
-      totalWeight = weights.get(trip) + distance(trip, endLat, endLon);
       this.endLat = endLat;
       this.endLon = endLon;
+      // Set weights
+      actualWeight = trip.getTripDistance();
+      heuristicWeight = actualWeight
+          + HEURISTIC_MULTIPLIER * distance(trip, endLat, endLon);
     }
 
     /**
@@ -320,22 +331,22 @@ public class TripSearcher {
      *          The old PathNode
      * @param newTrip
      *          The new Trip reached
-     * @param weights
-     *          A Map containing information about path weights
      */
-    PathNode(PathNode old, Trip newTrip, Map<Trip, Double> weights) {
+    PathNode(PathNode old, Trip newTrip) {
       trips = new ArrayList<Trip>(old.trips);
       trips.add(old.current);
       current = newTrip;
       endLat = old.endLat;
       endLon = old.endLon;
-      // Actual weight + heuristic
-      totalWeight = weights.get(newTrip) + distance(newTrip, endLat, endLon);
+      // Set weights
+      actualWeight = old.actualWeight + old.current.distanceTo(newTrip);
+      heuristicWeight = actualWeight
+          + HEURISTIC_MULTIPLIER * distance(newTrip, endLat, endLon);
     }
 
     @Override
     public int compareTo(PathNode o) {
-      return Double.compare(totalWeight, o.totalWeight);
+      return Double.compare(heuristicWeight, o.heuristicWeight);
     }
   }
 }

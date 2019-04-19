@@ -53,7 +53,7 @@ public class MemberComparatorTest {
     List<Trip> path1 = new ArrayList<Trip>(Arrays.asList(trip1, trip2));
     List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
 
-    ComparesSearchedTrips memberComparator = new MemberComparator();
+    MemberComparator memberComparator = new MemberComparator();
     memberComparator.setUserId("10");
     assertEquals(memberComparator.compare(path1, path2), 0);
   }
@@ -86,7 +86,7 @@ public class MemberComparatorTest {
     List<Trip> path1 = new ArrayList<Trip>(Arrays.asList(trip1, trip2));
     List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
 
-    ComparesSearchedTrips memberComparator = new MemberComparator();
+    MemberComparator memberComparator = new MemberComparator();
     memberComparator.setUserId("10");
     assertEquals(memberComparator.compare(path1, path2), -1);
   }
@@ -119,7 +119,7 @@ public class MemberComparatorTest {
     List<Trip> path1 = new ArrayList<Trip>(Arrays.asList(trip1, trip2));
     List<Trip> path2 = new ArrayList<Trip>(Arrays.asList(trip3, trip4));
 
-    ComparesSearchedTrips memberComparator = new MemberComparator();
+    MemberComparator memberComparator = new MemberComparator();
     memberComparator.setUserId("10");
     assertEquals(memberComparator.compare(path1, path2), 1);
   }
@@ -172,7 +172,7 @@ public class MemberComparatorTest {
     expected.add(path2);
     expected.add(path1);
 
-    ComparesSearchedTrips memberComparator = new MemberComparator();
+    MemberComparator memberComparator = new MemberComparator();
     memberComparator.setUserId("10");
     Collections.sort(paths, memberComparator);
     for (int i = 0; i < expected.size(); i++) {

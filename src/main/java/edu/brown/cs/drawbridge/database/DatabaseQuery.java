@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -417,9 +416,9 @@ public class DatabaseQuery {
    * @param walkRadius
    *     The buffer for finding reasonably distanced trips.
    * @param start
-   *     The int beginning of the time window in epoch time.
+   *          The long beginning of the time window in epoch time.
    * @param end
-   *     The int end of the time window in epoch time.
+   *          The long end of the time window in epoch time.
    *
    * @return A List of all the trips connected to the given trip.
    *
@@ -430,11 +429,10 @@ public class DatabaseQuery {
    */
   public List<Trip> searchTripsByTimeWindow(double lastLat, double lastLon,
       double walkRadius, double start, double end)
-
       throws SQLException, MissingDataException {
     List<Trip> results = new ArrayList<>();
     try (PreparedStatement prep = conn
-        .prepareStatement(QueryStrings.FIND_CONNECTED_TRIPS)) {
+        .prepareStatement(QueryStrings.FIND_CONNECTED_TRIPS_BY_WINDOW)) {
       prep.setDouble(1, lastLat);
       prep.setDouble(2, lastLat);
       prep.setDouble(3, lastLon);
@@ -475,7 +473,7 @@ public class DatabaseQuery {
    * @param walkRadius
    *     The buffer for finding reasonably distanced trips.
    * @param lastEta
-   *     The int expected arrival time of the last trip.
+   *          The long expected arrival time of the last trip.
    * @param timeBuffer
    *     The buffer for finding reasonably timed trips.
    *
@@ -487,36 +485,42 @@ public class DatabaseQuery {
    *     Errors involving the database's contents.
    */
   public List<Trip> getConnectedTripsAfterEta(double lastLat, double lastLon,
-      double walkRadius, long lastEta, double timeBuffer)
+                                              double walkRadius, long lastEta, double timeBuffer)
+          throws SQLException, MissingDataException {
+    //due to rounding errors in SQL, a walk radius of 0 will not return results.
+    if (walkRadius == 0) {
+      walkRadius = 0.000000000001; //this is a nanometer
+    }
+    List<Trip> results = new ArrayList<>();
+    try (PreparedStatement prep = conn
+            .prepareStatement(QueryStrings.FIND_CONNECTED_TRIPS_AFTER_ETA)) {
+      prep.setDouble(1, lastLat);
+      prep.setDouble(2, lastLon);
+      prep.setDouble(3, walkRadius);
+      prep.setDouble(4, lastLat);
+      prep.setDouble(5, lastLon);
+      prep.setLong(6, lastEta);
+      prep.setDouble(7, lastLat);
+      prep.setDouble(8, lastLon);
+      prep.setLong(9, (long) (lastEta + timeBuffer));
 
-      throws SQLException, MissingDataException {
-    int maxTimeShift = (int) (walkRadius / AVG_WALK_SPEED);
-    List<Trip> results = new LinkedList<>();
-    List<Trip> possibleTrips = searchTripsByTimeWindow(lastLat, lastLon,
-        walkRadius, lastEta, lastEta + timeBuffer + maxTimeShift);
-    for (Trip t : possibleTrips) {
-      double startLat = Math.toRadians(t.getStartingLatitude());
-      double startLon = Math.toRadians(t.getStartingLongitude());
-      long departure = t.getDepartureTime();
-      double prevLat = Math.toRadians(lastLat);
-      double prevLon = Math.toRadians(lastLon);
-      double latDifference = prevLat - startLat;
-      double lonDifference = prevLon - startLon;
-
-      double latSquares = Math.sin(latDifference / 2) * Math
-          .sin(latDifference / 2);
-      double lonSquares = Math.sin(lonDifference / 2) * Math
-          .sin(lonDifference / 2);
-      double products = latSquares + lonSquares * Math.cos(startLat) * Math
-          .cos(prevLat);
-      double kmDist = 2 * Math
-          .atan2(Math.sqrt(products), Math.sqrt(1 - products)) * EARTH_RADIUS;
-      long timeStart = lastEta + (int) (kmDist / AVG_WALK_SPEED);
-      double timeEnd = timeStart + timeBuffer;
-
-      if (timeStart < departure && departure < timeEnd) {
-        results.add(t);
+      try (ResultSet rs = prep.executeQuery()) {
+        while (rs.next()) {
+          results.add(Trip.TripBuilder.newTripBuilder()
+                  .addIdentification(rs.getInt(1), rs.getString(2))
+                  .addLocations(rs.getDouble(4), rs.getDouble(5), rs.getDouble(7),
+                          rs.getDouble(8))
+                  .addAddressNames(rs.getString(3), rs.getString(6))
+                  .addTimes(rs.getInt(9), rs.getInt(10))
+                  .addDetails(rs.getInt(11), rs.getDouble(12), rs.getString(13),
+                          rs.getString(14), rs.getString(15))
+                  .buildWithUsers(getHostOnTrip(rs.getInt(1)),
+                          getMembersOnTrip(rs.getInt(1)),
+                          getRequestsOnTrip(rs.getInt(1))));
+        }
       }
+    } catch (MissingDataException e) {
+      throw new MissingDataException("Results include trips without hosts");
     }
     return results;
   }
@@ -531,7 +535,7 @@ public class DatabaseQuery {
    * @param walkRadius
    *     The buffer for finding reasonably distanced trips.
    * @param departure
-   *     The time of departure.
+   *          The time of departure.
    * @param timeBuffer
    *     The buffer for finding reasonably timed trips.
    *
@@ -659,6 +663,19 @@ public class DatabaseQuery {
       try (PreparedStatement prep = conn.prepareStatement(query)) {
         prep.executeUpdate();
       }
+    }
+  }
+
+  /**
+   * Deletes a specific user by id.
+   * @param id The String id of the user.
+   * @throws SQLException Errors involving SQL queries.
+   */
+  protected void deleteUser(String id) throws SQLException {
+    try (PreparedStatement prep = conn.prepareStatement(
+            "DELETE FROM users WHERE id = ?;")) {
+      prep.setString(1, id);
+      prep.executeUpdate();
     }
   }
 }

@@ -2,6 +2,8 @@ package edu.brown.cs.drawbridge.models;
 
 import java.util.List;
 
+import edu.brown.cs.drawbridge.carpools.TripSearcher;
+
 /**
  * This class models a carpooling Trip.
  *
@@ -350,21 +352,8 @@ public class Trip {
    *         plus the length of the other.
    */
   public double distanceTo(Trip other) {
-    final int earthRadius = 6371;
-    double lat1 = Math.toRadians(endingLatitude);
-    double lat2 = Math.toRadians(other.startingLatitude);
-    double lon1 = Math.toRadians(endingLongitude);
-    double lon2 = Math.toRadians(other.startingLatitude);
-    double latDifference = lat2 - lat1;
-    double lonDifference = lon2 - lon1;
-    double latSquares = Math.sin(latDifference / 2)
-        * Math.sin(latDifference / 2);
-    double lonSquares = Math.sin(lonDifference / 2)
-        * Math.sin(lonDifference / 2);
-    double products = latSquares + lonSquares * Math.cos(lat1) * Math.cos(lat2);
-    double radiansFromEndToStart = 2
-        * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products));
-    return earthRadius * radiansFromEndToStart + other.getTripDistance();
+    return TripSearcher.distance(endingLatitude, other.startingLatitude,
+        endingLongitude, other.startingLongitude) + other.getTripDistance();
   }
 
   /**
@@ -373,21 +362,8 @@ public class Trip {
    * @return The distance of the Trip
    */
   public double getTripDistance() {
-    final int earthRadius = 6371;
-    double lat1 = Math.toRadians(startingLatitude);
-    double lat2 = Math.toRadians(endingLatitude);
-    double lon1 = Math.toRadians(startingLongitude);
-    double lon2 = Math.toRadians(endingLongitude);
-    double latDifference = lat2 - lat1;
-    double lonDifference = lon2 - lon1;
-    double latSquares = Math.sin(latDifference / 2)
-        * Math.sin(latDifference / 2);
-    double lonSquares = Math.sin(lonDifference / 2)
-        * Math.sin(lonDifference / 2);
-    double products = latSquares + lonSquares * Math.cos(lat1) * Math.cos(lat2);
-    double radians = 2
-        * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products));
-    return earthRadius * radians;
+    return TripSearcher.distance(startingLatitude, endingLatitude,
+        startingLongitude, endingLongitude);
   }
 
   @Override
