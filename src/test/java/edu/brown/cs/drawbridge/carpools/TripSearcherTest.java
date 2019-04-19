@@ -229,15 +229,16 @@ public class TripSearcherTest {
     expected.add(new ArrayList<String>(Arrays.asList("3L", "3G")));
     expected.add(new ArrayList<String>(Arrays.asList("3L", "3H")));
     expected.add(new ArrayList<String>(Arrays.asList("3L", "3I")));
+    expected.add(new ArrayList<String>(Arrays.asList("3B", "3F", "3I")));
     expected.add(new ArrayList<String>(Arrays.asList("3B", "3F", "3H")));
     expected.add(new ArrayList<String>(Arrays.asList("3B", "3E", "3I")));
     expected.add(new ArrayList<String>(Arrays.asList("3B", "3D", "3G")));
-    expected.add(new ArrayList<String>(Arrays.asList("3B", "3F", "3I")));
     assertSamePaths(tripSearcher.searchWithoutId(-16, -16, -17, -17, 20, 0, 5),
         expected);
     // Test 7
     expected = new ArrayList<List<String>>();
     expected.add(new ArrayList<String>(Arrays.asList("3C", "3E", "3I")));
+    expected.add(new ArrayList<String>(Arrays.asList("3C", "3F", "3J")));
     expected.add(new ArrayList<String>(Arrays.asList("3C", "3F", "3I")));
     expected.add(new ArrayList<String>(Arrays.asList("3C", "3F", "3H")));
     expected.add(new ArrayList<String>(Arrays.asList("3C", "3E", "3H")));

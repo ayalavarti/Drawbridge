@@ -60,7 +60,7 @@ public final class QueryStrings {
   protected static final String FIND_CONNECTED_TRIPS_AFTER_ETA =
           "SELECT * FROM trips WHERE "
                   + "(haversine(start_latitude, start_longitude, ?, ?) < ?) "
-                  + " AND (departure BETWEEN ((haversine(start_latitude, start_longitude, ?, ?) / 0.014) + ?) "
-                  + " AND (haversine(start_latitude, start_longitude, ?, ?) / 0.014) + ?);";
+                  + " AND (departure BETWEEN ((haversine(start_latitude, start_longitude, ?, ?) / 0.0014) + ?) "
+                  + " AND (haversine(start_latitude, start_longitude, ?, ?) / 0.0014) + ?);";
   //lat, lon, distRadius, lat, lon, lastEta, lat, lon, lastEta + buffer
 }
