@@ -123,7 +123,16 @@ function onSignIn(googleUser) {
         email: userProfile.getEmail()
     };
 
-    $.post("/login", loginData, function (response) {
+    <
+    <
+    <
+    <
+    <
+    << HEAD
+        $.post("/login", loginData, function (response) {
+=======
+    $.post("/login", loginData, function(response) {
+>>>>>>> dc52827e09fdb2982d61e50a2e8fa9c34dce4c2b
         const responseData = JSON.parse(response);
         if (responseData.success) {
             const isNewUser = responseData.isNewUser;
@@ -148,11 +157,11 @@ function signOut() {
         userProfile = undefined;
         document.cookie = "loggedIn=false; path=/";
 
-        // Performs page specific actions after user has signed out
-        onUserSignedOut();
+    // Performs page specific actions after user has signed out
+onUserSignedOut();
 
-        // Hide profile info dropdown and show login button
-        $("#profile-info").css({visibility: "hidden"});
+    // Hide profile info dropdown and show login button
+$("#profile-info").css({visibility: "hidden"});
         $("#sign-in").css({visibility: "visible"});
     });
 }
