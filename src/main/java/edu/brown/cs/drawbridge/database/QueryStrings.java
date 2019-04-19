@@ -32,13 +32,11 @@ public final class QueryStrings {
       = "DELETE FROM requests WHERE trip_id = ? AND user_id = ?;";
   protected static final String FIND_USER_BY_ID
       = "SELECT name, email FROM users WHERE id = ?;";
-  protected static final String FIND_TRIP_BY_ID
-      = "SELECT name, start_name, " +
-          "start_latitude, start_longitude, end_name, end_latitude, " +
-          "end_longitude, " +
-          "departure, eta, max_people, total_cost, phone_number, " +
-          "transportation, " +
-          "description FROM trips WHERE id = ?;";
+  protected static final String FIND_TRIP_BY_ID = "SELECT name, start_name, "
+      + "start_latitude, start_longitude, end_name, end_latitude, "
+      + "end_longitude, "
+      + "departure, eta, max_people, total_cost, phone_number, "
+      + "transportation, " + "description FROM trips WHERE id = ?;";
   protected static final String FIND_HOST_TRIPS
       = "SELECT trip_id FROM hosts WHERE user_id = ?;";
   protected static final String FIND_MEMBER_TRIPS

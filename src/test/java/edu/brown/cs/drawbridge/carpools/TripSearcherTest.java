@@ -1,18 +1,17 @@
 package edu.brown.cs.drawbridge.carpools;
 
-import static org.junit.Assert.assertEquals;
+import edu.brown.cs.drawbridge.database.DatabaseQuery;
+import edu.brown.cs.drawbridge.database.MissingDataException;
+import edu.brown.cs.drawbridge.models.Trip;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import edu.brown.cs.drawbridge.database.DatabaseQuery;
-import edu.brown.cs.drawbridge.database.MissingDataException;
-import edu.brown.cs.drawbridge.models.Trip;
+import static org.junit.Assert.assertEquals;
 
 public class TripSearcherTest {
 
@@ -23,19 +22,8 @@ public class TripSearcherTest {
    * Test search method.
    */
 
-  private void assertSamePaths(List<List<Trip>> paths1,
-      List<List<String>> paths2) {
-    for (int i = 0; i < paths1.size(); i++) {
-      for (int j = 0; j < paths1.get(i).size(); j++) {
-        assertEquals(paths1.get(i).get(j).getName(), paths2.get(i).get(j));
-      }
-      assertEquals(paths1.get(i).size(), paths2.get(i).size());
-    }
-    assertEquals(paths1.size(), paths2.size());
-  }
-
-  @BeforeClass
-  public static void oneTimeSetUp() throws SQLException, MissingDataException {
+  @BeforeClass public static void oneTimeSetUp()
+      throws SQLException, MissingDataException {
     try {
       String username = System.getenv("DB_USER");
       String password = System.getenv("DB_PASS");
@@ -60,6 +48,17 @@ public class TripSearcherTest {
         System.out.println(trip.getName());
       }
     }
+  }
+  
+  private void assertSamePaths(List<List<Trip>> paths1,
+      List<List<String>> paths2) {
+    for (int i = 0; i < paths1.size(); i++) {
+      for (int j = 0; j < paths1.get(i).size(); j++) {
+        assertEquals(paths1.get(i).get(j).getName(), paths2.get(i).get(j));
+      }
+      assertEquals(paths1.get(i).size(), paths2.get(i).size());
+    }
+    assertEquals(paths1.size(), paths2.size());
   }
 
   @Test
@@ -150,9 +149,6 @@ public class TripSearcherTest {
     expected.add(new ArrayList<String>(Arrays.asList("2D")));
     expected.add(new ArrayList<String>(Arrays.asList("2B", "2F")));
     expected.add(new ArrayList<String>(Arrays.asList("2A", "2F")));
-    /*
-     * Should pass without the next line.
-     */
     expected.add(new ArrayList<String>(Arrays.asList("2C", "2F")));
     assertSamePaths(tripSearcher.searchWithoutId(0, 0, 0.65, 0.67, 50, 1.6, 0),
         expected);
@@ -179,27 +175,29 @@ public class TripSearcherTest {
   @Test
   public void testSet3() {
     List<List<String>> expected = new ArrayList<List<String>>();
+
     // Test 1
-    expected.add(new ArrayList<String>(Arrays.asList("3A")));
-    expected.add(new ArrayList<String>(Arrays.asList("3B")));
-    expected.add(new ArrayList<String>(Arrays.asList("3C")));
+    expected.add(new ArrayList<>(Arrays.asList("3A")));
+    expected.add(new ArrayList<>(Arrays.asList("3B")));
+    expected.add(new ArrayList<>(Arrays.asList("3C")));
     assertSamePaths(
         tripSearcher.searchWithoutId(-16, -16, -16.5, -16.5, 20, 0, 10),
         expected);
     // Test 2
-    expected = new ArrayList<List<String>>();
-    expected.add(new ArrayList<String>(Arrays.asList("3A")));
-    expected.add(new ArrayList<String>(Arrays.asList("3B")));
+    expected = new ArrayList<>();
+    expected.add(new ArrayList<>(Arrays.asList("3A")));
+    expected.add(new ArrayList<>(Arrays.asList("3B")));
     assertSamePaths(
         tripSearcher.searchWithoutId(-16, -16, -16.5, -16.5, 15, 0, 5),
         expected);
     // Test 3
-    expected = new ArrayList<List<String>>();
-    expected.add(new ArrayList<String>(Arrays.asList("3C")));
+    expected = new ArrayList<>();
+    expected.add(new ArrayList<>(Arrays.asList("3C")));
     assertSamePaths(
         tripSearcher.searchWithoutId(-16, -16, -16.5, -16.5, 35, 0, 5),
         expected);
     // Test 4
+
     expected = new ArrayList<List<String>>();
     expected.add(new ArrayList<String>(Arrays.asList("3L")));
     expected.add(new ArrayList<String>(Arrays.asList("3K")));
