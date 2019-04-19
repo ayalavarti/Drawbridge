@@ -250,7 +250,7 @@ public class DatabaseQuery {
       prep.setString(1, userId);
       try (ResultSet rs = prep.executeQuery()) {
         if (rs.next()) {
-          User u = new User(userId, rs.getString(1), rs.getString(2));
+          User u = new User(userId, rs.getString(2), rs.getString(3));
           u.setTrips(getHostTripsWithUser(userId),
               getMemberTripsWithUser(userId), getRequestTripsWithUser(userId));
           return u;
@@ -307,17 +307,13 @@ public class DatabaseQuery {
    *           Errors involving SQL queries.
    */
   public void addUser(User user) throws SQLException {
-    try {
-      getUserById(user.getId());
-    } catch (MissingDataException e) {
-      try (PreparedStatement prep = conn
-          .prepareStatement(QueryStrings.INSERT_USER)) {
-        prep.setString(1, user.getId());
-        prep.setString(2, user.getName());
-        prep.setString(3, user.getEmail());
-        prep.addBatch();
-        prep.executeUpdate();
-      }
+    try (PreparedStatement prep = conn
+        .prepareStatement(QueryStrings.INSERT_USER)) {
+      prep.setString(1, user.getId());
+      prep.setString(2, user.getName());
+      prep.setString(3, user.getEmail());
+      prep.addBatch();
+      prep.executeUpdate();
     }
   }
 
@@ -434,7 +430,8 @@ public class DatabaseQuery {
    *           Errors involving the database's contents.
    */
   public List<Trip> searchTripsByTimeWindow(double lastLat, double lastLon,
-      double walkRadius, long start, long end)
+      double walkRadius, double start, double end)
+
       throws SQLException, MissingDataException {
     List<Trip> results = new ArrayList<>();
     try (PreparedStatement prep = conn
@@ -443,8 +440,9 @@ public class DatabaseQuery {
       prep.setDouble(2, lastLat);
       prep.setDouble(3, lastLon);
       prep.setDouble(4, walkRadius);
-      prep.setLong(5, start);
-      prep.setLong(6, end);
+      prep.setDouble(5, start);
+      prep.setDouble(6, end);
+
       try (ResultSet rs = prep.executeQuery()) {
         while (rs.next()) {
           results.add(Trip.TripBuilder.newTripBuilder()
@@ -490,7 +488,8 @@ public class DatabaseQuery {
    *           Errors involving the database's contents.
    */
   public List<Trip> getConnectedTripsAfterEta(double lastLat, double lastLon,
-      double walkRadius, long lastEta, long timeBuffer)
+      double walkRadius, long lastEta, double timeBuffer)
+
       throws SQLException, MissingDataException {
     int maxTimeShift = (int) (walkRadius / AVG_WALK_SPEED);
     List<Trip> results = new LinkedList<>();
@@ -504,16 +503,19 @@ public class DatabaseQuery {
       double prevLon = Math.toRadians(lastLon);
       double latDifference = prevLat - startLat;
       double lonDifference = prevLon - startLon;
-      double latSquares = Math.sin(latDifference / 2) * Math
-          .sin(latDifference / 2);
-      double lonSquares = Math.sin(lonDifference / 2) * Math
-          .sin(lonDifference / 2);
-      double products = latSquares + lonSquares * Math.cos(startLat) * Math
-          .cos(prevLat);
-      double kmDist = 2 * Math
-          .atan2(Math.sqrt(products), Math.sqrt(1 - products)) * EARTH_RADIUS;
+
+      double latSquares = Math.sin(latDifference / 2)
+          * Math.sin(latDifference / 2);
+      double lonSquares = Math.sin(lonDifference / 2)
+          * Math.sin(lonDifference / 2);
+      double products = latSquares
+          + lonSquares * Math.cos(startLat) * Math.cos(prevLat);
+      double kmDist = 2
+          * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products))
+          * EARTH_RADIUS;
       long timeStart = lastEta + (int) (kmDist / AVG_WALK_SPEED);
-      long timeEnd = timeStart + timeBuffer;
+      double timeEnd = timeStart + timeBuffer;
+
       if (timeStart < departure && departure < timeEnd) {
         results.add(t);
       }
@@ -531,7 +533,7 @@ public class DatabaseQuery {
    * @param walkRadius
    *          The buffer for finding reasonably distanced trips.
    * @param departure
-   *          The long time of departure.
+   *          The time of departure.
    * @param timeBuffer
    *          The buffer for finding reasonably timed trips.
    *
@@ -544,7 +546,8 @@ public class DatabaseQuery {
    *           Errors involving the database's contents.
    */
   public List<Trip> getConnectedTripsWithinTimeRadius(double lat, double lon,
-      double walkRadius, long departure, long timeBuffer)
+      double walkRadius, long departure, double timeBuffer)
+
       throws SQLException, MissingDataException {
     return searchTripsByTimeWindow(lat, lon, walkRadius, departure - timeBuffer,
         departure + timeBuffer);
