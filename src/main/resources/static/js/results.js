@@ -49,6 +49,31 @@ function initTooltips() {
  * Query the server for the results of the trip search
  */
 function queryResults() {
+    const queryMap = JSON.parse(payload);
+    console.log(queryMap);
+    $("#start").text(queryMap["startName"]);
+    $("#end").text(queryMap["endName"]);
+
+    let tripDate = new Date(1555948800000);
+    console.log(tripDate);
+    let hourLabel = "AM";
+    let minutes;
+    let hour = tripDate.getHours();
+    if (hour > 12) {
+        hour = hour - 12;
+        hourLabel = "PM";
+    }
+    if (tripDate.getMinutes() < 10) {
+        minutes = `${tripDate.getMinutes()}0`;
+    } else {
+        minutes = tripDate.getMinutes();
+    }
+
+    $("#date").text(
+        `${months[tripDate.getMonth()]} ${tripDate.getDate()},
+        ${tripDate.getFullYear()}`);
+    $("#time").text(`${hour}:${minutes} ${hourLabel}`);
+
     // Set the trip results on the page with the resulting data
     setTripResults(JSON.parse(data));
 }

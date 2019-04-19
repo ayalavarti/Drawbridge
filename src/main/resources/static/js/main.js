@@ -122,12 +122,12 @@ function onSignIn(googleUser) {
         name: userProfile.getName(),
         email: userProfile.getEmail()
     };
-  
-    $.post("/login", loginData, function(response) {
+
+    $.post("/login", loginData, function (response) {
         const responseData = JSON.parse(response);
         if (responseData.success) {
             const isNewUser = responseData.isNewUser;
-            if (isNewUser && true) {
+            if (isNewUser) {
                 newUserModal.show();
                 modalOpen = true;
             }

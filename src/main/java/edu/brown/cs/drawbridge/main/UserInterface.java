@@ -107,8 +107,8 @@ public final class UserInterface {
     });
   }
 
-
   // --------------------------- Helpers -----------------------------------
+
   /**
    * Overloaded method to provide an alternate signature for the
    * JSON-processing method.
@@ -125,7 +125,6 @@ public final class UserInterface {
 
     return processToJSON(uid, Arrays.asList(tripGroups));
   }
-
 
   /**
    * Method to help process a list of trip-groups into a JSON-encodable format.
@@ -177,14 +176,13 @@ public final class UserInterface {
     return data;
   }
 
-
   // ---------------------------- Home ------------------------------------
+
   /**
    * Handle requests to the home screen of the website.
    */
   private static class HomeGetHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
+    @Override public ModelAndView handle(Request req, Response res) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Home").put("mapboxKey", MAPBOX_TOKEN)
           .put("favicon", "images/favicon.png").build();
@@ -194,17 +192,18 @@ public final class UserInterface {
   }
 
   // ---------------------------- List ------------------------------------
+
   /**
    * Class to handle getting results to display; This handles all requests
    * originating from the home page and from resubmitting the walking time
    * values.
    */
   private static class ListGetHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request request, Response response) {
+    @Override public ModelAndView handle(Request request, Response response) {
       // Get parameter values
       QueryParamsMap qm = request.queryMap();
       List<List<Map<String, String>>> data;
+      JsonObject payload = new JsonObject();
 
       try {
         String startName = qm.value("startName");
@@ -230,6 +229,18 @@ public final class UserInterface {
           waitTime = 30 * 60; // 30 minutes is default for waiting for carpool
         }
 
+        // Mirror the inputted values back
+
+        payload.addProperty("startName", startName);
+        payload.addProperty("endName", endName);
+        payload.addProperty("startLat", startLat);
+        payload.addProperty("startLon", startLon);
+        payload.addProperty("endLat", endLat);
+        payload.addProperty("endLon", endLon);
+        payload.addProperty("date", datetime);
+        payload.addProperty("walkTime", walkTime);
+        payload.addProperty("waitTime", waitTime);
+
         // Do the search
         List<List<Trip>> results = carpools
             .searchWithId(uid, startLat, startLon, endLat, endLon, datetime,
@@ -239,23 +250,23 @@ public final class UserInterface {
       } catch (NullPointerException e) {
         data = new ArrayList<>();
       }
+
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Results")
           .put("favicon", "images/favicon.png").put("data", GSON.toJson(data))
-          .build();
+          .put("query", GSON.toJson(payload)).build();
 
       return new ModelAndView(variables, "results.ftl");
     }
   }
 
-
   // --------------------------- Detail -----------------------------------
+
   /**
    * Handler to get information about a specific trip and display it on a page.
    */
   private static class DetailGetHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request request, Response response)
+    @Override public ModelAndView handle(Request request, Response response)
         throws SQLException {
       int tid;
       Trip trip;
@@ -291,8 +302,7 @@ public final class UserInterface {
    * joining a trip, approving/denying pending members.
    */
   private static class DetailPostHandler implements Route {
-    @Override
-    public Object handle(Request request, Response response) {
+    @Override public Object handle(Request request, Response response) {
       QueryParamsMap qm = request.queryMap();
 
       int tid;
@@ -319,7 +329,6 @@ public final class UserInterface {
       payload.addProperty("userID", uid);
       payload.addProperty("tripID", tid);
       responseData.add("payload", payload);
-
 
       boolean success = false;
       try {
@@ -355,12 +364,12 @@ public final class UserInterface {
   }
 
   // -------------------------- My Trips ----------------------------------
+
   /**
    * Handles the display of the "my trips" page. Simply returns the template.
    */
   private static class MyTripsGetHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request request, Response response) {
+    @Override public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | My Trips")
           .put("favicon", "images/favicon.png").build();
@@ -373,8 +382,7 @@ public final class UserInterface {
    * Handles getting the user's trips, split up by category.
    */
   private static class MyTripsPostHandler implements Route {
-    @Override
-    public Object handle(Request request, Response response) {
+    @Override public Object handle(Request request, Response response) {
       QueryParamsMap qm = request.queryMap();
       String uid = qm.value("userID");
 
@@ -395,12 +403,12 @@ public final class UserInterface {
   }
 
   // --------------------------- Create -----------------------------------
+
   /**
    * Handles loading the "create new trip" page. Simple template serving.
    */
   private static class CreateGetHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request request, Response response) {
+    @Override public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Create Trip")
           .put("mapboxKey", MAPBOX_TOKEN).put("favicon", "images/favicon.png")
@@ -414,8 +422,7 @@ public final class UserInterface {
    * Handles create form submission and actual creation of a new trip.
    */
   private static class CreatePostHandler implements Route {
-    @Override
-    public Object handle(Request request, Response response)
+    @Override public Object handle(Request request, Response response)
         throws SQLException, MissingDataException {
       QueryParamsMap qm = request.queryMap();
 
@@ -458,13 +465,13 @@ public final class UserInterface {
   }
 
   // -------------------------- My Trips ----------------------------------
+
   /**
    * Handler for checking if a logged-in user is already in the database or
    * if they need to be added.
    */
   private static class UserLoginHandler implements Route {
-    @Override
-    public Object handle(Request request, Response response) {
+    @Override public Object handle(Request request, Response response) {
       QueryParamsMap qm = request.queryMap();
 
       String uid = qm.value("userID");
@@ -497,12 +504,12 @@ public final class UserInterface {
   }
 
   // ---------------------------- Info ------------------------------------
+
   /**
    * Class to handle get requests to faq/help/info static page.
    */
   private static class InfoGetHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request request, Response response) {
+    @Override public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Info")
           .put("favicon", "images/favicon.png").build();
@@ -510,7 +517,6 @@ public final class UserInterface {
       return new ModelAndView(variables, "info.ftl");
     }
   }
-
 
   // --------------------------- Errors -----------------------------------
 
@@ -532,8 +538,7 @@ public final class UserInterface {
    * Class to handle all page not found requests.
    */
   private static class ServerErrorHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request request, Response response) {
+    @Override public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Page Not Found")
           .put("favicon", "images/favicon.png").build();
