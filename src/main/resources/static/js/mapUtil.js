@@ -20,25 +20,6 @@ function initMapbox() {
  * Gets the current location if geolocation is enabled.
  */
 function getLocation() {
-
-    // Default to using ip lookup (faster + no popups)
-    $.get("https://jsonip.com/", function (ipData) {
-        if (ipData.status === "fail") {
-            // Fallback to using browser geolocation
-            geolocateLoc();
-        } else {
-            $.get("http://ip-api.com/json/" + ipData.ip, function (locData) {
-                if (locData.status === "fail") {
-                    geolocateLoc();
-                }
-                let position = {
-                    coords: {latitude: locData.lat, longitude: locData.lon}
-                };
-                initMap(position);
-            });
-        }
-    });
-
     let fallback = function(xhr, textStatus, error) {
         geolocateLoc();
     };
@@ -66,6 +47,7 @@ function getLocation() {
                         } else {
                             let position = {coords: {latitude: locData.lat, longitude: locData.lon}};
                             initMap(position);
+                            console.log("ipstuff");
                         }
                     }
                 });
@@ -77,16 +59,18 @@ function getLocation() {
 }
 
 function geolocateLoc() {
+    let defaultMap = () => initMap({coords: {latitude: curLat, longitude: curLong}});
     if (navigator.geolocation) {
+        console.log("gelocate");
         navigator.geolocation.getCurrentPosition(initMap, defaultMap, {timeout: 4000});
     } else {
+        console.log("defaultPos");
         const defaultPosition = {
             coords: {latitude: curLat, longitude: curLong}
         };
         initMap(defaultPosition);
     }
 }
-
 
 /**
  * Handle changes to the address input boxes whenever the input box loses focus.
