@@ -1,15 +1,14 @@
 package edu.brown.cs.drawbridge.tripcomparators;
 
+import java.util.Comparator;
 import java.util.List;
 
 import edu.brown.cs.drawbridge.models.Trip;
 
 /**
  * A comparator that compares Lists of Trips based on the total cost per person.
- *
- * @author Jeffrey Zhu
  */
-public class CostComparator implements ComparesSearchedTrips {
+public class CostComparator implements Comparator<List<Trip>>, Identifiable {
 
   private String userId;
 

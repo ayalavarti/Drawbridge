@@ -6,8 +6,6 @@ import edu.brown.cs.drawbridge.models.Trip;
 
 /**
  * A comparator that compares Trips based its time of departure.
- *
- * @author Jeffrey Zhu
  */
 public class TimeComparator implements Comparator<Trip> {
 
