@@ -20,7 +20,7 @@ function initMapbox() {
  * Gets the current location if geolocation is enabled.
  */
 function getLocation() {
-    let fallback = function(xhr, textStatus, error) {
+    let fallback = function (xhr, textStatus, error) {
         geolocateLoc();
     };
     let maxTime = 1500;
@@ -31,7 +31,7 @@ function getLocation() {
         timeout: maxTime,
         error: fallback,
         dataType: "json",
-        success: function(ipData, textStatus, xhr) {
+        success: function (ipData, textStatus, xhr) {
             if (ipData.status === "fail") {
                 geolocateLoc();
             } else {
@@ -45,9 +45,14 @@ function getLocation() {
                         if (locData.status === "fail") {
                             geolocateLoc();
                         } else {
-                            let position = {coords: {latitude: locData.lat, longitude: locData.lon}};
+                            let position = {
+                                coords: {
+                                    latitude: locData.lat,
+                                    longitude: locData.lon
+                                }
+                            };
                             initMap(position);
-                            console.log("ipstuff");
+                            console.log("IP Lookup");
                         }
                     }
                 });
@@ -59,12 +64,14 @@ function getLocation() {
 }
 
 function geolocateLoc() {
-    let defaultMap = () => initMap({coords: {latitude: curLat, longitude: curLong}});
+    let defaultMap = () => initMap(
+        {coords: {latitude: curLat, longitude: curLong}});
     if (navigator.geolocation) {
-        console.log("gelocate");
-        navigator.geolocation.getCurrentPosition(initMap, defaultMap, {timeout: 4000});
+        console.log("Geolocating");
+        navigator.geolocation.getCurrentPosition(initMap, defaultMap,
+            {timeout: 4000});
     } else {
-        console.log("defaultPos");
+        console.log("Defaulting");
         const defaultPosition = {
             coords: {latitude: curLat, longitude: curLong}
         };

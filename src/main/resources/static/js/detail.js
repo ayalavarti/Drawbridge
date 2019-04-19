@@ -266,8 +266,8 @@ function drawRoute(c) {
 }
 
 function copyToClipboard() {
-    let text = `localhost:8000/trip/${tid}`;
-    navigator.clipboard.writeText(text).then(function () {
+    //let text = `localhost:8000/trip/${tid}`;
+    navigator.clipboard.writeText(window.location).then(function () {
         showHideTooltip(copyTooltip[0]);
     }, function (err) {
         console.error('Async: Could not copy text: ', err);
