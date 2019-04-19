@@ -112,7 +112,8 @@
                          onmouseout="unhover(this);"/>
                     <img alt="pending-label" src="/images/pending-btn.png"
                          id="pending-label"
-                         style="display: none" class="delete-btn"
+                         style="display: none"
+                         class="delete-btn"
                     />
                 </div>
             </div>
