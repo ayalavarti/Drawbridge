@@ -1,5 +1,8 @@
 package edu.brown.cs.drawbridge.database;
 
+import edu.brown.cs.drawbridge.models.Trip;
+import edu.brown.cs.drawbridge.models.User;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,9 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
-import edu.brown.cs.drawbridge.models.Trip;
-import edu.brown.cs.drawbridge.models.User;
 
 /**
  * Class for PostgreSQL database queries.
@@ -35,8 +35,7 @@ public class DatabaseQuery {
       .addIdentification(5, "Mary's Carpool")
       .addLocations(42.038332, -72.616233, 41.827104, -71.399639)
       .addAddressNames("Six Flags New England",
-          "Brown University, Providence, RI")
-      .addTimes(1553487799, 1553494999)
+          "Brown University, Providence, RI").addTimes(1553487799, 1553494999)
       .addDetails(7, 8.40, "(555) 867-5309", "Uber",
           "We'll be meeting at the Ratty around this time, but maybe "
               + "a bit later")
@@ -50,16 +49,16 @@ public class DatabaseQuery {
    * A constructor based on the String name of the database.
    *
    * @param db
-   *          The name of the database.
+   *     The name of the database.
    * @param username
-   *          The username used to access the database.
+   *     The username used to access the database.
    * @param password
-   *          The password used to access the database.
+   *     The password used to access the database.
    *
    * @throws ClassNotFoundException
-   *           Errors involving the forName line.
+   *     Errors involving the forName line.
    * @throws SQLException
-   *           Errors involving the sql update.
+   *     Errors involving the sql update.
    */
   public DatabaseQuery(String db, String username, String password)
       throws ClassNotFoundException, SQLException {
@@ -74,14 +73,14 @@ public class DatabaseQuery {
    * Finds the id of the user hosting the specified trip.
    *
    * @param tripId
-   *          The int id of the trip.
+   *     The int id of the trip.
    *
    * @return The String id of the host.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    * @throws MissingDataException
-   *           Errors involving the database's contents.
+   *     Errors involving the database's contents.
    */
   public String getHostOnTrip(int tripId)
       throws SQLException, MissingDataException {
@@ -103,12 +102,12 @@ public class DatabaseQuery {
    * trip.
    *
    * @param tripId
-   *          The int id of the trip.
+   *     The int id of the trip.
    *
    * @return The List of String ids of the trip's members.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    */
   public List<String> getMembersOnTrip(int tripId) throws SQLException {
     List<String> results = new ArrayList<>();
@@ -128,12 +127,12 @@ public class DatabaseQuery {
    * Finds the ids of all the users requesting to join the specified trip.
    *
    * @param tripId
-   *          The int id of the trip.
+   *     The int id of the trip.
    *
    * @return The List of String ids of all requesting users for that trip.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    */
   public List<String> getRequestsOnTrip(int tripId) throws SQLException {
     List<String> results = new ArrayList<>();
@@ -153,12 +152,12 @@ public class DatabaseQuery {
    * Finds the ids of all the trips that the specified user is hosting.
    *
    * @param userId
-   *          The String id of the user.
+   *     The String id of the user.
    *
    * @return The List of Integer ids of all trips hosted by the user.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    */
   public List<Integer> getHostTripsWithUser(String userId) throws SQLException {
     List<Integer> results = new ArrayList<>();
@@ -179,12 +178,12 @@ public class DatabaseQuery {
    * member of.
    *
    * @param userId
-   *          The String id of the user.
+   *     The String id of the user.
    *
    * @return The List of Integer ids of all trips that the user is a member of.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    */
   public List<Integer> getMemberTripsWithUser(String userId)
       throws SQLException {
@@ -206,13 +205,13 @@ public class DatabaseQuery {
    * join.
    *
    * @param userId
-   *          The String id of the user.
+   *     The String id of the user.
    *
    * @return The List of Integer ids of all trips that the user is requesting to
-   *         join.
+   *     join.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    */
   public List<Integer> getRequestTripsWithUser(String userId)
       throws SQLException {
@@ -233,14 +232,14 @@ public class DatabaseQuery {
    * Finds the information for a specific User by id.
    *
    * @param userId
-   *          The String id of the user.
+   *     The String id of the user.
    *
    * @return The User object with the specified id.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    * @throws MissingDataException
-   *           Errors involving the database's contents.
+   *     Errors involving the database's contents.
    */
   public User getUserById(String userId)
       throws SQLException, MissingDataException {
@@ -250,7 +249,7 @@ public class DatabaseQuery {
       prep.setString(1, userId);
       try (ResultSet rs = prep.executeQuery()) {
         if (rs.next()) {
-          User u = new User(userId, rs.getString(2), rs.getString(3));
+          User u = new User(userId, rs.getString(1), rs.getString(2));
           u.setTrips(getHostTripsWithUser(userId),
               getMemberTripsWithUser(userId), getRequestTripsWithUser(userId));
           return u;
@@ -264,14 +263,14 @@ public class DatabaseQuery {
    * Finds the information for a specific Trip by id.
    *
    * @param tripId
-   *          The int id of the trip.
+   *     The int id of the trip.
    *
    * @return The Trip object with the specified id.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    * @throws MissingDataException
-   *           Errors involving the database's contents.
+   *     Errors involving the database's contents.
    */
   public Trip getTripById(int tripId)
       throws SQLException, MissingDataException {
@@ -301,10 +300,10 @@ public class DatabaseQuery {
    * Adds a new User to the database.
    *
    * @param user
-   *          The User object to add.
+   *     The User object to add.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    */
   public void addUser(User user) throws SQLException {
     try (PreparedStatement prep = conn
@@ -321,24 +320,24 @@ public class DatabaseQuery {
    * Adds a new Trip to the databse.
    *
    * @param trip
-   *          The Trip object to add.
+   *     The Trip object to add.
    * @param hostId
-   *          The String id of the user hosting the trip.
+   *     The String id of the user hosting the trip.
    *
    * @return The database's id of the inserted trip.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    * @throws MissingDataException
-   *           Errors involving the database's contents.
+   *     Errors involving the database's contents.
    */
   public int createTrip(Trip trip, String hostId)
       throws SQLException, MissingDataException {
     int tripId = -1;
     getUserById(hostId);
     // insert into trip
-    try (
-        PreparedStatement prep = conn.prepareStatement(QueryStrings.INSERT_TRIP,
+    try (PreparedStatement prep = conn
+        .prepareStatement(QueryStrings.INSERT_TRIP,
             Statement.RETURN_GENERATED_KEYS)) {
       prep.setString(1, trip.getName());
       prep.setString(2, trip.getStartingAddress());
@@ -380,10 +379,10 @@ public class DatabaseQuery {
    * Deletes the trip with the specified id from the database.
    *
    * @param tripId
-   *          The int id of the trip.
+   *     The int id of the trip.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    */
   public void deleteTripManually(int tripId) throws SQLException {
     try (PreparedStatement prep = conn
@@ -397,7 +396,7 @@ public class DatabaseQuery {
    * Deletes all trips that have already departed from the database.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    */
   public void deleteExpiredTrips() throws SQLException {
     try (PreparedStatement prep = conn
@@ -412,22 +411,22 @@ public class DatabaseQuery {
    * the given departure time within a specific time frame.
    *
    * @param lastLat
-   *          The double ending latitude of the previous trip.
+   *     The double ending latitude of the previous trip.
    * @param lastLon
-   *          The double ending longitude of the previous trip.
+   *     The double ending longitude of the previous trip.
    * @param walkRadius
-   *          The buffer for finding reasonably distanced trips.
+   *     The buffer for finding reasonably distanced trips.
    * @param start
-   *          The int beginning of the time window in epoch time.
+   *     The int beginning of the time window in epoch time.
    * @param end
-   *          The int end of the time window in epoch time.
+   *     The int end of the time window in epoch time.
    *
    * @return A List of all the trips connected to the given trip.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    * @throws MissingDataException
-   *           Errors involving the database's contents.
+   *     Errors involving the database's contents.
    */
   public List<Trip> searchTripsByTimeWindow(double lastLat, double lastLon,
       double walkRadius, double start, double end)
@@ -470,22 +469,22 @@ public class DatabaseQuery {
    * the given departure time within a specific time frame.
    *
    * @param lastLat
-   *          The double ending latitude of the previous trip.
+   *     The double ending latitude of the previous trip.
    * @param lastLon
-   *          The double ending longitude of the previous trip.
+   *     The double ending longitude of the previous trip.
    * @param walkRadius
-   *          The buffer for finding reasonably distanced trips.
+   *     The buffer for finding reasonably distanced trips.
    * @param lastEta
-   *          The int expected arrival time of the last trip.
+   *     The int expected arrival time of the last trip.
    * @param timeBuffer
-   *          The buffer for finding reasonably timed trips.
+   *     The buffer for finding reasonably timed trips.
    *
    * @return A List of all the trips connected to the given trip.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    * @throws MissingDataException
-   *           Errors involving the database's contents.
+   *     Errors involving the database's contents.
    */
   public List<Trip> getConnectedTripsAfterEta(double lastLat, double lastLon,
       double walkRadius, long lastEta, double timeBuffer)
@@ -504,15 +503,14 @@ public class DatabaseQuery {
       double latDifference = prevLat - startLat;
       double lonDifference = prevLon - startLon;
 
-      double latSquares = Math.sin(latDifference / 2)
-          * Math.sin(latDifference / 2);
-      double lonSquares = Math.sin(lonDifference / 2)
-          * Math.sin(lonDifference / 2);
-      double products = latSquares
-          + lonSquares * Math.cos(startLat) * Math.cos(prevLat);
-      double kmDist = 2
-          * Math.atan2(Math.sqrt(products), Math.sqrt(1 - products))
-          * EARTH_RADIUS;
+      double latSquares = Math.sin(latDifference / 2) * Math
+          .sin(latDifference / 2);
+      double lonSquares = Math.sin(lonDifference / 2) * Math
+          .sin(lonDifference / 2);
+      double products = latSquares + lonSquares * Math.cos(startLat) * Math
+          .cos(prevLat);
+      double kmDist = 2 * Math
+          .atan2(Math.sqrt(products), Math.sqrt(1 - products)) * EARTH_RADIUS;
       long timeStart = lastEta + (int) (kmDist / AVG_WALK_SPEED);
       double timeEnd = timeStart + timeBuffer;
 
@@ -527,23 +525,23 @@ public class DatabaseQuery {
    * Finds all of the trips that match the search criteria based on departure.
    *
    * @param lat
-   *          The double latitude of departure.
+   *     The double latitude of departure.
    * @param lon
-   *          The double longitude of departure.
+   *     The double longitude of departure.
    * @param walkRadius
-   *          The buffer for finding reasonably distanced trips.
+   *     The buffer for finding reasonably distanced trips.
    * @param departure
    *     The time of departure.
    * @param timeBuffer
-   *          The buffer for finding reasonably timed trips.
+   *     The buffer for finding reasonably timed trips.
    *
    * @return A List of all the trips leaving around the specified location and
-   *         time.
+   *     time.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    * @throws MissingDataException
-   *           Errors involving the database's contents.
+   *     Errors involving the database's contents.
    */
   public List<Trip> getConnectedTripsWithinTimeRadius(double lat, double lon,
       double walkRadius, long departure, double timeBuffer)
@@ -557,12 +555,12 @@ public class DatabaseQuery {
    * Inserts a request relation into the database.
    *
    * @param tripId
-   *          The int id of the trip being requested.
+   *     The int id of the trip being requested.
    * @param userId
-   *          The String id of the user requesting to join the trip.
+   *     The String id of the user requesting to join the trip.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    */
   public void request(int tripId, String userId) throws SQLException {
     try (PreparedStatement prep = conn
@@ -579,12 +577,12 @@ public class DatabaseQuery {
    * corresponding request relation.
    *
    * @param tripId
-   *          The int id of the trip being requested.
+   *     The int id of the trip being requested.
    * @param userId
-   *          The String id of the user requesting to join the trip.
+   *     The String id of the user requesting to join the trip.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    */
   public void approve(int tripId, String userId) throws SQLException {
     // insert into members
@@ -611,12 +609,12 @@ public class DatabaseQuery {
    * Rejects a request by removing its relation from the database.
    *
    * @param tripId
-   *          The int id of the trip being requested.
+   *     The int id of the trip being requested.
    * @param userId
-   *          The String id of the user requesting to join the trip.
+   *     The String id of the user requesting to join the trip.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    */
   public void reject(int tripId, String userId) throws SQLException {
     try (PreparedStatement prep = conn
@@ -631,12 +629,12 @@ public class DatabaseQuery {
    * Kicks a member by removing its relation from the database.
    *
    * @param tripId
-   *          The int id of the trip.
+   *     The int id of the trip.
    * @param userId
-   *          The String id of the user being kicked from the trip.
+   *     The String id of the user being kicked from the trip.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    */
   public void kick(int tripId, String userId) throws SQLException {
     try (PreparedStatement prep = conn
@@ -651,11 +649,11 @@ public class DatabaseQuery {
    * Clears all data from the database.
    *
    * @throws SQLException
-   *           Errors involving SQL queries.
+   *     Errors involving SQL queries.
    */
   public void clearData() throws SQLException {
-    List<String> deleteQueries = new ArrayList<>(
-        Arrays.asList("DELETE FROM requests;", "DELETE FROM members;",
+    List<String> deleteQueries = new ArrayList<>(Arrays
+        .asList("DELETE FROM requests;", "DELETE FROM members;",
             "DELETE FROM hosts;", "DELETE FROM trips;", "DELETE FROM users;"));
     for (String query : deleteQueries) {
       try (PreparedStatement prep = conn.prepareStatement(query)) {
