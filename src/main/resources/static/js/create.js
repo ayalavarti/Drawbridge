@@ -201,8 +201,13 @@ function handleSubmit() {
             };
             console.log(postParameters);
 
-            $.post("/new", postParameters, responseJSON => {
-                console.log("Response");
+            $.post("/new", postParameters, responseData => {
+                // const responseData = JSON.parse(responseJSON);
+                if (responseData.success && responseData.redirect) {
+                    window.location.replace(responseData.redirect);
+                } else {
+                    window.location.replace("/error");
+                }
             }, "json");
         }
     }

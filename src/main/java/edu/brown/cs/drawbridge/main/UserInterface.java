@@ -415,7 +415,7 @@ public final class UserInterface {
    */
   private static class CreatePostHandler implements Route {
     @Override
-    public ModelAndView handle(Request request, Response response)
+    public Object handle(Request request, Response response)
         throws SQLException, MissingDataException {
       QueryParamsMap qm = request.queryMap();
 
@@ -450,8 +450,10 @@ public final class UserInterface {
 
       int tid = carpools.createTrip(newTrip, hostID);
 
-      response.redirect("/trip/" + tid, 303);
-      return null;
+      JsonObject responseData = new JsonObject();
+      responseData.addProperty("success", true);
+      responseData.addProperty("redirect", "/trip/" + tid);
+      return GSON.toJson(responseData);
     }
   }
 
