@@ -46,7 +46,7 @@ i {
 #container {
     display: grid;
     grid-gap: 20px;
-    max-width: 100%;
+    width: 100%;
     margin-bottom: 50px;
 }
 
@@ -112,14 +112,21 @@ i {
 .share-tooltip {
     margin-right: 20px;
     cursor: pointer;
-    background: #fff;
     width: 40px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 15px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.096), 0 2px 4px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 20px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.096), 0 2px 4px 0 rgba(0, 0, 0, 0.19);
+}
+
+.share-tooltip.twitter {
+    background: #38A1F3;
+}
+
+.share-tooltip.copy {
+    background: #43c4e2;
 }
 
 .share-tooltip > i {
@@ -177,6 +184,7 @@ i {
     color: #555555;
 }
 
+.pending-btn,
 .leave-btn,
 .delete-btn,
 .join-btn {
@@ -260,5 +268,11 @@ i {
     #title {
         margin-top: 80px;
         text-align: center;
+    }
+}
+
+@media screen and (max-width: 1030px) and (min-width: 550px) {
+    #container {
+        max-width: 500px;
     }
 }

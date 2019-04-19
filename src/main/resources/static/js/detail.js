@@ -16,7 +16,11 @@ $(document).ready(function () {
     initMapbox();
     initMap();
     initTooltips();
-    $("#join-btn").show();
+    if (navigator.cookieEnabled && getCookie("loggedIn") === "true") {
+        $("#join-btn").hide();
+    } else {
+        $("#join-btn").show();
+    }
     console.log("DOM ready.");
 });
 
@@ -37,17 +41,19 @@ function onUserSignedIn() {
         $("#join-btn").hide();
         $("#leave-btn").hide();
         $("#pending").show();
+        $("#pending-label").hide();
         $("#action-btn").show();
     } else if (containsUser(members, uid)) {
         $("#delete-btn").hide();
         $("#join-btn").hide();
         $("#leave-btn").show();
         $("#pending").hide();
+        $("#pending-label").hide();
         $("#action-btn").hide();
     } else if (containsUser(pending, uid)) {
         $("#delete-btn").hide();
         $("#join-btn").hide();
-        $("#leave-btn").hide();
+        $("#leave-btn").show();
         $("#pending").hide();
         $("#action-btn").hide();
         $("#pending-label").show();
@@ -110,7 +116,7 @@ function initTooltips() {
         animation: "scale",
         arrow: true,
         arrowType: "round",
-        theme: "drawbridge-alt",
+        theme: "drawbridge-alt2",
         interactive: false,
         trigger: "manual",
         hideOnClick: false,
@@ -151,7 +157,7 @@ function setRoute() {
  * @param {*} tid
  */
 function joinClick(tid) {
-    if (userProfile == undefined) {
+    if (userProfile === undefined) {
         $("html, body").animate({scrollTop: 0}, "slow");
         signInTooltip[0].setContent(
             "Sign in with your Google Account to join this trip.");
@@ -229,8 +235,16 @@ function denyClick(tid, pendUID) {
  * @param {*} url
  */
 function sendRequest(data, url) {
-    $.post(url, data, responseJSON => {
-        console.log("Response");
+    $.post(url, data, response => {
+        if (response.success) {
+            if (response.redirect) {
+                window.location.replace(response.redirect);
+            } else {
+                window.location.reload(true);
+            }
+        } else {
+            window.location.replace("/error");
+        }
     }, "json");
 }
 
@@ -252,8 +266,8 @@ function drawRoute(c) {
 }
 
 function copyToClipboard() {
-    let text = `localhost:8000/trip/${tid}`;
-    navigator.clipboard.writeText(text).then(function () {
+    //let text = `localhost:8000/trip/${tid}`;
+    navigator.clipboard.writeText(window.location).then(function () {
         showHideTooltip(copyTooltip[0]);
     }, function (err) {
         console.error('Async: Could not copy text: ', err);

@@ -20,28 +20,63 @@ function initMapbox() {
  * Gets the current location if geolocation is enabled.
  */
 function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(initMap, defaultMap);
-    } else {
-        defaultMap("Browser doesn't support geolocation");
-    }
-}
+    let fallback = function (xhr, textStatus, error) {
+        geolocateLoc();
+    };
+    let maxTime = 1500;
 
-function defaultMap(error) {
-    $.get("https://jsonip.com/", function (ipData) {
-        if (ipData.status === "fail") {
-            initMap(undefined);
-        } else {
-            $.get("http://ip-api.com/json/" + ipData.ip, function (locData) {
-                let position = {
-                    coords: {
-                        latitude: locData.lat, longitude: locData.lon
+    $.ajax({
+        type: "GET",
+        url: "https://jsonip.com/",
+        timeout: maxTime,
+        error: fallback,
+        dataType: "json",
+        success: function (ipData, textStatus, xhr) {
+            if (ipData.status === "fail") {
+                geolocateLoc();
+            } else {
+                $.ajax({
+                    type: "GET",
+                    url: "http://ip-api.com/json/" + ipData.ip,
+                    timeout: maxTime,
+                    error: fallback,
+                    dataType: "json",
+                    success: function (locData, textStatus, xhr) {
+                        if (locData.status === "fail") {
+                            geolocateLoc();
+                        } else {
+                            let position = {
+                                coords: {
+                                    latitude: locData.lat,
+                                    longitude: locData.lon
+                                }
+                            };
+                            initMap(position);
+                            console.log("IP Lookup");
+                        }
                     }
-                };
-                initMap(position);
-            });
+                });
+            }
         }
     });
+
+
+}
+
+function geolocateLoc() {
+    let defaultMap = () => initMap(
+        {coords: {latitude: curLat, longitude: curLong}});
+    if (navigator.geolocation) {
+        console.log("Geolocating");
+        navigator.geolocation.getCurrentPosition(initMap, defaultMap,
+            {timeout: 4000});
+    } else {
+        console.log("Defaulting");
+        const defaultPosition = {
+            coords: {latitude: curLat, longitude: curLong}
+        };
+        initMap(defaultPosition);
+    }
 }
 
 /**
@@ -89,7 +124,6 @@ function handleInput(id, index) {
                                  * */
                                 let feature = response.body.features[0];
                                 $(`#${id}`).val(feature.place_name);
-                                console.log(feature);
                                 coordinates[index] = feature.center;
                                 // Add new marker on the map with the returned
                                 // feature data

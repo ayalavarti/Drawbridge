@@ -284,7 +284,7 @@ public class DatabaseQuery {
               .addLocations(rs.getDouble(3), rs.getDouble(4), rs.getDouble(6),
                   rs.getDouble(7))
               .addAddressNames(rs.getString(2), rs.getString(5))
-              .addTimes(rs.getInt(8), rs.getInt(9))
+              .addTimes(rs.getLong(8), rs.getLong(9))
               .addDetails(rs.getInt(10), rs.getDouble(11), rs.getString(12),
                   rs.getString(13), rs.getString(14))
               .buildWithUsers(getHostOnTrip(tripId), getMembersOnTrip(tripId),
@@ -447,7 +447,7 @@ public class DatabaseQuery {
               .addLocations(rs.getDouble(4), rs.getDouble(5), rs.getDouble(7),
                   rs.getDouble(8))
               .addAddressNames(rs.getString(3), rs.getString(6))
-              .addTimes(rs.getInt(9), rs.getInt(10))
+              .addTimes(rs.getLong(9), rs.getLong(10))
               .addDetails(rs.getInt(11), rs.getDouble(12), rs.getString(13),
                   rs.getString(14), rs.getString(15))
               .buildWithUsers(getHostOnTrip(rs.getInt(1)),
@@ -511,7 +511,7 @@ public class DatabaseQuery {
                   .addLocations(rs.getDouble(4), rs.getDouble(5), rs.getDouble(7),
                           rs.getDouble(8))
                   .addAddressNames(rs.getString(3), rs.getString(6))
-                  .addTimes(rs.getInt(9), rs.getInt(10))
+                  .addTimes(rs.getLong(9), rs.getLong(10))
                   .addDetails(rs.getInt(11), rs.getDouble(12), rs.getString(13),
                           rs.getString(14), rs.getString(15))
                   .buildWithUsers(getHostOnTrip(rs.getInt(1)),

@@ -37,6 +37,12 @@
                                  src="/images/twitter-icon.png"/>
                         </div>
                     </a>
+                    <div class="share-tooltip" id="clipboardTooltip"
+                         data-tippy-content="Trip URL copied to clipboard!"
+                         onclick="copyToClipboard()">
+                        <img style="height: 20px; width: auto"
+                             src="/images/copy-icon.png"/>
+                    </div>
                     <a href="mailto:?Subject=Join%20My%20Carpool!"
                        target="_top">
                         <div class="share-tooltip">
@@ -44,12 +50,6 @@
                                  src="/images/mail-icon.png"/>
                         </div>
                     </a>
-                    <div class="share-tooltip" id="clipboardTooltip"
-                         data-tippy-content="Trip URL copied to clipboard!"
-                         onclick="copyToClipboard()">
-                        <img style="height: 15px; width: auto"
-                             src="/images/copy-icon.png"/>
-                    </div>
 
                     <script async src="https://platform.twitter.com/widgets.js"
                             charset="utf-8"></script>
@@ -112,7 +112,8 @@
                          onmouseout="unhover(this);"/>
                     <img alt="pending-label" src="/images/pending-btn.png"
                          id="pending-label"
-                         style="display: none" class="delete-btn"
+                         style="display: none;"
+                         class="pending-btn"
                     />
                 </div>
             </div>

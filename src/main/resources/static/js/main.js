@@ -7,6 +7,9 @@ let userProfile = undefined;
 let signInTooltip;
 let infoTooltips;
 
+let newUserModal;
+let modalOpen;
+
 /**
  * When the DOM loads, check for the logged in cookie.
  */
@@ -21,6 +24,8 @@ $(document).ready(function () {
     if (navigator.cookieEnabled && getCookie("loggedIn") === "true") {
         $("#sign-in").css({visibility: "visible"});
     }
+    newUserModal = $("#newUserModal");
+    modalOpen = false;
 });
 
 /**
@@ -112,10 +117,25 @@ function onSignIn(googleUser) {
     $("#profile-info").css({visibility: "visible"});
     $("#sign-in").css({visibility: "hidden "});
 
-    /**
-     * TODO add post request to server to create new user account if one
-     * does not already exist in the database
-     */
+    const loginData = {
+        userID: userProfile.getId(),
+        name: userProfile.getName(),
+        email: userProfile.getEmail()
+    };
+
+    $.post("/login", loginData, function (response) {
+        const responseData = JSON.parse(response);
+        if (responseData.success) {
+            const isNewUser = responseData.isNewUser;
+            if (isNewUser) {
+                newUserModal.show();
+                modalOpen = true;
+            }
+        } else {
+            window.location.replace("/error");
+            console.log("ERROR logging in");
+        }
+    });
 }
 
 /**
@@ -161,3 +181,23 @@ function hover(e) {
 function unhover(e) {
     e.setAttribute('src', `../images/${e.className}.png`);
 }
+
+/**
+ * Close the modal on button click.
+ */
+function closeModal() {
+    if (modalOpen) {
+        newUserModal.hide();
+        modalOpen = false;
+    }
+}
+
+/**
+ * Listen for keyup escape to close modal if it is open.
+ */
+$(document).keyup(function (e) {
+    if (e.key === "Escape" && modalOpen) {
+        newUserModal.hide();
+        modalOpen = false;
+    }
+});

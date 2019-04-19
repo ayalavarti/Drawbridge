@@ -164,7 +164,9 @@ function handleSubmit() {
      * completely.
      */
     if (dateInput === "" || timeInput === "" || typeInput === "" || nameInput
-        === "" || sizeInput === "" || priceInput === "" || phoneInput === "") {
+        === "" || sizeInput === "" || priceInput === "" || phoneInput === "" ||
+        !coordinates[0] || !coordinates[1]
+        || coordinates[0].length !== 2 || coordinates[1].length !== 2) {
         showHideTooltip(formValidationTooltip[0]);
     } else {
         if (sizeInput < 1) {
@@ -188,7 +190,7 @@ function handleSubmit() {
                 startLon: coordinates[0][0],
                 endLat: coordinates[1][1],
                 endLon: coordinates[1][0],
-                date: date.getTime(),
+                date: date.getTime() / 1000,
                 size: sizeInput,
                 price: priceInput,
                 method: typeInput,
@@ -196,12 +198,16 @@ function handleSubmit() {
                 name: nameInput,
                 comments: commentsInput,
                 userID: userProfile.getId(),
-                eta: route[1]
+                eta: route[1] + date.getTime() / 1000
             };
-            console.log(postParameters);
 
-            $.post("/new", postParameters, responseJSON => {
-                console.log("Response");
+            $.post("/new", postParameters, responseData => {
+                // const responseData = JSON.parse(responseJSON);
+                if (responseData.success && responseData.redirect) {
+                    window.location.replace(responseData.redirect);
+                } else {
+                    window.location.replace("/error");
+                }
             }, "json");
         }
     }

@@ -57,6 +57,7 @@
     </div>
     <script type="text/javascript">
         let data = "${data?js_string}"
+        let payload = "${query?js_string}"
     </script>
     <script src="/js/util.js"></script>
     <script src="/js/results.js"></script>
