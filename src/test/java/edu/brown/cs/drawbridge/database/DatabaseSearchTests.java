@@ -31,8 +31,8 @@ public class DatabaseSearchTests {
 
   @BeforeClass public static void oneTimeSetUp()
       throws SQLException, ClassNotFoundException {
-    String username = System.getenv("DB_USER");
-    String password = System.getenv("DB_PASS");
+    String username = "dev";
+    String password = "dev";
     /*
      * Run the following queries in pgadmin:
      * CREATE USER <username> WITH PASSWORD '<password>'
@@ -42,7 +42,7 @@ public class DatabaseSearchTests {
     searchTester = new DatabaseQuery("//127.0.0.1:5432/searchTester", username,
         password);
     final User dummyHost = new User("1", "one", "one@mail.com");
-    searchTester.addUser(dummyHost);
+    //searchTester.addUser(dummyHost);
   }
 
   public static boolean hasAllTrips(List<String> nameList, List<Trip> trips) {

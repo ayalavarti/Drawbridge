@@ -10,7 +10,7 @@ public final class QueryStrings {
   protected static final String INSERT_USER = "INSERT "
       + "INTO users VALUES (?, ?, ?);";
   protected static final String INSERT_TRIP = "INSERT INTO "
-      + "trips(name, start_name,"
+      + "trips(name, start_name, "
       + "start_latitude, start_longitude, end_name, end_latitude, "
       + "end_longitude, "
       + "departure, eta, max_people, total_cost, phone_number, "
@@ -58,13 +58,18 @@ public final class QueryStrings {
   protected static final String FIND_GROUP_TRIP =
       "SELECT trip_id FROM (SELECT * FROM members UNION SELECT * "
           + "FROM requests) WHERE group_id = ?;";
-  protected static final String FIND_CONNECTED_TRIPS =
+  protected static final String FIND_CONNECTED_TRIPS_BY_WINDOW =
       "SELECT * FROM trips WHERE "
           + "(2 * 6371 * asin(sqrt(sin(radians(? - start_latitude) / 2)^2 + "
           + "cos(radians(start_latitude)) * cos(radians(?)) * "
           + "sin(radians(? - start_longitude) / 2)^2)) <= ?) "
           + "AND (departure BETWEEN ? AND ?);";
-  protected static final String[] RESET_DATABASE =
-          {"TRUNCATE trips RESTART IDENTITY CASCADE;",
-                  "TRUNCATE users CASCADE;"};
+  protected static final String FIND_CONNECTED_TRIPS_AFTER_ETA =
+          "SELECT * FROM trips WHERE "
+                  + "(haversine(start_latitude, start_longitude, ?, ?) < ?) "
+                  + " AND (departure BETWEEN ((haversine(start_latitude, start_longitude, ?, ?) / 0.014) + ?) "
+                  + " AND (haversine(start_latitude, start_longitude, ?, ?) / 0.014) + ?);";
+  //lat, lon, distRadius, lat, lon, lastEta, lat, lon, lastEta + buffer
+  protected static final String RESET_DATABASE =
+          "TRUNCATE trips, users RESTART IDENTITY CASCADE;";
 }

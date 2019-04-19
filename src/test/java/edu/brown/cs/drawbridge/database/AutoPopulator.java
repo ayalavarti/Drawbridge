@@ -188,9 +188,4 @@ public class AutoPopulator {
     long max = min + secondsPerTenDays;
     return (long) Math.floor(Math.random() * (max - min)) + min;
   }
-
-  private void truncateAndReset() {
-    String[] queries = {"TRUNCATE trips RESTART IDENTITY CASCADE;",
-            "TRUNCATE users CASCADE;"};
-  }
 }

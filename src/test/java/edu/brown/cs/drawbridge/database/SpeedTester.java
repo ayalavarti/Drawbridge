@@ -30,7 +30,7 @@ public class SpeedTester {
   }
 
   private static Long lastTime;
-  private static boolean midSize = true;
+  private static boolean midSize = false;
   private static boolean bigSize = false;
 
   private long timeSince() {
@@ -57,7 +57,10 @@ public class SpeedTester {
       timeSince();
       assertEquals(u3.getName(), "hiawfdbq");
     } else if (bigSize) {
-
+      timeSince();
+      User u1 = test.getUserById("383");
+      assertTrue(timeSince() < 100);
+      assertEquals(u1.getName(), "pxzqq");
     }
   }
 
@@ -70,7 +73,11 @@ public class SpeedTester {
       assertEquals(t.getName(), "zlgflxily");
       assertEquals(t.getMemberIds(), Collections.singletonList("50"));
     } else if (bigSize) {
-
+      timeSince();
+      Trip t = test.getTripById(50);
+      assertTrue(timeSince() < 1000);
+      assertEquals(t.getName(), "wvqwym");
+      assertEquals(t.getMemberIds(), Collections.singletonList("50"));
     }
   }
 
@@ -96,7 +103,84 @@ public class SpeedTester {
       System.out.println(t3.size());
       System.out.println(t4.size());
     } else if (bigSize) {
+      timeSince();
+      List<Trip> t1 = test.getConnectedTripsWithinTimeRadius(
+              48.582, -93.682, 25, 1555887384, 3600);
+      assertTrue(timeSince() < 5000);
+      assertFalse(t1.isEmpty());
+      List<Trip> t2 = test.getConnectedTripsAfterEta(
+              72.035, -53.227, 25, 1556010000, 1000000);
+      assertTrue(timeSince() < 5000);
+      assertEquals(t2.size(), 2);
+      //walk distance = halfway around the equator
+      List<Trip> t3 = test.getConnectedTripsWithinTimeRadius(
+              0, 0, Math.PI * 6371, 1555870749, 10000);
+      assertTrue(timeSince() < 60000);
+      List<Trip> t4 = test.getConnectedTripsAfterEta(
+              72.035, -53.227, Math.PI * 6371, 1556010000, 1000000);
+      assertFalse(t4.isEmpty());
+      assertTrue(timeSince() < 60000);
+      System.out.println(t3.size());
+      System.out.println(t4.size());
+    }
+  }
 
+  @Test
+  public void testModifications() throws MissingDataException, SQLException {
+    if (midSize) {
+      timeSince();
+      test.addUser(new User("1001", "random", "not@real.com"));
+      assertTrue(timeSince() < 100);
+
+      int tx = test.createTrip(Trip.TripBuilder.newTripBuilder()
+              .addIdentification(-1, "random")
+              .addLocations(0,0,0,0)
+              .addAddressNames("nowhere", "nowhere")
+              .addTimes(0, 0)
+              .addDetails(5, 5.00, "","","")
+              .build(), "1");
+      assertTrue(timeSince() < 100);
+
+      test.request(tx, "1001");
+      assertTrue(timeSince() < 100);
+
+      test.approve(tx, "1001");
+      assertTrue(timeSince() < 100);
+
+      test.kick(tx, "1001");
+      assertTrue(timeSince() < 100);
+
+      test.deleteExpiredTrips();
+      assertTrue(timeSince() < 5000);
+
+      test.deleteUser("1001");
+    } else if (bigSize) {
+      timeSince();
+      test.addUser(new User("1001", "random", "not@real.com"));
+      assertTrue(timeSince() < 100);
+
+      int tx = test.createTrip(Trip.TripBuilder.newTripBuilder()
+              .addIdentification(-1, "random")
+              .addLocations(0,0,0,0)
+              .addAddressNames("nowhere", "nowhere")
+              .addTimes(0, 0)
+              .addDetails(5, 5.00, "","","")
+              .build(), "1");
+      assertTrue(timeSince() < 100);
+
+      test.request(tx, "1001");
+      assertTrue(timeSince() < 100);
+
+      test.approve(tx, "1001");
+      assertTrue(timeSince() < 100);
+
+      test.kick(tx, "1001");
+      assertTrue(timeSince() < 100);
+
+      test.deleteExpiredTrips();
+      assertTrue(timeSince() < 30000);
+
+      test.deleteUser("1001");
     }
   }
 

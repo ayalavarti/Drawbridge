@@ -21,15 +21,15 @@ public class DatabaseQueryTest {
   private static final User DUMMY_U1 = new User("1", "one", "one@mail.com");
   private static final User DUMMY_U2 = new User("2", "two", "two@mail.com");
   private static final Trip DUMMY_T1 = Trip.TripBuilder.newTripBuilder()
-      .addIdentification(1, "First trip").addLocations(3, 3, 5, 5)
+      .addIdentification(-1, "First trip").addLocations(3, 3, 5, 5)
       .addAddressNames("(3, 3)", "(5, 5)").addTimes(1000, 1500)
       .addDetails(5, 20.00, "555-555-5555", "car", "").build();
   private static final Trip DUMMY_T2 = Trip.TripBuilder.newTripBuilder()
-      .addIdentification(2, "Second trip").addLocations(0, 0, 5, 4)
+      .addIdentification(-1, "Second trip").addLocations(0, 0, 5, 4)
       .addAddressNames("(0, 0)", "(5, 4)").addTimes(900, 2000)
       .addDetails(4, 15.50, "444-444-4444", "car", "").build();
   private static final Trip DUMMY_T3 = Trip.TripBuilder.newTripBuilder()
-      .addIdentification(3, "Third trip").addLocations(2, 3, 9, 9)
+      .addIdentification(-1, "Third trip").addLocations(2, 3, 9, 9)
       .addAddressNames("(2, 3)", "(9, 9)").addTimes(500, 1500)
       .addDetails(3, 16.00, "333-333-3333", "car", "").build();
   private static DatabaseQuery test;
@@ -66,8 +66,6 @@ public class DatabaseQueryTest {
   }
 
   @Test public void testAddUser() throws SQLException, MissingDataException {
-    test.addUser(DUMMY_U1);
-    test.addUser(DUMMY_U2);
     assertNotNull(test.getUserById("1"));
     assertNotNull(test.getUserById("2"));
   }
@@ -117,6 +115,21 @@ public class DatabaseQueryTest {
     } catch (MissingDataException e) {
       assert true;
     }
+    int t4 = test.createTrip(Trip.TripBuilder.newTripBuilder()
+            .addIdentification(-1, "Late")
+            .addLocations(10, 10, 15, 15)
+            .addAddressNames("(10, 10)", "(15, 15)")
+            .addTimes(1556470997, 1556479997)
+            .addDetails(5, 30.00, "108-851-fake", "uber", "")
+            .build(), DUMMY_U1.getId());
+    test.deleteExpiredTrips();
+    assertNotNull(test.getTripById(t4));
+    test.deleteTripManually(t4);
+    try {
+      assertNull(test.getTripById(t4));
+    } catch (MissingDataException e) {
+      assert true;
+    }
     t1 = test.createTrip(DUMMY_T1, "1");
     t2 = test.createTrip(DUMMY_T2, "2");
     t3 = test.createTrip(DUMMY_T3, "2");
@@ -155,7 +168,7 @@ public class DatabaseQueryTest {
     //before eta within buffer
     assertTrue(test.getConnectedTripsAfterEta(3, 3, 0, 1021, 25).isEmpty());
     //after eta within buffer
-    assertEquals(test.getConnectedTripsAfterEta(3, 3, 0, 999, 25),
+    assertEquals(test.getConnectedTripsAfterEta(3, 3, 0, 975, 50),
         new ArrayList<>(Collections.singletonList(test.getTripById(t1))));
     //after eta outside buffer
     assertTrue(test.getConnectedTripsAfterEta(3, 3, 0, 1026, 25).isEmpty());
@@ -215,7 +228,6 @@ public class DatabaseQueryTest {
     assertTrue(test.getMembersOnTrip(t1).isEmpty());
   }
 
-<<<<<<< HEAD
   @Test
   public void testTeamDataExists()
           throws SQLException, MissingDataException {
@@ -224,16 +236,6 @@ public class DatabaseQueryTest {
             "105528985214845949817", //Jeff
             "118428670975676923422", //Mark
             "106748572580441940868"}; //Sam
-=======
-  @Test public void testTeamDataExists()
-      throws SQLException, MissingDataException {
-    String[] teamIds = { "0", //'Jenny'
-        "108134993267513125002", // Arvind
-        "105528985214845949817", //Jeff
-        "118428670975676923422", //Mark
-        "106748572580441940868"
-    }; //Sam
->>>>>>> master
     teamData.getUserById(teamIds[0]);
     teamData.getUserById(teamIds[1]);
     teamData.getUserById(teamIds[2]);
