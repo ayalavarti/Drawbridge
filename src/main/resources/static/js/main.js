@@ -7,6 +7,9 @@ let userProfile = undefined;
 let signInTooltip;
 let infoTooltips;
 
+let newUserModal;
+let modalOpen;
+
 /**
  * When the DOM loads, check for the logged in cookie.
  */
@@ -19,8 +22,10 @@ $(document).ready(function () {
      * the sign in button
      */
     if (navigator.cookieEnabled && getCookie("loggedIn") === "true") {
-        $("#sign-in").css({visibility: "visible"});
+        $("#sign-in").css({visibility: "hidden"});
     }
+    newUserModal = $("#newUserModal");
+    modalOpen = false;
 });
 
 /**
@@ -112,17 +117,20 @@ function onSignIn(googleUser) {
     $("#profile-info").css({visibility: "visible"});
     $("#sign-in").css({visibility: "hidden "});
 
-
     const loginData = {
         userID: userProfile.getId(),
         name: userProfile.getName(),
         email: userProfile.getEmail()
     };
+  
     $.post("/login", loginData, function(response) {
         const responseData = JSON.parse(response);
         if (responseData.success) {
             const isNewUser = responseData.isNewUser;
-            // TODO: fill in anything new here that you need
+            if (isNewUser && true) {
+                newUserModal.show();
+                modalOpen = true;
+            }
         } else {
             window.location.replace("/error");
             console.log("ERROR logging in");
@@ -173,3 +181,23 @@ function hover(e) {
 function unhover(e) {
     e.setAttribute('src', `../images/${e.className}.png`);
 }
+
+/**
+ * Close the modal on button click.
+ */
+function closeModal() {
+    if (modalOpen) {
+        newUserModal.hide();
+        modalOpen = false;
+    }
+}
+
+/**
+ * Listen for keyup escape to close modal if it is open.
+ */
+$(document).keyup(function (e) {
+    if (e.key === "Escape" && modalOpen) {
+        newUserModal.hide();
+        modalOpen = false;
+    }
+});

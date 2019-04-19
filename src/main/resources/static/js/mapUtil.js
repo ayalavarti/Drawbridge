@@ -133,7 +133,6 @@ function handleInput(id, index) {
                                  * */
                                 let feature = response.body.features[0];
                                 $(`#${id}`).val(feature.place_name);
-                                console.log(feature);
                                 coordinates[index] = feature.center;
                                 // Add new marker on the map with the returned
                                 // feature data

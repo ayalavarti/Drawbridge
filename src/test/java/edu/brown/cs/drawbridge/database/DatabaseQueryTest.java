@@ -66,8 +66,6 @@ public class DatabaseQueryTest {
   }
 
   @Test public void testAddUser() throws SQLException, MissingDataException {
-    test.addUser(DUMMY_U1);
-    test.addUser(DUMMY_U2);
     assertNotNull(test.getUserById("1"));
     assertNotNull(test.getUserById("2"));
   }
@@ -215,8 +213,7 @@ public class DatabaseQueryTest {
     assertTrue(test.getMembersOnTrip(t1).isEmpty());
   }
 
-  @Test public void testTeamDataExists()
-      throws SQLException, MissingDataException {
+  public void testTeamDataExists() throws SQLException, MissingDataException {
     String[] teamIds = { "0", //'Jenny'
         "108134993267513125002", // Arvind
         "105528985214845949817", //Jeff
