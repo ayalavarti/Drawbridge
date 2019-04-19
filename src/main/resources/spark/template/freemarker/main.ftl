@@ -6,6 +6,15 @@
     <meta name="viewport"
           content="width=device-width,initial-scale=1,maximum-scale=1">
 
+    <meta property="og:url"
+          content=""/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="Drawbridge"/>
+    <meta property="og:description" content="Connecting the world. One trip a
+            time."/>
+    <meta property="og:image"
+          content=""/>
+
     <#--  Google Sign In  -->
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id"
@@ -68,15 +77,27 @@
     </div>
 </div>
 
-<div style="visibility: hidden; top: 2%;" id="home-btn" class="home-btn"
-     onclick="toHome();">
-    <img style="height: 15px; width: auto" src="/images/home-icon.png"/>
-</div>
+<a href="/">
+    <div style="display: none; top: 2%;" id="home-btn" class="home-btn">
+        <img style="height: 15px; width: auto" src="/images/home-icon.png"/>
+    </div>
+</a>
 
-<div style="visibility: hidden; bottom: 2%; position: fixed;" id="info-btn"
-     class="info-btn" onclick="toInfo();">
-    <img style="height: 15px; width: auto" src="/images/info-icon.png"/>
-</div>
+<a href="/help">
+    <div style="display: none; bottom: 2%; position: fixed;" id="info-btn"
+         data-tippy-content="Drawbridge Info"
+         class="fixed-controls info-btn">
+        <img style="height: 15px; width: auto" src="/images/info-icon.png"/>
+    </div>
+</a>
+
+<a href="/new">
+    <div style="display: none; bottom: 2%; right: 90px; position: fixed;"
+         id="new-btn" data-tippy-content="Host a Carpool"
+         class="fixed-controls new-btn">
+        <img style="height: 15px; width: auto" src="/images/host-icon.png"/>
+    </div>
+</a>
 
 <div class="body">
     ${content}

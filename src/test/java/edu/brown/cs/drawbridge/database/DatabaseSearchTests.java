@@ -43,7 +43,7 @@ public class DatabaseSearchTests {
     searchTester = new DatabaseQuery("//127.0.0.1:5432/searchTester", username,
         password);
     final User dummyHost = new User("1", "one", "one@mail.com");
-    searchTester.addUser(dummyHost);
+    //searchTester.addUser(dummyHost);
   }
 
   public static boolean hasAllTrips(List<String> nameList, List<Trip> trips) {
@@ -127,7 +127,7 @@ public class DatabaseSearchTests {
           "1");
       searchTester.createTrip(
           Trip.TripBuilder.newTripBuilder().addIdentification(-1, "2E")
-              .addLocations(0.0361, 0.0361, 0.71, 0.75).addAddressNames("", "")
+              .addLocations(0.361, 0.361, 0.71, 0.75).addAddressNames("", "")
               .addTimes(1500, 3000).addDetails(2, 2.00, "", "", "").build(),
           "1");
       searchTester.createTrip(

@@ -68,7 +68,7 @@ public final class Main {
     Spark.exception(Exception.class, new ExceptionPrinter());
 
     // If we can't connect to the db, give up and stop the server
-    if (UserInterface.setDB("carpools")) {
+    if (UserInterface.setDB(System.getenv("DATABASE_URL"))) {
       UserInterface.setEndpoints();
     }
   }

@@ -1,8 +1,21 @@
-let addressNames = [];
-let coordinates = [];
+/**
+ * Set up global variables for use in all map actions.
+ */
+let map;
 
+let found = [];
+let coordinates = [];
+let markers = [];
+
+let addressNames = [];
+let route = [];
+
+/**
+ * Set up tooltips for map page.
+ */
 let formValidationTooltip;
 let formTooltips = [];
+let mapControlTooltips = [];
 
 /**
  * When the DOM loads, set the tooltip content and check if cookies are enabled
@@ -12,14 +25,16 @@ $(document).ready(function () {
     signInTooltip[0].setContent(
         "Sign in with your Google Account to host a trip.");
     initMapbox();
+    getLocation();
     showHomeInfo();
     initDateTime();
     initTooltips();
+    disableTrip();
     console.log("DOM ready.");
 });
 
 /**
- * Overriden function for user sign in action.
+ * Overridden function for user sign in action.
  */
 function onUserSignedIn() {
     console.log("User signed in.");
@@ -27,11 +42,45 @@ function onUserSignedIn() {
 }
 
 /**
- * Overriden function for user sign out action.
+ * Overridden function for user sign out action.
  */
 function onUserSignedOut() {
     console.log("User signed out.");
     signInTooltip[0].show();
+}
+
+/**
+ * Initializes the Map.
+ */
+function initMap(position) {
+    /**
+     * If the position is valid from the navigator, set the current latitude
+     * and longitude to the positions latitude and longitude.
+     */
+    if (position !== undefined) {
+        curLat = position.coords.latitude;
+        curLong = position.coords.longitude;
+    }
+
+    // Create map object with custom settings and add NavigationControl
+    map = new mapboxgl.Map({
+        container: "map",
+        keyboard: false,
+        maxZoom: 18,
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: [curLong, curLat],
+        zoom: 12,
+    });
+    map.addControl(new mapboxgl.NavigationControl());
+
+    /**
+     * Hide loading gif and show all initially hidden objects
+     */
+    $("#loading").hide();
+    $("#trip-loc-input").fadeIn(FADE_SPEED);
+    $("[id=pre-load]").fadeIn(FADE_SPEED);
+
+    console.log("Map loaded.");
 }
 
 /**
@@ -59,7 +108,7 @@ function initTooltips() {
         animation: "scale",
         arrow: true,
         arrowType: "round",
-        theme: "drawbridge-alt",
+        theme: "drawbridge-alt2",
         interactive: false,
         trigger: "manual",
         hideOnClick: false,
@@ -78,59 +127,17 @@ function initTooltips() {
         inertia: true,
         placement: "bottom",
     });
-
-}
-
-/**
- * Handle changes to the address input boxes whenever the input box loses focus.
- *
- * @param {*} id
- *            The name of the input box (either 'start-input' or 'end-input')
- * @param {*} index
- *            The index to use for identification (either 0 or 1)
- */
-function handleInput(id, index) {
-    // Get the address value from the correct input box
-    let address = $(`#${id}`).val();
-    if (address === "" || address === addressNames[index]) {
-        return;
-    }
-    $(`#loading-${id}`).css({
-                                visibility: "visible"
-                            });
-
-    setTimeout(function () {
-        // Send network request for geocoding based on address box value
-        mapboxClient.geocoding
-                    .forwardGeocode({
-                                        query: address,
-                                        proximity: [curLong, curLat],
-                                        autocomplete: true,
-                                        limit: 1
-                                    })
-                    .send()
-                    .then(function (response) {
-                        // If valid response
-                        if (response && response.body &&
-                            response.body.features &&
-                            response.body.features.length)
-                        {
-                            /**
-                             * Get the first element of the suggestions, set
-                             * the input box to that value, then update the
-                             * addressNames and coordinates arrays with the
-                             * feature data.
-                             * */
-                            let feature = response.body.features[0];
-                            $(`#${id}`).val(feature.place_name);
-                            coordinates[index] = feature.center;
-                            addressNames[index] = feature.place_name;
-                        }
-                        $(`#loading-${id}`).css({
-                                                    visibility: "hidden"
-                                                });
-                    });
-    }, 800);
+    mapControlTooltips = tippy(".map-settings", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge-alt",
+        interactive: "true",
+        hideOnClick: true,
+        inertia: true,
+        sticky: true,
+        placement: "top",
+    });
 }
 
 /**
@@ -142,6 +149,7 @@ function handleSubmit() {
     let timeInput = $("#time").val();
     let date = new Date(`${dateInput} ${timeInput}`);
 
+    let nameInput = $("#name").val();
     let sizeInput = $("#carpool-size").val();
     let typeInput = $("#transport-type").val();
     let priceInput = $("#expected-price").val();
@@ -155,9 +163,8 @@ function handleSubmit() {
      * 3 seconds, then hide it, prompting the user to fill out the form
      * completely.
      */
-    if (dateInput === "" || timeInput === "" || typeInput === "" ||
-        sizeInput === "" || priceInput === "" || phoneInput === "")
-    {
+    if (dateInput === "" || timeInput === "" || typeInput === "" || nameInput
+        === "" || sizeInput === "" || priceInput === "" || phoneInput === "") {
         showHideTooltip(formValidationTooltip[0]);
     } else {
         if (sizeInput < 1) {
@@ -168,26 +175,28 @@ function handleSubmit() {
             showHideTooltip(formTooltips[2]);
         } else if (userProfile === undefined) {
             $("html, body").animate({
-                                        scrollTop: 0
-                                    },
-                                    "slow"
+                    scrollTop: 0
+                },
+                "slow"
             );
             signInTooltip[0].show();
         } else {
             const postParameters = {
                 startName: addressNames[0],
                 endName: addressNames[1],
-                startLat: coordinates[0].slice(0).reverse()[0],
-                startLon: coordinates[0].slice(0).reverse()[1],
-                endLat: coordinates[1].slice(0).reverse()[0],
-                endLon: coordinates[1].slice(0).reverse()[1],
+                startLat: coordinates[0][1],
+                startLon: coordinates[0][0],
+                endLat: coordinates[1][1],
+                endLon: coordinates[1][0],
                 date: date.getTime(),
                 size: sizeInput,
                 price: priceInput,
-                type: typeInput,
+                method: typeInput,
                 phone: phoneInput,
+                name: nameInput,
                 comments: commentsInput,
-                userID: userProfile.getId()
+                userID: userProfile.getId(),
+                eta: route[1]
             };
             console.log(postParameters);
 

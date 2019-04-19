@@ -7,7 +7,7 @@
         <img src="/images/loading.gif" style="width: 60px; height: auto;"/>
     </div>
 
-    <div id="pre-load" style="visibility: visible;" class="search-menu-wrapper">
+    <div id="pre-load" style="display: none;" class="search-menu-wrapper">
         <div class="search-menu">
             <h2 class="section-heading">Search for a Carpool</h2>
             <img src="/images/divider.png" style="height: 4px; width: auto;"/>
@@ -22,7 +22,7 @@
                              class="loading-address-gif"/>
                         <img class="clear-btn"
                              onclick="clearTrip('start-input', 0)"
-                             src="/images/clear-btn.png" class=""
+                             src="/images/clear-btn.png"
                              onmouseover="hover(this);"
                              onmouseout="unhover(this);"/>
                     </div>
@@ -30,11 +30,11 @@
                         <input class="address-input" id="end-input"
                                onblur="handleInput('end-input', 1)" type="text"
                                placeholder="Ending destination..."/>
-                        <img src="/images/loading.gif"
+                        <img id="loading-end-input" src="/images/loading.gif"
                              class="loading-address-gif"/>
                         <img class="clear-btn"
                              onclick="clearTrip('end-input', 1)"
-                             src="/images/clear-btn.png" class=""
+                             src="/images/clear-btn.png"
                              onmouseover="hover(this);"
                              onmouseout="unhover(this);"/>
                     </div>
@@ -59,33 +59,34 @@
     </div>
 
 
-    <div id="pre-load" style="visibility: visible;" data-tippy-content="Align
+    <div id="pre-load" style="display: none;" data-tippy-content="Align
      Map"
          class="map-settings compass-setting" onclick="alignMap()">
         <img class="icon-img" src="/images/compass-icon.png"/>
     </div>
-    <div id="pre-load" style="visibility: visible;" data-tippy-content="Center
+    <div id="pre-load" style="display: none;" data-tippy-content="Center
      Map"
          class="map-settings location-setting" onclick="centerMap()">
         <img class="icon-img" src="/images/pin-icon.png"/>
     </div>
-    <div id="pre-load" style="visibility: hidden;" data-tippy-content="Align
+    <div id="pre-load" style="display: none;" data-tippy-content="Align
      Trip View"
          class="map-settings trip-setting" onclick="alignTrip()">
         <img id="car-icon" class="icon-img" src="/images/car-disabled.png"/>
     </div>
-    <div id="pre-load" style="visibility: visible;" data-tippy-content="My
-    Trips"
-         class="map-settings team-setting" onclick="toUser()">
-        <img class="icon-img" src="/images/team-icon.png"/>
-    </div>
-    <div id="pre-load" style="visibility: visible;"
-         data-tippy-content="Drawbridge Info"
-         class="map-settings info-setting" onclick="toInfo()">
-        <img class="icon-img" src="/images/info-icon.png"/>
-    </div>
-
-    <div id="route-info" style="visibility: hidden; flex-direction: column;"
+    <a href="/new">
+        <div data-tippy-content="Host a Carpool" class="map-settings
+        team-setting">
+            <img class="icon-img" src="/images/host-icon.png"/>
+        </div>
+    </a>
+    <a href="/help">
+        <div data-tippy-content="Drawbridge Info"
+             class="map-settings info-setting">
+            <img class="icon-img" src="/images/info-icon.png"/>
+        </div>
+    </a>
+    <div id="route-info" style="display: none; flex-direction: column;"
          class="route-info">
         <div>Route Information</div>
         <img src="/images/divider.png"
