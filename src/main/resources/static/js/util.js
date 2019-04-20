@@ -1,6 +1,6 @@
 function generateTrip(trip) {
     let date = new Date(parseFloat(trip["date"]) * 1000);
-    console.log(trip);
+
     let hourLabel = "AM";
     let minutes;
     let hour = date.getHours();

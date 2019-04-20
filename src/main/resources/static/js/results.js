@@ -50,12 +50,10 @@ function initTooltips() {
  */
 function queryResults() {
     const queryMap = JSON.parse(payload);
-    console.log(queryMap);
     $("#start").text(queryMap["startName"]);
     $("#end").text(queryMap["endName"]);
 
-    let tripDate = new Date(1555948800000);
-    console.log(tripDate);
+    let tripDate = new Date(queryMap["date"] * 1000);
     let hourLabel = "AM";
     let minutes;
     let hour = tripDate.getHours();

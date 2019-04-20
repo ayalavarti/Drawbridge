@@ -284,7 +284,16 @@ function alignTrip() {
             left = 75;
             right = 75;
         }
+
+        if (window.location.pathname === "/new") {
+            left = 100;
+            right = 50;
+            top = 50;
+            bottom = 50;
+        }
+
         // Fits the bounds of the map to the given padding sizes.
+
         map.fitBounds(coordinates, {
             padding: {
                 top: top,

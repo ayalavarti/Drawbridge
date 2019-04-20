@@ -221,16 +221,15 @@ public final class UserInterface {
         if (qm.hasKey("walkTime")) {
           walkTime = qm.get("walkTime").doubleValue();
         } else {
-          walkTime = 15 * 60; // 15 minutes walking is the default
+          walkTime = 15; // 15 minutes walking is the default
         }
         if (qm.hasKey("waitTime")) {
           waitTime = qm.get("waitTime").doubleValue();
         } else {
-          waitTime = 30 * 60; // 30 minutes is default for waiting for carpool
+          waitTime = 30; // 30 minutes is default for waiting for carpool
         }
 
         // Mirror the inputted values back
-
         payload.addProperty("startName", startName);
         payload.addProperty("endName", endName);
         payload.addProperty("startLat", startLat);
@@ -241,13 +240,20 @@ public final class UserInterface {
         payload.addProperty("walkTime", walkTime);
         payload.addProperty("waitTime", waitTime);
 
-        // Do the search
-        List<List<Trip>> results = carpools
-            .searchWithId(uid, startLat, startLon, endLat, endLon, datetime,
-                    (long) walkTime, (long) waitTime);
+        List<List<Trip>> results;
+        // Perform search
+        if (uid == null) {
+          results = carpools
+              .searchWithoutId(startLat, startLon, endLat, endLon, datetime,
+                  (long) walkTime, (long) waitTime);
+        } else {
+          results = carpools
+              .searchWithId(uid, startLat, startLon, endLat, endLon, datetime,
+                  (long) walkTime, (long) waitTime);
+        }
         data = processToJSON(uid, results);
 
-      } catch (NullPointerException e) {
+      } catch (RuntimeException e) {
         data = new ArrayList<>();
       }
 

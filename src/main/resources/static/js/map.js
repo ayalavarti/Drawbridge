@@ -237,7 +237,7 @@ function validateSubmit() {
             startLon: coordinates[0][0],
             endLat: coordinates[1][1],
             endLon: coordinates[1][0],
-            date: date.getTime(),
+            date: date.getTime() / 1000,
             userID: userID,
             eta: route[1]
         };
