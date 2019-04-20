@@ -6,9 +6,13 @@ let userProfile = undefined;
 // Set up sign in tooltip for use across pages
 let signInTooltip;
 let infoTooltips;
+let tutorialTooltips = [];
 
 let newUserModal;
 let modalOpen;
+
+let tutorialElements;
+const intervalTime = 3000;
 
 /**
  * When the DOM loads, check for the logged in cookie.
@@ -26,38 +30,10 @@ $(document).ready(function () {
     }
     newUserModal = $("#newUserModal");
     modalOpen = false;
+    tutorialElements = [
+        $(".header"), $(".home-btn"), $(".new-btn"), $(".info-btn")
+    ];
 });
-
-/**
- * Initializes the sign in tooltip below the sign in button.
- */
-function initSignInTooltip() {
-    signInTooltip = tippy("#sign-in", {
-        animation: "scale",
-        arrow: true,
-        arrowType: "round",
-        theme: "drawbridge",
-        interactive: false,
-        trigger: "manual",
-        hideOnClick: false,
-        maxWidth: 150,
-        inertia: true,
-        sticky: true,
-        placement: "bottom",
-    });
-    infoTooltips = tippy(".fixed-controls", {
-        animation: "scale",
-        arrow: true,
-        arrowType: "round",
-        theme: "drawbridge-alt",
-        interactive: "true",
-        hideOnClick: true,
-        inertia: true,
-        sticky: true,
-        placement: "top",
-    });
-
-}
 
 /**
  * Gets the cookie value of a given attribute
@@ -127,7 +103,7 @@ function onSignIn(googleUser) {
         const responseData = JSON.parse(response);
         if (responseData.success) {
             const isNewUser = responseData.isNewUser;
-            if (isNewUser) {
+            if (isNewUser || true) {
                 newUserModal.show();
                 modalOpen = true;
             }
@@ -201,3 +177,127 @@ $(document).keyup(function (e) {
         modalOpen = false;
     }
 });
+
+function startTutorial() {
+    initTutorialTooltips();
+    for (let i = 0; i < tutorialElements.length; i++) {
+        tutorialAction(tutorialElements[i], i);
+    }
+}
+
+function tutorialAction(elt, i) {
+    setTimeout(function () {
+        highlightTutorialElt(elt);
+        showHideTooltip(tutorialTooltips[i][0], intervalTime);
+    }, i * intervalTime);
+}
+
+function highlightTutorialElt(elt) {
+    elt.css('zIndex', 121);
+    setTimeout(function () {
+        elt.css('zIndex', "");
+    }, intervalTime)
+}
+
+/**
+ * Initializes the sign in tooltip below the sign in button.
+ */
+function initSignInTooltip() {
+    signInTooltip = tippy("#sign-in", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge",
+        interactive: false,
+        trigger: "manual",
+        hideOnClick: false,
+        maxWidth: 150,
+        inertia: true,
+        sticky: true,
+        placement: "bottom",
+    });
+    infoTooltips = tippy(".fixed-controls", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge-alt",
+        interactive: "true",
+        hideOnClick: true,
+        inertia: true,
+        sticky: true,
+        placement: "top",
+    });
+}
+
+function initTutorialTooltips() {
+    let alt = "";
+    let searchText = "To search for an existing carpools, go to our" +
+        " home screen.";
+    if (window.location.pathname === "/") {
+        alt = "-main";
+        searchText = "Search for existing carpools and request the host to" +
+            " join."
+    }
+    tutorialTooltips.push(tippy("#profile-info", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge",
+        interactive: false,
+        trigger: "manual",
+        hideOnClick: false,
+        maxWidth: 150,
+        inertia: true,
+        sticky: true,
+        placement: "bottom",
+        content: "Sign in with your Google account to join or host a trip" +
+            " and to view your upcoming trips."
+    }));
+    tutorialTooltips.push(tippy(`#home-btn-tutorial${alt}`, {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge",
+        interactive: false,
+        trigger: "manual",
+        hideOnClick: false,
+        maxWidth: 150,
+        distance: 30,
+        inertia: true,
+        sticky: true,
+        placement: "bottom",
+        content: searchText
+    }));
+    tutorialTooltips.push(tippy(`#new-btn-tutorial${alt}`, {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge",
+        interactive: false,
+        trigger: "manual",
+        hideOnClick: false,
+        maxWidth: 150,
+        distance: 30,
+        inertia: true,
+        sticky: true,
+        placement: "bottom",
+        content: "If you want to host your own carpool, press the host trip" +
+            " button to create a new carpool."
+    }));
+    tutorialTooltips.push(tippy(`#info-btn-tutorial${alt}`, {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge",
+        interactive: false,
+        trigger: "manual",
+        distance: 30,
+        hideOnClick: false,
+        maxWidth: 150,
+        inertia: true,
+        sticky: true,
+        placement: "bottom",
+        content: "If you still have any questions about Drawbridge, visit" +
+            " our info page to learn more."
+    }));
+}

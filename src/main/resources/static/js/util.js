@@ -44,9 +44,9 @@ function generateTrip(trip) {
 			</div></a>`)
 }
 
-function showHideTooltip(tooltip) {
+function showHideTooltip(tooltip, timeout) {
     tooltip.show();
     setTimeout(function () {
         tooltip.hide();
-    }, 1500);
+    }, timeout);
 }

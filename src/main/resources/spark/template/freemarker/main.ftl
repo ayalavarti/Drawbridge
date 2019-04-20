@@ -31,6 +31,7 @@
     <#--  JQuery and Main.js  -->
     <script src="/js/external/jquery-3.1.1.js"></script>
     <script src="/js/main.js"></script>
+    <script src="/js/util.js"></script>
 
     <#--  Datetime Picker  -->
     <link rel="stylesheet"
@@ -79,7 +80,8 @@
 
 <a href="/">
     <div style="display: none; top: 2%;" id="home-btn" class="home-btn">
-        <img style="height: 15px; width: auto" src="/images/home-icon.png"/>
+        <img id="home-btn-tutorial" style="height: 15px; width: auto"
+             src="/images/home-icon.png"/>
     </div>
 </a>
 
@@ -87,7 +89,8 @@
     <div style="display: none; bottom: 2%; position: fixed;" id="info-btn"
          data-tippy-content="Drawbridge Info"
          class="fixed-controls info-btn">
-        <img style="height: 15px; width: auto" src="/images/info-icon.png"/>
+        <img id="info-btn-tutorial" style="height: 15px; width: auto"
+             src="/images/info-icon.png"/>
     </div>
 </a>
 
@@ -95,15 +98,28 @@
     <div style="display: none; bottom: 2%; right: 90px; position: fixed;"
          id="new-btn" data-tippy-content="Host a Carpool"
          class="fixed-controls new-btn">
-        <img style="height: 15px; width: auto" src="/images/host-icon.png"/>
+        <img id="new-btn-tutorial" style="height: 15px; width: auto"
+             src="/images/host-icon.png"/>
     </div>
 </a>
 
 <div id="newUserModal" tabindex='-1' class="modal">
     <div class="modal-content">
         <div class="modal-body">
-            <p class="justify info-text">
+            <img src="/images/welcome-label.png" class="welcome-img"/>
+            <div style="width: 100%; text-align: center; margin-top: 30px;">
+                <img style="width: 125px; height: auto;"
+                     src="/images/logo-circle.png"/>
+            </div>
+            <p>
+                Thanks for choosing Drawbridge for your carpooling needs!
+                Press play below to start a brief tutorial on the basic
+                features of Drawbridge. Visit our FAQ page if you have any
+                more questions.
             </p>
+            <img class="play-btn" id="play"
+                 onclick="startTutorial();"
+                 src="/images/play-btn.png"/>
         </div>
         <img class="clear-btn" id="close"
              onclick="closeModal();"

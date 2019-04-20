@@ -217,7 +217,7 @@ function validateSubmit() {
      */
     if (dateInput === "" || timeInput === "" || coordinates[0] === undefined ||
         coordinates[1] === undefined) {
-        showHideTooltip(formValidationTooltip[0]);
+        showHideTooltip(formValidationTooltip[0], 1500);
     } else {
         /**
          * If the user is logged in, send a GET request with the UID.
