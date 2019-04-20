@@ -71,6 +71,7 @@ public final class UserInterface {
           System.getenv("DB_PASS"));
       return true;
     } catch (SQLException | ClassNotFoundException e) {
+      System.out.println("ERROR: Could not connect to the database");
       return false;
     }
   }
