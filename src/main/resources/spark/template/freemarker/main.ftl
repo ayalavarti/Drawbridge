@@ -64,8 +64,9 @@
          class="profile-btn dropdown">
         <div class="user-info" id="user-name"></div>
         <div id="profile-picture-wrapper">
+            <img alt='/images/temp.png' id="profile-picture"/>
             <div class="dropdown-content">
-                <a class="dropdown-filler"></a>
+                <a class="dropdown-filler"/>
                 <a class="dropdown-top" href="/my-trips">My Trips</a>
                 <a class="dropdown-bottom" onclick="signOut();">Sign Out</a>
             </div>

@@ -76,15 +76,10 @@ function onSignIn(googleUser) {
 
     // Performs page specific actions after user has signed in
     onUserSignedIn();
-
+    
     // Add profile picture
-    $("#profile-picture-wrapper").prepend(
-        $("<img>", {
-            id: "profile-picture",
-            src: `${userProfile.getImageUrl()}`,
-            onerror: "this.onerror=null;this.src='/images/temp.png';"
-        })
-    );
+    $("#profile-picture")
+    .attr("src", `${googleUser.getBasicProfile().getImageUrl()}`);
 
     // Set user name
     $("#user-name").text(userProfile.getGivenName());
