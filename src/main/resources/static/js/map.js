@@ -29,6 +29,11 @@ $(document).ready(function () {
     initDateTime();
     initTooltips();
     disableTrip();
+    tutorialElements = [
+        $(".header"), $(".search-menu-wrapper"), $(".team-setting"),
+        $(".info-setting")
+    ];
+
     console.log("DOM ready.");
 });
 
