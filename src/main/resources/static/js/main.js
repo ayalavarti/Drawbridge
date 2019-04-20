@@ -103,7 +103,7 @@ function onSignIn(googleUser) {
         const responseData = JSON.parse(response);
         if (responseData.success) {
             const isNewUser = responseData.isNewUser;
-            if (isNewUser || true) {
+            if (isNewUser) {
                 newUserModal.show();
                 modalOpen = true;
             }

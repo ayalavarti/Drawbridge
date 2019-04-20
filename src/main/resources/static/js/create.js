@@ -80,6 +80,13 @@ function initMap(position) {
     $("#trip-loc-input").fadeIn(FADE_SPEED);
     $("[id=pre-load]").fadeIn(FADE_SPEED);
 
+    /**
+     * Set up binding for map onclick event
+     */
+    map.on("click", function (event) {
+        handleClick(event.lngLat);
+    });
+
     console.log("Map loaded.");
 }
 

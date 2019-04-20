@@ -322,7 +322,7 @@
     .location-setting,
     .compass-setting,
     .trip-setting {
-        display: none;
+        visibility: hidden !important;
     }
 
     .info-setting {
@@ -341,6 +341,6 @@
 
     .route-info,
     .map-settings {
-        display: none;
+        visibility: hidden;
     }
 }

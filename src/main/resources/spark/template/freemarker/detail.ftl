@@ -30,7 +30,7 @@
                 <h3 style="margin-top: 30px;">Share this Trip</h3>
                 <div style="display: flex; flex-wrap: wrap; justify-content:
                 center; align-items: center;">
-                    <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fwww.yoururl.com&text=Join%20My%20Carpool!">
+                    <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Flocalhost:8000/trip/${trip.getId()}&text=Join%20My%20Carpool!">
                         <div class="share-tooltip">
                             <img style="height: 15px; width: auto"
                                  src="/images/twitter-icon.png"/>

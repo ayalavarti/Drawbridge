@@ -338,14 +338,14 @@ input[type="number"] {
     color: #45bc96;
     padding: 10px;
     border-radius: 10px;
-    box-shadow: 0 2px 4px 0 rgba(119, 255, 203, 0.3);
+    box-shadow: 0 2px 4px 0 rgba(99, 100, 100, 0.397);
 }
 
 .tippy-tooltip.drawbridge-alt-theme {
     color: #3493ff;
     padding: 10px;
     border-radius: 10px;
-    box-shadow: 0 2px 4px 0 rgba(70, 175, 255, 0.301);
+    box-shadow: 0 2px 4px 0 rgba(99, 100, 100, 0.397);
 }
 
 .tippy-tooltip.drawbridge-alt2-theme[data-animatefill],
