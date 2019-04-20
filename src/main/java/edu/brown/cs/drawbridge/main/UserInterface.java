@@ -66,6 +66,7 @@ public final class UserInterface {
    * @return true when the set is successful; false when unsuccessful.
    */
   public static boolean setDB(String dbName) {
+    System.out.println("INFO: Connecting to database url: " + dbName);
     try {
       carpools = new Carpools(dbName, System.getenv("DB_USER"),
           System.getenv("DB_PASS"));
