@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import edu.brown.cs.drawbridge.carpools.Carpools;
+import edu.brown.cs.drawbridge.constants.Constants;
 import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
@@ -69,6 +70,12 @@ public final class UserInterface {
     try {
       carpools = new Carpools(dbName, System.getenv("DB_USER"),
           System.getenv("DB_PASS"));
+
+      // Set up cron job to clean out old trips periodically
+//      Timer timer = new Timer();
+//      TimerTask tripCleaner = new TripCleaner(carpools);
+//      timer.scheduleAtFixedRate(tripCleaner, 0, Constants.TRIP_CLEAN_INTERVAL);
+
       return true;
     } catch (SQLException | ClassNotFoundException e) {
       return false;
