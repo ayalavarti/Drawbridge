@@ -23,7 +23,6 @@
             <div id="pending" class="results-content"></div>
         </div>
     </div>
-    <script src="/js/util.js"></script>
     <script src="/js/my-trips.js"></script>
 </#assign>
 <#include "main.ftl">
