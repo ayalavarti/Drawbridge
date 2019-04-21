@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import edu.brown.cs.drawbridge.carpools.Carpools;
+import edu.brown.cs.drawbridge.constants.Constants;
 import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
@@ -20,11 +21,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * An abstract class for the User Interface of the Java project. Contains
@@ -69,6 +66,12 @@ public final class UserInterface {
     try {
       carpools = new Carpools(dbName, System.getenv("DB_USER"),
           System.getenv("DB_PASS"));
+
+      // Set up cron job to clean out old trips periodically
+//      Timer timer = new Timer();
+//      TimerTask tripCleaner = new TripCleaner(carpools);
+//      timer.scheduleAtFixedRate(tripCleaner, 0, Constants.TRIP_CLEAN_INTERVAL);
+
       return true;
     } catch (SQLException | ClassNotFoundException e) {
       return false;
@@ -343,7 +346,7 @@ public final class UserInterface {
 
         } else if (action.equals("leave")) {
           success = carpools.leaveTrip(tid, uid);
-          success &= carpools.rejectRequest(tid, uid, uid);
+          success |= carpools.rejectRequest(tid, uid, uid);
 
         } else if (action.equals("delete")) {
           success = carpools.deleteTrip(tid, uid);

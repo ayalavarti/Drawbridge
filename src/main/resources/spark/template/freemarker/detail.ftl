@@ -80,12 +80,12 @@
                                 <img alt="approve-btn"
                                      src="/images/approve-btn.png"
                                      class="approve-btn"
-                                     onclick="approveClick(${trip.getId()}, ${pend.getId()});"
+                                     onclick="approveClick(${trip.getId()}, '${pend.getId()?js_string}');"
                                      onmouseover="hover(this);"
                                      onmouseout="unhover(this);"/>
                                 <img alt="deny-btn" src="/images/deny-btn.png"
                                      class="deny-btn"
-                                     onclick="denyClick(${trip.getId()}, ${pend.getId()});"
+                                     onclick="denyClick(${trip.getId()}, '${pend.getId()?js_string}');"
                                      onmouseover="hover(this);"
                                      onmouseout="unhover(this);"/>
                             </div>
