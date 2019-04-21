@@ -21,11 +21,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * An abstract class for the User Interface of the Java project. Contains
@@ -350,7 +346,7 @@ public final class UserInterface {
 
         } else if (action.equals("leave")) {
           success = carpools.leaveTrip(tid, uid);
-          success &= carpools.rejectRequest(tid, uid, uid);
+          success |= carpools.rejectRequest(tid, uid, uid);
 
         } else if (action.equals("delete")) {
           success = carpools.deleteTrip(tid, uid);
