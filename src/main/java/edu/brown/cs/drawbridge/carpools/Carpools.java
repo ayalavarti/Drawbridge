@@ -88,10 +88,15 @@ public final class Carpools {
    *          departure time
    *
    * @return A List of valid paths. Each path is a List of Trips.
+   * @throws SQLException
+   *           If the SQL query is invalid.
+   * @throws MissingDataException
+   *           If database is missing information
    */
   public List<List<Trip>> searchWithId(String userId, double startLat,
       double startLon, double endLat, double endLon, long departureTime,
-      long walkingTime, double timeRadius) {
+      long walkingTime, double timeRadius)
+      throws SQLException, MissingDataException {
     return tripSearcher.searchWithId(userId, startLat, startLon, endLat, endLon,
         departureTime, walkingTime * WALKING_SPEED,
         timeRadius * SECONDS_PER_MINUTE);
@@ -119,10 +124,14 @@ public final class Carpools {
    *          departure time
    *
    * @return A List of valid paths. Each path is a List of Trips.
+   * @throws SQLException
+   *           If the SQL query is invalid.
+   * @throws MissingDataException
+   *           If database is missing information
    */
   public List<List<Trip>> searchWithoutId(double startLat, double startLon,
       double endLat, double endLon, long departureTime, double walkingTime,
-      long timeRadius) {
+      long timeRadius) throws SQLException, MissingDataException {
     return tripSearcher.searchWithoutId(startLat, startLon, endLat, endLon,
         departureTime, walkingTime * WALKING_SPEED,
         timeRadius * SECONDS_PER_MINUTE);
@@ -214,7 +223,7 @@ public final class Carpools {
    *          The id of the User
    *
    * @return True if the request was successful. False if it was unsuccessful
-   *         (the User is already host, member, or pending)
+   *         (the User is already host, member, pending, or Trip is full)
    *
    * @throws SQLException
    *           If the SQL query is invalid.
@@ -226,7 +235,8 @@ public final class Carpools {
     Trip toJoin = database.getTripById(tripId);
     if (toJoin.getHostId().equals(userId)
         || toJoin.getMemberIds().contains(userId)
-        || toJoin.getPendingIds().contains(userId)) {
+        || toJoin.getPendingIds().contains(userId)
+        || toJoin.getCurrentSize() >= toJoin.getMaxUsers()) {
       return false;
     } else {
       database.request(tripId, userId);
@@ -266,7 +276,7 @@ public final class Carpools {
    * @throws SQLException
    *           If the SQL query is invalid.
    * @throws MissingDataException
-   *           If database is missing information
+   *           If the trip does not exist
    */
   public Trip getTrip(int tripId) throws SQLException, MissingDataException {
     return database.getTripById(tripId);
@@ -336,7 +346,8 @@ public final class Carpools {
    *          The id of the user to approve
    *
    * @return True if the approval was successful. False if it was unsuccessful
-   *         (the approver is not the host or if the pender is not pending)
+   *         (the approver is not the host, the pender is not pending, or the
+   *         Trip is full)
    *
    * @throws SQLException
    *           If the SQL query is invalid.
@@ -347,7 +358,8 @@ public final class Carpools {
       throws SQLException, MissingDataException {
     Trip trip = database.getTripById(tripId);
     if (trip.getHostId().equals(approver)
-        && trip.getPendingIds().contains(pender)) {
+        && trip.getPendingIds().contains(pender)
+        && trip.getCurrentSize() < trip.getMaxUsers()) {
       database.approve(tripId, pender);
       return true;
     } else {
@@ -383,5 +395,9 @@ public final class Carpools {
     } else {
       return false;
     }
+  }
+
+  DatabaseQuery getDatabase() {
+    return database;
   }
 }

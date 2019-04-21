@@ -166,12 +166,17 @@ public class TripSearcher {
    * @param timeRadius
    *          The amount of time (seconds) that the Trip can leave within of the
    *          departure time
+   * @throws SQLException
+   *           If the SQL query is invalid.
+   * @throws MissingDataException
+   *           If database is missing information
    *
    * @return A List of valid paths. Each path is a List of Trips.
    */
   public List<List<Trip>> searchWithId(String userId, double startLat,
       double startLon, double endLat, double endLon, long departureTime,
-      double distanceRadius, double timeRadius) {
+      double distanceRadius, double timeRadius)
+      throws SQLException, MissingDataException {
 
     List<List<Trip>> paths = search(userId, startLat, startLon, endLat, endLon,
         departureTime, distanceRadius, timeRadius);
@@ -200,10 +205,14 @@ public class TripSearcher {
    *          departure time
    *
    * @return A List of valid paths. Each path is a List of Trips.
+   * @throws SQLException
+   *           If the SQL query is invalid.
+   * @throws MissingDataException
+   *           If database is missing information
    */
   public List<List<Trip>> searchWithoutId(double startLat, double startLon,
       double endLat, double endLon, long departureTime, double distanceRadius,
-      double timeRadius) {
+      double timeRadius) throws SQLException, MissingDataException {
 
     List<List<Trip>> paths = search("", startLat, startLon, endLat, endLon,
         departureTime, distanceRadius, timeRadius);
@@ -234,10 +243,16 @@ public class TripSearcher {
    *          departure time
    *
    * @return A List of valid paths. Each path is a List of Trips.
+   *
+   * @throws SQLException
+   *           If the SQL query is invalid.
+   * @throws MissingDataException
+   *           If database is missing information
    */
   private List<List<Trip>> search(String userId, double startLat,
       double startLon, double endLat, double endLon, long departureTime,
-      double distanceRadius, double timeRadius) {
+      double distanceRadius, double timeRadius)
+      throws SQLException, MissingDataException {
 
     // Set the user id for all comparators
     setUser(userId);
@@ -249,42 +264,62 @@ public class TripSearcher {
     // Contains a Set of visited Trips
     Set<Trip> visited = new HashSet<>();
     // Contains a Map from Trips to their total path weight (no heuristic)
-    try {
-      // Create list of paths from starting location
-      List<Trip> startingTrips = database.getConnectedTripsWithinTimeRadius(
-          startLat, startLon, distanceRadius, departureTime, timeRadius);
-      for (Trip trip : startingTrips) {
-        // Add PathNode with distance-to-destination heuristic to toVisit Queue
-        toVisit.add(new PathNode(trip, endLat, endLon));
-      }
 
-      // Search for at most 5 valid paths to destination
-      while (!toVisit.isEmpty() && paths.size() < MAX_PATH_FOUND) {
-        PathNode visitingNode = toVisit.poll();
-        Trip visitingTrip = visitingNode.current;
-        if (isWithinDestinationRadius(visitingTrip, distanceRadius, endLat,
-            endLon)) {
-          paths.add(unwrap(visitingNode));
-          continue;
-        }
-        if (visited.contains(visitingTrip)) {
-          continue;
-        } else {
-          visited.add(visitingTrip);
-        }
-        if (visitingNode.trips.size() < MAX_TRIPS_PER_PATH - 1) {
-          for (Trip nextTrip : database.getConnectedTripsAfterEta(
-              visitingTrip.getEndingLatitude(),
-              visitingTrip.getEndingLongitude(), distanceRadius,
-              visitingTrip.getEta(), CONNECTION_WAIT_TIME)) {
-            toVisit.add(new PathNode(visitingNode, nextTrip));
+    // Create list of paths from starting location
+    List<Trip> startingTrips = database.getConnectedTripsWithinTimeRadius(
+        startLat, startLon, distanceRadius, departureTime, timeRadius);
+    for (Trip trip : startingTrips) {
+      if (isFull(trip, userId)) {
+        continue;
+      }
+      // Add PathNode with distance-to-destination heuristic to toVisit Queue
+      toVisit.add(new PathNode(trip, endLat, endLon));
+    }
+
+    // Search for at most 5 valid paths to destination
+    while (!toVisit.isEmpty() && paths.size() < MAX_PATH_FOUND) {
+      PathNode visitingNode = toVisit.poll();
+      Trip visitingTrip = visitingNode.current;
+      if (isWithinDestinationRadius(visitingTrip, distanceRadius, endLat,
+          endLon)) {
+        paths.add(unwrap(visitingNode));
+        continue;
+      }
+      if (visited.contains(visitingTrip)) {
+        continue;
+      } else {
+        visited.add(visitingTrip);
+      }
+      if (visitingNode.trips.size() < MAX_TRIPS_PER_PATH - 1) {
+        for (Trip nextTrip : database.getConnectedTripsAfterEta(
+            visitingTrip.getEndingLatitude(), visitingTrip.getEndingLongitude(),
+            distanceRadius, visitingTrip.getEta(), CONNECTION_WAIT_TIME)) {
+          if (isFull(nextTrip, userId)) {
+            continue;
           }
+          toVisit.add(new PathNode(visitingNode, nextTrip));
         }
       }
-    } catch (SQLException | MissingDataException e) {
-      assert false;
     }
     return paths;
+  }
+
+  /**
+   * Return whether or not a trip is full.
+   *
+   * @param trip
+   *          The trip that may be full
+   * @param userId
+   *          The id of the User searching
+   * @return False if the User is a host, member, or requester of the Trip. Also
+   *         false if the maximum number of users allowed is less than the
+   *         current size. Otherwise true
+   */
+  private boolean isFull(Trip trip, String userId) {
+    boolean tripIncludesUser = trip.getHostId().equals(userId)
+        || trip.getMemberIds().contains(userId)
+        || trip.getPendingIds().contains(userId);
+    return !(tripIncludesUser || trip.getMaxUsers() > trip.getCurrentSize());
   }
 
   /**
