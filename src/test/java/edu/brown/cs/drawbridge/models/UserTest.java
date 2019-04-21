@@ -1,6 +1,7 @@
 package edu.brown.cs.drawbridge.models;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.LinkedList;
@@ -163,11 +164,28 @@ public class UserTest {
   }
 
   /**
-   * Test getPendingTrips method given no Trip data.
+   * Test equals method.
    */
-  @Test(expected = IllegalArgumentException.class)
-  public void testGetPendingTripsNoTrip() {
-    User u = new User("id1", "name1", "email");
-    u.getPendingTrips();
+  @Test
+  public void testEquals() {
+    User u1 = new User("id1", "name", "email");
+    User u2 = new User("id1", "name", "email");
+    User u3 = new User("id2", "name", "email");
+    assertEquals(u1, u2);
+    assertNotEquals(u1, u3);
+    assertNotEquals(u2, u3);
+  }
+
+  /**
+   * Test hashCode method.
+   */
+  @Test
+  public void testHashCode() {
+    User u1 = new User("id1", "name", "email");
+    User u2 = new User("id1", "name", "email");
+    User u3 = new User("id2", "name", "email");
+    assertEquals(u1.hashCode(), u2.hashCode());
+    assertNotEquals(u1.hashCode(), u3.hashCode());
+    assertNotEquals(u2.hashCode(), u3.hashCode());
   }
 }

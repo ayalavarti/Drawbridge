@@ -80,6 +80,13 @@ function initMap(position) {
     $("#trip-loc-input").fadeIn(FADE_SPEED);
     $("[id=pre-load]").fadeIn(FADE_SPEED);
 
+    /**
+     * Set up binding for map onclick event
+     */
+    map.on("click", function (event) {
+        handleClick(event.lngLat);
+    });
+
     console.log("Map loaded.");
 }
 
@@ -167,14 +174,14 @@ function handleSubmit() {
         === "" || sizeInput === "" || priceInput === "" || phoneInput === "" ||
         !coordinates[0] || !coordinates[1]
         || coordinates[0].length !== 2 || coordinates[1].length !== 2) {
-        showHideTooltip(formValidationTooltip[0]);
+        showHideTooltip(formValidationTooltip[0], 1500);
     } else {
         if (sizeInput < 1) {
-            showHideTooltip(formTooltips[0]);
+            showHideTooltip(formTooltips[0], 1500);
         } else if (priceInput < 0) {
-            showHideTooltip(formTooltips[1]);
+            showHideTooltip(formTooltips[1], 1500);
         } else if (!phoneRegex.test(phoneInput)) {
-            showHideTooltip(formTooltips[2]);
+            showHideTooltip(formTooltips[2], 1500);
         } else if (userProfile === undefined) {
             $("html, body").animate({
                     scrollTop: 0

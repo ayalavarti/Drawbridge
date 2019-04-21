@@ -5,12 +5,16 @@
 <#assign content>
     <div class="trip-info-wrapper">
         <div class="trip-info">
-            <i class="fas fa-dot-circle icon-label-medium"></i>
-            <span id="start" class="trip-info-text"></span>
+            <div>
+                <i class="fas fa-dot-circle icon-label-medium"></i>
+                <span id="start" class="trip-info-text"></span>
+            </div>
             <img src="/images/divider.png"
                  style="height: 2px; margin: 0px 10px; width: auto;"/>
-            <i class="fas fa-map-marker-alt icon-label-medium"></i>
-            <span id="end" class="trip-info-text"></span>
+            <div>
+                <i class="fas fa-map-marker-alt icon-label-medium"></i>
+                <span id="end" class="trip-info-text"></span>
+            </div>
         </div>
         <span class="sub-heading"><span id="date"></span> at <span
                     id="time"></span></span>
@@ -59,7 +63,6 @@
         let data = "${data?js_string}"
         let payload = "${query?js_string}"
     </script>
-    <script src="/js/util.js"></script>
     <script src="/js/results.js"></script>
 </#assign>
 <#include "main.ftl">

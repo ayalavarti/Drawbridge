@@ -140,6 +140,77 @@ function handleInput(id, index) {
 }
 
 /**
+ * Handles onclick events on the map element to set up a popup. Lets the user
+ * choose whether to set the pin location as their starting or ending location.
+ * @param coord
+ */
+function handleClick(coord) {
+    setTimeout(function () {
+        // Send network request for reverse geocoding based on clicked location
+        mapboxClient.geocoding
+                    .reverseGeocode({
+                        query: [coord["lng"], coord["lat"]],
+                        limit: 1
+                    })
+                    .send()
+                    .then(function (response) {
+                        // If valid response
+                        if (response && response.body &&
+                            response.body.features &&
+                            response.body.features.length) {
+                            let feature = response.body.features[0];
+                            /**
+                             * Drop the pin on the map, parse the resulting
+                             * feature address and create a popup with
+                             * buttons that let the user select where to use
+                             * the new address in their route.
+                             */
+                            droppedPin = new mapboxgl.Popup()
+                            .setLngLat(feature["center"])
+                            .setHTML(`
+                                ${parseAddressOnClick(feature.place_name)}
+                                <button onclick="updateAddress('start-input', 0,
+                                    '${feature.place_name}', '${feature.center[1]}',
+                                    '${feature.center[0]}');" 
+                                    class="setLocation-btn">
+                                    Set Starting
+                                </button>
+                                
+                                <button onclick="updateAddress('end-input', 1,
+                                    '${feature.place_name}', '${feature.center[1]}',
+                                    '${feature.center[0]}');" 
+                                    class="setLocation-btn">
+                                    Set Ending
+                                </button>
+                            `)
+                            .addTo(map);
+                        }
+                    });
+    }, 800);
+}
+
+/**
+ * Update the address on when click "Set Starting" or "Set Ending" on a
+ * given map popup.
+ *
+ * @param id
+ * @param index
+ * @param featureName
+ * @param featureLat
+ * @param featureLng
+ */
+function updateAddress(id, index, featureName, featureLat, featureLng) {
+    droppedPin.remove();
+    $(`#${id}`).val(featureName);
+    coordinates[index] = [parseFloat(featureLng), parseFloat(featureLat)];
+    /**
+     * Add new marker on the map with the returned feature data
+     */
+    addStreetPoint(featureLat, featureLng,
+        id, index, featureName);
+}
+
+/**
  * Add a new street point on the map after a new address is inputted.
  *
  * @param {*} lat
@@ -265,13 +336,13 @@ function alignTrip() {
                 coordinates[1][1]) ||
             (coordinates[0][0] > coordinates[1][0] && coordinates[0][1] >
                 coordinates[1][1]) ||
-            $("#map").height() < 600) {
+            window.height < 600) {
             top = 150;
         }
         /**
          * Checks if in half screen vertical mode and adjust map view.
          */
-        if ($("#map").height() < 600 && $("#map").width() >= 767) {
+        if (window.height < 600 && window.width >= 767) {
             right = 50;
             bottom = 50;
         }
@@ -279,11 +350,19 @@ function alignTrip() {
          * Checks if the window width is below a threshold. Then the map view
          * is adjusted since the search menu will not cover up the trip.
          */
-        if ($("#map").width() < 767) {
+        if (window.width < 767) {
             top = 100;
             left = 75;
             right = 75;
         }
+
+        if (window.location.pathname === "/new") {
+            left = 200;
+            right = 50;
+            top = 50;
+            bottom = 100;
+        }
+
         // Fits the bounds of the map to the given padding sizes.
         map.fitBounds(coordinates, {
             padding: {
