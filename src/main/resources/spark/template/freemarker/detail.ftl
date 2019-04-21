@@ -56,7 +56,9 @@
             </div>
         </div>
         <div id="member-list-container">
-            <h2>Carpool Members</h2>
+            <h2>Carpool Members <i style="font-size: 15px">${trip
+                    .getCurrentSize()}/${trip.getMaxUsers()}
+                </i></h2>
             <div id="member-list">
                 <div class="list-person">
                     <span class="user-name">${host.getName()}</span>
