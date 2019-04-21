@@ -12,6 +12,7 @@ let newUserModal;
 let modalOpen;
 
 let tutorialElements;
+let tutorialStarted = false;
 const intervalTime = 3000;
 
 /**
@@ -76,7 +77,7 @@ function onSignIn(googleUser) {
 
     // Performs page specific actions after user has signed in
     onUserSignedIn();
-    
+
     // Add profile picture
     $("#profile-picture")
     .attr("src", `${googleUser.getBasicProfile().getImageUrl()}`);
@@ -98,7 +99,7 @@ function onSignIn(googleUser) {
         const responseData = JSON.parse(response);
         if (responseData.success) {
             const isNewUser = responseData.isNewUser;
-            if (isNewUser) {
+            if (isNewUser || true) {
                 newUserModal.show();
                 modalOpen = true;
             }
@@ -173,26 +174,42 @@ $(document).keyup(function (e) {
     }
 });
 
-function startTutorial() {
-    initTutorialTooltips();
-    for (let i = 0; i < tutorialElements.length; i++) {
-        tutorialAction(tutorialElements[i], i);
+let curTutorialPhase = 0;
+
+function incrementTutorial() {
+    if (!tutorialStarted) {
+        initTutorialTooltips();
+        tutorialStarted = true;
+    }
+    if (curTutorialPhase === tutorialTooltips.length) {
+        unhighlightTutorialElt(tutorialElements[curTutorialPhase - 1]);
+        tutorialTooltips[curTutorialPhase - 1][0].hide();
+        $("#play").css({visibility: "hidden"});
+
+    } else {
+        tutorialAction(curTutorialPhase);
+        curTutorialPhase++;
     }
 }
 
-function tutorialAction(elt, i) {
-    setTimeout(function () {
-        highlightTutorialElt(elt);
-        showHideTooltip(tutorialTooltips[i][0], intervalTime);
-    }, i * intervalTime);
+function tutorialAction(i) {
+    if (i !== 0) {
+        unhighlightTutorialElt(tutorialElements[i - 1]);
+        tutorialTooltips[i - 1][0].hide();
+    }
+    highlightTutorialElt(tutorialElements[i]);
+    tutorialTooltips[i][0].show();
 }
 
 function highlightTutorialElt(elt) {
     elt.css('zIndex', 121);
-    setTimeout(function () {
-        elt.css('zIndex', "");
-    }, intervalTime)
 }
+
+function unhighlightTutorialElt(elt) {
+    console.log(elt);
+    elt.css('zIndex', "");
+}
+
 
 /**
  * Initializes the sign in tooltip below the sign in button.
