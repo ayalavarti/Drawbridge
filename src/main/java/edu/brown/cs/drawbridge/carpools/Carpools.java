@@ -266,7 +266,7 @@ public final class Carpools {
    * @throws SQLException
    *           If the SQL query is invalid.
    * @throws MissingDataException
-   *           If database is missing information
+   *           If the trip does not exist
    */
   public Trip getTrip(int tripId) throws SQLException, MissingDataException {
     return database.getTripById(tripId);
