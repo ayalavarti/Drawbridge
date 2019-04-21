@@ -393,4 +393,8 @@ public final class Carpools {
       return false;
     }
   }
+
+  DatabaseQuery getDatabase() {
+    return database;
+  }
 }

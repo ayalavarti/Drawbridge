@@ -14,7 +14,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.brown.cs.drawbridge.database.DatabaseQuery;
 import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
@@ -37,7 +36,6 @@ public class CarpoolsTest {
       .addAddressNames("(2, 3)", "(9, 9)").addTimes(500, 1500)
       .addDetails(3, 16.00, "333-333-3333", "car", "").build();
   private static int t1, t2, t3; // Ids of new Trips
-  private static DatabaseQuery database;
   private static Carpools carpools;
 
   @BeforeClass
@@ -70,8 +68,9 @@ public class CarpoolsTest {
   }
 
   @AfterClass
-  public static void oneTimeTearDown() throws SQLException {
-    database.clearData();
+  public static void testGetDatabase()
+      throws SQLException, ClassNotFoundException {
+    carpools.getDatabase().clearData();
   }
 
   @Test
