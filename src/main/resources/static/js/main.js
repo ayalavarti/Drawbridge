@@ -189,9 +189,27 @@ function incrementTutorial() {
         $("#faq-text").css({display: "block"});
     } else {
         tutorialAction(curTutorialPhase);
+        loadProgressBar(curTutorialPhase);
         curTutorialPhase++;
-        let elem = document.getElementById("progress-bar");
-        elem.style.width = curTutorialPhase * 25 + '%';
+    }
+}
+
+function loadProgressBar(start) {
+    let elem = document.getElementById("progress-bar");
+    //elem.style.width = curTutorialPhase * 25 + '%';
+
+
+    let width = start * (100 / tutorialElements.length);
+    console.log(width);
+    let id = setInterval(move, 15);
+
+    function move() {
+        if (width >= (start + 1) * (100 / tutorialElements.length)) {
+            clearInterval(id);
+        } else {
+            width++;
+            elem.style.width = width + '%';
+        }
     }
 }
 

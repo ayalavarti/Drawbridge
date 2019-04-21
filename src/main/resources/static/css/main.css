@@ -477,15 +477,15 @@ input[type="number"] {
 
 
 .progress-container {
-    width: 40% !important;
-    margin-bottom: 20px;
+    width: 30% !important;
+    margin-top: 20px;
     background-color: #FFF;
     border-radius: 20px;
 }
 
 .progress-bar {
     width: 0;
-    height: 20px;
+    height: 15px;
     border-radius: 20px;
-    background-color: #EC7087;
+    background-color: #47A5FF;
 }
