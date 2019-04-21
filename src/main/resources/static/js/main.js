@@ -184,11 +184,14 @@ function incrementTutorial() {
     if (curTutorialPhase === tutorialTooltips.length) {
         unhighlightTutorialElt(tutorialElements[curTutorialPhase - 1]);
         tutorialTooltips[curTutorialPhase - 1][0].hide();
-        $("#play").css({visibility: "hidden"});
-
+        $("#play").css({display: "none"});
+        $(".progress-container").css({display: "none"});
+        $("#faq-text").css({display: "block"});
     } else {
         tutorialAction(curTutorialPhase);
         curTutorialPhase++;
+        let elem = document.getElementById("progress-bar");
+        elem.style.width = curTutorialPhase * 25 + '%';
     }
 }
 

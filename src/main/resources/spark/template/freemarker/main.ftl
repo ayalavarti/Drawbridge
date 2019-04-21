@@ -115,12 +115,21 @@
             <p>
                 Thanks for choosing Drawbridge for your carpooling needs!
                 Press play below to start a brief tutorial on the basic
-                features of Drawbridge. Visit our FAQ page if you have any
-                more questions.
+                features of Drawbridge.
             </p>
-            <img class="play-btn" id="play"
-                 onclick="incrementTutorial();"
-                 src="/images/play-btn.png"/>
+            <div class="progress-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            <div>
+                <img class="play-btn" id="play"
+                     onclick="incrementTutorial();"
+                     src="/images/play-btn.png"/>
+                <br>
+                <p id="faq-text" style="display: none;">
+                    If you have any
+                    more questions, visit our FAQ page here!
+                </p>
+            </div>
         </div>
         <img class="clear-btn" id="close"
              onclick="closeModal();"

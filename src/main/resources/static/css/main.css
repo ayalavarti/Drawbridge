@@ -404,6 +404,11 @@ input[type="number"] {
     flex-wrap: wrap;
 }
 
+.modal-body > div {
+    width: 100%;
+    text-align: center;
+}
+
 .modal-content {
     position: relative;
     background-color: #ececec;
@@ -468,4 +473,19 @@ input[type="number"] {
     color: #47A5FF;
     border: none;
     box-shadow: 0 2px 4px 0 rgba(71, 165, 255, 0.18), 0 2px 4px 0 rgba(71, 165, 255, 0.11);
+}
+
+
+.progress-container {
+    width: 40% !important;
+    margin-bottom: 20px;
+    background-color: #FFF;
+    border-radius: 20px;
+}
+
+.progress-bar {
+    width: 0;
+    height: 20px;
+    border-radius: 20px;
+    background-color: #EC7087;
 }
