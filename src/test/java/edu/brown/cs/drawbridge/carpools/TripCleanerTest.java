@@ -30,8 +30,8 @@ public class TripCleanerTest {
   @BeforeClass
   public static void oneTimeSetUp()
       throws SQLException, MissingDataException, ClassNotFoundException {
-    String username = "dev";
-    String password = "dev";
+    String username = System.getenv("DB_USER");
+    String password = System.getenv("DB_PASS");
     /*
      * Run the following queries in pgadmin: CREATE USER <username> WITH
      * PASSWORD '<password>' GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public
