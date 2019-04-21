@@ -125,6 +125,7 @@ input[type="number"] {
     box-shadow: 0 2px 4px 0 #0000001e, 0 5px 10px 0 #0000002f;
 }
 
+.full-label,
 .play-btn,
 .clear-btn,
 .hosting-btn,
@@ -146,6 +147,7 @@ input[type="number"] {
     cursor: pointer;
 }
 
+.full-label,
 .pending-btn {
     cursor: initial;
 }
@@ -459,4 +461,11 @@ input[type="number"] {
     .welcome-img {
         width: 250px;
     }
+}
+
+.setLocation-btn {
+    width: 100px;
+    color: #47A5FF;
+    border: none;
+    box-shadow: 0 2px 4px 0 rgba(71, 165, 255, 0.18), 0 2px 4px 0 rgba(71, 165, 255, 0.11);
 }

@@ -16,7 +16,8 @@ $(document).ready(function () {
     initMapbox();
     initMap();
     initTooltips();
-    if (navigator.cookieEnabled && getCookie("loggedIn") === "true") {
+    if ((navigator.cookieEnabled && getCookie("loggedIn") === "true") ||
+        tripFull) {
         $("#join-btn").hide();
     } else {
         $("#join-btn").show();
@@ -60,6 +61,11 @@ function onUserSignedIn() {
     } else {
         $("#join-btn").show();
     }
+    if (tripFull) {
+        $("#join-btn").hide();
+        $("#full-label").show();
+        $("[id=approve-btn]").hide();
+    }
 }
 
 /**
@@ -84,10 +90,13 @@ function containsUser(list, uid) {
 function onUserSignedOut() {
     console.log("User signed out.");
     $("#delete-btn").hide();
-    $("#join-btn").show();
     $("#leave-btn").hide();
     $("#pending").hide();
     $("#pending-label").hide();
+
+    if (!tripFull) {
+        $("#join-btn").show();
+    }
 }
 
 /**

@@ -76,7 +76,7 @@
                         <span class="user-name">${pend.getName()}<i
                                     class="addendum">(pending)</i></span>
                             <div class="pending">
-                                <img alt="approve-btn"
+                                <img alt="approve-btn" id="approve-btn"
                                      src="/images/approve-btn.png"
                                      class="approve-btn"
                                      onclick="approveClick(${trip.getId()}, ${pend.getId()});"
@@ -114,6 +114,11 @@
                          style="display: none;"
                          class="pending-btn"
                     />
+                    <img alt="full-label" src="/images/full-label.png"
+                         id="full-label"
+                         style="display: none;"
+                         class="full-label"
+                    />
                 </div>
             </div>
         </div>
@@ -150,6 +155,14 @@
         <#list members as mem>"${mem.getId()?js_string}"<#if mem_has_next>,
         </#if></#list>
     ];
+
+    let tripFull =
+    ${trip.getMaxUsers()} ===
+    ${trip.getCurrentSize()};
+
+    if (tripFull) {
+        $("#full-label").show();
+    }
 
     let pending = [
         <#list pending as pen>"${pen.getId()?js_string}"<#if pen_has_next>,

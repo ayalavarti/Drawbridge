@@ -119,7 +119,7 @@
                 more questions.
             </p>
             <img class="play-btn" id="play"
-                 onclick="startTutorial();"
+                 onclick="incrementTutorial();"
                  src="/images/play-btn.png"/>
         </div>
         <img class="clear-btn" id="close"
