@@ -88,10 +88,15 @@ public final class Carpools {
    *          departure time
    *
    * @return A List of valid paths. Each path is a List of Trips.
+   * @throws SQLException
+   *           If the SQL query is invalid.
+   * @throws MissingDataException
+   *           If database is missing information
    */
   public List<List<Trip>> searchWithId(String userId, double startLat,
       double startLon, double endLat, double endLon, long departureTime,
-      long walkingTime, double timeRadius) {
+      long walkingTime, double timeRadius)
+      throws SQLException, MissingDataException {
     return tripSearcher.searchWithId(userId, startLat, startLon, endLat, endLon,
         departureTime, walkingTime * WALKING_SPEED,
         timeRadius * SECONDS_PER_MINUTE);
@@ -119,10 +124,14 @@ public final class Carpools {
    *          departure time
    *
    * @return A List of valid paths. Each path is a List of Trips.
+   * @throws SQLException
+   *           If the SQL query is invalid.
+   * @throws MissingDataException
+   *           If database is missing information
    */
   public List<List<Trip>> searchWithoutId(double startLat, double startLon,
       double endLat, double endLon, long departureTime, double walkingTime,
-      long timeRadius) {
+      long timeRadius) throws SQLException, MissingDataException {
     return tripSearcher.searchWithoutId(startLat, startLon, endLat, endLon,
         departureTime, walkingTime * WALKING_SPEED,
         timeRadius * SECONDS_PER_MINUTE);
