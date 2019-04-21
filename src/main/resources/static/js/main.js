@@ -13,7 +13,7 @@ let modalOpen;
 
 let tutorialElements;
 let tutorialStarted = false;
-const intervalTime = 3000;
+let curTutorialPhase = 0;
 
 /**
  * When the DOM loads, check for the logged in cookie.
@@ -174,13 +174,20 @@ $(document).keyup(function (e) {
     }
 });
 
-let curTutorialPhase = 0;
-
+/**
+ * Increment the current tutorial phase to show the next tutorial step.
+ */
 function incrementTutorial() {
+    // Initialize the tooltips if the tutorial hasn't started already
     if (!tutorialStarted) {
         initTutorialTooltips();
         tutorialStarted = true;
     }
+    /**
+     * If at the end of the tutorial, unhighlight the last element, hide the
+     * tooltip, and show/hide respective elements on the modal. Otherwise,
+     * perform the appropriate tutorial action and load the progress bar.
+     */
     if (curTutorialPhase === tutorialTooltips.length) {
         unhighlightTutorialElt(tutorialElements[curTutorialPhase - 1]);
         tutorialTooltips[curTutorialPhase - 1][0].hide();
@@ -194,43 +201,66 @@ function incrementTutorial() {
     }
 }
 
+/**
+ * Load the progress bar from the current position to the next stage.
+ * @param start
+ */
 function loadProgressBar(start) {
-    let elem = document.getElementById("progress-bar");
-    //elem.style.width = curTutorialPhase * 25 + '%';
-
-
+    // Get the progress bar element and set the starting width
+    let progressBar = $("#progress-bar");
     let width = start * (100 / tutorialElements.length);
-    console.log(width);
+
+    // Setup an ID for an interval to repeat
     let id = setInterval(move, 15);
 
+    // Move the progress bar until the width is at the next percentage
     function move() {
         if (width >= (start + 1) * (100 / tutorialElements.length)) {
             clearInterval(id);
         } else {
             width++;
-            elem.style.width = width + '%';
+            progressBar.width(`${width}%`);
         }
     }
 }
 
+/**
+ * Perform the tutorial action for the given tutorial element position
+ * @param i
+ */
 function tutorialAction(i) {
+    /**
+     * If not at the first stage, unhighlight the previous element and hide the
+     * previous tooltip.
+     */
     if (i !== 0) {
         unhighlightTutorialElt(tutorialElements[i - 1]);
         tutorialTooltips[i - 1][0].hide();
     }
+    /**
+     * Highlight the current element and show the current tooltip.
+     */
     highlightTutorialElt(tutorialElements[i]);
     tutorialTooltips[i][0].show();
 }
 
+/**
+ * Highlight the given tutorial element
+ * @param elt
+ */
 function highlightTutorialElt(elt) {
+    // Set the z-index to 121 to bring the element above the gray pseudo-div
     elt.css('zIndex', 121);
 }
 
+/**
+ * Highlight the given tutorial element
+ * @param elt
+ */
 function unhighlightTutorialElt(elt) {
-    console.log(elt);
+    // Reset the z-index to its initial value
     elt.css('zIndex', "");
 }
-
 
 /**
  * Initializes the sign in tooltip below the sign in button.
@@ -262,6 +292,9 @@ function initSignInTooltip() {
     });
 }
 
+/**
+ * Initialize the tutorial tooltips.
+ */
 function initTutorialTooltips() {
     let alt = "";
     let searchText = "To search for an existing carpools, go to our" +
