@@ -359,7 +359,7 @@ public final class Carpools {
     Trip trip = database.getTripById(tripId);
     if (trip.getHostId().equals(approver)
         && trip.getPendingIds().contains(pender)
-        || trip.getCurrentSize() < trip.getMaxUsers()) {
+        && trip.getCurrentSize() < trip.getMaxUsers()) {
       database.approve(tripId, pender);
       return true;
     } else {
