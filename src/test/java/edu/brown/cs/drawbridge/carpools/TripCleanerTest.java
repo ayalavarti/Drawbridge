@@ -1,34 +1,32 @@
 package edu.brown.cs.drawbridge.carpools;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import edu.brown.cs.drawbridge.database.MissingDataException;
+import edu.brown.cs.drawbridge.models.Trip;
+import edu.brown.cs.drawbridge.models.User;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.sql.SQLException;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import edu.brown.cs.drawbridge.database.MissingDataException;
-import edu.brown.cs.drawbridge.models.Trip;
-import edu.brown.cs.drawbridge.models.User;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test TripCleaner constructor and methods.
  */
 public class TripCleanerTest {
 
-  private static Carpools carpools;
   private static final User DUMMY_USER = new User("1", "one", "one@mail.com");
   private static final Trip DUMMY_TRIP = Trip.TripBuilder.newTripBuilder()
       .addIdentification(-1, "First trip").addLocations(3, 3, 5, 5)
       .addAddressNames("(3, 3)", "(5, 5)").addTimes(1000, 1500)
       .addDetails(5, 20.00, "555-555-5555", "car", "").build();
+  private static Carpools carpools;
   private static int tripId;
 
-  @BeforeClass
-  public static void oneTimeSetUp()
+  @BeforeClass public static void oneTimeSetUp()
       throws SQLException, MissingDataException, ClassNotFoundException {
     String username = System.getenv("DB_USER");
     String password = System.getenv("DB_PASS");
@@ -38,11 +36,11 @@ public class TripCleanerTest {
      * TO <username> GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO
      * <username>
      */
-    carpools = new Carpools("//127.0.0.1:5432/carpools", username, password);
+    carpools = new Carpools("//127.0.0.1:5432/testCarpools", username,
+        password);
   }
 
-  @Test
-  public void testRun()
+  @Test public void testRun()
       throws InterruptedException, SQLException, MissingDataException {
     carpools.addUser(DUMMY_USER);
     tripId = carpools.createTrip(DUMMY_TRIP, "1");
