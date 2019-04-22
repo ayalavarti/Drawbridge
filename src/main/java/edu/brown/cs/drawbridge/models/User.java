@@ -142,7 +142,11 @@ public class User {
    * @return The url to the user's profile picture.
    */
   public String getProfilePic() {
-    return this.profilePic;
+    if (this.profilePic != null) {
+      return this.profilePic;
+    } else { // return default user image if none given
+      return "/images/temp.png";
+    }
   }
 
   /**
