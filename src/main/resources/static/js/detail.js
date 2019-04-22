@@ -68,6 +68,7 @@ function onUserSignedIn() {
     }
     console.log(uid);
     $(`#${uid}`).css({visibility: "visible"});
+    $(`.${uid}`).attr("src", `${userProfile.getImageUrl()}`);
 }
 
 /**
@@ -99,7 +100,8 @@ function onUserSignedOut() {
     if (!tripFull) {
         $("#join-btn").show();
     }
-    $(".verified").css({visibility: "hidden"});
+    $("[class=verified]").css({visibility: "hidden"});
+    $("[id=member-img]").attr("src", "/images/temp.png");
 }
 
 /**

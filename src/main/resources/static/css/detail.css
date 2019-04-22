@@ -186,10 +186,11 @@ i {
     align-items: center;
 }
 
-.member-img {
+#member-img {
     height: 35px;
     width: auto;
-    margin: 0 10px;
+    margin-right: 10px;
+    border-radius: 50%;
 }
 
 .addendum {
