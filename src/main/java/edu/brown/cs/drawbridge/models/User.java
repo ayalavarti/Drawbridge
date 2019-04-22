@@ -3,7 +3,6 @@ package edu.brown.cs.drawbridge.models;
 import com.google.gson.JsonObject;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This class models a carpooling User.
@@ -15,7 +14,7 @@ public class User {
   private String id;
   private String name;
   private String email;
-  private Optional<String> profilePic;
+  private String profilePic;
   private List<Integer> hostingTripIds, memberTripIds, pendingTripIds;
 
   /**
@@ -43,7 +42,7 @@ public class User {
     this.id = id;
     this.name = name;
     this.email = email;
-    this.profilePic = Optional.ofNullable(profilePic);
+    this.profilePic = profilePic;
   }
 
   /**
@@ -136,6 +135,14 @@ public class User {
           "ERROR: Trip information has not been initialized.");
     }
     return pendingTripIds;
+  }
+
+  /**
+   * Getter for the user's profile picture.
+   * @return The url to the user's profile picture.
+   */
+  public String getProfilePic() {
+    return this.profilePic;
   }
 
   /**
