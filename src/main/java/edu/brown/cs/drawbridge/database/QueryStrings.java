@@ -8,7 +8,7 @@ package edu.brown.cs.drawbridge.database;
 public final class QueryStrings {
 
   protected static final String INSERT_USER = "INSERT INTO "
-          + "users VALUES (?, ?, ?);";
+          + "users VALUES (?, ?, ?, ?);";
 //  protected static final String INSERT_USER = "INSERT INTO "
 //          + "users VALUES (?, ?, ?, ?);";
   protected static final String UPDATE_PROFILE_PICTURE =
