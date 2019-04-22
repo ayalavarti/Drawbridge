@@ -103,12 +103,12 @@
                                 <img alt="approve-btn" id="approve-btn"
                                      src="/images/approve-btn.png"
                                      class="approve-btn"
-                                     onclick="approveClick(${trip.getId()}, '${pend.getId()?js_string}');"
+                                     onclick="approveClick(${trip.getId()?c}, '${pend.getId()?js_string}');"
                                      onmouseover="hover(this);"
                                      onmouseout="unhover(this);"/>
                                 <img alt="deny-btn" src="/images/deny-btn.png"
                                      class="deny-btn"
-                                     onclick="denyClick(${trip.getId()}, '${pend.getId()?js_string}');"
+                                     onclick="denyClick(${trip.getId()?c}, '${pend.getId()?js_string}');"
                                      onmouseover="hover(this);"
                                      onmouseout="unhover(this);"/>
                             </div>
@@ -118,19 +118,19 @@
                 <div id="button-container">
                     <img alt="join-btn" src="/images/join-btn.png" id="join-btn"
                          style="display: none" class="join-btn"
-                         onclick="joinClick(${trip.getId()});"
+                         onclick="joinClick(${trip.getId()?c});"
                          onmouseover="hover(this);"
                          onmouseout="unhover(this);"/>
                     <img alt="leave-btn" src="/images/leave-btn.png"
                          id="leave-btn"
                          style="display: none" class="leave-btn"
-                         onclick="leaveClick(${trip.getId()});"
+                         onclick="leaveClick(${trip.getId()?c});"
                          onmouseover="hover(this);"
                          onmouseout="unhover(this);"/>
                     <img alt="delete-btn" src="/images/delete-btn.png"
                          id="delete-btn"
                          style="display: none" class="delete-btn"
-                         onclick="deleteClick(${trip.getId()});"
+                         onclick="deleteClick(${trip.getId()?c});"
                          onmouseover="hover(this);"
                          onmouseout="unhover(this);"/>
                     <img alt="pending-label" src="/images/pending-btn.png"
