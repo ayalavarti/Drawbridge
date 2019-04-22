@@ -139,7 +139,7 @@ public final class UserInterface {
     @Override public ModelAndView handle(Request request, Response response) {
       // Get parameter values
       QueryParamsMap qm = request.queryMap();
-      List<List<Map<String, String>>> data;
+      JsonArray data;
       JsonObject payload = new JsonObject();
 
       try {
@@ -188,10 +188,10 @@ public final class UserInterface {
               .searchWithId(uid, startLat, startLon, endLat, endLon, datetime,
                   (long) walkTime, (long) waitTime);
         }
-        data = processToJSON(uid, results);
+        data = JSONProcessor.processTripGroups(uid, results);
 
       } catch (RuntimeException | SQLException | MissingDataException e) {
-        data = new ArrayList<>();
+        data = new JsonArray();
       }
 
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
@@ -212,8 +212,15 @@ public final class UserInterface {
     public Object handle(Request request, Response response) {
       QueryParamsMap qm = request.queryMap();
 
+      // Read in the params
       String uid = qm.value("uid");
+      JsonArray tids =
+              (JsonArray) new JsonParser().parse(qm.value("trips"));
 
+      // Iterate over the trips and check the user's status in each
+      for (JsonElement tid : tids) {
+//        Trip trip = carpools.getTrip(tid.getAsInt());
+      }
       return null;
     }
   }
@@ -352,10 +359,11 @@ public final class UserInterface {
         List<Trip> member = userTrips.get(1);
         List<Trip> pending = userTrips.get(2);
 
-        return GSON.toJson(processToJSON(uid, hosting, member, pending));
+        return GSON.toJson(
+                JSONProcessor.processTripGroups(uid, hosting, member, pending));
       } catch (SQLException | MissingDataException e) {
         // TODO: decide stuff to do
-        return GSON.toJson(processToJSON(uid));
+        return GSON.toJson(new JsonObject());
       }
     }
   }
