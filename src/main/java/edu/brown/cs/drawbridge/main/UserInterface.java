@@ -471,7 +471,7 @@ public final class UserInterface {
       String email = qm.value("email");
       String profilePic = qm.value("profilePic");
 
-      User user = new User(uid, name, email);
+      User user = new User(uid, name, email, profilePic);
 
       JsonObject responseData = new JsonObject();
       responseData.addProperty("uid", uid);
