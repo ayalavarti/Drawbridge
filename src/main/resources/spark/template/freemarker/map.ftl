@@ -17,6 +17,7 @@
                 <div class="search-inputs">
                     <div><i class="fas fa-dot-circle icon-label"></i>
                         <input class="address-input" id="start-input"
+                               onfocus="hideClearButtons();"
                                onblur="handleInput('start-input', 0)"
                                type="text" placeholder="Starting point..."/>
                         <img id="loading-start-input" src="/images/loading.gif"
@@ -29,6 +30,7 @@
                     </div>
                     <div><i class="fas fa-map-marker-alt icon-label"></i>
                         <input class="address-input" id="end-input"
+                               onfocus="hideClearButtons();"
                                onblur="handleInput('end-input', 1)" type="text"
                                placeholder="Ending destination..."/>
                         <img id="loading-end-input" src="/images/loading.gif"
