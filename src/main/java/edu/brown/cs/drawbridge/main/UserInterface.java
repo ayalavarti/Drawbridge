@@ -1,10 +1,10 @@
 package edu.brown.cs.drawbridge.main;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import edu.brown.cs.drawbridge.carpools.Carpools;
 import edu.brown.cs.drawbridge.database.MissingDataException;
+import edu.brown.cs.drawbridge.json.JSONProcessor;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import freemarker.template.Configuration;
@@ -111,75 +111,6 @@ public final class UserInterface {
       res.redirect("/error");
       return null;
     });
-  }
-
-  // --------------------------- Helpers -----------------------------------
-
-  /**
-   * Overloaded method to provide an alternate signature for the
-   * JSON-processing method.
-   *
-   * @param uid
-   *     The user id for which to create this JSON object.
-   * @param tripGroups
-   *     a trip-group array.
-   *
-   * @return A JSON-encodable data structure for trip-groups.
-   */
-  @SafeVarargs private static List<List<Map<String, String>>> processToJSON(
-      String uid, List<Trip>... tripGroups) {
-
-    return processToJSON(uid, Arrays.asList(tripGroups));
-  }
-
-  /**
-   * Method to help process a list of trip-groups into a JSON-encodable format.
-   *
-   * @param uid
-   *     The user id this is being compiled for.
-   * @param tripGroupList
-   *     The list of troup-grips.
-   *
-   * @return A JSON-encodable list of groups of trip objects.
-   */
-  private static List<List<Map<String, String>>> processToJSON(String uid,
-      List<List<Trip>> tripGroupList) {
-    List<List<Map<String, String>>> data = new ArrayList<>();
-    for (List<Trip> entry : tripGroupList) {
-
-      List<Map<String, String>> innerList = new ArrayList<>();
-      for (Trip trip : entry) {
-        String status;
-        if (trip.getMemberIds().contains(uid)) {
-          status = "joined";
-        } else if (trip.getHostId().equals(uid)) {
-          status = "hosting";
-        } else if (trip.getPendingIds().contains(uid)) {
-          status = "pending";
-        } else {
-          status = "join";
-        }
-
-        Map<String, String> vals = new HashMap<>();
-        vals.put("start", trip.getStartingAddress());
-        vals.put("end", trip.getEndingAddress());
-        vals.put("date", Long.toString(trip.getDepartureTime()));
-        vals.put("currentSize", Integer.toString(trip.getCurrentSize()));
-        vals.put("maxSize", Integer.toString(trip.getMaxUsers()));
-        if (uid != null) {
-          vals.put("costPerPerson", Double.toString(trip.getCostPerUser(uid)));
-        } else {
-          vals.put("costPerPerson", Double.toString(trip.getCostPerUser("")));
-        }
-        vals.put("id", Integer.toString(trip.getId()));
-        vals.put("name", trip.getName());
-        vals.put("status", status);
-
-        innerList.add(vals);
-      }
-      data.add(innerList);
-    }
-    return data;
   }
 
   // ---------------------------- Home ------------------------------------
