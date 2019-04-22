@@ -12,11 +12,12 @@
             <h2 class="section-heading" id="home-btn-tutorial-main">Search for a
                 Carpool</h2>
             <img src="/images/divider.png" style="height: 4px; width: auto;"/>
-            <form autocomplete="off"
+            <form autocomplete="on"
                   onsubmit="event.preventDefault(); validateSubmit()">
                 <div class="search-inputs">
                     <div><i class="fas fa-dot-circle icon-label"></i>
                         <input class="address-input" id="start-input"
+                               oninput="hideClearButtons();"
                                onblur="handleInput('start-input', 0)"
                                type="text" placeholder="Starting point..."/>
                         <img id="loading-start-input" src="/images/loading.gif"
@@ -29,6 +30,7 @@
                     </div>
                     <div><i class="fas fa-map-marker-alt icon-label"></i>
                         <input class="address-input" id="end-input"
+                               oninput="hideClearButtons();"
                                onblur="handleInput('end-input', 1)" type="text"
                                placeholder="Ending destination..."/>
                         <img id="loading-end-input" src="/images/loading.gif"

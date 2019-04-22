@@ -134,6 +134,7 @@ function handleInput(id, index) {
                             $(`#loading-${id}`).css({
                                 visibility: "hidden"
                             });
+                            $(".clear-btn").css({visibility: "visible"});
                         });
         }, 800);
     }
@@ -266,6 +267,10 @@ function enableTrip() {
     });
     $("#car-icon").attr("src", "/images/car-icon.png");
     $("#route-info").fadeIn(FADE_SPEED);
+}
+
+function hideClearButtons() {
+    $(".clear-btn").css({visibility: "hidden"});
 }
 
 /**
