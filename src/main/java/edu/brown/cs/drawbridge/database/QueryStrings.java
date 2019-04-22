@@ -61,4 +61,6 @@ public final class QueryStrings {
                   + " AND (departure BETWEEN ((haversine(start_latitude, start_longitude, ?, ?) / 0.0014) + ?) "
                   + " AND (haversine(start_latitude, start_longitude, ?, ?) / 0.0014) + ?);";
   //lat, lon, distRadius, lat, lon, lastEta, lat, lon, lastEta + buffer
+  protected static final String UPDATE_DESCRIPTION =
+          "UPDATE trips SET description = ? WHERE id = ?;";
 }
