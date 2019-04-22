@@ -1,21 +1,5 @@
 function generateTrip(trip) {
     let date = new Date(parseFloat(trip["date"]) * 1000);
-
-    let hourLabel = "AM";
-    let minutes;
-    let hour = date.getHours();
-    if (hour >= 12) {
-        hour = hour - 12;
-        hourLabel = "PM";
-    }
-    if (hour === 0) {
-        hour = 12;
-    }
-    if (date.getMinutes() < 10) {
-        minutes = `${date.getMinutes()}0`;
-    } else {
-        minutes = date.getMinutes();
-    }
     // If the status is "join" add hover effects and an onclick handler
     let imgAtt = "";
     if (trip["status"] === "join") {
@@ -33,9 +17,9 @@ function generateTrip(trip) {
 				</div>
 				<div>
 					<i class="fas fa-calendar icon-label-small"></i>
-						${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}
+						${date.toDateString()}
 					<i class="fas fa-clock icon-label-small"></i>
-						${hour}:${minutes} ${hourLabel}
+						${toJSTime(date)}
 				</div>
 				<div>
 					<i class="fas fa-users icon-label-small"></i>
@@ -52,4 +36,16 @@ function showHideTooltip(tooltip, timeout) {
     setTimeout(function () {
         tooltip.hide();
     }, timeout);
+}
+
+function toJSTime(date) {
+    let hour = date.getHours();
+    let min = date.getMinutes();
+    let output = `${((hour > 12) ? hour - 12 : hour)}`;
+    if (hour === 0) {
+        output = '12';
+    }
+    output += `${((min < 10) ? ':0' : ':') + min}`;
+    output += (hour >= 12) ? ' PM' : ' AM';
+    return output;
 }

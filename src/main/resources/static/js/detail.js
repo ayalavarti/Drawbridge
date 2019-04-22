@@ -66,6 +66,9 @@ function onUserSignedIn() {
         $("#full-label").show();
         $("[id=approve-btn]").hide();
     }
+    console.log(uid);
+    $(`#${uid}`).css({visibility: "visible"});
+    $(`.${uid}`).attr("src", `${userProfile.getImageUrl()}`);
 }
 
 /**
@@ -97,6 +100,8 @@ function onUserSignedOut() {
     if (!tripFull) {
         $("#join-btn").show();
     }
+    $("[class=verified]").css({visibility: "hidden"});
+    $("[id=member-img]").attr("src", "/images/temp.png");
 }
 
 /**
