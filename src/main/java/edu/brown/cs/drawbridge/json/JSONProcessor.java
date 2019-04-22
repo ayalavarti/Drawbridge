@@ -1,8 +1,10 @@
 package edu.brown.cs.drawbridge.json;
 
 import com.google.gson.JsonArray;
+import com.sun.istack.internal.NotNull;
 import edu.brown.cs.drawbridge.models.Trip;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,8 +25,8 @@ public abstract class JSONProcessor {
    * @param uid The user to set the status field in the trips for.
    * @return A json representation of the trips groups.
    */
-  public static JsonArray processTripGroups(List<List<Trip>> tripGroups,
-                                            String uid) {
+  public static JsonArray processTripGroups(@NotNull String uid,
+                                            List<List<Trip>> tripGroups) {
     JsonArray data = new JsonArray();
 
     for (List<Trip> tripGroup : tripGroups) {
@@ -37,7 +39,17 @@ public abstract class JSONProcessor {
 
     return data;
   }
-
+  /**
+   * Alternate method for processing trip groups passed in one by one.
+   * @param uid The user id to set the status for. Empty string for no user.
+   * @param tripGroups The trips to process in.
+   * @return A json representation of the tripGroups passed in.
+   */
+  @SafeVarargs
+  public static JsonArray processTripGroups(@NotNull String uid,
+                                            List<Trip>...tripGroups) {
+    return processTripGroups(uid, Arrays.asList(tripGroups));
+  }
   /**
    * Method to process trip groups into json without a user. Status field
    * will be set to "join" for all trips.
@@ -45,6 +57,6 @@ public abstract class JSONProcessor {
    * @return A json representation of the trips.
    */
   public static JsonArray processTripGroups(List<List<Trip>> tripGroups) {
-    return processTripGroups(tripGroups, "");
+    return processTripGroups("", tripGroups);
   }
 }
