@@ -48,3 +48,14 @@ Searches:
 
 * Wheeler School -> Walden Pond: May 10th, 11:00 PM
 ==> 1 single trip
+
+bipartitite connected graph of locations: 
+1) {"Keeney Quad", "Providence Station", "Metcalf Research Building", "RISD Store",
+    	"CIT", "Hope High School", "Wheeler School", "Nelson Fitness Center",
+    	"Providence Place", "Ratty", "Jo's"}
+2) {"Copley Square", "Metropolitan Opera House",
+        "Museum of Fine Arts, Boston", "Rockefeller Center", "Coney Island",
+        "Six Flags, New England", "Mount Monadnock", "Narragansett Beach",
+        "Tanglewood", "Grand Central Station", "Reading Terminal",
+        "Walden Pond"}
+Times randomized between May 6th and May 16th
