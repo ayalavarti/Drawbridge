@@ -469,6 +469,7 @@ public final class UserInterface {
       String uid = qm.value("userID");
       String name = qm.value("name");
       String email = qm.value("email");
+      String profilePic = qm.value("profilePic");
 
       User user = new User(uid, name, email);
 
@@ -476,6 +477,7 @@ public final class UserInterface {
       responseData.addProperty("uid", uid);
 
       try {
+        // Check if they're already a member and add them if they're not
         if (carpools.addUser(user)) {
           // User successfully added to database
           responseData.addProperty("isNewUser", true);
@@ -484,12 +486,16 @@ public final class UserInterface {
           responseData.addProperty("isNewUser", false);
         }
 
+        // Update the user's profile picture
+        carpools.updateProfilePic(uid, profilePic);
+
         responseData.addProperty("success", true);
 
       } catch (SQLException e) {
         responseData.addProperty("success", false);
         responseData.addProperty("error", e.getMessage());
       }
+
 
       return GSON.toJson(responseData);
     }

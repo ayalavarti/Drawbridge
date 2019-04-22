@@ -291,7 +291,7 @@ public class DatabaseQuery {
       prep.setString(1, user.getId());
       prep.setString(2, user.getName());
       prep.setString(3, user.getEmail());
-      //prep.setString(4, user.getPictureUrl());
+      prep.setString(4, user.getProfilePic());
       prep.addBatch();
       prep.executeUpdate();
     }
