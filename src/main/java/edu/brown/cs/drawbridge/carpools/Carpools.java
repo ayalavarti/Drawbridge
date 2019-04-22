@@ -397,6 +397,18 @@ public final class Carpools {
     }
   }
 
+  /**
+   * Gets a user given the user's id.
+   * @param uid The user id.
+   * @return The user object associated with the id.
+   * @throws SQLException when the database has an error
+   * @throws MissingDataException when the user doesn't exist.
+   */
+  public User getUserById(String uid)
+          throws SQLException, MissingDataException {
+    return database.getUserById(uid);
+  }
+
   DatabaseQuery getDatabase() {
     return database;
   }
