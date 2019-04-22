@@ -272,6 +272,21 @@ public final class UserInterface {
     }
   }
 
+  /**
+   * Handler for checking trips for membership after they're displayed to
+   * display accurate hosting/pending/member information if relevant.
+   */
+  private static class ListPostHandler implements Route {
+    @Override
+    public Object handle(Request request, Response response) {
+      QueryParamsMap qm = request.queryMap();
+
+      String uid = qm.value("uid");
+
+      return null;
+    }
+  }
+
   // --------------------------- Detail -----------------------------------
 
   /**
