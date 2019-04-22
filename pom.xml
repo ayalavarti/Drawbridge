@@ -110,7 +110,7 @@
           <appName>boggle_test</appName>
           <processTypes>
             <!-- Tell Heroku how to launch your application -->
-            <web>java -jar ./target/javalin-heroku-example-1.0-jar-with-dependencies.jar</web>
+            <web>java $JAVA_OPTS -cp target/classes:target/dependency/* edu.brown.cs.drawbridge.main.Main</web>
           </processTypes>
         </configuration>
       </plugin>
