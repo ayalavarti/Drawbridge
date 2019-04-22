@@ -1,47 +1,79 @@
 package edu.brown.cs.drawbridge.database;
 
+import edu.brown.cs.drawbridge.models.Trip;
+import edu.brown.cs.drawbridge.models.User;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import org.junit.Test;
-
-import edu.brown.cs.drawbridge.models.Trip;
-import edu.brown.cs.drawbridge.models.User;
-import retrofit2.http.Query;
 
 /**
  * Contains a Test that populates the database.
  */
 public class AutoPopulator {
 
-  private static DatabaseQuery test;
-
   private static final int NUM_TRIPS = 10000;
   private static final int NUM_USERS = 1000;
+  private static DatabaseQuery test;
+  private String[] startNames = { "Keeney Quad", "Providence Station",
+      "Metcalf Research Building", "RISD Store", "CIT", "Hope High School",
+      "Wheeler School", "Nelson Fitness Center", "Providence Place", "Ratty",
+      "Jo's"
+  };
+  private double[][] startCoordinates = { { -71.4032918, 41.8247879 },
+      { -71.41449, 41.828762 }, { -71.4007193, 41.8267941 },
+      { -71.40683, 41.8256618 }, { -71.3995396, 41.8271697 },
+      { -71.40237, 41.834724 }, { -71.39872, 41.828613 },
+      { -71.3979893, 41.8296967 }, { -71.41631, 41.827362 },
+      { -71.40083, 41.825184 }, { -71.39944, 41.82346 }
+  };
+  private String[] endNames = { "Copley Square", "Metropolitan Opera House",
+      "Museum of Fine Arts, Boston", "Rockefeller Center", "Coney Island",
+      "Six Flags, New England", "Mount Monadnock", "Narragansett Beach",
+      "Tanglewood", "Grand Central Station", "Reading Terminal", "Walden Pond"
+  };
+  //to add: Kimball's Farm, Bedford Farms, Reasons to be Cheerful
+  private double[][] endCoordinates = { { -71.078705, 42.34819 },
+      { -73.98343, 40.772377 }, { -71.094734, 42.33818 },
+      { -73.97852, 40.75865 }, { -73.9851, 40.5758 }, { -72.61579, 42.037796 },
+      { -72.0615, 42.83001 }, { -71.4563, 41.4378 }, { -73.310844, 42.349247 },
+      { -73.97745, 40.752785 }, { -75.15931, 39.953342 },
+      { -71.33524, 42.440456 }
+  };
+  private User[] users = {
+      new User("108134993267513125002", "Arvind", "arvind_yalavarti@brown.edu"),
+      new User("105528985214845949817", "Jeff", "jeffreyzhu101@gmail.com"),
+      new User("118428670975676923422", "Mark", "lavrema@outlook.com"),
+      new User("106748572580441940868", "Sam", "samuel_maffa@brown.edu"),
+      new User("500", "Blueno", "blue@no.com"),
+  };
+  private String[] comments = { "", "Looking for some more members",
+      "Anybody want to join me?"
+  };
 
   /**
    * Populate all tables in the database.
    *
    * @throws ClassNotFoundException
-   *           When connection to database is invalid
+   *     When connection to database is invalid
    * @throws SQLException
-   *           If the SQL query is invalid.
+   *     If the SQL query is invalid.
    * @throws MissingDataException
-   *           If database is missing information
+   *     If database is missing information
    */
   //@Test
   public void populateUsers()
       throws ClassNotFoundException, SQLException, MissingDataException {
-    String username = "dev";
-    String password = "dev";
+    String username = System.getenv("DB_USER");
+    String password = System.getenv("DB_PASS");
     test = new DatabaseQuery("//127.0.0.1:5432/massData", username, password);
     populateUsers(test);
   }
 
   //@Test
-  public void populateTrips() throws SQLException, ClassNotFoundException, MissingDataException {
+  public void populateTrips()
+      throws SQLException, ClassNotFoundException, MissingDataException {
     String username = "dev";
     String password = "dev";
     test = new DatabaseQuery("//127.0.0.1:5432/massData", username, password);
@@ -49,7 +81,8 @@ public class AutoPopulator {
   }
 
   //@Test
-  public void populateRequests() throws SQLException, ClassNotFoundException, MissingDataException {
+  public void populateRequests()
+      throws SQLException, ClassNotFoundException, MissingDataException {
     String username = "dev";
     String password = "dev";
     test = new DatabaseQuery("//127.0.0.1:5432/massData", username, password);
@@ -57,7 +90,8 @@ public class AutoPopulator {
   }
 
   //@Test
-  public void populateMembers() throws SQLException, ClassNotFoundException, MissingDataException {
+  public void populateMembers()
+      throws SQLException, ClassNotFoundException, MissingDataException {
     String username = "dev";
     String password = "dev";
     test = new DatabaseQuery("//127.0.0.1:5432/massData", username, password);
@@ -89,8 +123,7 @@ public class AutoPopulator {
           .addAddressNames(generateRandomString(), generateRandomString())
           .addTimes(departureTime, departureTime + secondsPerHour)
           .addDetails(maxUsers, cost, generateRandomPhoneNumber(),
-              generateRandomTransportation(), generateRandomString())
-          .build();
+              generateRandomTransportation(), generateRandomString()).build();
       db.createTrip(trip, Integer.toString(hostId));
       hostId = (hostId + 1) % NUM_USERS;
     }
@@ -98,7 +131,7 @@ public class AutoPopulator {
 
   private void populatePending(DatabaseQuery db)
       throws SQLException, MissingDataException, ClassNotFoundException {
-    List<String> allUserIds = new ArrayList<String>();
+    List<String> allUserIds = new ArrayList<>();
     for (int i = 0; i < NUM_USERS; i++) {
       allUserIds.add(Integer.toString(i));
     }
@@ -193,56 +226,8 @@ public class AutoPopulator {
     return (long) (Math.floor(Math.random() * (max - min)) + min);
   }
 
-  private String[] startNames = {"Keeney Quad", "Providence Station",
-          "Metcalf Research Building", "RISD Store",
-          "CIT", "Hope High School", "Wheeler School", "Nelson Fitness Center",
-          "Providence Place", "Ratty", "Jo's"};
-  private double[][] startCoordinates =
-          {
-                  {-71.4032918, 41.8247879},
-                  {-71.41449, 41.828762},
-                  {-71.4007193, 41.8267941},
-                  {-71.40683, 41.8256618},
-                  {-71.3995396, 41.8271697},
-                  {-71.40237, 41.834724},
-                  {-71.39872, 41.828613},
-                  {-71.3979893, 41.8296967},
-                  {-71.41631, 41.827362},
-                  {-71.40083, 41.825184},
-                  {-71.39944, 41.82346}
-          };
-  private String[] endNames = {"Copley Square", "Metropolitan Opera House",
-          "Museum of Fine Arts, Boston", "Rockefeller Center", "Coney Island",
-          "Six Flags, New England", "Mount Monadnock", "Narragansett Beach",
-          "Tanglewood", "Grand Central Station", "Reading Terminal",
-          "Walden Pond"};
-  //to add: Kimball's Farm, Bedford Farms, Reasons to be Cheerful
-  private double[][] endCoordinates =
-          {
-                  {-71.078705, 42.34819},
-                  {-73.98343, 40.772377},
-                  {-71.094734, 42.33818},
-                  {-73.97852, 40.75865},
-                  {-73.9851, 40.5758},
-                  {-72.61579, 42.037796},
-                  {-72.0615, 42.83001},
-                  {-71.4563, 41.4378},
-                  {-73.310844, 42.349247},
-                  {-73.97745, 40.752785},
-                  {-75.15931, 39.953342},
-                  {-71.33524, 42.440456}
-          };
-  private User[] users = {
-          new User("108134993267513125002", "Arvind", "arvind_yalavarti@brown.edu"),
-          new User("105528985214845949817", "Jeff", "jeffreyzhu101@gmail.com"),
-          new User("118428670975676923422", "Mark", "lavrema@outlook.com"),
-          new User("106748572580441940868", "Sam", "samuel_maffa@brown.edu"),
-          new User("500", "Blueno", "blue@no.com"),
-  };
-  private String[] comments = {"", "Looking for some more members", "Anybody want to join me?"};
-
   private void populateTrips2(DatabaseQuery db, int tripNum)
-          throws SQLException, MissingDataException, ClassNotFoundException {
+      throws SQLException, MissingDataException, ClassNotFoundException {
     for (int i = 1; i <= tripNum; i++) {
       int randomStartIndex = (int) (Math.random() * startNames.length);
       int randomEndIndex = (int) (Math.random() * endNames.length);
@@ -252,14 +237,17 @@ public class AutoPopulator {
       int randomTripSize = 2 + (int) (Math.random() * 4);
       double randomCost = 20 + Math.random() * 20;
       String randomComment = comments[(int) (Math.random() * comments.length)];
-      Trip t = Trip.TripBuilder.newTripBuilder()
-              .addIdentification(-1, startNames[randomStartIndex] + " to " + endNames[randomEndIndex])
-              .addLocations(startCoordinates[randomStartIndex][1], startCoordinates[randomStartIndex][0],
-                      endCoordinates[randomEndIndex][1], endCoordinates[randomEndIndex][0])
-              .addAddressNames(startNames[randomStartIndex], endNames[randomEndIndex])
-              .addTimes(randomTime, randomTime + randomTripLength)
-              .addDetails(randomTripSize, randomCost, generateRandomPhoneNumber(), generateRandomTransportation(), randomComment)
-              .build();
+      Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(-1,
+          startNames[randomStartIndex] + " to " + endNames[randomEndIndex])
+          .addLocations(startCoordinates[randomStartIndex][1],
+              startCoordinates[randomStartIndex][0],
+              endCoordinates[randomEndIndex][1],
+              endCoordinates[randomEndIndex][0])
+          .addAddressNames(startNames[randomStartIndex],
+              endNames[randomEndIndex])
+          .addTimes(randomTime, randomTime + randomTripLength)
+          .addDetails(randomTripSize, randomCost, generateRandomPhoneNumber(),
+              generateRandomTransportation(), randomComment).build();
       db.createTrip(t, users[randomHost].getId());
     }
   }
@@ -273,13 +261,15 @@ public class AutoPopulator {
   }
 
   //@Test
-  public void popTrips() throws SQLException, ClassNotFoundException, MissingDataException {
+  public void popTrips()
+      throws SQLException, ClassNotFoundException, MissingDataException {
     test = new DatabaseQuery("//127.0.0.1:5432/carpools", "dev", "dev");
     populateTrips2(test, 1000);
   }
 
   //@Test
-  public void popMembers() throws SQLException, ClassNotFoundException, MissingDataException {
+  public void popMembers()
+      throws SQLException, ClassNotFoundException, MissingDataException {
     test = new DatabaseQuery("//127.0.0.1:5432/carpools", "dev", "dev");
     for (int i = 2001; i < 3000; i++) {
       Trip t = test.getTripById(i);
