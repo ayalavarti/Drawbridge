@@ -7,8 +7,12 @@ package edu.brown.cs.drawbridge.database;
  */
 public final class QueryStrings {
 
-  protected static final String INSERT_USER = "INSERT "
-      + "INTO users VALUES (?, ?, ?);";
+  protected static final String INSERT_USER = "INSERT INTO "
+          + "users VALUES (?, ?, ?);";
+//  protected static final String INSERT_USER = "INSERT INTO "
+//          + "users VALUES (?, ?, ?, ?);";
+  protected static final String UPDATE_PROFILE_PICTURE =
+        "UPDATE users SET profile_picture = ? WHERE id = ?";
   protected static final String INSERT_TRIP = "INSERT INTO "
       + "trips(name, start_name, "
       + "start_latitude, start_longitude, end_name, end_latitude, "
@@ -16,6 +20,8 @@ public final class QueryStrings {
       + "departure, eta, max_people, total_cost, phone_number, "
       + "transportation, "
       + "description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+  protected static final String UPDATE_DESCRIPTION =
+          "UPDATE trips SET description = ? WHERE id = ?;";
   protected static final String REMOVE_TRIP_BY_ID = "DELETE FROM trips "
       + "WHERE id = ?;";
   protected static final String REMOVE_TRIPS_BY_TIME = "DELETE FROM trips "
@@ -32,6 +38,8 @@ public final class QueryStrings {
       = "DELETE FROM requests WHERE trip_id = ? AND user_id = ?;";
   protected static final String FIND_USER_BY_ID
       = "SELECT name, email FROM users WHERE id = ?;";
+//  protected static final String FIND_USER_BY_ID =
+//          "SELECT name, email, profile_picture FROM users WHERE id = ?;";
   protected static final String FIND_TRIP_BY_ID = "SELECT name, start_name, "
       + "start_latitude, start_longitude, end_name, end_latitude, "
       + "end_longitude, "
@@ -61,6 +69,4 @@ public final class QueryStrings {
                   + " AND (departure BETWEEN ((haversine(start_latitude, start_longitude, ?, ?) / 0.0014) + ?) "
                   + " AND (haversine(start_latitude, start_longitude, ?, ?) / 0.0014) + ?);";
   //lat, lon, distRadius, lat, lon, lastEta, lat, lon, lastEta + buffer
-  protected static final String UPDATE_DESCRIPTION =
-          "UPDATE trips SET description = ? WHERE id = ?;";
 }

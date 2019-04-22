@@ -36,6 +36,10 @@ as well. Open PGAdmin and create a new database named
 
 To restore data to your database, select "restore" and
 choose one of the data files. 
+(For some reason, the dump file restores data in the
+wrong order: i.e., restoring references to foreign ids
+before the ids themselves. Restoring the same data
+twice should correctly populate the database.)
 
 *In the carpools database, open the query tool (lightning
 symbol), and run the following commands, consistent with
