@@ -341,6 +341,9 @@ public final class UserInterface {
         } else if (action.equals("deny")) {
           String pendingUID = qm.value("pendingUser");
           success = carpools.rejectRequest(tid, uid, pendingUID);
+        } else if (action.equals("editComment")) {
+          String newComment = qm.value("newComment");
+          success = carpools.updateComment(tid, uid, newComment);
         }
         assert success; // Make sure the db action was completed successfully
         responseData.addProperty("success", true);
