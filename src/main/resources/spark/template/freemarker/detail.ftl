@@ -30,7 +30,7 @@
                 <h3 style="margin-top: 30px;">Share this Trip</h3>
                 <div style="display: flex; flex-wrap: wrap; justify-content:
                 center; align-items: center;">
-                    <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Flocalhost:8000/trip/${trip.getId()}&text=Join%20My%20Carpool!">
+                    <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Flocalhost:8000/trip/${trip.getId()}&text=Join%20My%20Carpool!&hashtags=drawbridge">
                         <div class="share-tooltip">
                             <img style="height: 15px; width: auto"
                                  src="/images/twitter-icon.png"/>
@@ -61,13 +61,27 @@
                 </i></h2>
             <div id="member-list">
                 <div class="list-person">
-                    <span class="user-name">${host.getName()}</span>
+                    <span class="user-name">
+                        <img class="member-img"
+                             src="/images/temp.png"/>
+                        ${host.getName()}
+                        <img id="${host.getId()}" class="verified"
+                             style="visibility: hidden;"
+                             src="/images/current-user.png"/>
+                    </span>
                     <img alt="host-label" src="/images/hosting-btn.png"
                          class="host-label"/>
                 </div>
                 <#list members as member>
                     <div class="list-person">
-                        <span class="user-name">${member.getName()}</span>
+                        <span class="user-name">
+                            <img class="member-img"
+                                 src="/images/temp.png"/>
+                            ${member.getName()}
+                            <img id="${member.getId()}" class="verified"
+                                 style="visibility: hidden;"
+                                 src="/images/current-user.png"/>
+                        </span>
                         <img alt="member-label" src="/images/member-label.png"
                              class="member-label"/>
                     </div>
@@ -75,8 +89,16 @@
                 <div id="pending" style="display: none;">
                     <#list pending as pend>
                         <div class="list-person">
-                        <span class="user-name">${pend.getName()}<i
-                                    class="addendum">(pending)</i></span>
+                        <span id="${pend.getId()}" class="user-name">
+                            <img class="member-img"
+                                 src="/images/temp.png"/>
+                            ${pend.getName()}<i
+                                    style="padding-left: 5px;"
+                                    class="addendum">(pending)</i>
+                            <img id=`"${pend.getId()}"` class="verified"
+                                 style="visibility: hidden;"
+                                 src="/images/current-user.png"/>
+                        </span>
                             <div class="pending">
                                 <img alt="approve-btn" id="approve-btn"
                                      src="/images/approve-btn.png"

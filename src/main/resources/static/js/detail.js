@@ -66,6 +66,8 @@ function onUserSignedIn() {
         $("#full-label").show();
         $("[id=approve-btn]").hide();
     }
+    console.log(uid);
+    $(`#${uid}`).css({visibility: "visible"});
 }
 
 /**
@@ -97,6 +99,7 @@ function onUserSignedOut() {
     if (!tripFull) {
         $("#join-btn").show();
     }
+    $(".verified").css({visibility: "hidden"});
 }
 
 /**
