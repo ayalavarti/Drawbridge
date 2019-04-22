@@ -214,33 +214,38 @@ public final class UserInterface {
 
       // Read in the params
       String uid = qm.value("uid");
-      JsonArray tids =
+      JsonArray tripGroups =
               (JsonArray) new JsonParser().parse(qm.value("trips"));
 
       // Create response data object
       JsonObject responseData = new JsonObject();
       responseData.addProperty("uid", uid);
-      JsonArray jTrips = new JsonArray();
+      JsonArray jTripGroups = new JsonArray();
 
       // Iterate over the trips and check the user's status in each
-      for (JsonElement tid : tids) {
-        Trip trip;
-        try {
-          trip = carpools.getTrip(tid.getAsInt());
-        } catch (SQLException | MissingDataException e) {
-          responseData.addProperty("success", false);
-          responseData.addProperty("error", e.getMessage());
-          return GSON.toJson(responseData);
-        }
+      for (JsonElement tGroup : tripGroups) {
+        JsonArray arrTGroup = tGroup.getAsJsonArray();
+        JsonArray pjTrips = new JsonArray();
+        for (JsonElement tid : arrTGroup) {
+          Trip trip;
+          try {
+            trip = carpools.getTrip(tid.getAsInt());
+          } catch (SQLException | MissingDataException e) {
+            responseData.addProperty("success", false);
+            responseData.addProperty("error", e.getMessage());
+            return GSON.toJson(responseData);
+          }
 
-        if (uid != null) {
-          jTrips.add(trip.toJson(uid));
-        } else {
-          jTrips.add(trip.toJson());
+          if (uid != null) {
+            pjTrips.add(trip.toJson(uid));
+          } else {
+            pjTrips.add(trip.toJson());
+          }
         }
+        jTripGroups.add(pjTrips);
       }
 
-      responseData.add("trips", jTrips);
+      responseData.add("trips", jTripGroups);
       responseData.addProperty("success", true);
       return GSON.toJson(responseData);
     }
