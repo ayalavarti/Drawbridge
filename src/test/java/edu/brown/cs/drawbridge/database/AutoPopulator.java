@@ -205,7 +205,7 @@ public class AutoPopulator {
                   {-71.40683, 41.8256618},
                   {-71.3995396, 41.8271697},
                   {-71.40237, 41.834724},
-                  {-71.4, 41.85},
+                  {-71.39872, 41.828613},
                   {-71.3979893, 41.8296967},
                   {-71.41631, 41.827362},
                   {-71.40083, 41.825184},
@@ -216,6 +216,7 @@ public class AutoPopulator {
           "Six Flags, New England", "Mount Monadnock", "Narragansett Beach",
           "Tanglewood", "Grand Central Station", "Reading Terminal",
           "Walden Pond"};
+  //to add: Kimball's Farm, Bedford Farms, Reasons to be Cheerful
   private double[][] endCoordinates =
           {
                   {-71.078705, 42.34819},
@@ -228,8 +229,8 @@ public class AutoPopulator {
                   {-71.4563, 41.4378},
                   {-73.310844, 42.349247},
                   {-73.97745, 40.752785},
-                  {-71.39944, 41.82346},
-                  {-73.97745, 40.752785}
+                  {-75.15931, 39.953342},
+                  {-71.33524, 42.440456}
           };
   private User[] users = {
           new User("108134993267513125002", "Arvind", "arvind_yalavarti@brown.edu"),
@@ -251,11 +252,10 @@ public class AutoPopulator {
       int randomTripSize = 2 + (int) (Math.random() * 4);
       double randomCost = 20 + Math.random() * 20;
       String randomComment = comments[(int) (Math.random() * comments.length)];
-      User host = users[randomHost];
       Trip t = Trip.TripBuilder.newTripBuilder()
               .addIdentification(-1, startNames[randomStartIndex] + " to " + endNames[randomEndIndex])
-              .addLocations(startCoordinates[randomStartIndex][0], startCoordinates[randomStartIndex][1],
-                      endCoordinates[randomEndIndex][0], endCoordinates[randomEndIndex][1])
+              .addLocations(startCoordinates[randomStartIndex][1], startCoordinates[randomStartIndex][0],
+                      endCoordinates[randomEndIndex][1], endCoordinates[randomEndIndex][0])
               .addAddressNames(startNames[randomStartIndex], endNames[randomEndIndex])
               .addTimes(randomTime, randomTime + randomTripLength)
               .addDetails(randomTripSize, randomCost, generateRandomPhoneNumber(), generateRandomTransportation(), randomComment)
@@ -275,20 +275,24 @@ public class AutoPopulator {
   //@Test
   public void popTrips() throws SQLException, ClassNotFoundException, MissingDataException {
     test = new DatabaseQuery("//127.0.0.1:5432/carpools", "dev", "dev");
-    populateTrips2(test, 300);
+    populateTrips2(test, 1000);
   }
 
   //@Test
   public void popMembers() throws SQLException, ClassNotFoundException, MissingDataException {
     test = new DatabaseQuery("//127.0.0.1:5432/carpools", "dev", "dev");
-    for (int i = 301; i < 600; i++) {
-      String id = test.getHostOnTrip(i);
+    for (int i = 2001; i < 3000; i++) {
+      Trip t = test.getTripById(i);
+      String id = t.getHostId();
+      int maxPeople = t.getMaxUsers();
+      int numPeople = 1;
       for (User u : users) {
         boolean accept = new Random().nextBoolean();
         if (!id.equals(u.getId())) {
           test.request(i, u.getId());
-          if (accept) {
+          if (accept && numPeople < maxPeople) {
             test.approve(i, u.getId());
+            numPeople++;
           }
         }
       }
