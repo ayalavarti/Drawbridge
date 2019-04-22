@@ -30,7 +30,7 @@
                 <h3 style="margin-top: 30px;">Share this Trip</h3>
                 <div style="display: flex; flex-wrap: wrap; justify-content:
                 center; align-items: center;">
-                    <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Flocalhost:8000/trip/${trip.getId()}&text=Join%20My%20Carpool!">
+                    <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Flocalhost:8000/trip/${trip.getId()}&text=Join%20My%20Carpool!&hashtags=drawbridge">
                         <div class="share-tooltip">
                             <img style="height: 15px; width: auto"
                                  src="/images/twitter-icon.png"/>
@@ -61,13 +61,27 @@
                 </i></h2>
             <div id="member-list">
                 <div class="list-person">
-                    <span class="user-name">${host.getName()}</span>
+                    <span class="user-name">
+                        <img class="${host.getId()}" id="member-img"
+                             src="/images/temp.png"/>
+                        ${host.getName()}
+                        <img id="${host.getId()}" class="verified"
+                             style="visibility: hidden;"
+                             src="/images/current-user.png"/>
+                    </span>
                     <img alt="host-label" src="/images/hosting-btn.png"
                          class="host-label"/>
                 </div>
                 <#list members as member>
                     <div class="list-person">
-                        <span class="user-name">${member.getName()}</span>
+                        <span class="user-name">
+                            <img class="${member.getId()}" id="member-img"
+                                 src="/images/temp.png"/>
+                            ${member.getName()}
+                            <img id="${member.getId()}" class="verified"
+                                 style="visibility: hidden;"
+                                 src="/images/current-user.png"/>
+                        </span>
                         <img alt="member-label" src="/images/member-label.png"
                              class="member-label"/>
                     </div>
@@ -75,18 +89,26 @@
                 <div id="pending" style="display: none;">
                     <#list pending as pend>
                         <div class="list-person">
-                        <span class="user-name">${pend.getName()}<i
-                                    class="addendum">(pending)</i></span>
+                        <span id="${pend.getId()}" class="user-name">
+                            <img class="${pend.getId()}" id="member-img"
+                                 src="/images/temp.png"/>
+                            ${pend.getName()}<i
+                                    style="padding-left: 5px;"
+                                    class="addendum">(pending)</i>
+                            <img id=`"${pend.getId()}"` class="verified"
+                                 style="visibility: hidden;"
+                                 src="/images/current-user.png"/>
+                        </span>
                             <div class="pending">
                                 <img alt="approve-btn" id="approve-btn"
                                      src="/images/approve-btn.png"
                                      class="approve-btn"
-                                     onclick="approveClick(${trip.getId()}, '${pend.getId()?js_string}');"
+                                     onclick="approveClick(${trip.getId()?c}, '${pend.getId()?js_string}');"
                                      onmouseover="hover(this);"
                                      onmouseout="unhover(this);"/>
                                 <img alt="deny-btn" src="/images/deny-btn.png"
                                      class="deny-btn"
-                                     onclick="denyClick(${trip.getId()}, '${pend.getId()?js_string}');"
+                                     onclick="denyClick(${trip.getId()?c}, '${pend.getId()?js_string}');"
                                      onmouseover="hover(this);"
                                      onmouseout="unhover(this);"/>
                             </div>
@@ -96,19 +118,19 @@
                 <div id="button-container">
                     <img alt="join-btn" src="/images/join-btn.png" id="join-btn"
                          style="display: none" class="join-btn"
-                         onclick="joinClick(${trip.getId()});"
+                         onclick="joinClick(${trip.getId()?c});"
                          onmouseover="hover(this);"
                          onmouseout="unhover(this);"/>
                     <img alt="leave-btn" src="/images/leave-btn.png"
                          id="leave-btn"
                          style="display: none" class="leave-btn"
-                         onclick="leaveClick(${trip.getId()});"
+                         onclick="leaveClick(${trip.getId()?c});"
                          onmouseover="hover(this);"
                          onmouseout="unhover(this);"/>
                     <img alt="delete-btn" src="/images/delete-btn.png"
                          id="delete-btn"
                          style="display: none" class="delete-btn"
-                         onclick="deleteClick(${trip.getId()});"
+                         onclick="deleteClick(${trip.getId()?c});"
                          onmouseover="hover(this);"
                          onmouseout="unhover(this);"/>
                     <img alt="pending-label" src="/images/pending-btn.png"

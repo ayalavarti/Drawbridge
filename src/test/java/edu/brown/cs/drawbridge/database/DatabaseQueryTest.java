@@ -37,23 +37,19 @@ public class DatabaseQueryTest {
   private static DatabaseQuery teamData;
 
   @BeforeClass public static void oneTimeSetUp()
-      throws SQLException, MissingDataException {
-    try {
-      String username = System.getenv("DB_USER");
-      String password = System.getenv("DB_PASS");
-      /*
-       * Run the following queries in pgadmin:
-       * CREATE USER <username> WITH PASSWORD '<password>'
-       * GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <username>
-       * GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO <username>
-       */
-      test = new DatabaseQuery("//127.0.0.1:5432/testCarpools", username,
-          password);
-      teamData = new DatabaseQuery("//127.0.0.1:5432/carpools", username,
-          password);
-    } catch (ClassNotFoundException | SQLException e) {
-      assert false;
-    }
+      throws SQLException, MissingDataException, ClassNotFoundException {
+    String username = System.getenv("DB_USER");
+    String password = System.getenv("DB_PASS");
+    /*
+     * Run the following queries in pgadmin:
+     * CREATE USER <username> WITH PASSWORD '<password>'
+     * GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <username>
+     * GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO <username>
+     */
+    test = new DatabaseQuery("//127.0.0.1:5432/testCarpools", username,
+        password);
+    teamData = new DatabaseQuery("//127.0.0.1:5432/carpools", username,
+        password);
     test.addUser(DUMMY_U1);
     test.addUser(DUMMY_U2);
     t1 = test.createTrip(DUMMY_T1, "1");
@@ -115,13 +111,13 @@ public class DatabaseQueryTest {
     } catch (MissingDataException e) {
       assert true;
     }
-    int t4 = test.createTrip(Trip.TripBuilder.newTripBuilder()
-            .addIdentification(-1, "Late")
+    int t4 = test.createTrip(
+        Trip.TripBuilder.newTripBuilder().addIdentification(-1, "Late")
             .addLocations(10, 10, 15, 15)
             .addAddressNames("(10, 10)", "(15, 15)")
             .addTimes(1556470997, 1556479997)
-            .addDetails(5, 30.00, "108-851-fake", "uber", "")
-            .build(), DUMMY_U1.getId());
+            .addDetails(5, 30.00, "108-851-fake", "uber", "").build(),
+        DUMMY_U1.getId());
     test.deleteExpiredTrips();
     assertNotNull(test.getTripById(t4));
     test.deleteTripManually(t4);
@@ -228,14 +224,14 @@ public class DatabaseQueryTest {
     assertTrue(test.getMembersOnTrip(t1).isEmpty());
   }
 
-  @Test
-  public void testTeamDataExists()
-          throws SQLException, MissingDataException {
-    String[] teamIds = {"0", //'Jenny'
-            "108134993267513125002", //Arvind
-            "105528985214845949817", //Jeff
-            "118428670975676923422", //Mark
-            "106748572580441940868"}; //Sam
+  @Test public void testTeamDataExists()
+      throws SQLException, MissingDataException {
+    String[] teamIds = { "0", //'Jenny'
+        "108134993267513125002", //Arvind
+        "105528985214845949817", //Jeff
+        "118428670975676923422", //Mark
+        "106748572580441940868"
+    }; //Sam
     teamData.getUserById(teamIds[0]);
     teamData.getUserById(teamIds[1]);
     teamData.getUserById(teamIds[2]);

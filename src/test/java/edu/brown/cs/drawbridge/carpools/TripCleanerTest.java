@@ -40,7 +40,8 @@ public class TripCleanerTest {
         password);
   }
 
-  @Test public void testRun()
+  //@Test
+  public void testRun()
       throws InterruptedException, SQLException, MissingDataException {
     carpools.addUser(DUMMY_USER);
     tripId = carpools.createTrip(DUMMY_TRIP, "1");

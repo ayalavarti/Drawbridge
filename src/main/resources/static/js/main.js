@@ -80,7 +80,7 @@ function onSignIn(googleUser) {
 
     // Add profile picture
     $("#profile-picture")
-    .attr("src", `${googleUser.getBasicProfile().getImageUrl()}`);
+    .attr("src", `${userProfile.getImageUrl()}`);
 
     // Set user name
     $("#user-name").text(userProfile.getGivenName());

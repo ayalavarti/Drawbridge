@@ -35,3 +35,27 @@ Logan Airport (42.365524, -71.018308) -> Wayland House (41.825013, -71.402718)
 4/21 10:00 am (1555840800) -> 4/21 11:40 am (1555846800)
 people = 3, cost $55, 911-404-8080, uber, "If flight is delayed, may depart later."
 MEMBERS: REQUESTS: Mark
+
+--------------------------------------------------------------
+RealishData:
+
+Searches: 
+* Wheeler School -> Rockefeller Center: May 9th, 9:00 AM
+==> 5 single trips
+
+* Ratty -> 115 Waterman: May 10th, 5:00 PM
+==> 3 double trips
+
+* Wheeler School -> Walden Pond: May 10th, 11:00 PM
+==> 1 single trip
+
+bipartitite connected graph of locations: 
+1) {"Keeney Quad", "Providence Station", "Metcalf Research Building", "RISD Store",
+    	"CIT", "Hope High School", "Wheeler School", "Nelson Fitness Center",
+    	"Providence Place", "Ratty", "Jo's"}
+2) {"Copley Square", "Metropolitan Opera House",
+        "Museum of Fine Arts, Boston", "Rockefeller Center", "Coney Island",
+        "Six Flags, New England", "Mount Monadnock", "Narragansett Beach",
+        "Tanglewood", "Grand Central Station", "Reading Terminal",
+        "Walden Pond"}
+Times randomized between May 6th and May 16th

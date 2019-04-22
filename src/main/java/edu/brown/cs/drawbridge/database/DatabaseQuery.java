@@ -20,28 +20,7 @@ import java.util.List;
  */
 public class DatabaseQuery {
 
-  public static final User DUMMY_USER = new User("0", "Mary", "mary@gmail.com");
-  public static final Trip DUMMY_TRIP = Trip.TripBuilder.newTripBuilder()
-      .addIdentification(0, "Mary's Carpool")
-      .addLocations(41.608550, -72.656662, 41.827104, -71.399639)
-      .addAddressNames("", "").addTimes(1553487799, 1553494999)
-      .addDetails(7, 8.40, "555-867-5309", "Uber",
-          "We'll be meeting at the Ratty around this time, but "
-              + "maybe a bit later")
-      .buildWithUsers("118428670975676923422", new ArrayList<>(),
-          new ArrayList<>());
-  public static final Trip DUMMY_TRIP2 = Trip.TripBuilder.newTripBuilder()
-      .addIdentification(5, "Mary's Carpool")
-      .addLocations(42.038332, -72.616233, 41.827104, -71.399639)
-      .addAddressNames("Six Flags New England",
-          "Brown University, Providence, RI").addTimes(1553487799, 1553494999)
-      .addDetails(7, 8.40, "(555) 867-5309", "Uber",
-          "We'll be meeting at the Ratty around this time, but maybe "
-              + "a bit later")
-      .buildWithUsers("108134993267513125002", new ArrayList<>(),
-          new ArrayList<>());
-  private static final double AVG_WALK_SPEED = 0.0014; // km per s
-  private static final int EARTH_RADIUS = 6371; // km
+  private static final double NANOMETER = 0.000000000001;
   private Connection conn;
 
   /**
@@ -248,7 +227,9 @@ public class DatabaseQuery {
       prep.setString(1, userId);
       try (ResultSet rs = prep.executeQuery()) {
         if (rs.next()) {
-          User u = new User(userId, rs.getString(1), rs.getString(2));
+          User u = new User(userId, rs.getString(1), rs.getString(2)
+                  //, rs.getString(3)
+          );
           u.setTrips(getHostTripsWithUser(userId),
               getMemberTripsWithUser(userId), getRequestTripsWithUser(userId));
           return u;
@@ -310,6 +291,7 @@ public class DatabaseQuery {
       prep.setString(1, user.getId());
       prep.setString(2, user.getName());
       prep.setString(3, user.getEmail());
+      //prep.setString(4, user.getPictureUrl());
       prep.addBatch();
       prep.executeUpdate();
     }
@@ -489,7 +471,7 @@ public class DatabaseQuery {
           throws SQLException, MissingDataException {
     //due to rounding errors in SQL, a walk radius of 0 will not return results.
     if (walkRadius == 0) {
-      walkRadius = 0.000000000001; //this is a nanometer
+      walkRadius = NANOMETER;
     }
     List<Trip> results = new ArrayList<>();
     try (PreparedStatement prep = conn
@@ -675,6 +657,38 @@ public class DatabaseQuery {
     try (PreparedStatement prep = conn.prepareStatement(
             "DELETE FROM users WHERE id = ?;")) {
       prep.setString(1, id);
+      prep.executeUpdate();
+    }
+  }
+
+  /**
+   * Updates the description for a specific trip.
+   * @param tripId The id of the trip.
+   * @param newMessage The new description to post.
+   * @throws SQLException Errors involving SQL queries.
+   */
+  public void updateTripDescription(int tripId, String newMessage)
+          throws SQLException {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.UPDATE_DESCRIPTION)) {
+      prep.setString(1, newMessage);
+      prep.setInt(2, tripId);
+      prep.executeUpdate();
+    }
+  }
+
+  /**
+   * Updates the url for the user's profile picture.
+   * @param userId The id of the user.
+   * @param newUrl The new url to store.
+   * @throws SQLException Errors involving SQL queries.
+   */
+  public void updateUserPicture(String userId, String newUrl)
+          throws SQLException {
+    try (PreparedStatement prep = conn.prepareStatement(
+            QueryStrings.UPDATE_PROFILE_PICTURE)) {
+      prep.setString(1, newUrl);
+      prep.setString(2, userId);
       prep.executeUpdate();
     }
   }
