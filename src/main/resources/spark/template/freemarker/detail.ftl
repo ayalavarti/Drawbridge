@@ -63,7 +63,7 @@
                 <div class="list-person">
                     <span class="user-name">
                         <img class="${host.getId()}" id="member-img"
-                             src="/images/temp.png"/>
+                             src="${host.getProfilePic()}"/>
                         ${host.getName()}
                         <img id="${host.getId()}" class="verified"
                              style="visibility: hidden;"
@@ -76,7 +76,7 @@
                     <div class="list-person">
                         <span class="user-name">
                             <img class="${member.getId()}" id="member-img"
-                                 src="/images/temp.png"/>
+                                 src="${member.getProfilePic()}"/>
                             ${member.getName()}
                             <img id="${member.getId()}" class="verified"
                                  style="visibility: hidden;"
@@ -91,7 +91,7 @@
                         <div class="list-person">
                         <span id="${pend.getId()}" class="user-name">
                             <img class="${pend.getId()}" id="member-img"
-                                 src="/images/temp.png"/>
+                                 src="${pend.getProfilePic()}"/>
                             ${pend.getName()}<i
                                     style="padding-left: 5px;"
                                     class="addendum">(pending)</i>

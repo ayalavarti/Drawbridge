@@ -101,7 +101,6 @@ function onUserSignedOut() {
         $("#join-btn").show();
     }
     $("[class=verified]").css({visibility: "hidden"});
-    $("[id=member-img]").attr("src", "/images/temp.png");
 }
 
 /**

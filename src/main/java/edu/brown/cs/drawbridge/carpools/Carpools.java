@@ -409,6 +409,17 @@ public final class Carpools {
     return database.getUserById(uid);
   }
 
+  /**
+   * Updates the user's profile picture in the database.
+   * @param uid The id of the user to update the picture for.
+   * @param newProfilePic The new url of the picture.
+   * @throws SQLException when the database encounters an error.
+   */
+  public void updateProfilePic(String uid, String newProfilePic)
+          throws SQLException {
+    database.updateUserPicture(uid, newProfilePic);
+  }
+
   DatabaseQuery getDatabase() {
     return database;
   }
