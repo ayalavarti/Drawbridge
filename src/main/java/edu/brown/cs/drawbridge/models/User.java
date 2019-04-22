@@ -1,5 +1,7 @@
 package edu.brown.cs.drawbridge.models;
 
+import com.google.gson.JsonObject;
+
 import java.util.List;
 
 /**
@@ -120,6 +122,20 @@ public class User {
           "ERROR: Trip information has not been initialized.");
     }
     return pendingTripIds;
+  }
+
+  /**
+   * Method for converting this user into a json object.
+   * @return A json representation of this user.
+   */
+  public JsonObject toJson() {
+    JsonObject data = new JsonObject();
+
+    data.addProperty("id", id);
+    data.addProperty("name", name);
+    data.addProperty("email", email);
+
+    return data;
   }
 
   @Override

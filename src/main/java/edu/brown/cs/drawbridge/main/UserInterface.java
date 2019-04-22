@@ -1,10 +1,10 @@
 package edu.brown.cs.drawbridge.main;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import edu.brown.cs.drawbridge.carpools.Carpools;
 import edu.brown.cs.drawbridge.database.MissingDataException;
+import edu.brown.cs.drawbridge.json.JSONProcessor;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import freemarker.template.Configuration;
@@ -113,75 +113,6 @@ public final class UserInterface {
     });
   }
 
-  // --------------------------- Helpers -----------------------------------
-
-  /**
-   * Overloaded method to provide an alternate signature for the
-   * JSON-processing method.
-   *
-   * @param uid
-   *     The user id for which to create this JSON object.
-   * @param tripGroups
-   *     a trip-group array.
-   *
-   * @return A JSON-encodable data structure for trip-groups.
-   */
-  @SafeVarargs private static List<List<Map<String, String>>> processToJSON(
-      String uid, List<Trip>... tripGroups) {
-
-    return processToJSON(uid, Arrays.asList(tripGroups));
-  }
-
-  /**
-   * Method to help process a list of trip-groups into a JSON-encodable format.
-   *
-   * @param uid
-   *     The user id this is being compiled for.
-   * @param tripGroupList
-   *     The list of troup-grips.
-   *
-   * @return A JSON-encodable list of groups of trip objects.
-   */
-  private static List<List<Map<String, String>>> processToJSON(String uid,
-      List<List<Trip>> tripGroupList) {
-    List<List<Map<String, String>>> data = new ArrayList<>();
-    for (List<Trip> entry : tripGroupList) {
-
-      List<Map<String, String>> innerList = new ArrayList<>();
-      for (Trip trip : entry) {
-        String status;
-        if (trip.getMemberIds().contains(uid)) {
-          status = "joined";
-        } else if (trip.getHostId().equals(uid)) {
-          status = "hosting";
-        } else if (trip.getPendingIds().contains(uid)) {
-          status = "pending";
-        } else {
-          status = "join";
-        }
-
-        Map<String, String> vals = new HashMap<>();
-        vals.put("start", trip.getStartingAddress());
-        vals.put("end", trip.getEndingAddress());
-        vals.put("date", Long.toString(trip.getDepartureTime()));
-        vals.put("currentSize", Integer.toString(trip.getCurrentSize()));
-        vals.put("maxSize", Integer.toString(trip.getMaxUsers()));
-        if (uid != null) {
-          vals.put("costPerPerson", Double.toString(trip.getCostPerUser(uid)));
-        } else {
-          vals.put("costPerPerson", Double.toString(trip.getCostPerUser("")));
-        }
-        vals.put("id", Integer.toString(trip.getId()));
-        vals.put("name", trip.getName());
-        vals.put("status", status);
-
-        innerList.add(vals);
-      }
-      data.add(innerList);
-    }
-    return data;
-  }
-
   // ---------------------------- Home ------------------------------------
 
   /**
@@ -208,7 +139,7 @@ public final class UserInterface {
     @Override public ModelAndView handle(Request request, Response response) {
       // Get parameter values
       QueryParamsMap qm = request.queryMap();
-      List<List<Map<String, String>>> data;
+      JsonArray data;
       JsonObject payload = new JsonObject();
 
       try {
@@ -257,10 +188,10 @@ public final class UserInterface {
               .searchWithId(uid, startLat, startLon, endLat, endLon, datetime,
                   (long) walkTime, (long) waitTime);
         }
-        data = processToJSON(uid, results);
+        data = JSONProcessor.processTripGroups(uid, results);
 
       } catch (RuntimeException | SQLException | MissingDataException e) {
-        data = new ArrayList<>();
+        data = new JsonArray();
       }
 
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
@@ -281,9 +212,37 @@ public final class UserInterface {
     public Object handle(Request request, Response response) {
       QueryParamsMap qm = request.queryMap();
 
+      // Read in the params
       String uid = qm.value("uid");
+      JsonArray tids =
+              (JsonArray) new JsonParser().parse(qm.value("trips"));
 
-      return null;
+      // Create response data object
+      JsonObject responseData = new JsonObject();
+      responseData.addProperty("uid", uid);
+      JsonArray jTrips = new JsonArray();
+
+      // Iterate over the trips and check the user's status in each
+      for (JsonElement tid : tids) {
+        Trip trip;
+        try {
+          trip = carpools.getTrip(tid.getAsInt());
+        } catch (SQLException | MissingDataException e) {
+          responseData.addProperty("success", false);
+          responseData.addProperty("error", e.getMessage());
+          return GSON.toJson(responseData);
+        }
+
+        if (uid != null) {
+          jTrips.add(trip.toJson(uid));
+        } else {
+          jTrips.add(trip.toJson());
+        }
+      }
+
+      responseData.add("trips", jTrips);
+      responseData.addProperty("success", true);
+      return GSON.toJson(responseData);
     }
   }
 
@@ -421,10 +380,11 @@ public final class UserInterface {
         List<Trip> member = userTrips.get(1);
         List<Trip> pending = userTrips.get(2);
 
-        return GSON.toJson(processToJSON(uid, hosting, member, pending));
+        return GSON.toJson(
+                JSONProcessor.processTripGroups(uid, hosting, member, pending));
       } catch (SQLException | MissingDataException e) {
         // TODO: decide stuff to do
-        return GSON.toJson(processToJSON(uid));
+        return GSON.toJson(new JsonObject());
       }
     }
   }
