@@ -217,11 +217,32 @@ public final class UserInterface {
       JsonArray tids =
               (JsonArray) new JsonParser().parse(qm.value("trips"));
 
+      // Create response data object
+      JsonObject responseData = new JsonObject();
+      responseData.addProperty("uid", uid);
+      JsonArray jTrips = new JsonArray();
+
       // Iterate over the trips and check the user's status in each
       for (JsonElement tid : tids) {
-//        Trip trip = carpools.getTrip(tid.getAsInt());
+        Trip trip;
+        try {
+          trip = carpools.getTrip(tid.getAsInt());
+        } catch (SQLException | MissingDataException e) {
+          responseData.addProperty("success", false);
+          responseData.addProperty("error", e.getMessage());
+          return GSON.toJson(responseData);
+        }
+
+        if (uid != null) {
+          jTrips.add(trip.toJson(uid));
+        } else {
+          jTrips.add(trip.toJson());
+        }
       }
-      return null;
+
+      responseData.add("trips", jTrips);
+      responseData.addProperty("success", true);
+      return GSON.toJson(responseData);
     }
   }
 
