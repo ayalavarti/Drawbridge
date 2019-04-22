@@ -1,7 +1,6 @@
 package edu.brown.cs.drawbridge.json;
 
 import com.google.gson.JsonArray;
-import com.sun.istack.internal.NotNull;
 import edu.brown.cs.drawbridge.models.Trip;
 
 import java.util.Arrays;
@@ -25,7 +24,7 @@ public abstract class JSONProcessor {
    * @param uid The user to set the status field in the trips for.
    * @return A json representation of the trips groups.
    */
-  public static JsonArray processTripGroups(@NotNull String uid,
+  public static JsonArray processTripGroups(String uid,
                                             List<List<Trip>> tripGroups) {
     JsonArray data = new JsonArray();
 
@@ -46,7 +45,7 @@ public abstract class JSONProcessor {
    * @return A json representation of the tripGroups passed in.
    */
   @SafeVarargs
-  public static JsonArray processTripGroups(@NotNull String uid,
+  public static JsonArray processTripGroups(String uid,
                                             List<Trip>...tripGroups) {
     return processTripGroups(uid, Arrays.asList(tripGroups));
   }

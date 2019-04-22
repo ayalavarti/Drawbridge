@@ -3,7 +3,6 @@ package edu.brown.cs.drawbridge.models;
 import java.util.List;
 
 import com.google.gson.JsonObject;
-import com.sun.istack.internal.NotNull;
 import edu.brown.cs.drawbridge.carpools.TripSearcher;
 
 /**
@@ -382,7 +381,7 @@ public class Trip {
    * @param uid The user to set the status field for.
    * @return A json representation of this trip.
    */
-  public JsonObject toJson(@NotNull final String uid) {
+  public JsonObject toJson(final String uid) {
     JsonObject data = new JsonObject();
 
     data.addProperty("start", this.getStartingAddress());

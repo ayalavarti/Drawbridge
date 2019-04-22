@@ -18,9 +18,39 @@ $(document).ready(function () {
  */
 function onUserSignedIn() {
     console.log("User signed in.");
+
+    let postParameters = {
+        uid: userProfile.getId(),
+        trips: getTripIds(JSON.parse(data))
+    };
+    console.log(postParameters);
+    $.post("/results", postParameters, response => {
+        if (response.success) {
+            // Set the trip results on the page with the resulting data
+            setTripResults(JSON.parse(response.trips));
+        } else {
+            window.location.replace("/error");
+        }
+    }, "json");
+
     // Hide the sign in tooltip if visible
     signInTooltip[0].hide();
 }
+
+
+function getTripIds(data) {
+    let tripIds = [];
+    console.log(data);
+    data.forEach(element => {
+        let innerTripIds = [];
+        for (let trip in element) {
+            innerTripIds.push(parseInt(element[trip]["id"]));
+        }
+        tripIds.push(innerTripIds);
+    });
+    return tripIds;
+}
+
 
 /**
  * Overridden function for user sign out action.
@@ -57,9 +87,12 @@ function queryResults() {
     $("#date").text(
         `${tripDate.toDateString()}`);
     $("#time").text(`${toJSTime(tripDate)}`);
+    if ((navigator.cookieEnabled && getCookie("loggedIn") === "true")) {
+    } else {
+        // Set the trip results on the page with the resulting data
+        setTripResults(JSON.parse(data));
+    }
 
-    // Set the trip results on the page with the resulting data
-    setTripResults(JSON.parse(data));
 }
 
 /**
