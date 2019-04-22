@@ -1,17 +1,18 @@
 package edu.brown.cs.drawbridge.carpools;
 
-import edu.brown.cs.drawbridge.database.DatabaseQuery;
-import edu.brown.cs.drawbridge.database.MissingDataException;
-import edu.brown.cs.drawbridge.models.Trip;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import edu.brown.cs.drawbridge.database.DatabaseQuery;
+import edu.brown.cs.drawbridge.database.MissingDataException;
+import edu.brown.cs.drawbridge.models.Trip;
 
 public class TripSearcherTest {
 
@@ -22,8 +23,8 @@ public class TripSearcherTest {
    * Test search method.
    */
 
-  @BeforeClass public static void oneTimeSetUp()
-      throws SQLException, MissingDataException {
+  @BeforeClass
+  public static void oneTimeSetUp() throws SQLException, MissingDataException {
     try {
       String username = System.getenv("DB_USER");
       String password = System.getenv("DB_PASS");
@@ -49,7 +50,7 @@ public class TripSearcherTest {
       }
     }
   }
-  
+
   private void assertSamePaths(List<List<Trip>> paths1,
       List<List<String>> paths2) {
     for (int i = 0; i < paths1.size(); i++) {
@@ -62,7 +63,7 @@ public class TripSearcherTest {
   }
 
   @Test
-  public void testSet1() {
+  public void testSet1() throws SQLException, MissingDataException {
     List<List<String>> expected = new ArrayList<List<String>>();
     // Test 1
     expected.add(new ArrayList<String>(Arrays.asList("1H", "1I")));
@@ -137,7 +138,7 @@ public class TripSearcherTest {
   }
 
   @Test
-  public void testSet2() {
+  public void testSet2() throws SQLException, MissingDataException {
     List<List<String>> expected = new ArrayList<List<String>>();
     // Test 1
     expected.add(new ArrayList<String>(Arrays.asList("2B", "2F")));
@@ -173,7 +174,7 @@ public class TripSearcherTest {
   }
 
   @Test
-  public void testSet3() {
+  public void testSet3() throws SQLException, MissingDataException {
     List<List<String>> expected = new ArrayList<List<String>>();
 
     // Test 1
@@ -245,7 +246,7 @@ public class TripSearcherTest {
   }
 
   @Test
-  public void testSet4() {
+  public void testSet4() throws SQLException, MissingDataException {
     List<List<String>> expected = new ArrayList<List<String>>();
     // Test 1
     expected.add(new ArrayList<String>(Arrays.asList("4A")));

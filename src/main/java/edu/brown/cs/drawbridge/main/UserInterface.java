@@ -69,6 +69,12 @@ public final class UserInterface {
     try {
       carpools = new Carpools(dbName, System.getenv("DB_USER"),
           System.getenv("DB_PASS"));
+
+      // Set up cron job to clean out old trips periodically
+      //      Timer timer = new Timer();
+      //      TimerTask tripCleaner = new TripCleaner(carpools);
+      //      timer.scheduleAtFixedRate(tripCleaner, 0, Constants.TRIP_CLEAN_INTERVAL);
+
       return true;
     } catch (SQLException | ClassNotFoundException e) {
       return false;
@@ -253,7 +259,7 @@ public final class UserInterface {
         }
         data = processToJSON(uid, results);
 
-      } catch (RuntimeException e) {
+      } catch (RuntimeException | SQLException | MissingDataException e) {
         data = new ArrayList<>();
       }
 
@@ -343,7 +349,7 @@ public final class UserInterface {
 
         } else if (action.equals("leave")) {
           success = carpools.leaveTrip(tid, uid);
-          success &= carpools.rejectRequest(tid, uid, uid);
+          success |= carpools.rejectRequest(tid, uid, uid);
 
         } else if (action.equals("delete")) {
           success = carpools.deleteTrip(tid, uid);

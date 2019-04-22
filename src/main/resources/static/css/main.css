@@ -125,6 +125,8 @@ input[type="number"] {
     box-shadow: 0 2px 4px 0 #0000001e, 0 5px 10px 0 #0000002f;
 }
 
+.full-label,
+.play-btn,
 .clear-btn,
 .hosting-btn,
 .approve-btn,
@@ -145,6 +147,7 @@ input[type="number"] {
     cursor: pointer;
 }
 
+.full-label,
 .pending-btn {
     cursor: initial;
 }
@@ -154,6 +157,7 @@ input[type="number"] {
     height: auto;
     margin-right: 10px;
 }
+
 
 .info-tooltip {
     position: static;
@@ -336,14 +340,14 @@ input[type="number"] {
     color: #45bc96;
     padding: 10px;
     border-radius: 10px;
-    box-shadow: 0 2px 4px 0 rgba(119, 255, 203, 0.3);
+    box-shadow: 0 2px 4px 0 rgba(99, 100, 100, 0.397);
 }
 
 .tippy-tooltip.drawbridge-alt-theme {
     color: #3493ff;
     padding: 10px;
     border-radius: 10px;
-    box-shadow: 0 2px 4px 0 rgba(70, 175, 255, 0.301);
+    box-shadow: 0 2px 4px 0 rgba(99, 100, 100, 0.397);
 }
 
 .tippy-tooltip.drawbridge-alt2-theme[data-animatefill],
@@ -394,6 +398,15 @@ input[type="number"] {
 
 .modal-body {
     padding: 20px 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.modal-body > div {
+    width: 100%;
+    text-align: center;
 }
 
 .modal-content {
@@ -401,7 +414,7 @@ input[type="number"] {
     background-color: #ececec;
     margin: auto;
     padding: 0;
-    width: 30%;
+    width: 600px;
     box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.2);
     animation-name: animate;
     animation-duration: 1.7s;
@@ -414,9 +427,15 @@ input[type="number"] {
     height: 30px;
     width: auto;
     position: absolute;
-    top: -15px;
+    top: -10px;
     cursor: pointer;
-    right: -15px;
+    right: -20px;
+}
+
+.welcome-img {
+    width: 500px;
+    height: auto;
+    margin: 0 auto;
 }
 
 @keyframes animate {
@@ -439,5 +458,34 @@ input[type="number"] {
     }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 650px) {
+    .modal-content {
+        width: 300px;
+    }
+
+    .welcome-img {
+        width: 250px;
+    }
+}
+
+.setLocation-btn {
+    width: 100px;
+    color: #47A5FF;
+    border: none;
+    box-shadow: 0 2px 4px 0 rgba(71, 165, 255, 0.18), 0 2px 4px 0 rgba(71, 165, 255, 0.11);
+}
+
+
+.progress-container {
+    width: 30% !important;
+    margin-top: 20px;
+    background-color: #FFF;
+    border-radius: 20px;
+}
+
+.progress-bar {
+    width: 0;
+    height: 15px;
+    border-radius: 20px;
+    background-color: #47A5FF;
 }

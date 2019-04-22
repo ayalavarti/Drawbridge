@@ -136,13 +136,6 @@
     text-align: center;
 }
 
-.setLocation-btn {
-    width: 100px;
-    color: #47A5FF;
-    border: none;
-    box-shadow: 0 2px 4px 0 rgba(71, 165, 255, 0.18), 0 2px 4px 0 rgba(71, 165, 255, 0.11);
-}
-
 @media screen and (max-width: 767px) {
     .search-menu-wrapper {
         bottom: 0;
@@ -322,7 +315,7 @@
     .location-setting,
     .compass-setting,
     .trip-setting {
-        display: none;
+        visibility: hidden !important;
     }
 
     .info-setting {
@@ -341,6 +334,6 @@
 
     .route-info,
     .map-settings {
-        display: none;
+        visibility: hidden;
     }
 }

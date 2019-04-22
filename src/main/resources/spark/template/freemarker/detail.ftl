@@ -1,7 +1,6 @@
 <#assign stylesheets>
     <link rel="stylesheet" href="/css/detail.css" type="text/css">
     <script src="/js/mapUtil.js"></script>
-    <script src="/js/util.js"></script>
     <script src="/js/detail.js"></script>
 </#assign>
 
@@ -31,7 +30,7 @@
                 <h3 style="margin-top: 30px;">Share this Trip</h3>
                 <div style="display: flex; flex-wrap: wrap; justify-content:
                 center; align-items: center;">
-                    <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fwww.yoururl.com&text=Join%20My%20Carpool!">
+                    <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Flocalhost:8000/trip/${trip.getId()}&text=Join%20My%20Carpool!">
                         <div class="share-tooltip">
                             <img style="height: 15px; width: auto"
                                  src="/images/twitter-icon.png"/>
@@ -57,7 +56,9 @@
             </div>
         </div>
         <div id="member-list-container">
-            <h2>Carpool Members</h2>
+            <h2>Carpool Members <i style="font-size: 15px">${trip
+                    .getCurrentSize()}/${trip.getMaxUsers()}
+                </i></h2>
             <div id="member-list">
                 <div class="list-person">
                     <span class="user-name">${host.getName()}</span>
@@ -77,15 +78,15 @@
                         <span class="user-name">${pend.getName()}<i
                                     class="addendum">(pending)</i></span>
                             <div class="pending">
-                                <img alt="approve-btn"
+                                <img alt="approve-btn" id="approve-btn"
                                      src="/images/approve-btn.png"
                                      class="approve-btn"
-                                     onclick="approveClick(${trip.getId()}, ${pend.getId()});"
+                                     onclick="approveClick(${trip.getId()}, '${pend.getId()?js_string}');"
                                      onmouseover="hover(this);"
                                      onmouseout="unhover(this);"/>
                                 <img alt="deny-btn" src="/images/deny-btn.png"
                                      class="deny-btn"
-                                     onclick="denyClick(${trip.getId()}, ${pend.getId()});"
+                                     onclick="denyClick(${trip.getId()}, '${pend.getId()?js_string}');"
                                      onmouseover="hover(this);"
                                      onmouseout="unhover(this);"/>
                             </div>
@@ -114,6 +115,11 @@
                          id="pending-label"
                          style="display: none;"
                          class="pending-btn"
+                    />
+                    <img alt="full-label" src="/images/full-label.png"
+                         id="full-label"
+                         style="display: none;"
+                         class="full-label"
                     />
                 </div>
             </div>
@@ -151,6 +157,14 @@
         <#list members as mem>"${mem.getId()?js_string}"<#if mem_has_next>,
         </#if></#list>
     ];
+
+    let tripFull =
+    ${trip.getMaxUsers()} ===
+    ${trip.getCurrentSize()};
+
+    if (tripFull) {
+        $("#full-label").show();
+    }
 
     let pending = [
         <#list pending as pen>"${pen.getId()?js_string}"<#if pen_has_next>,

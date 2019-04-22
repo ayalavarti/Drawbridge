@@ -57,9 +57,12 @@ function queryResults() {
     let hourLabel = "AM";
     let minutes;
     let hour = tripDate.getHours();
-    if (hour > 12) {
+    if (hour >= 12) {
         hour = hour - 12;
         hourLabel = "PM";
+    }
+    if (hour === 0) {
+        hour = 12;
     }
     if (tripDate.getMinutes() < 10) {
         minutes = `${tripDate.getMinutes()}0`;

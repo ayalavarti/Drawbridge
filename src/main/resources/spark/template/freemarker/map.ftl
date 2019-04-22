@@ -9,7 +9,8 @@
 
     <div id="pre-load" style="display: none;" class="search-menu-wrapper">
         <div class="search-menu">
-            <h2 class="section-heading">Search for a Carpool</h2>
+            <h2 class="section-heading" id="home-btn-tutorial-main">Search for a
+                Carpool</h2>
             <img src="/images/divider.png" style="height: 4px; width: auto;"/>
             <form autocomplete="off"
                   onsubmit="event.preventDefault(); validateSubmit()">
@@ -74,19 +75,21 @@
          class="map-settings trip-setting" onclick="alignTrip()">
         <img id="car-icon" class="icon-img" src="/images/car-disabled.png"/>
     </div>
-    <a href="/new">
+    <a href="/new" id="new-btn">
         <div data-tippy-content="Host a Carpool" id="pre-load"
              style="display: none;"
              class="map-settings
         team-setting">
-            <img class="icon-img" src="/images/host-icon.png"/>
+            <img id="new-btn-tutorial-main" class="icon-img"
+                 src="/images/host-icon.png"/>
         </div>
     </a>
-    <a href="/help">
+    <a href="/help" id="info-btn">
         <div data-tippy-content="Drawbridge Info" id="pre-load"
              style="display: none;"
              class="map-settings info-setting">
-            <img class="icon-img" src="/images/info-icon.png"/>
+            <img id="info-btn-tutorial-main" class="icon-img"
+                 src="/images/info-icon.png"/>
         </div>
     </a>
     <div id="route-info" style="display: none; flex-direction: column;"
@@ -107,7 +110,6 @@
     <script type="text/javascript">
         mapboxgl.accessToken = "${mapboxKey?js_string}";
     </script>
-    <script src="/js/util.js"></script>
     <script src="/js/mapUtil.js"></script>
     <script src="/js/map.js"></script>
 </#assign>
