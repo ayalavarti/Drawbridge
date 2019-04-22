@@ -3,6 +3,7 @@ package edu.brown.cs.drawbridge.models;
 import com.google.gson.JsonObject;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class models a carpooling User.
@@ -14,6 +15,7 @@ public class User {
   private String id;
   private String name;
   private String email;
+  private Optional<String> profilePic;
   private List<Integer> hostingTripIds, memberTripIds, pendingTripIds;
 
   /**
@@ -27,9 +29,21 @@ public class User {
    *          The User's email address
    */
   public User(String id, String name, String email) {
+    this(id, name, email, null);
+  }
+
+  /**
+   * Constructor for creating a user with their avatar image.
+   * @param id The user's google id.
+   * @param name The user's name.
+   * @param email The user's email.
+   * @param profilePic The url of the user's profile picture.
+   */
+  public User(String id, String name, String email, String profilePic) {
     this.id = id;
     this.name = name;
     this.email = email;
+    this.profilePic = Optional.ofNullable(profilePic);
   }
 
   /**
