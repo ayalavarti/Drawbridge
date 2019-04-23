@@ -26,7 +26,8 @@ public class TripCleanerTest {
   private static Carpools carpools;
   private static int tripId;
 
-  @BeforeClass public static void oneTimeSetUp()
+  @BeforeClass
+  public static void oneTimeSetUp()
       throws SQLException, MissingDataException, ClassNotFoundException {
     String username = System.getenv("DB_USER");
     String password = System.getenv("DB_PASS");

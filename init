@@ -7,4 +7,4 @@ export MAPBOX_KEY="pk.eyJ1IjoiYXJ2Mzk1IiwiYSI6ImNqdWlvejgyYzFjcXg0M3AwaGMyc2xxNT
 
 mvn package
 
-./run --gui --port 8000
+./run

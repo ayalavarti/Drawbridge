@@ -22,7 +22,8 @@ public class TripSearcherTest {
    * Test search method.
    */
 
-  @BeforeClass public static void oneTimeSetUp()
+  @BeforeClass
+  public static void oneTimeSetUp()
       throws SQLException, MissingDataException {
     try {
       String username = System.getenv("DB_USER");
@@ -61,7 +62,8 @@ public class TripSearcherTest {
     assertEquals(paths1.size(), paths2.size());
   }
 
-  @Test public void testSet1() throws SQLException, MissingDataException {
+  @Test
+  public void testSet1() throws SQLException, MissingDataException {
     List<List<String>> expected = new ArrayList<>();
     // Test 1
     expected.add(new ArrayList<>(Arrays.asList("1H", "1I")));
@@ -135,7 +137,8 @@ public class TripSearcherTest {
         expected);
   }
 
-  @Test public void testSet2() throws SQLException, MissingDataException {
+  @Test
+  public void testSet2() throws SQLException, MissingDataException {
     List<List<String>> expected = new ArrayList<>();
     // Test 1
     expected.add(new ArrayList<>(Arrays.asList("2B", "2F")));
@@ -170,7 +173,8 @@ public class TripSearcherTest {
         expected);
   }
 
-  @Test public void testSet3() throws SQLException, MissingDataException {
+  @Test
+  public void testSet3() throws SQLException, MissingDataException {
     List<List<String>> expected = new ArrayList<>();
 
     // Test 1
@@ -241,7 +245,8 @@ public class TripSearcherTest {
         expected);
   }
 
-  @Test public void testSet4() throws SQLException, MissingDataException {
+  @Test
+  public void testSet4() throws SQLException, MissingDataException {
     List<List<String>> expected = new ArrayList<>();
     // Test 1
     expected.add(new ArrayList<>(Arrays.asList("4A")));

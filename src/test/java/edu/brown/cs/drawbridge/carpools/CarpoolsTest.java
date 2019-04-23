@@ -37,7 +37,8 @@ public class CarpoolsTest {
   private static int t1, t2, t3; // Ids of new Trips
   private static Carpools carpools;
 
-  @BeforeClass public static void oneTimeSetUp()
+  @BeforeClass
+  public static void oneTimeSetUp()
       throws SQLException, MissingDataException, ClassNotFoundException {
     try {
       String username = System.getenv("DB_USER");
@@ -66,29 +67,34 @@ public class CarpoolsTest {
     assertNotNull(t3);
   }
 
-  @AfterClass public static void testGetDatabase()
+  @AfterClass
+  public static void testGetDatabase()
       throws SQLException, ClassNotFoundException {
     carpools.getDatabase().clearData();
   }
 
-  @Test public void testAddUserGivenAlreadyExists()
+  @Test
+  public void testAddUserGivenAlreadyExists()
       throws SQLException, MissingDataException {
     assertNotNull(carpools.addUser(DUMMY_U1));
     assertNotNull(carpools.addUser(DUMMY_U2));
   }
 
-  @Test public void testGetTrip() throws SQLException, MissingDataException {
+  @Test
+  public void testGetTrip() throws SQLException, MissingDataException {
     assertNotNull(carpools.getTrip(t1));
     assertNotNull(carpools.getTrip(t2));
     assertNotNull(carpools.getTrip(t3));
   }
 
-  @Test(expected = MissingDataException.class) public void testGetTripInvalid()
+  @Test(expected = MissingDataException.class)
+  public void testGetTripInvalid()
       throws SQLException, MissingDataException {
     assertEquals(carpools.getTrip(-10), -1);
   }
 
-  @Test public void testDeleteTrip() throws SQLException, MissingDataException {
+  @Test
+  public void testDeleteTrip() throws SQLException, MissingDataException {
     assertTrue(carpools.deleteTrip(t1, "1"));
     try {
       carpools.getTrip(t1);
@@ -99,7 +105,8 @@ public class CarpoolsTest {
     assert false;
   }
 
-  @Test public void testJoinAndLeaveTrip()
+  @Test
+  public void testJoinAndLeaveTrip()
       throws SQLException, MissingDataException {
     assertTrue(carpools.joinTrip(t1, "3"));
     assertFalse(carpools.joinTrip(t1, "1"));
@@ -107,7 +114,8 @@ public class CarpoolsTest {
     assertFalse(carpools.leaveTrip(t1, "1"));
   }
 
-  @Test public void testApproveRequest()
+  @Test
+  public void testApproveRequest()
       throws SQLException, MissingDataException {
     assertTrue(carpools.joinTrip(t1, "3"));
     assertTrue(carpools.approveRequest(t1, "1", "3"));
@@ -116,7 +124,8 @@ public class CarpoolsTest {
     assertTrue(carpools.leaveTrip(t1, "3"));
   }
 
-  @Test public void testRejectRequest()
+  @Test
+  public void testRejectRequest()
       throws SQLException, MissingDataException {
     assertTrue(carpools.joinTrip(t1, "3"));
     assertTrue(carpools.rejectRequest(t1, "1", "3"));
@@ -125,7 +134,8 @@ public class CarpoolsTest {
     assertFalse(carpools.leaveTrip(t1, "3"));
   }
 
-  @Test public void testGetUsers() throws SQLException, MissingDataException {
+  @Test
+  public void testGetUsers() throws SQLException, MissingDataException {
     assertTrue(carpools.joinTrip(t1, "2"));
     assertTrue(carpools.joinTrip(t1, "3"));
     assertTrue(carpools.approveRequest(t1, "1", "2"));
@@ -145,7 +155,8 @@ public class CarpoolsTest {
     assertTrue(carpools.rejectRequest(t1, "1", "3"));
   }
 
-  @Test public void testGetTrips() throws SQLException, MissingDataException {
+  @Test
+  public void testGetTrips() throws SQLException, MissingDataException {
     assertTrue(carpools.joinTrip(t2, "1"));
     assertTrue(carpools.joinTrip(t3, "1"));
     assertTrue(carpools.approveRequest(t2, "2", "1"));
@@ -164,7 +175,8 @@ public class CarpoolsTest {
     assertTrue(carpools.leaveTrip(t3, "1"));
   }
 
-  @Test public void testSearch() throws SQLException, MissingDataException {
+  @Test
+  public void testSearch() throws SQLException, MissingDataException {
     List<List<Trip>> expected = new ArrayList<>();
     expected.add(new ArrayList<>(Arrays.asList(DUMMY_T1)));
     List<List<Trip>> actual = carpools

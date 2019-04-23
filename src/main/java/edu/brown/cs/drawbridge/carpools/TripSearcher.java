@@ -33,20 +33,26 @@ public class TripSearcher {
   private static final int MAX_TRIPS_PER_PATH = 3;
   private static final int MAX_PATH_OPTIONS = 10;
   private static final int MAX_PATH_FOUND = 15;
-  // Higher multipler means better quality, lower multipler means better
-  // quantity; higher multipler reaches best point faster and marks more nodes
+  // Higher multiplier means better quality, lower multipler means better
+  // quantity; higher multiplier reaches best point faster and marks more nodes
   // as visited
   private static final double HEURISTIC_MULTIPLIER = 0.9;
 
-  private static final Comparator<List<Trip>> HOST_COMPARATOR = new HostComparator();
-  private static final Comparator<List<Trip>> MEMBER_COMPARATOR = new MemberComparator();
-  private static final Comparator<List<Trip>> PENDING_COMPARATOR = new PendingComparator();
-  private static final Comparator<List<Trip>> COST_COMPARATOR = new CostComparator();
-  private static final Comparator<List<Trip>> LENGTH_COMPARATOR = new LengthComparator();
+  private static final Comparator<List<Trip>> HOST_COMPARATOR
+          = new HostComparator();
+  private static final Comparator<List<Trip>> MEMBER_COMPARATOR
+          = new MemberComparator();
+  private static final Comparator<List<Trip>> PENDING_COMPARATOR
+          = new PendingComparator();
+  private static final Comparator<List<Trip>> COST_COMPARATOR
+          = new CostComparator();
+  private static final Comparator<List<Trip>> LENGTH_COMPARATOR
+          = new LengthComparator();
   private static final List<Identifiable> IDENTIFIABLE = Arrays.asList(
       (Identifiable) HOST_COMPARATOR, (Identifiable) MEMBER_COMPARATOR,
       (Identifiable) PENDING_COMPARATOR, (Identifiable) COST_COMPARATOR);
-  private static final Comparator<List<Trip>> TRIP_COMPARATOR = new MultipleTripComparator(
+  private static final Comparator<List<Trip>> TRIP_COMPARATOR
+          = new MultipleTripComparator(
       Arrays.asList(HOST_COMPARATOR, MEMBER_COMPARATOR, PENDING_COMPARATOR,
           LENGTH_COMPARATOR, COST_COMPARATOR));
 

@@ -5,7 +5,7 @@ package edu.brown.cs.drawbridge.database;
  *
  * @author Sam Maffa
  */
-public final class QueryStrings {
+public abstract class QueryStrings {
 
   protected static final String INSERT_USER = "INSERT INTO "
           + "users VALUES (?, ?, ?);";

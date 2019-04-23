@@ -74,17 +74,19 @@ public final class UserInterface {
 
       carpools = new Carpools(dbURL, username, password);
 
-      // Set up cron job to clean out old trips periodically
-      //      Timer timer = new Timer();
-      //      TimerTask tripCleaner = new TripCleaner(carpools);
-      //      timer.scheduleAtFixedRate(tripCleaner, 0, Constants.TRIP_CLEAN_INTERVAL);
+//       Set up cron job to clean out old trips periodically
+//            Timer timer = new Timer();
+//            TimerTask tripCleaner = new TripCleaner(carpools);
+//            timer.scheduleAtFixedRate(tripCleaner, 0, Constants.TRIP_CLEAN_INTERVAL);
 
       return true;
     } catch (URISyntaxException e) {
-      System.out.println("ERROR: Problem reading database url location: " + e.getMessage());
+      System.out.println("ERROR: Problem reading database url location: "
+              + e.getMessage());
       return false;
     } catch (SQLException | ClassNotFoundException e) {
-      System.out.println("ERROR: Could not connect to the database: " + e.getMessage());
+      System.out.println("ERROR: Could not connect to the database: "
+              + e.getMessage());
       return false;
     }
   }

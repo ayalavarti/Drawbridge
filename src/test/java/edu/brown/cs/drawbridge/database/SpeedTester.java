@@ -34,7 +34,7 @@ public class SpeedTester {
 
   private static Long lastTime;
   private static boolean midSize = false;
-  private static boolean bigSize = true;
+  private static boolean bigSize = false;
 
   private long timeSince() {
     long elapsed = 0;
@@ -197,14 +197,12 @@ public class SpeedTester {
     }
   }
 
-  @Test
+  //@Test
   public void speedTest() throws SQLException, ClassNotFoundException, MissingDataException {
     Carpools cp = new Carpools("//127.0.0.1:5432/speed", "dev", "dev");
     timeSince();
     List<List<Trip>> results = cp.searchWithId(
             "1", 42.34819, -71.078705 , 39.953342, -75.15931, 1557154980, 1440, 1440);
-//    List<List<Trip>> results2 = cp.searchWithoutId(
-//            -71.078705, 42.34819, -75.15931, 39.953342, 1557154980, 300000, 30000);
     System.out.println(results.size());
     for (List<Trip> ts : results) {
       System.out.println(ts.size());

@@ -34,20 +34,26 @@ public class QuickSearcher {
   private static final long CONNECTION_WAIT_TIME = 1800;
   private static final int MAX_TRIPS_PER_PATH = 3;
   private static final int MAX_PATH_OPTIONS = 5;
-  // Higher multipler means better quality, lower multipler means better
-  // quantity; higher multipler reaches best point faster and marks more nodes
+  // Higher multiplier means better quality, lower multipler means better
+  // quantity; higher multiplier reaches best point faster and marks more nodes
   // as visited
   private static final double HEURISTIC_MULTIPLIER = 0.9;
 
-  private static final Comparator<List<Trip>> HOST_COMPARATOR = new HostComparator();
-  private static final Comparator<List<Trip>> MEMBER_COMPARATOR = new MemberComparator();
-  private static final Comparator<List<Trip>> PENDING_COMPARATOR = new PendingComparator();
-  private static final Comparator<List<Trip>> COST_COMPARATOR = new CostComparator();
-  private static final Comparator<List<Trip>> LENGTH_COMPARATOR = new LengthComparator();
+  private static final Comparator<List<Trip>> HOST_COMPARATOR
+          = new HostComparator();
+  private static final Comparator<List<Trip>> MEMBER_COMPARATOR
+          = new MemberComparator();
+  private static final Comparator<List<Trip>> PENDING_COMPARATOR
+          = new PendingComparator();
+  private static final Comparator<List<Trip>> COST_COMPARATOR
+          = new CostComparator();
+  private static final Comparator<List<Trip>> LENGTH_COMPARATOR
+          = new LengthComparator();
   private static final List<Identifiable> IDENTIFIABLE = Arrays.asList(
       (Identifiable) HOST_COMPARATOR, (Identifiable) MEMBER_COMPARATOR,
       (Identifiable) PENDING_COMPARATOR, (Identifiable) COST_COMPARATOR);
-  private static final Comparator<List<Trip>> TRIP_COMPARATOR = new MultipleTripComparator(
+  private static final Comparator<List<Trip>> TRIP_COMPARATOR
+          = new MultipleTripComparator(
       Arrays.asList(HOST_COMPARATOR, MEMBER_COMPARATOR, PENDING_COMPARATOR,
           LENGTH_COMPARATOR, COST_COMPARATOR));
   private DatabaseQuery database;
@@ -78,13 +84,21 @@ public class QuickSearcher {
    * @param endLon
    *          The longitude of the destination
    *
-   * @return
+   * @return The distance in km from the trip's destination to another point.
    */
   private double distance(Trip trip, double endLat, double endLon) {
     return distance(trip.getEndingLatitude(), endLat, trip.getEndingLongitude(),
         endLon);
   }
 
+  /**
+   * Calculates the distance (km) between two coordinate points.
+   * @param latitude1 The initial latitude
+   * @param latitude2 The final latitude
+   * @param longitude1 The initial longitude
+   * @param longitude2 The final longitude
+   * @return The distance in km between the two points.
+   */
   public static double distance(double latitude1, double latitude2,
       double longitude1, double longitude2) {
     double lat1 = Math.toRadians(latitude1);
