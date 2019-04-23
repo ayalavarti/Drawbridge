@@ -79,6 +79,48 @@ function geolocateLoc() {
     }
 }
 
+let typingTimerStart;
+let typingTimerEnd;
+let finishTypingInterval = 1500;
+
+$("#start-input").on('keyup', function () {
+    clearTimeout(typingTimerStart);
+    typingTimerStart = setTimeout(function () {
+            if ($.trim($('#start-input').val()) !== '') {
+                $("#start-input").blur();
+                $("#end-input").focus();
+            }
+        },
+        finishTypingInterval);
+});
+
+$("#start-input").on('keydown', function () {
+    clearTimeout(typingTimerStart);
+});
+
+$("#start-input").on('blur', function () {
+    clearTimeout(typingTimerStart);
+});
+
+
+$("#end-input").on('keyup', function () {
+    clearTimeout(typingTimerEnd);
+    typingTimerEnd = setTimeout(function () {
+            if ($.trim($('#end-input').val()) !== '') {
+                $("#end-input").blur();
+            }
+        },
+        finishTypingInterval);
+});
+
+$("#end-input").on('keydown', function () {
+    clearTimeout(typingTimerEnd);
+});
+
+$("#end-input").on('blur', function () {
+    clearTimeout(typingTimerEnd);
+});
+
 /**
  * Handle changes to the address input boxes whenever the input box loses focus.
  *

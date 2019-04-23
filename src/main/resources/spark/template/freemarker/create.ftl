@@ -144,7 +144,7 @@
                             </div>
                         </div>
                         <div>
-                            <span class="sub-heading">Expected Total 
+                            <span class="sub-heading">Expected Total
                                 Price</span>
                             <div>
                                 <i class="fas fa-dollar-sign icon-label"></i>
