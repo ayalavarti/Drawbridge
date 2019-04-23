@@ -34,7 +34,7 @@ public class SpeedTester {
 
   private static Long lastTime;
   private static boolean midSize = false;
-  private static boolean bigSize = false;
+  private static boolean bigSize = true;
 
   private long timeSince() {
     long elapsed = 0;
@@ -129,6 +129,11 @@ public class SpeedTester {
       timeSince();
       List<List<Trip>> results = cp.searchWithId("1", 54.8743144468108, -107.696585988682, 88.2212956652336, -172.076626546341, 1556081006,1440, 1440);
       System.out.println(results.size());
+      for (List<Trip> connectedTrips : results) {
+        for (Trip t : connectedTrips) {
+          System.out.println(t.getName());
+        }
+      }
       assertTrue(timeSince() < 2000);
     }
   }
@@ -197,15 +202,15 @@ public class SpeedTester {
     Carpools cp = new Carpools("//127.0.0.1:5432/speed", "dev", "dev");
     timeSince();
     List<List<Trip>> results = cp.searchWithId(
-            "1", -71.078705, 42.34819 , -75.15931, 39.953342, 1557154980, 1440, 1440);
-    List<List<Trip>> results2 = cp.searchWithoutId(
-            -71.078705, 42.34819, -75.15931, 39.953342, 1557154980, 300000, 30000);
+            "1", 42.34819, -71.078705 , 39.953342, -75.15931, 1557154980, 1440, 1440);
+//    List<List<Trip>> results2 = cp.searchWithoutId(
+//            -71.078705, 42.34819, -75.15931, 39.953342, 1557154980, 300000, 30000);
     System.out.println(results.size());
-    for (List<Trip> ts : results2) {
+    for (List<Trip> ts : results) {
       System.out.println(ts.size());
-      ts.get(0).getName();
+      System.out.println(ts.get(0).getName());
     }
-    System.out.println(results2.size());
+    System.out.println(results.size());
     timeSince();
   }
 

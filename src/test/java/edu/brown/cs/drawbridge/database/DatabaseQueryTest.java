@@ -38,18 +38,18 @@ public class DatabaseQueryTest {
 
   @BeforeClass public static void oneTimeSetUp()
       throws SQLException, MissingDataException, ClassNotFoundException {
-    String username = System.getenv("DB_USER");
-    String password = System.getenv("DB_PASS");
+    String username = "dev";//System.getenv("DB_USER");
+    String password = "dev";//System.getenv("DB_PASS");
     /*
      * Run the following queries in pgadmin:
      * CREATE USER <username> WITH PASSWORD '<password>'
      * GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <username>
      * GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO <username>
      */
-    test = new DatabaseQuery("//127.0.0.1:5432/testCarpools", username,
-        password);
-    teamData = new DatabaseQuery("//127.0.0.1:5432/carpools", username,
-        password);
+    test = new DatabaseQuery("jdbc:postgresql://127.0.0.1:5432/testCarpools",
+        username, password);
+    teamData = new DatabaseQuery("jdbc:postgresql://127.0.0.1:5432/carpools",
+        username, password);
     test.addUser(DUMMY_U1);
     test.addUser(DUMMY_U2);
     t1 = test.createTrip(DUMMY_T1, "1");
@@ -224,51 +224,12 @@ public class DatabaseQueryTest {
     assertTrue(test.getMembersOnTrip(t1).isEmpty());
   }
 
-//  @Test public void testUpdate() throws SQLException, MissingDataException {
-//    Trip trip1 = test.getTripById(t1);
-//    assertEquals(trip1.getComments(), "");
-//    test.updateTripDescription(t1, "This is a new comment");
-//    assertEqu
-//  }
-
-  //@Test
-  public void testTeamDataExists()
-      throws SQLException, MissingDataException {
-    String[] teamIds = { "0", //'Jenny'
-        "108134993267513125002", //Arvind
-        "105528985214845949817", //Jeff
-        "118428670975676923422", //Mark
-        "106748572580441940868"
-    }; //Sam
-    teamData.getUserById(teamIds[0]);
-    teamData.getUserById(teamIds[1]);
-    teamData.getUserById(teamIds[2]);
-    teamData.getUserById(teamIds[3]);
-    teamData.getUserById(teamIds[4]);
-    assertNotNull(teamData.getTripById(1));
-    assertNotNull(teamData.getTripById(2));
-    assertNotNull(teamData.getTripById(3));
-    assertNotNull(teamData.getTripById(4));
-    assertNotNull(teamData.getTripById(5));
-    assertEquals(teamData.getHostOnTrip(1), teamIds[0]);
-    assertEquals(teamData.getHostOnTrip(2), teamIds[1]);
-    assertEquals(teamData.getHostOnTrip(3), teamIds[3]);
-    assertEquals(teamData.getHostOnTrip(4), teamIds[0]);
-    assertEquals(teamData.getHostOnTrip(5), teamIds[2]);
-    assertTrue(teamData.getMembersOnTrip(1).contains(teamIds[3]));
-    assertTrue(teamData.getMembersOnTrip(2).contains(teamIds[2]));
-    assertTrue(teamData.getMembersOnTrip(2).contains(teamIds[4]));
-    assertTrue(teamData.getMembersOnTrip(3).contains(teamIds[4]));
-    assertTrue(teamData.getMembersOnTrip(4).contains(teamIds[1]));
-    assertTrue(teamData.getMembersOnTrip(5).isEmpty());
-    assertTrue(teamData.getRequestsOnTrip(1).contains(teamIds[4]));
-    assertTrue(teamData.getRequestsOnTrip(1).contains(teamIds[2]));
-    assertTrue(teamData.getRequestsOnTrip(1).contains(teamIds[1]));
-    assertTrue(teamData.getRequestsOnTrip(2).isEmpty());
-    assertTrue(teamData.getRequestsOnTrip(3).contains(teamIds[1]));
-    assertTrue(teamData.getRequestsOnTrip(4).contains(teamIds[2]));
-    assertTrue(teamData.getRequestsOnTrip(4).contains(teamIds[3]));
-    assertTrue(teamData.getRequestsOnTrip(4).contains(teamIds[4]));
-    assertTrue(teamData.getRequestsOnTrip(5).contains(teamIds[3]));
+  @Test
+  public void testUpdate() throws SQLException, MissingDataException {
+    Trip trip1 = test.getTripById(t1);
+    assertEquals(trip1.getComments(), "");
+    test.updateTripDescription(t1, "This is a new comment");
+    Trip trip1Changed = test.getTripById(t1);
+    assertEquals(trip1Changed.getComments(), "This is a new comment");
   }
 }
