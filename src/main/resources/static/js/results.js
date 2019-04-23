@@ -18,11 +18,30 @@ $(document).ready(function () {
  */
 function onUserSignedIn() {
     console.log("User signed in.");
+    queryTrips();
+    // Hide the sign in tooltip if visible
+    signInTooltip[0].hide();
+}
 
-    let postParameters = {
-        uid: userProfile.getId(),
-        trips: getTripIds(JSON.parse(data))
-    };
+function queryTrips() {
+    let uid;
+    if (userProfile) {
+         uid = userProfile.getId();
+    } else {
+        uid = null;
+    }
+    let walkTime = $("#walking-input").val();
+    let waitTime = $("#waiting-input").val();
+
+    let postParameters = JSON.parse(payload);
+    if (walkTime !== "") {
+        postParameters["walkTime"] = parseFloat(walkTime);
+    }
+    if (waitTime !== "") {
+        postParameters["waitTime"] = parseFloat(waitTime);
+    }
+    postParameters["uid"] = uid;
+
     console.log(postParameters);
     $.post("/results", postParameters, response => {
         if (response.success) {
@@ -32,30 +51,13 @@ function onUserSignedIn() {
             window.location.replace("/error");
         }
     }, "json");
-
-    // Hide the sign in tooltip if visible
-    signInTooltip[0].hide();
 }
-
-
-function getTripIds(data) {
-    let tripIds = [];
-    console.log(data);
-    data.forEach(element => {
-        let innerTripIds = [];
-        for (let trip in element) {
-            innerTripIds.push(parseInt(element[trip]["id"]));
-        }
-        tripIds.push(innerTripIds);
-    });
-    return tripIds;
-}
-
 
 /**
  * Overridden function for user sign out action.
  */
 function onUserSignedOut() {
+    queryTrips(null);
     console.log("User signed out.");
 }
 
@@ -92,7 +94,6 @@ function queryResults() {
         // Set the trip results on the page with the resulting data
         setTripResults(JSON.parse(data));
     }
-
 }
 
 /**

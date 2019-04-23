@@ -43,7 +43,7 @@
                     <span class="sub-heading">Wait Time</span>
                     <div>
                         <i class="far fa-clock icon-label-large"></i>
-                        <input class="threshold-input" id="walking-input"
+                        <input class="threshold-input" id="waiting-input"
                                value="30" min="0" max="3600" type="number"
                                placeholder="..."/>min
                         <span id="info" class="info-tooltip"
@@ -58,7 +58,7 @@
                 <div>
                     <img alt="search-btn" src="/images/search-btn.png"
                          id="search-btn" class="search-btn"
-                         onclick="updateQuery();"
+                         onclick="queryTrips();"
                          onmouseover="hover(this);"
                          onmouseout="unhover(this);"/>
                 </div>
