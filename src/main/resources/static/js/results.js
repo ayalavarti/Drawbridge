@@ -3,6 +3,8 @@ const months = [
     "July", "August", "September", "October", "November", "December"
 ];
 
+let formValidationTooltip;
+
 /**
  * When the DOM loads, show the home and info buttons, query for the
  * results of the search, and initialize tooltips.
@@ -34,11 +36,13 @@ function queryTrips() {
     let waitTime = $("#waiting-input").val();
 
     let postParameters = JSON.parse(payload);
-    if (walkTime !== "") {
+
+    if (parseFloat(walkTime) > 0 && parseFloat(waitTime) > 0) {
         postParameters["walkTime"] = parseFloat(walkTime);
-    }
-    if (waitTime !== "") {
         postParameters["waitTime"] = parseFloat(waitTime);
+    } else {
+        showHideTooltip(formValidationTooltip[0], 2000);
+        return;
     }
     postParameters["uid"] = uid;
 
@@ -75,6 +79,20 @@ function initTooltips() {
         inertia: true,
         placement: "bottom",
     });
+    formValidationTooltip = tippy("#search-btn", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge-alt",
+        interactive: false,
+        trigger: "manual",
+        hideOnClick: false,
+        inertia: true,
+        sticky: true,
+        content: "Inputs should be positive numbers less than 3600.",
+        placement: "top",
+    });
+
 }
 
 /**
