@@ -167,6 +167,7 @@ function editComment(tid) {
 
 function updatePageComment(comment) {
     cancelEditing();
+    console.log(comment);
     $("#true-comment").text(comment);
 }
 
@@ -291,7 +292,7 @@ function denyClick(tid, pendUID) {
 function sendRequest(data, url) {
     $.post(url, data, response => {
         if (response.success) {
-
+            console.log(response);
             if (response.payload.action === "editComment") {
                 updatePageComment(response.newComment);
             } else if (response.redirect) {

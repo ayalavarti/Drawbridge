@@ -99,7 +99,7 @@
                         <div>
                             <i class="fas fa-font icon-label"></i>
                             <input class="name-input" id="name"
-                                   type="text" placeholder="Name..."/>
+                                   type="text" placeholder="Carpool Name..."/>
                         </div>
                         <div>
                             <i class="fas fa-calendar icon-label"></i>
@@ -144,7 +144,8 @@
                             </div>
                         </div>
                         <div>
-                            <span class="sub-heading">Expected Price</span>
+                            <span class="sub-heading">Expected Total 
+                                Price</span>
                             <div>
                                 <i class="fas fa-dollar-sign icon-label"></i>
                                 <input data-tippy-content="Minimum price must be $0."
