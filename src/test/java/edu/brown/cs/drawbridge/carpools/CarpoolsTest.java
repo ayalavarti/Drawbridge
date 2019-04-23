@@ -48,8 +48,8 @@ public class CarpoolsTest {
        * public TO <username> GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA
        * public TO <username>
        */
-      carpools = new Carpools("//127.0.0.1:5432/testCarpools", username,
-          password);
+      carpools = new Carpools("jdbc:postgresql://127.0.0.1:5432/testCarpools",
+          username, password);
     } catch (ClassNotFoundException | SQLException e) {
       assert false;
     }
