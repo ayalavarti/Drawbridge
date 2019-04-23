@@ -161,8 +161,13 @@ function editComment(tid) {
             user: userProfile.getId()
         };
         console.log(data);
-        //sendRequest(data, "/trip/" + tid);
+        sendRequest(data, "/trip/" + tid);
     }
+}
+
+function updatePageComment(comment) {
+    cancelEditing();
+    $("#true-comment").text(comment);
 }
 
 function cancelEditing() {
@@ -286,7 +291,10 @@ function denyClick(tid, pendUID) {
 function sendRequest(data, url) {
     $.post(url, data, response => {
         if (response.success) {
-            if (response.redirect) {
+
+            if (response.payload.action === "editComment") {
+                updatePageComment(response.newComment);
+            } else if (response.redirect) {
                 window.location.replace(response.redirect);
             } else {
                 window.location.reload(true);

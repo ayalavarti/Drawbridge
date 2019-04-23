@@ -152,8 +152,8 @@
                 <i class="fas fa-dollar-sign"></i>${trip.getCost()?string("##0.00")}
                 <i class="addendum">/person</i>
                 <p id="comment-input" style="display: none;">
-                    <textarea class="comments-textarea">${trip.getComments()
-                        }</textarea>
+                    <textarea
+                            class="comments-textarea">${trip.getComments()}</textarea>
                 </p>
                 <p id="true-comment">
                     ${trip.getComments()}
