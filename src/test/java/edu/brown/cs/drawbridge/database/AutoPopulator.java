@@ -2,6 +2,7 @@ package edu.brown.cs.drawbridge.database;
 
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
+import org.junit.Test;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -287,5 +288,48 @@ public class AutoPopulator {
         }
       }
     }
+  }
+
+  String[] nameSet = {"Copley Square", "Ratty", "Rockefeller Center", "Reading Terminal"};
+  double[][] coords = {
+          { -71.078705, 42.34819 },
+          { -71.40083, 41.825184 },
+          { -73.97852, 40.75865 },
+          { -75.15931, 39.953342 }};
+  long[] timeDeps = {1557154980, 1557156980,
+          1557156990, 1557158980,
+          1557158990, 1557160980};
+  private void populateTrips3(DatabaseQuery db, int tripNum)
+          throws SQLException, MissingDataException, ClassNotFoundException {
+    for (int i = 1; i <= tripNum; i++) {
+      int randomHost = (int) (Math.random() * users.length);
+      int randomTripSize = 2 + (int) (Math.random() * 4);
+      double randomCost = 20 + Math.random() * 20;
+      String randomComment = comments[(int) (Math.random() * comments.length)];
+      Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(-1,
+              nameSet[0] + " to " + nameSet[1])
+              .addLocations(coords[0][1], coords[0][0],
+                      coords[1][1], coords[1][0])
+              .addAddressNames(nameSet[0], nameSet[1])
+              .addTimes(timeDeps[0], timeDeps[1])
+              .addDetails(randomTripSize, randomCost, generateRandomPhoneNumber(),
+                      generateRandomTransportation(), randomComment).build();
+      db.createTrip(t, users[randomHost].getId());
+    }
+  }
+
+  //@Test
+  public void popUser() throws SQLException, ClassNotFoundException {
+    test = new DatabaseQuery("//127.0.0.1:5432/speed", "dev", "dev");
+    for (User u : users) {
+      test.addUser(u);
+    }
+  }
+
+  //@Test
+  public void popTrip()
+          throws SQLException, ClassNotFoundException, MissingDataException {
+    test = new DatabaseQuery("//127.0.0.1:5432/speed", "dev", "dev");
+    populateTrips3(test, 3333);
   }
 }

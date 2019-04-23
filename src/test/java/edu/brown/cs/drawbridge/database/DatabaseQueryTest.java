@@ -224,7 +224,15 @@ public class DatabaseQueryTest {
     assertTrue(test.getMembersOnTrip(t1).isEmpty());
   }
 
-  @Test public void testTeamDataExists()
+//  @Test public void testUpdate() throws SQLException, MissingDataException {
+//    Trip trip1 = test.getTripById(t1);
+//    assertEquals(trip1.getComments(), "");
+//    test.updateTripDescription(t1, "This is a new comment");
+//    assertEqu
+//  }
+
+  //@Test
+  public void testTeamDataExists()
       throws SQLException, MissingDataException {
     String[] teamIds = { "0", //'Jenny'
         "108134993267513125002", //Arvind
