@@ -420,6 +420,16 @@ public final class Carpools {
     database.updateUserPicture(uid, newProfilePic);
   }
 
+  public boolean updateComment(int tid, String uid, String newComment)
+          throws SQLException, MissingDataException {
+    if (database.getHostOnTrip(tid).equals(uid)) {
+      database.updateTripDescription(tid, newComment);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   DatabaseQuery getDatabase() {
     return database;
   }
