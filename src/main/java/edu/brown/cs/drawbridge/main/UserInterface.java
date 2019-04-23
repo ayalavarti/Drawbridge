@@ -19,6 +19,8 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,16 +61,18 @@ public final class UserInterface {
 
   /**
    * Method to set the database to use when querying.
-   *
-   * @param dbName
-   *     The name of the database.
-   *
    * @return true when the set is successful; false when unsuccessful.
    */
-  public static boolean setDB(String dbName) {
+  public static boolean setDB() {
     try {
-      carpools = new Carpools(dbName, System.getenv("DB_USER"),
-          System.getenv("DB_PASS"));
+      URI dbURI = new URI(System.getenv("DATABASE_URL"));
+      String username = dbURI.getUserInfo().split(":")[0];
+      String password = dbURI.getUserInfo().split(":")[1];
+
+      String dbURL = "jdbc:postgresql://" + dbURI.getHost() + ':'
+                     + dbURI.getPort() + dbURI.getPath();
+
+      carpools = new Carpools(dbURL, username, password);
 
       // Set up cron job to clean out old trips periodically
       //      Timer timer = new Timer();
@@ -76,7 +80,11 @@ public final class UserInterface {
       //      timer.scheduleAtFixedRate(tripCleaner, 0, Constants.TRIP_CLEAN_INTERVAL);
 
       return true;
+    } catch (URISyntaxException e) {
+      System.out.println("ERROR: Problem reading database url location: " + e.getMessage());
+      return false;
     } catch (SQLException | ClassNotFoundException e) {
+      System.out.println("ERROR: Could not connect to the database: " + e.getMessage());
       return false;
     }
   }
