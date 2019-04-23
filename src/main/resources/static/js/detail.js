@@ -149,16 +149,30 @@ function editComment(tid) {
     tripID = tid;
     if (!editing) {
         $("#edit-img").attr("src", "/images/arrow-label.png");
+        $("#cancel-btn").show();
         $("#true-comment").hide();
         $("#comment-input").show();
         $(".comments-textarea").focus();
+        editing = true;
     } else {
         const data = {
             action: "editComment",
-            newComment: "",
+            newComment: $(".comments-textarea").val(),
             user: userProfile.getId()
         };
-        sendRequest(data, "/trip/" + tid);
+        console.log(data);
+        //sendRequest(data, "/trip/" + tid);
+    }
+}
+
+function cancelEditing() {
+    if (editing) {
+        $("#edit-img").attr("src", "/images/pencil-icon.png");
+        $("#cancel-btn").hide();
+        $("#true-comment").show();
+        $("#comment-input").hide();
+        $(".comments-textarea").blur();
+        editing = false;
     }
 }
 
