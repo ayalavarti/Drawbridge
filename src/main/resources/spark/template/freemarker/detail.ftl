@@ -26,7 +26,7 @@
             <div class="info-box">
                 <span><i class="fas fa-phone"></i>Contact host at ${trip.getPhoneNumber()}</span>
             </div>
-            <div>
+            <div id='share-section' style="display: none">
                 <h3 style="margin-top: 30px;">Share this Trip</h3>
                 <div style="display: flex; flex-wrap: wrap; justify-content:
                 center; align-items: center;">

@@ -45,6 +45,7 @@ function onUserSignedIn() {
         $("#pending-label").hide();
         $("#action-btn").show();
         $("#edit-btn").show();
+        $("#share-section").show();
     } else if (containsUser(members, uid)) {
         $("#delete-btn").hide();
         $("#join-btn").hide();
@@ -52,6 +53,7 @@ function onUserSignedIn() {
         $("#pending").hide();
         $("#pending-label").hide();
         $("#action-btn").hide();
+        $("#share-section").show();
     } else if (containsUser(pending, uid)) {
         $("#delete-btn").hide();
         $("#join-btn").hide();
@@ -97,7 +99,8 @@ function onUserSignedOut() {
     $("#leave-btn").hide();
     $("#pending").hide();
     $("#pending-label").hide();
-    $("#edit-btn").show();
+    $("#edit-btn").hide();
+    $("#share-section").hide();
 
     if (!tripFull) {
         $("#join-btn").show();
