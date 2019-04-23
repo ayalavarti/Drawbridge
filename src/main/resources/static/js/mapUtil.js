@@ -133,9 +133,10 @@ function handleInput(id, index) {
     if (map) {
         // Get the address value from the correct input box
         let address = $(`#${id}`).val();
-        if (address === "") {
+        if ($.trim(address) === "") {
             removeMarker(index);
             disableTrip();
+            $(`#${id}`).val("");
             return;
         }
 
