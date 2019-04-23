@@ -158,8 +158,7 @@
                             <span class="sub-heading">Contact Number</span>
                             <div>
                                 <i class="fas fa-phone icon-label"></i>
-                                <input data-tippy-content="Required phone format is 123-456-7890."
-                                       class="form-tooltip phone-input"
+                                <input class="form-tooltip phone-input"
                                        id="contact-number" type="tel"
                                        placeholder="Phone..."/>
                             </div>
