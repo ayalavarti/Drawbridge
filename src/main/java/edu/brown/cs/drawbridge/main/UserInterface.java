@@ -70,7 +70,7 @@ public final class UserInterface {
       String password = dbURI.getUserInfo().split(":")[1];
 
       String dbURL = "jdbc:postgresql://" + dbURI.getHost() + ':'
-                     + dbURI.getPort() + dbURI.getPath() + "?sslmode=require";
+                     + dbURI.getPort() + dbURI.getPath();
 
       carpools = new Carpools(dbURL, username, password);
 

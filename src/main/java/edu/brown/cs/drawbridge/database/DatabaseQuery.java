@@ -26,7 +26,7 @@ public class DatabaseQuery {
   /**
    * A constructor based on the String name of the database.
    *
-   * @param db
+   * @param dbURL
    *     The name of the database.
    * @param username
    *     The username used to access the database.
@@ -38,13 +38,12 @@ public class DatabaseQuery {
    * @throws SQLException
    *     Errors involving the sql update.
    */
-  public DatabaseQuery(String db, String username, String password)
+  public DatabaseQuery(String dbURL, String username, String password)
       throws ClassNotFoundException, SQLException {
     // this line loads the driver manager class, and must be
     // present for everything else to work properly
     Class.forName("org.postgresql.Driver");
-    String urlToDB = "jdbc:postgresql:" + db;
-    conn = DriverManager.getConnection(urlToDB, username, password);
+    conn = DriverManager.getConnection(dbURL, username, password);
   }
 
   /**
