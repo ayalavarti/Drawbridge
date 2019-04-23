@@ -23,10 +23,11 @@
             <div class="info-box half-size">
                 <span><i class="far fa-clock"></i>${(trip.getDepartureTime()*1000)?number_to_time?string("h:mm a")}</span>
             </div>
-            <div class="info-box">
+            <div id='privacy-hidden' style="display:none;" class="info-box">
                 <span><i class="fas fa-phone"></i>Contact host at ${trip.getPhoneNumber()}</span>
             </div>
-            <div id='share-section' style="display: none">
+            <div id='privacy-hidden' class="share-section" style="display:
+            none">
                 <h3 style="margin-top: 30px;">Share this Trip</h3>
                 <div style="display: flex; flex-wrap: wrap; justify-content:
                 center; align-items: center;">
