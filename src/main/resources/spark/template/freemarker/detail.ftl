@@ -151,7 +151,18 @@
             <div id="comments">
                 <i class="fas fa-dollar-sign"></i>${trip.getCost()?string("##0.00")}
                 <i class="addendum">/person</i>
-                <p>${trip.getComments()}</p>
+                <p id="comment-input" style="display: none;">
+                    <textarea class="comments-textarea">${trip.getComments()
+                        }</textarea>
+                </p>
+                <p id="true-comment">
+                    ${trip.getComments()}
+                </p>
+                <div class="share-tooltip" id="edit-btn" style="display: none;"
+                     onclick="editComment(${trip.getId()?c})">
+                    <img style="height: 20px; width: auto" id="edit-img"
+                         src="/images/pencil-icon.png"/>
+                </div>
             </div>
         </div>
     </div>

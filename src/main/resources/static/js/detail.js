@@ -44,6 +44,7 @@ function onUserSignedIn() {
         $("#pending").show();
         $("#pending-label").hide();
         $("#action-btn").show();
+        $("#edit-btn").show();
     } else if (containsUser(members, uid)) {
         $("#delete-btn").hide();
         $("#join-btn").hide();
@@ -96,6 +97,7 @@ function onUserSignedOut() {
     $("#leave-btn").hide();
     $("#pending").hide();
     $("#pending-label").hide();
+    $("#edit-btn").show();
 
     if (!tripFull) {
         $("#join-btn").show();
@@ -138,6 +140,26 @@ function initTooltips() {
         sticky: true,
         placement: "bottom",
     });
+}
+
+let tripID;
+let editing = false;
+
+function editComment(tid) {
+    tripID = tid;
+    if (!editing) {
+        $("#edit-img").attr("src", "/images/arrow-label.png");
+        $("#true-comment").hide();
+        $("#comment-input").show();
+        $(".comments-textarea").focus();
+    } else {
+        const data = {
+            action: "editComment",
+            newComment: "",
+            user: userProfile.getId()
+        };
+        sendRequest(data, "/trip/" + tid);
+    }
 }
 
 /**

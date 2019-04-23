@@ -237,15 +237,24 @@ i {
     box-shadow: 0 2px 4px 0 #0000001e, 0 3px 6px 0 #00000023;
 }
 
+.comments-textarea,
 #comments p {
     font-size: 14px;
     color: #555555;
+    min-height: 100px;
+    height: auto;
 }
 
 .verified {
     width: 20px;
     height: auto;
     padding-left: 5px;
+}
+
+.comments-textarea {
+    width: 100%;
+    resize: none;
+    border: none;
 }
 
 @media screen and (max-width: 1030px) {
