@@ -55,6 +55,13 @@
                         </span>
                     </div>
                 </div>
+                <div>
+                    <img alt="search-btn" src="/images/search-btn.png"
+                         id="search-btn" class="search-btn"
+                         onclick="updateQuery();"
+                         onmouseover="hover(this);"
+                         onmouseout="unhover(this);"/>
+                </div>
             </div>
             <span class="trip-info-text">Carpool Search Results</span>
         </div>
