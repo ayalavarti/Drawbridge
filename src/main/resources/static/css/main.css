@@ -260,6 +260,14 @@ input[type="number"] {
     margin-right: auto;
 }
 
+.loading-gif2 {
+    width: 300px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
 .popup-title {
     font-size: 18px;
     font-weight: 500;

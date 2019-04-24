@@ -64,8 +64,11 @@
                 </div>
             </div>
             <span class="trip-info-text">Carpool Search Results</span>
+            <div class="loading-gif2" id="loading">
+                <img src="/images/loading.gif"
+                     style="width: 60px; height: auto;"/>
+            </div>
             <div id="carpool-results">
-
             </div>
         </div>
     </div>
