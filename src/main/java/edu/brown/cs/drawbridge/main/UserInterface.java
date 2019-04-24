@@ -344,6 +344,7 @@ public final class UserInterface {
         } else if (action.equals("editComment")) {
           String newComment = qm.value("newComment");
           success = carpools.updateComment(tid, uid, newComment);
+          responseData.addProperty("newComment", newComment);
         }
         assert success; // Make sure the db action was completed successfully
         responseData.addProperty("success", true);
