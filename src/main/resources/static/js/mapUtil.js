@@ -177,7 +177,10 @@ function handleInput(id, index) {
                             $(`#loading-${id}`).css({
                                 visibility: "hidden"
                             });
-                            $(".clear-btn").css({visibility: "visible"});
+                            if (!$("#start-input").is(":focus") &&
+                                !$("#end-input").is(":focus")) {
+                                $(".clear-btn").css({visibility: "visible"});
+                            }
                         });
         }, 800);
     }

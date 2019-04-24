@@ -45,6 +45,7 @@
                     <div>
                         <i class="fas fa-dot-circle icon-label"></i>
                         <input class="address-input" id="start-input"
+                               onfocus="hideClearButtons();"
                                onblur="handleInput('start-input', 0)"
                                type="text" placeholder="Starting point..."/>
                         <img alt="loading" id="loading-start-input"
@@ -60,6 +61,7 @@
                         <i class="fas fa-map-marker-alt icon-label"></i>
                         <input class="address-input" id="end-input"
                                onblur="handleInput('end-input', 1)"
+                               onfocus="hideClearButtons();"
                                type="text"
                                placeholder="Ending destination..."/>
                         <img alt="loading" id="loading-end-input"
