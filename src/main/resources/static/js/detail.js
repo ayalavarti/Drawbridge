@@ -71,7 +71,6 @@ function onUserSignedIn() {
         $("#full-label").show();
         $("[id=approve-btn]").hide();
     }
-    console.log(uid);
     $(`#${uid}`).css({visibility: "visible"});
     $(`.${uid}`).attr("src", `${userProfile.getImageUrl()}`);
 }
@@ -166,14 +165,12 @@ function editComment(tid) {
             newComment: $(".comments-textarea").val(),
             user: userProfile.getId()
         };
-        console.log(data);
         sendRequest(data, "/trip/" + tid);
     }
 }
 
 function updatePageComment(comment) {
     cancelEditing();
-    console.log(comment);
     $("#true-comment").text(comment);
 }
 

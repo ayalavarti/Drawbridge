@@ -214,7 +214,8 @@ function handleClick(coord) {
                             .setHTML(`
                                 ${parseAddressOnClick(feature.place_name)}
                                 <button onclick="updateAddress('start-input', 0,
-                                    '${feature.place_name}', '${feature.center[1]}',
+                                    '${feature.place_name.replace("'",
+                                "")}', '${feature.center[1]}',
                                     '${feature.center[0]}');" 
                                     class="setLocation-btn">
                                     Set Starting
