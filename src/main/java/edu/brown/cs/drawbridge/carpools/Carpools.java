@@ -19,7 +19,6 @@ public final class Carpools {
 
   private static final long SECONDS_PER_MINUTE = 60;
   private static final double WALKING_SPEED = 0.084; // Kilometers per minute
-  private final TripSearcher tripSearcher;
   private final Comparator<Trip> timeComparator = new TimeComparator();
   private DatabaseQuery database;
 
@@ -41,7 +40,6 @@ public final class Carpools {
   public Carpools(String dbName, String dbUser, String dbPass)
       throws ClassNotFoundException, SQLException {
     database = new DatabaseQuery(dbName, dbUser, dbPass);
-    tripSearcher = new TripSearcher(database);
   }
 
   /**
@@ -97,6 +95,7 @@ public final class Carpools {
       double startLon, double endLat, double endLon, long departureTime,
       long walkingTime, double timeRadius)
       throws SQLException, MissingDataException {
+    TripSearcher tripSearcher = new TripSearcher(database);
     return tripSearcher.searchWithId(userId, startLat, startLon, endLat, endLon,
         departureTime, walkingTime * WALKING_SPEED,
         timeRadius * SECONDS_PER_MINUTE);
@@ -132,6 +131,7 @@ public final class Carpools {
   public List<List<Trip>> searchWithoutId(double startLat, double startLon,
       double endLat, double endLon, long departureTime, double walkingTime,
       long timeRadius) throws SQLException, MissingDataException {
+    TripSearcher tripSearcher = new TripSearcher(database);
     return tripSearcher.searchWithoutId(startLat, startLon, endLat, endLon,
         departureTime, walkingTime * WALKING_SPEED,
         timeRadius * SECONDS_PER_MINUTE);

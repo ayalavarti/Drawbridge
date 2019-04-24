@@ -54,23 +54,30 @@ public final class Main {
     // Accept gui command and begin REPL reading
     try {
       OptionSet options = parser.parse(args);
-      if (options.has("gui")) {
-        runSparkServer((int) options.valueOf("port"));
-      }
+      runSparkServer();
     } catch (OptionException e) {
       System.out.println("Use one of: --gui [--port <number>] or no inputs.");
     }
   }
 
-  private void runSparkServer(int port) {
-    Spark.port(port);
+  private void runSparkServer() {
+    Spark.port(getHerokuAssignedPort());
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.exception(Exception.class, new ExceptionPrinter());
 
     // If we can't connect to the db, give up and stop the server
-    if (UserInterface.setDB(System.getenv("DATABASE_URL"))) {
+    if (UserInterface.setDB()) {
       UserInterface.setEndpoints();
     }
+  }
+
+  static int getHerokuAssignedPort() {
+    ProcessBuilder processBuilder = new ProcessBuilder();
+    if (processBuilder.environment().get("PORT") != null) {
+      return Integer.parseInt(processBuilder.environment().get("PORT"));
+    }
+    return 8000;
+    //return default port if heroku-port isn't set (i.e. on localhost)
   }
 
   /**
