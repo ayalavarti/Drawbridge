@@ -2,12 +2,14 @@ package edu.brown.cs.drawbridge.main;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import edu.brown.cs.drawbridge.carpools.Carpools;
 import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.json.JSONProcessor;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import freemarker.template.Configuration;
+import javafx.util.Pair;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
@@ -112,6 +114,68 @@ public final class UserInterface {
       return null;
     });
   }
+  // -------------------------- Helpers -----------------------------------
+
+  private static Pair<JsonObject, JsonArray> executeSearch(QueryParamsMap qm) {
+    // Get parameter values
+    JsonArray data;
+    JsonObject payload = new JsonObject();
+
+    try {
+      String startName = qm.value("startName");
+      String endName = qm.value("endName");
+
+      double startLat = Double.parseDouble(qm.value("startLat"));
+      double startLon = Double.parseDouble(qm.value("startLon"));
+      double endLat = Double.parseDouble(qm.value("endLat"));
+      double endLon = Double.parseDouble(qm.value("endLon"));
+
+      long datetime = Long.parseLong(qm.value("date"));
+      String uid = qm.value("userID");
+
+      double walkTime, waitTime;
+      if (qm.hasKey("walkTime")) {
+        walkTime = qm.get("walkTime").doubleValue();
+      } else {
+        walkTime = 15; // 15 minutes walking is the default
+      }
+      if (qm.hasKey("waitTime")) {
+        waitTime = qm.get("waitTime").doubleValue();
+      } else {
+        waitTime = 30; // 30 minutes is default for waiting for carpool
+      }
+
+      // Mirror the inputted values back
+      payload.addProperty("startName", startName);
+      payload.addProperty("endName", endName);
+      payload.addProperty("startLat", startLat);
+      payload.addProperty("startLon", startLon);
+      payload.addProperty("endLat", endLat);
+      payload.addProperty("endLon", endLon);
+      payload.addProperty("date", datetime);
+      payload.addProperty("walkTime", walkTime);
+      payload.addProperty("waitTime", waitTime);
+
+      List<List<Trip>> results;
+      // Perform search
+      if (uid == null) {
+        results = carpools.searchWithoutId(startLat, startLon,
+                                           endLat, endLon, datetime,
+                                           (long) walkTime, (long) waitTime);
+      } else {
+        results = carpools.searchWithId(uid, startLat, startLon,
+                                        endLat, endLon, datetime,
+                                        (long) walkTime, (long) waitTime);
+      }
+      data = JSONProcessor.processTripGroups(uid, results);
+
+    } catch (RuntimeException | SQLException | MissingDataException e) {
+      data = new JsonArray();
+    }
+
+    return new Pair<JsonObject, JsonArray>(payload, data);
+  }
+
 
   // ---------------------------- Home ------------------------------------
 
@@ -137,67 +201,15 @@ public final class UserInterface {
    */
   private static class ListGetHandler implements TemplateViewRoute {
     @Override public ModelAndView handle(Request request, Response response) {
-      // Get parameter values
-      QueryParamsMap qm = request.queryMap();
-      JsonArray data;
-      JsonObject payload = new JsonObject();
 
-      try {
-        String startName = qm.value("startName");
-        String endName = qm.value("endName");
-
-        double startLat = Double.parseDouble(qm.value("startLat"));
-        double startLon = Double.parseDouble(qm.value("startLon"));
-        double endLat = Double.parseDouble(qm.value("endLat"));
-        double endLon = Double.parseDouble(qm.value("endLon"));
-
-        long datetime = Long.parseLong(qm.value("date"));
-        String uid = qm.value("userID");
-
-        double walkTime, waitTime;
-        if (qm.hasKey("walkTime")) {
-          walkTime = qm.get("walkTime").doubleValue();
-        } else {
-          walkTime = 15; // 15 minutes walking is the default
-        }
-        if (qm.hasKey("waitTime")) {
-          waitTime = qm.get("waitTime").doubleValue();
-        } else {
-          waitTime = 30; // 30 minutes is default for waiting for carpool
-        }
-
-        // Mirror the inputted values back
-        payload.addProperty("startName", startName);
-        payload.addProperty("endName", endName);
-        payload.addProperty("startLat", startLat);
-        payload.addProperty("startLon", startLon);
-        payload.addProperty("endLat", endLat);
-        payload.addProperty("endLon", endLon);
-        payload.addProperty("date", datetime);
-        payload.addProperty("walkTime", walkTime);
-        payload.addProperty("waitTime", waitTime);
-
-        List<List<Trip>> results;
-        // Perform search
-        if (uid == null) {
-          results = carpools
-              .searchWithoutId(startLat, startLon, endLat, endLon, datetime,
-                  (long) walkTime, (long) waitTime);
-        } else {
-          results = carpools
-              .searchWithId(uid, startLat, startLon, endLat, endLon, datetime,
-                  (long) walkTime, (long) waitTime);
-        }
-        data = JSONProcessor.processTripGroups(uid, results);
-
-      } catch (RuntimeException | SQLException | MissingDataException e) {
-        data = new JsonArray();
-      }
+      Pair<JsonObject, JsonArray> searchResults =
+              executeSearch(request.queryMap());
 
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("title", "Drawbridge | Results")
-          .put("favicon", "images/favicon.png").put("data", GSON.toJson(data))
-          .put("query", GSON.toJson(payload)).build();
+             .put("title", "Drawbridge | Results")
+             .put("favicon", "images/favicon.png")
+             .put("data", GSON.toJson(searchResults.getValue()))
+             .put("query", GSON.toJson(searchResults.getKey())).build();
 
       return new ModelAndView(variables, "results.ftl");
     }
@@ -210,44 +222,14 @@ public final class UserInterface {
   private static class ListPostHandler implements Route {
     @Override
     public Object handle(Request request, Response response) {
-      QueryParamsMap qm = request.queryMap();
+      Pair<JsonObject, JsonArray> searchResults =
+              executeSearch(request.queryMap());
 
-      // Read in the params
-      String uid = qm.value("uid");
-      JsonArray tripGroups =
-              (JsonArray) new JsonParser().parse(qm.value("trips"));
+      JsonObject returnData = new JsonObject();
+      returnData.add("payload", searchResults.getKey());
+      returnData.add("data", searchResults.getValue());
 
-      // Create response data object
-      JsonObject responseData = new JsonObject();
-      responseData.addProperty("uid", uid);
-      JsonArray jTripGroups = new JsonArray();
-
-      // Iterate over the trips and check the user's status in each
-      for (JsonElement tGroup : tripGroups) {
-        JsonArray arrTGroup = tGroup.getAsJsonArray();
-        JsonArray pjTrips = new JsonArray();
-        for (JsonElement tid : arrTGroup) {
-          Trip trip;
-          try {
-            trip = carpools.getTrip(tid.getAsInt());
-          } catch (SQLException | MissingDataException e) {
-            responseData.addProperty("success", false);
-            responseData.addProperty("error", e.getMessage());
-            return GSON.toJson(responseData);
-          }
-
-          if (uid != null) {
-            pjTrips.add(trip.toJson(uid));
-          } else {
-            pjTrips.add(trip.toJson());
-          }
-        }
-        jTripGroups.add(pjTrips);
-      }
-
-      responseData.add("trips", jTripGroups);
-      responseData.addProperty("success", true);
-      return GSON.toJson(responseData);
+      return GSON.toJson(returnData);
     }
   }
 
