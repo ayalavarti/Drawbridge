@@ -9,8 +9,8 @@ import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.json.JSONProcessor;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
+import edu.brown.cs.drawbridge.util.Pair;
 import freemarker.template.Configuration;
-import javafx.util.Pair;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
@@ -220,8 +220,8 @@ public final class UserInterface {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Results")
           .put("favicon", "images/favicon.png")
-          .put("data", GSON.toJson(searchResults.getValue()))
-          .put("query", GSON.toJson(searchResults.getKey())).build();
+          .put("data", GSON.toJson(searchResults.getSecond()))
+          .put("query", GSON.toJson(searchResults.getFirst())).build();
 
       return new ModelAndView(variables, "results.ftl");
     }
@@ -237,8 +237,8 @@ public final class UserInterface {
       Pair<JsonObject, JsonArray> searchResults = executeSearch(
           request.queryMap());
       JsonObject returnData = new JsonObject();
-      returnData.add("payload", searchResults.getKey());
-      returnData.add("data", searchResults.getValue());
+      returnData.add("payload", searchResults.getFirst());
+      returnData.add("data", searchResults.getSecond());
 
       return GSON.toJson(returnData);
     }
