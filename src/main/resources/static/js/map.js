@@ -30,7 +30,7 @@ $(document).ready(function () {
     initTooltips();
     disableTrip();
     tutorialElements = [
-        $(".header"), $(".search-menu-wrapper"), $(".team-setting"),
+        $(".header"), $(".submit-btn"), $(".team-setting"),
         $(".info-setting")
     ];
 
