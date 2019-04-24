@@ -64,6 +64,9 @@
                 </div>
             </div>
             <span class="trip-info-text">Carpool Search Results</span>
+            <div id="carpool-results">
+
+            </div>
         </div>
     </div>
     <script type="text/javascript">

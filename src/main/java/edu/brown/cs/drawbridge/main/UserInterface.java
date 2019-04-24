@@ -1,8 +1,9 @@
 package edu.brown.cs.drawbridge.main;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.*;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import edu.brown.cs.drawbridge.carpools.Carpools;
 import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.json.JSONProcessor;
@@ -23,8 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -92,6 +91,7 @@ public final class UserInterface {
 
     Spark.get("/", new HomeGetHandler(), freeMarker);
     Spark.get("/results", new ListGetHandler(), freeMarker);
+    Spark.post("/results", new ListPostHandler());
 
     Spark.get("/trip/:tid", new DetailGetHandler(), freeMarker);
     Spark.post("/trip/:tid", new DetailPostHandler());
@@ -159,23 +159,27 @@ public final class UserInterface {
       List<List<Trip>> results;
       // Perform search
       if (uid == null) {
-        results = carpools.searchWithoutId(startLat, startLon,
-                                           endLat, endLon, datetime,
-                                           (long) walkTime, (long) waitTime);
+        results = carpools
+            .searchWithoutId(startLat, startLon, endLat, endLon, datetime,
+                (long) walkTime, (long) waitTime);
       } else {
-        results = carpools.searchWithId(uid, startLat, startLon,
-                                        endLat, endLon, datetime,
-                                        (long) walkTime, (long) waitTime);
+        results = carpools
+            .searchWithId(uid, startLat, startLon, endLat, endLon, datetime,
+                (long) walkTime, (long) waitTime);
       }
-      data = JSONProcessor.processTripGroups(uid, results);
+      if (uid != null) {
+        data = JSONProcessor.processTripGroups(uid, results);
+      } else {
+        data = JSONProcessor.processTripGroups(results);
+      }
 
     } catch (RuntimeException | SQLException | MissingDataException e) {
+      e.printStackTrace();
       data = new JsonArray();
     }
 
-    return new Pair<JsonObject, JsonArray>(payload, data);
+    return new Pair<>(payload, data);
   }
-
 
   // ---------------------------- Home ------------------------------------
 
@@ -202,14 +206,14 @@ public final class UserInterface {
   private static class ListGetHandler implements TemplateViewRoute {
     @Override public ModelAndView handle(Request request, Response response) {
 
-      Pair<JsonObject, JsonArray> searchResults =
-              executeSearch(request.queryMap());
+      Pair<JsonObject, JsonArray> searchResults = executeSearch(
+          request.queryMap());
 
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-             .put("title", "Drawbridge | Results")
-             .put("favicon", "images/favicon.png")
-             .put("data", GSON.toJson(searchResults.getValue()))
-             .put("query", GSON.toJson(searchResults.getKey())).build();
+          .put("title", "Drawbridge | Results")
+          .put("favicon", "images/favicon.png")
+          .put("data", GSON.toJson(searchResults.getValue()))
+          .put("query", GSON.toJson(searchResults.getKey())).build();
 
       return new ModelAndView(variables, "results.ftl");
     }
@@ -220,11 +224,10 @@ public final class UserInterface {
    * display accurate hosting/pending/member information if relevant.
    */
   private static class ListPostHandler implements Route {
-    @Override
-    public Object handle(Request request, Response response) {
-      Pair<JsonObject, JsonArray> searchResults =
-              executeSearch(request.queryMap());
+    @Override public Object handle(Request request, Response response) {
 
+      Pair<JsonObject, JsonArray> searchResults = executeSearch(
+          request.queryMap());
       JsonObject returnData = new JsonObject();
       returnData.add("payload", searchResults.getKey());
       returnData.add("data", searchResults.getValue());
@@ -372,7 +375,7 @@ public final class UserInterface {
         List<Trip> pending = userTrips.get(2);
 
         return GSON.toJson(
-                JSONProcessor.processTripGroups(uid, hosting, member, pending));
+            JSONProcessor.processTripGroups(uid, hosting, member, pending));
       } catch (SQLException | MissingDataException e) {
         // TODO: decide stuff to do
         return GSON.toJson(new JsonObject());
@@ -481,7 +484,6 @@ public final class UserInterface {
         responseData.addProperty("success", false);
         responseData.addProperty("error", e.getMessage());
       }
-
 
       return GSON.toJson(responseData);
     }

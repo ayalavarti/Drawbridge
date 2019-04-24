@@ -28,7 +28,7 @@ function onUserSignedIn() {
 function queryTrips() {
     let uid;
     if (userProfile) {
-         uid = userProfile.getId();
+        uid = userProfile.getId();
     } else {
         uid = null;
     }
@@ -44,16 +44,11 @@ function queryTrips() {
         showHideTooltip(formValidationTooltip[0], 2000);
         return;
     }
-    postParameters["uid"] = uid;
+    postParameters["userID"] = uid;
 
-    console.log(postParameters);
     $.post("/results", postParameters, response => {
-        if (response.success) {
-            // Set the trip results on the page with the resulting data
-            setTripResults(JSON.parse(response.trips));
-        } else {
-            window.location.replace("/error");
-        }
+        // Set the trip results on the page with the resulting data
+        setTripResults((response.data));
     }, "json");
 }
 
@@ -119,7 +114,7 @@ function queryResults() {
  * @param {*} data
  */
 function setTripResults(data) {
-
+    $("#carpool-results").html("");
     if (data.length > 0) {
         // Iterate through each trip group
         data.forEach(element => {
@@ -129,17 +124,17 @@ function setTripResults(data) {
                 result += generateTrip(element[trip]);
             }
             result += `</div></div>`
-            $(".results-content").append(result);
+            $("#carpool-results").append(result);
         });
     } else {
-        $(".results-content").append(`<div class="empty-results">
+        $("#carpool-results").append(`<div class="empty-results">
 			<img src="/images/no-trips-icon.png" /></div>`);
     }
     /**
-     * Append a host trip button wiht hover effects and an onclick handler
+     * Append a host trip button with hover effects and an onclick handler
      * to the end of the results-content div
      */
-    $(".results-content").append(`<div><input name="host" alt="Host" type="image" src="/images/host-btn.png"
+    $("#carpool-results").append(`<div><input name="host" alt="Host" type="image" src="/images/host-btn.png"
 		class="host-btn" onmouseover="hover(this);" onmouseout="unhover(this);" onclick="handleHost();"/></div>`);
 }
 
