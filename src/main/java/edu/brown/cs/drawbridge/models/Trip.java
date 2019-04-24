@@ -2,6 +2,7 @@ package edu.brown.cs.drawbridge.models;
 
 import java.util.List;
 
+import com.google.gson.JsonObject;
 import edu.brown.cs.drawbridge.carpools.TripSearcher;
 
 /**
@@ -364,6 +365,47 @@ public class Trip {
   public double getTripDistance() {
     return TripSearcher.distance(startingLatitude, endingLatitude,
         startingLongitude, endingLongitude);
+  }
+
+  /**
+   * Method for converting trip into a json object.
+   * @return A json representation of this trip
+   */
+  public JsonObject toJson() {
+    return this.toJson("");
+  }
+
+  /**
+   * Method for converting trip into a json object with an added status field
+   * representing the given user's status in that trip.
+   * @param uid The user to set the status field for.
+   * @return A json representation of this trip.
+   */
+  public JsonObject toJson(final String uid) {
+    JsonObject data = new JsonObject();
+
+    data.addProperty("start", this.getStartingAddress());
+    data.addProperty("end", this.getEndingAddress());
+    data.addProperty("date", this.getDepartureTime());
+    data.addProperty("currentSize", this.getCurrentSize());
+    data.addProperty("maxSize", this.getMaxUsers());
+    data.addProperty("costPerPerson", this.getCostPerUser(uid));
+    data.addProperty("id", this.getId());
+    data.addProperty("name", this.getName());
+
+    String status;
+    if (this.getHostId().equals(uid)) {
+      status = "hosting";
+    } else if (this.getMemberIds().contains(uid)) {
+      status = "joined";
+    } else if (this.getPendingIds().contains(uid)) {
+      status = "pending";
+    } else {
+      status = "join";
+    }
+    data.addProperty("status", status);
+
+    return data;
   }
 
   @Override

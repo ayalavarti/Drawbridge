@@ -79,6 +79,48 @@ function geolocateLoc() {
     }
 }
 
+let typingTimerStart;
+let typingTimerEnd;
+let finishTypingInterval = 1500;
+
+$("#start-input").on('keyup', function () {
+    clearTimeout(typingTimerStart);
+    typingTimerStart = setTimeout(function () {
+            if ($.trim($('#start-input').val()) !== '') {
+                $("#start-input").blur();
+                $("#end-input").focus();
+            }
+        },
+        finishTypingInterval);
+});
+
+$("#start-input").on('keydown', function () {
+    clearTimeout(typingTimerStart);
+});
+
+$("#start-input").on('blur', function () {
+    clearTimeout(typingTimerStart);
+});
+
+
+$("#end-input").on('keyup', function () {
+    clearTimeout(typingTimerEnd);
+    typingTimerEnd = setTimeout(function () {
+            if ($.trim($('#end-input').val()) !== '') {
+                $("#end-input").blur();
+            }
+        },
+        finishTypingInterval);
+});
+
+$("#end-input").on('keydown', function () {
+    clearTimeout(typingTimerEnd);
+});
+
+$("#end-input").on('blur', function () {
+    clearTimeout(typingTimerEnd);
+});
+
 /**
  * Handle changes to the address input boxes whenever the input box loses focus.
  *
@@ -91,9 +133,10 @@ function handleInput(id, index) {
     if (map) {
         // Get the address value from the correct input box
         let address = $(`#${id}`).val();
-        if (address === "") {
+        if ($.trim(address) === "") {
             removeMarker(index);
             disableTrip();
+            $(`#${id}`).val("");
             return;
         }
 
@@ -171,7 +214,8 @@ function handleClick(coord) {
                             .setHTML(`
                                 ${parseAddressOnClick(feature.place_name)}
                                 <button onclick="updateAddress('start-input', 0,
-                                    '${feature.place_name}', '${feature.center[1]}',
+                                    '${feature.place_name.replace("'",
+                                "")}', '${feature.center[1]}',
                                     '${feature.center[0]}');" 
                                     class="setLocation-btn">
                                     Set Starting

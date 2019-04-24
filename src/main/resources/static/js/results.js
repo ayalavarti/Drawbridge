@@ -3,6 +3,8 @@ const months = [
     "July", "August", "September", "October", "November", "December"
 ];
 
+let formValidationTooltip;
+
 /**
  * When the DOM loads, show the home and info buttons, query for the
  * results of the search, and initialize tooltips.
@@ -18,14 +20,43 @@ $(document).ready(function () {
  */
 function onUserSignedIn() {
     console.log("User signed in.");
+    queryTrips();
     // Hide the sign in tooltip if visible
     signInTooltip[0].hide();
+}
+
+function queryTrips() {
+    let uid;
+    if (userProfile) {
+        uid = userProfile.getId();
+    } else {
+        uid = null;
+    }
+    let walkTime = $("#walking-input").val();
+    let waitTime = $("#waiting-input").val();
+
+    let postParameters = JSON.parse(payload);
+
+    if (parseFloat(walkTime) > 0 && parseFloat(waitTime) > 0) {
+        postParameters["walkTime"] = parseFloat(walkTime);
+        postParameters["waitTime"] = parseFloat(waitTime);
+    } else {
+        showHideTooltip(formValidationTooltip[0], 2000);
+        return;
+    }
+    postParameters["userID"] = uid;
+
+    $.post("/results", postParameters, response => {
+        // Set the trip results on the page with the resulting data
+        setTripResults((response.data));
+    }, "json");
 }
 
 /**
  * Overridden function for user sign out action.
  */
 function onUserSignedOut() {
+    queryTrips(null);
     console.log("User signed out.");
 }
 
@@ -43,6 +74,20 @@ function initTooltips() {
         inertia: true,
         placement: "bottom",
     });
+    formValidationTooltip = tippy("#search-btn", {
+        animation: "scale",
+        arrow: true,
+        arrowType: "round",
+        theme: "drawbridge-alt",
+        interactive: false,
+        trigger: "manual",
+        hideOnClick: false,
+        inertia: true,
+        sticky: true,
+        content: "Inputs should be positive numbers less than 3600.",
+        placement: "top",
+    });
+
 }
 
 /**
@@ -57,9 +102,11 @@ function queryResults() {
     $("#date").text(
         `${tripDate.toDateString()}`);
     $("#time").text(`${toJSTime(tripDate)}`);
-
-    // Set the trip results on the page with the resulting data
-    setTripResults(JSON.parse(data));
+    if ((navigator.cookieEnabled && getCookie("loggedIn") === "true")) {
+    } else {
+        // Set the trip results on the page with the resulting data
+        setTripResults(JSON.parse(data));
+    }
 }
 
 /**
@@ -67,7 +114,7 @@ function queryResults() {
  * @param {*} data
  */
 function setTripResults(data) {
-
+    $("#carpool-results").html("");
     if (data.length > 0) {
         // Iterate through each trip group
         data.forEach(element => {
@@ -77,17 +124,17 @@ function setTripResults(data) {
                 result += generateTrip(element[trip]);
             }
             result += `</div></div>`
-            $(".results-content").append(result);
+            $("#carpool-results").append(result);
         });
     } else {
-        $(".results-content").append(`<div class="empty-results">
+        $("#carpool-results").append(`<div class="empty-results">
 			<img src="/images/no-trips-icon.png" /></div>`);
     }
     /**
-     * Append a host trip button wiht hover effects and an onclick handler
+     * Append a host trip button with hover effects and an onclick handler
      * to the end of the results-content div
      */
-    $(".results-content").append(`<div><input name="host" alt="Host" type="image" src="/images/host-btn.png"
+    $("#carpool-results").append(`<div><input name="host" alt="Host" type="image" src="/images/host-btn.png"
 		class="host-btn" onmouseover="hover(this);" onmouseout="unhover(this);" onclick="handleHost();"/></div>`);
 }
 
