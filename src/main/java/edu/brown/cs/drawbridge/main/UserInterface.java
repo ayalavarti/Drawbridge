@@ -62,6 +62,7 @@ public final class UserInterface {
 
   /**
    * Method to set the database to use when querying.
+   *
    * @return true when the set is successful; false when unsuccessful.
    */
   public static boolean setDB() {
@@ -70,8 +71,8 @@ public final class UserInterface {
       String username = dbURI.getUserInfo().split(":")[0];
       String password = dbURI.getUserInfo().split(":")[1];
 
-      String dbURL = "jdbc:postgresql://" + dbURI.getHost() + ':'
-                     + dbURI.getPort() + dbURI.getPath();
+      String dbURL = "jdbc:postgresql://" + dbURI.getHost() + ':' + dbURI
+          .getPort() + dbURI.getPath();
 
       carpools = new Carpools(dbURL, username, password);
 
@@ -82,10 +83,12 @@ public final class UserInterface {
 
       return true;
     } catch (URISyntaxException e) {
-      System.out.println("ERROR: Problem reading database url location: " + e.getMessage());
+      System.out.println(
+          "ERROR: Problem reading database url location: " + e.getMessage());
       return false;
     } catch (SQLException | ClassNotFoundException e) {
-      System.out.println("ERROR: Could not connect to the database: " + e.getMessage());
+      System.out.println(
+          "ERROR: Could not connect to the database: " + e.getMessage());
       return false;
     }
   }
@@ -426,7 +429,7 @@ public final class UserInterface {
       double endLon = Double.parseDouble(qm.value("endLon"));
 
       long departureTime = Long.parseLong(qm.value("date"));
-      long eta = (long) (Double.parseDouble(qm.value("eta")) * 60);
+      long eta = (long) (Double.parseDouble(qm.value("eta")));
       int maxSize = Integer.parseInt(qm.value("size"));
       double totalPrice = Double.parseDouble(qm.value("price"));
 

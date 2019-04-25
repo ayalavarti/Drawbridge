@@ -45,7 +45,8 @@ function queryTrips() {
         return;
     }
     postParameters["userID"] = uid;
-
+    $("#carpool-results").html("");
+    $("#loading").show();
     $.post("/results", postParameters, response => {
         // Set the trip results on the page with the resulting data
         setTripResults((response.data));
@@ -56,7 +57,7 @@ function queryTrips() {
  * Overridden function for user sign out action.
  */
 function onUserSignedOut() {
-    queryTrips(null);
+    queryTrips();
     console.log("User signed out.");
 }
 
@@ -114,7 +115,6 @@ function queryResults() {
  * @param {*} data
  */
 function setTripResults(data) {
-    $("#carpool-results").html("");
     if (data.length > 0) {
         // Iterate through each trip group
         data.forEach(element => {
@@ -136,6 +136,7 @@ function setTripResults(data) {
      */
     $("#carpool-results").append(`<div><input name="host" alt="Host" type="image" src="/images/host-btn.png"
 		class="host-btn" onmouseover="hover(this);" onmouseout="unhover(this);" onclick="handleHost();"/></div>`);
+    $("#loading").hide();
 }
 
 /**
