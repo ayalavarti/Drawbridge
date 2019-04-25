@@ -64,6 +64,11 @@
                 </div>
             </div>
             <span class="trip-info-text">Carpool Search Results</span>
+            <div id="walking-distance">
+                We found results, but given your search was within
+                <span id="walk-eta-time"></span> minutes, we strongly feel
+                you should just walk the distance.
+            </div>
             <div class="loading-gif2" id="loading">
                 <img src="/images/loading.gif"
                      style="width: 60px; height: auto;"/>
