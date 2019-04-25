@@ -202,9 +202,8 @@ function handleSubmit() {
                 name: nameInput,
                 comments: commentsInput,
                 userID: userProfile.getId(),
-                eta: route[1] + date.getTime() / 1000
+                eta: (route[1] * 60) + (date.getTime() / 1000)
             };
-
             $.post("/new", postParameters, responseData => {
                 // const responseData = JSON.parse(responseJSON);
                 if (responseData.success && responseData.redirect) {

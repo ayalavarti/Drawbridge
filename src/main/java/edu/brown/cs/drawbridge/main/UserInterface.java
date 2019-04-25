@@ -140,6 +140,7 @@ public final class UserInterface {
       double startLon = Double.parseDouble(qm.value("startLon"));
       double endLat = Double.parseDouble(qm.value("endLat"));
       double endLon = Double.parseDouble(qm.value("endLon"));
+      double eta = Double.parseDouble(qm.value("eta"));
 
       long datetime = Long.parseLong(qm.value("date"));
       String uid = qm.value("userID");
@@ -166,6 +167,7 @@ public final class UserInterface {
       payload.addProperty("date", datetime);
       payload.addProperty("walkTime", walkTime);
       payload.addProperty("waitTime", waitTime);
+      payload.addProperty("eta", eta);
 
       List<List<Trip>> results;
       // Perform search

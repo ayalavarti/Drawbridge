@@ -47,6 +47,7 @@ function queryTrips() {
     postParameters["userID"] = uid;
     $("#carpool-results").html("");
     $("#loading").show();
+    $("#walking-distance").hide();
     $.post("/results", postParameters, response => {
         // Set the trip results on the page with the resulting data
         setTripResults((response.data));
@@ -116,6 +117,12 @@ function queryResults() {
  */
 function setTripResults(data) {
     if (data.length > 0) {
+        const queryMap = JSON.parse(payload);
+        console.log(queryMap);
+        if (queryMap.walkTime >= queryMap.eta) {
+            $("#walk-eta-time").text(parseFloat(queryMap.eta).toFixed(2));
+            $("#walking-distance").show();
+        }
         // Iterate through each trip group
         data.forEach(element => {
             let result = `<div class="result"><div class="result-trips">`;

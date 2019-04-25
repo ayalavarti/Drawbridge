@@ -12,6 +12,10 @@
         <div id="my-trips-wrapper" style="display: none">
             <div class="sub-heading-left">Hosting</div>
             <img src="/images/divider.png" style="height: 4px; width: auto;"/>
+            <div class="loading-gif2" id="loading" style="display: none;">
+                <img src="/images/loading.gif"
+                     style="width: 60px; height: auto;"/>
+            </div>
             <div id="hosting" class="results-content"></div>
 
             <div class="sub-heading-left">Confirmed Membership</div>

@@ -78,6 +78,7 @@ function queryUserTrips() {
     const data = {
         userID: userProfile.getId()
     };
+    $("#loading").show();
     $.post("/my-trips", data, response => {
         generateTripCards(response);
     }, "json");
@@ -120,4 +121,5 @@ function renderTripCards(hosting, member, pending) {
     $("#hosting").append(hosting);
     $("#member").append(member);
     $("#pending").append(pending);
+    $("#loading").hide();
 }
