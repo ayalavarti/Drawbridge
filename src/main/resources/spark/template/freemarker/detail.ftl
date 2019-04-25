@@ -23,10 +23,11 @@
             <div class="info-box half-size">
                 <span><i class="far fa-clock"></i>${(trip.getDepartureTime()*1000)?number_to_time?string("h:mm a")}</span>
             </div>
-            <div class="info-box">
+            <div id='privacy-hidden' style="display:none;" class="info-box">
                 <span><i class="fas fa-phone"></i>Contact host at ${trip.getPhoneNumber()}</span>
             </div>
-            <div>
+            <div id='privacy-hidden' class="share-section" style="display:
+            none">
                 <h3 style="margin-top: 30px;">Share this Trip</h3>
                 <div style="display: flex; flex-wrap: wrap; justify-content:
                 center; align-items: center;">
@@ -63,7 +64,7 @@
                 <div class="list-person">
                     <span class="user-name">
                         <img class="${host.getId()}" id="member-img"
-                             src="/images/temp.png"/>
+                             src="${host.getProfilePic()}"/>
                         ${host.getName()}
                         <img id="${host.getId()}" class="verified"
                              style="visibility: hidden;"
@@ -76,7 +77,7 @@
                     <div class="list-person">
                         <span class="user-name">
                             <img class="${member.getId()}" id="member-img"
-                                 src="/images/temp.png"/>
+                                 src="${member.getProfilePic()}"/>
                             ${member.getName()}
                             <img id="${member.getId()}" class="verified"
                                  style="visibility: hidden;"
@@ -91,7 +92,7 @@
                         <div class="list-person">
                         <span id="${pend.getId()}" class="user-name">
                             <img class="${pend.getId()}" id="member-img"
-                                 src="/images/temp.png"/>
+                                 src="${pend.getProfilePic()}"/>
                             ${pend.getName()}<i
                                     style="padding-left: 5px;"
                                     class="addendum">(pending)</i>
@@ -151,7 +152,28 @@
             <div id="comments">
                 <i class="fas fa-dollar-sign"></i>${trip.getCost()?string("##0.00")}
                 <i class="addendum">/person</i>
-                <p>${trip.getComments()}</p>
+                <p id="comment-input" style="display: none;">
+                    <textarea
+                            class="comments-textarea">${trip.getComments()}</textarea>
+                </p>
+                <p id="true-comment">
+                    ${trip.getComments()}
+                </p>
+                <div style="display: flex;">
+                    <div class="share-tooltip" id="cancel-btn" style="display:
+                    none;"
+                         onclick="cancelEditing();">
+                        <img style="height: 17px; width: auto; margin: 0;"
+                             id="cancel-img"
+                             src="/images/times-icon.png"/>
+                    </div>
+                    <div class="share-tooltip" id="edit-btn"
+                         style="display: none;"
+                         onclick="editComment(${trip.getId()?c})">
+                        <img style="height: 20px; width: auto" id="edit-img"
+                             src="/images/pencil-icon.png"/>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

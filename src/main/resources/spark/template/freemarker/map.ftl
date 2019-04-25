@@ -9,7 +9,7 @@
 
     <div id="pre-load" style="display: none;" class="search-menu-wrapper">
         <div class="search-menu">
-            <h2 class="section-heading" id="home-btn-tutorial-main">Search for a
+            <h2 class="section-heading">Search for a
                 Carpool</h2>
             <img src="/images/divider.png" style="height: 4px; width: auto;"/>
             <form autocomplete="off"
@@ -50,12 +50,14 @@
                         <input class="datetime-input flatpickr flatpickr-input"
                                id="time" type="text" placeholder="Time..."/>
                     </div>
-                    <input id="requiredTooltip" name="submit" alt="Submit"
-                           type="image" src="/images/submit-btn.png"
-                           class="submit-btn"
-                           data-tippy-content="Please enter all inputs."
-                           onmouseover="hover(this);"
-                           onmouseout="unhover(this);"/>
+                    <div id="home-btn-tutorial-main">
+                        <input id="requiredTooltip" name="submit" alt="Submit"
+                               type="image" src="/images/submit-btn.png"
+                               class="submit-btn"
+                               data-tippy-content="Please enter all inputs."
+                               onmouseover="hover(this);"
+                               onmouseout="unhover(this);"/>
+                    </div>
                 </div>
             </form>
         </div>

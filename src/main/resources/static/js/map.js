@@ -30,7 +30,7 @@ $(document).ready(function () {
     initTooltips();
     disableTrip();
     tutorialElements = [
-        $(".header"), $(".search-menu-wrapper"), $(".team-setting"),
+        $(".header"), $(".submit-btn"), $(".team-setting"),
         $(".info-setting")
     ];
 
@@ -153,17 +153,6 @@ function validateSubmit() {
         coordinates[1] === undefined) {
         showHideTooltip(formValidationTooltip[0], 1500);
     } else {
-        /**
-         * If the user is logged in, send a GET request with the UID.
-         * Otherwise, send null as the UID, returning generic results.
-         */
-        let userID;
-        if (userProfile === undefined) {
-            userID = null;
-        } else {
-            userID = userProfile.getId();
-        }
-
         const postParameters = {
             startName: addressNames[0],
             endName: addressNames[1],
@@ -172,7 +161,6 @@ function validateSubmit() {
             endLat: coordinates[1][1],
             endLon: coordinates[1][0],
             date: date.getTime() / 1000,
-            userID: userID,
             eta: route[1]
         };
         let urlStr = jQuery.param(postParameters);

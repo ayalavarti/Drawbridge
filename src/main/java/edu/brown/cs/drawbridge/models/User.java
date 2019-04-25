@@ -1,5 +1,7 @@
 package edu.brown.cs.drawbridge.models;
 
+import com.google.gson.JsonObject;
+
 import java.util.List;
 
 /**
@@ -12,6 +14,7 @@ public class User {
   private String id;
   private String name;
   private String email;
+  private String profilePic;
   private List<Integer> hostingTripIds, memberTripIds, pendingTripIds;
 
   /**
@@ -25,9 +28,21 @@ public class User {
    *          The User's email address
    */
   public User(String id, String name, String email) {
+    this(id, name, email, null);
+  }
+
+  /**
+   * Constructor for creating a user with their avatar image.
+   * @param id The user's google id.
+   * @param name The user's name.
+   * @param email The user's email.
+   * @param profilePic The url of the user's profile picture.
+   */
+  public User(String id, String name, String email, String profilePic) {
     this.id = id;
     this.name = name;
     this.email = email;
+    this.profilePic = profilePic;
   }
 
   /**
@@ -120,6 +135,32 @@ public class User {
           "ERROR: Trip information has not been initialized.");
     }
     return pendingTripIds;
+  }
+
+  /**
+   * Getter for the user's profile picture.
+   * @return The url to the user's profile picture.
+   */
+  public String getProfilePic() {
+    if (this.profilePic != null) {
+      return this.profilePic;
+    } else { // return default user image if none given
+      return "/images/temp.png";
+    }
+  }
+
+  /**
+   * Method for converting this user into a json object.
+   * @return A json representation of this user.
+   */
+  public JsonObject toJson() {
+    JsonObject data = new JsonObject();
+
+    data.addProperty("id", id);
+    data.addProperty("name", name);
+    data.addProperty("email", email);
+
+    return data;
   }
 
   @Override

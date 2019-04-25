@@ -8,7 +8,7 @@ package edu.brown.cs.drawbridge.database;
 public abstract class QueryStrings {
 
   protected static final String INSERT_USER = "INSERT INTO "
-          + "users VALUES (?, ?, ?);";
+          + "users VALUES (?, ?, ?, ?);";
 //  protected static final String INSERT_USER = "INSERT INTO "
 //          + "users VALUES (?, ?, ?, ?);";
   protected static final String UPDATE_PROFILE_PICTURE =
@@ -36,10 +36,8 @@ public abstract class QueryStrings {
       = "DELETE FROM members WHERE trip_id = ? AND user_id = ?;";
   protected static final String REMOVE_REQUEST
       = "DELETE FROM requests WHERE trip_id = ? AND user_id = ?;";
-  protected static final String FIND_USER_BY_ID
-      = "SELECT name, email FROM users WHERE id = ?;";
-//  protected static final String FIND_USER_BY_ID =
-//          "SELECT name, email, profile_picture FROM users WHERE id = ?;";
+  protected static final String FIND_USER_BY_ID =
+          "SELECT name, email, profile_picture FROM users WHERE id = ?;";
   protected static final String FIND_TRIP_BY_ID = "SELECT name, start_name, "
       + "start_latitude, start_longitude, end_name, end_latitude, "
       + "end_longitude, "

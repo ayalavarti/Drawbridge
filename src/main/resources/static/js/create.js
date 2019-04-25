@@ -162,7 +162,6 @@ function handleSubmit() {
     let priceInput = $("#expected-price").val();
     let phoneInput = $("#contact-number").val();
     let commentsInput = $("#comments").val();
-    let phoneRegex = new RegExp("[0-9]{3}-[0-9]{3}-[0-9]{4}");
 
     /**
      * If any of the input entries are not filled out, show the form validation
@@ -180,8 +179,6 @@ function handleSubmit() {
             showHideTooltip(formTooltips[0], 1500);
         } else if (priceInput < 0) {
             showHideTooltip(formTooltips[1], 1500);
-        } else if (!phoneRegex.test(phoneInput)) {
-            showHideTooltip(formTooltips[2], 1500);
         } else if (userProfile === undefined) {
             $("html, body").animate({
                     scrollTop: 0

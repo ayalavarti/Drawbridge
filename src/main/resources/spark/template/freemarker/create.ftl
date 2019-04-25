@@ -45,6 +45,7 @@
                     <div>
                         <i class="fas fa-dot-circle icon-label"></i>
                         <input class="address-input" id="start-input"
+                               onfocus="hideClearButtons();"
                                onblur="handleInput('start-input', 0)"
                                type="text" placeholder="Starting point..."/>
                         <img alt="loading" id="loading-start-input"
@@ -60,6 +61,7 @@
                         <i class="fas fa-map-marker-alt icon-label"></i>
                         <input class="address-input" id="end-input"
                                onblur="handleInput('end-input', 1)"
+                               onfocus="hideClearButtons();"
                                type="text"
                                placeholder="Ending destination..."/>
                         <img alt="loading" id="loading-end-input"
@@ -99,7 +101,7 @@
                         <div>
                             <i class="fas fa-font icon-label"></i>
                             <input class="name-input" id="name"
-                                   type="text" placeholder="Name..."/>
+                                   type="text" placeholder="Carpool Name..."/>
                         </div>
                         <div>
                             <i class="fas fa-calendar icon-label"></i>
@@ -144,7 +146,8 @@
                             </div>
                         </div>
                         <div>
-                            <span class="sub-heading">Expected Price</span>
+                            <span class="sub-heading">Expected Total
+                                Price</span>
                             <div>
                                 <i class="fas fa-dollar-sign icon-label"></i>
                                 <input data-tippy-content="Minimum price must be $0."
@@ -157,8 +160,7 @@
                             <span class="sub-heading">Contact Number</span>
                             <div>
                                 <i class="fas fa-phone icon-label"></i>
-                                <input data-tippy-content="Required phone format is 123-456-7890."
-                                       class="form-tooltip phone-input"
+                                <input class="form-tooltip phone-input"
                                        id="contact-number" type="tel"
                                        placeholder="Phone..."/>
                             </div>

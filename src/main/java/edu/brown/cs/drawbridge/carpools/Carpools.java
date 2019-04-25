@@ -17,8 +17,7 @@ import edu.brown.cs.drawbridge.tripcomparators.TimeComparator;
  * A class used to interact with the GUI handlers.
  */
 public final class Carpools {
-
-  private final TripSearcher tripSearcher;
+  
   private final Comparator<Trip> timeComparator = new TimeComparator();
   private DatabaseQuery database;
 
@@ -40,7 +39,6 @@ public final class Carpools {
   public Carpools(String dbName, String dbUser, String dbPass)
       throws ClassNotFoundException, SQLException {
     database = new DatabaseQuery(dbName, dbUser, dbPass);
-    tripSearcher = new TripSearcher(database);
   }
 
   /**
@@ -96,6 +94,7 @@ public final class Carpools {
       double startLon, double endLat, double endLon, long departureTime,
       long walkingTime, double timeRadius)
       throws SQLException, MissingDataException {
+    TripSearcher tripSearcher = new TripSearcher(database);
     return tripSearcher.searchWithId(userId, startLat, startLon, endLat, endLon,
         departureTime, walkingTime * Constants.WALKING_SPEED_PER_MINUTE,
         timeRadius * Constants.SECONDS_PER_MINUTE);
@@ -131,6 +130,7 @@ public final class Carpools {
   public List<List<Trip>> searchWithoutId(double startLat, double startLon,
       double endLat, double endLon, long departureTime, double walkingTime,
       long timeRadius) throws SQLException, MissingDataException {
+    TripSearcher tripSearcher = new TripSearcher(database);
     return tripSearcher.searchWithoutId(startLat, startLon, endLat, endLon,
         departureTime, walkingTime * Constants.WALKING_SPEED_PER_MINUTE,
         timeRadius * Constants.SECONDS_PER_MINUTE);
@@ -390,6 +390,39 @@ public final class Carpools {
     if (trip.getHostId().equals(rejector)
         && trip.getPendingIds().contains(pender)) {
       database.reject(tripId, pender);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Gets a user given the user's id.
+   * @param uid The user id.
+   * @return The user object associated with the id.
+   * @throws SQLException when the database has an error
+   * @throws MissingDataException when the user doesn't exist.
+   */
+  public User getUserById(String uid)
+          throws SQLException, MissingDataException {
+    return database.getUserById(uid);
+  }
+
+  /**
+   * Updates the user's profile picture in the database.
+   * @param uid The id of the user to update the picture for.
+   * @param newProfilePic The new url of the picture.
+   * @throws SQLException when the database encounters an error.
+   */
+  public void updateProfilePic(String uid, String newProfilePic)
+          throws SQLException {
+    database.updateUserPicture(uid, newProfilePic);
+  }
+
+  public boolean updateComment(int tid, String uid, String newComment)
+          throws SQLException, MissingDataException {
+    if (database.getHostOnTrip(tid).equals(uid)) {
+      database.updateTripDescription(tid, newComment);
       return true;
     } else {
       return false;

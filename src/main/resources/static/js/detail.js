@@ -44,6 +44,8 @@ function onUserSignedIn() {
         $("#pending").show();
         $("#pending-label").hide();
         $("#action-btn").show();
+        $("#edit-btn").show();
+        $("[id=privacy-hidden]").show();
     } else if (containsUser(members, uid)) {
         $("#delete-btn").hide();
         $("#join-btn").hide();
@@ -51,6 +53,7 @@ function onUserSignedIn() {
         $("#pending").hide();
         $("#pending-label").hide();
         $("#action-btn").hide();
+        $("[id=privacy-hidden]").show();
     } else if (containsUser(pending, uid)) {
         $("#delete-btn").hide();
         $("#join-btn").hide();
@@ -58,6 +61,8 @@ function onUserSignedIn() {
         $("#pending").hide();
         $("#action-btn").hide();
         $("#pending-label").show();
+        $("[id=privacy-hidden]").show();
+        $(".share-section").hide();
     } else {
         $("#join-btn").show();
     }
@@ -66,7 +71,6 @@ function onUserSignedIn() {
         $("#full-label").show();
         $("[id=approve-btn]").hide();
     }
-    console.log(uid);
     $(`#${uid}`).css({visibility: "visible"});
     $(`.${uid}`).attr("src", `${userProfile.getImageUrl()}`);
 }
@@ -96,12 +100,14 @@ function onUserSignedOut() {
     $("#leave-btn").hide();
     $("#pending").hide();
     $("#pending-label").hide();
+    $("#edit-btn").hide();
+    $("[id=privacy-hidden]").hide();
+    $(".share-section").hide();
 
     if (!tripFull) {
         $("#join-btn").show();
     }
     $("[class=verified]").css({visibility: "hidden"});
-    $("[id=member-img]").attr("src", "/images/temp.png");
 }
 
 /**
@@ -139,6 +145,44 @@ function initTooltips() {
         sticky: true,
         placement: "bottom",
     });
+}
+
+let tripID;
+let editing = false;
+
+function editComment(tid) {
+    tripID = tid;
+    if (!editing) {
+        $("#edit-img").attr("src", "/images/arrow-label.png");
+        $("#cancel-btn").show();
+        $("#true-comment").hide();
+        $("#comment-input").show();
+        $(".comments-textarea").focus();
+        editing = true;
+    } else {
+        const data = {
+            action: "editComment",
+            newComment: $(".comments-textarea").val(),
+            user: userProfile.getId()
+        };
+        sendRequest(data, "/trip/" + tid);
+    }
+}
+
+function updatePageComment(comment) {
+    cancelEditing();
+    $("#true-comment").text(comment);
+}
+
+function cancelEditing() {
+    if (editing) {
+        $("#edit-img").attr("src", "/images/pencil-icon.png");
+        $("#cancel-btn").hide();
+        $("#true-comment").show();
+        $("#comment-input").hide();
+        $(".comments-textarea").blur();
+        editing = false;
+    }
 }
 
 /**
@@ -251,7 +295,10 @@ function denyClick(tid, pendUID) {
 function sendRequest(data, url) {
     $.post(url, data, response => {
         if (response.success) {
-            if (response.redirect) {
+            console.log(response);
+            if (response.payload.action === "editComment") {
+                updatePageComment(response.newComment);
+            } else if (response.redirect) {
                 window.location.replace(response.redirect);
             } else {
                 window.location.reload(true);

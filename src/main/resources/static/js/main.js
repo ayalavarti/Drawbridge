@@ -92,7 +92,8 @@ function onSignIn(googleUser) {
     const loginData = {
         userID: userProfile.getId(),
         name: userProfile.getName(),
-        email: userProfile.getEmail()
+        email: userProfile.getEmail(),
+        profilePic: userProfile.getImageUrl()
     };
 
     $.post("/login", loginData, function (response) {

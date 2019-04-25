@@ -38,23 +38,17 @@ public class TripSearcher {
   // as visited
   private static final double HEURISTIC_MULTIPLIER = 0.9;
 
-  private static final Comparator<List<Trip>> HOST_COMPARATOR
-          = new HostComparator();
-  private static final Comparator<List<Trip>> MEMBER_COMPARATOR
-          = new MemberComparator();
-  private static final Comparator<List<Trip>> PENDING_COMPARATOR
-          = new PendingComparator();
-  private static final Comparator<List<Trip>> COST_COMPARATOR
-          = new CostComparator();
-  private static final Comparator<List<Trip>> LENGTH_COMPARATOR
-          = new LengthComparator();
-  private static final List<Identifiable> IDENTIFIABLE = Arrays.asList(
-      (Identifiable) HOST_COMPARATOR, (Identifiable) MEMBER_COMPARATOR,
-      (Identifiable) PENDING_COMPARATOR, (Identifiable) COST_COMPARATOR);
-  private static final Comparator<List<Trip>> TRIP_COMPARATOR
-          = new MultipleTripComparator(
-      Arrays.asList(HOST_COMPARATOR, MEMBER_COMPARATOR, PENDING_COMPARATOR,
-          LENGTH_COMPARATOR, COST_COMPARATOR));
+  private final Comparator<List<Trip>> hostComparator = new HostComparator();
+  private final Comparator<List<Trip>> memberComparator = new MemberComparator();
+  private final Comparator<List<Trip>> pendingComparator = new PendingComparator();
+  private final Comparator<List<Trip>> costComparator = new CostComparator();
+  private final Comparator<List<Trip>> lengthComparator = new LengthComparator();
+  private final List<Identifiable> identifiable = Arrays.asList(
+      (Identifiable) hostComparator, (Identifiable) memberComparator,
+      (Identifiable) pendingComparator, (Identifiable) costComparator);
+  private final Comparator<List<Trip>> tripComparator = new MultipleTripComparator(
+      Arrays.asList(hostComparator, memberComparator, pendingComparator,
+          lengthComparator, costComparator));
 
   private DatabaseQuery database;
 
@@ -69,7 +63,7 @@ public class TripSearcher {
   }
 
   private void setUser(String userId) {
-    for (Identifiable comparator : IDENTIFIABLE) {
+    for (Identifiable comparator : identifiable) {
       comparator.setUserId(userId);
     }
   }
@@ -186,7 +180,7 @@ public class TripSearcher {
 
     List<List<Trip>> paths = search(userId, startLat, startLon, endLat, endLon,
         departureTime, distanceRadius, timeRadius);
-    Collections.sort(paths, TRIP_COMPARATOR);
+    Collections.sort(paths, tripComparator);
     return paths.subList(0, Math.min(paths.size(), MAX_PATH_OPTIONS));
   }
 
@@ -222,7 +216,7 @@ public class TripSearcher {
 
     List<List<Trip>> paths = search("", startLat, startLon, endLat, endLon,
         departureTime, distanceRadius, timeRadius);
-    Collections.sort(paths, COST_COMPARATOR);
+    Collections.sort(paths, costComparator);
     return paths.subList(0, Math.min(paths.size(), MAX_PATH_OPTIONS));
   }
 

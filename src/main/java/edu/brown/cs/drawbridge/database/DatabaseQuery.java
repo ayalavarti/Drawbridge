@@ -226,9 +226,10 @@ public class DatabaseQuery {
       prep.setString(1, userId);
       try (ResultSet rs = prep.executeQuery()) {
         if (rs.next()) {
-          User u = new User(userId, rs.getString(1), rs.getString(2)
-                  //, rs.getString(3)
-          );
+          User u = new User(userId,
+                            rs.getString(1),
+                            rs.getString(2),
+                            rs.getString(3));
           u.setTrips(getHostTripsWithUser(userId),
               getMemberTripsWithUser(userId), getRequestTripsWithUser(userId));
           return u;
@@ -290,7 +291,7 @@ public class DatabaseQuery {
       prep.setString(1, user.getId());
       prep.setString(2, user.getName());
       prep.setString(3, user.getEmail());
-      //prep.setString(4, user.getPictureUrl());
+      prep.setString(4, user.getProfilePic());
       prep.addBatch();
       prep.executeUpdate();
     }

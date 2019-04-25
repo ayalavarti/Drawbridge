@@ -2,11 +2,14 @@ package edu.brown.cs.drawbridge.main;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import edu.brown.cs.drawbridge.carpools.Carpools;
 import edu.brown.cs.drawbridge.database.MissingDataException;
+import edu.brown.cs.drawbridge.json.JSONProcessor;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
+import edu.brown.cs.drawbridge.util.Pair;
 import freemarker.template.Configuration;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
@@ -23,8 +26,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,6 +62,7 @@ public final class UserInterface {
 
   /**
    * Method to set the database to use when querying.
+   *
    * @return true when the set is successful; false when unsuccessful.
    */
   public static boolean setDB() {
@@ -69,8 +71,8 @@ public final class UserInterface {
       String username = dbURI.getUserInfo().split(":")[0];
       String password = dbURI.getUserInfo().split(":")[1];
 
-      String dbURL = "jdbc:postgresql://" + dbURI.getHost() + ':'
-                     + dbURI.getPort() + dbURI.getPath();
+      String dbURL = "jdbc:postgresql://" + dbURI.getHost() + ':' + dbURI
+          .getPort() + dbURI.getPath();
 
       carpools = new Carpools(dbURL, username, password);
 
@@ -100,6 +102,7 @@ public final class UserInterface {
 
     Spark.get("/", new HomeGetHandler(), freeMarker);
     Spark.get("/results", new ListGetHandler(), freeMarker);
+    Spark.post("/results", new ListPostHandler());
 
     Spark.get("/trip/:tid", new DetailGetHandler(), freeMarker);
     Spark.post("/trip/:tid", new DetailPostHandler());
@@ -122,74 +125,71 @@ public final class UserInterface {
       return null;
     });
   }
+  // -------------------------- Helpers -----------------------------------
 
-  // --------------------------- Helpers -----------------------------------
+  private static Pair<JsonObject, JsonArray> executeSearch(QueryParamsMap qm) {
+    // Get parameter values
+    JsonArray data;
+    JsonObject payload = new JsonObject();
 
-  /**
-   * Overloaded method to provide an alternate signature for the
-   * JSON-processing method.
-   *
-   * @param uid
-   *     The user id for which to create this JSON object.
-   * @param tripGroups
-   *     a trip-group array.
-   *
-   * @return A JSON-encodable data structure for trip-groups.
-   */
-  @SafeVarargs private static List<List<Map<String, String>>> processToJSON(
-      String uid, List<Trip>... tripGroups) {
+    try {
+      String startName = qm.value("startName");
+      String endName = qm.value("endName");
 
-    return processToJSON(uid, Arrays.asList(tripGroups));
-  }
+      double startLat = Double.parseDouble(qm.value("startLat"));
+      double startLon = Double.parseDouble(qm.value("startLon"));
+      double endLat = Double.parseDouble(qm.value("endLat"));
+      double endLon = Double.parseDouble(qm.value("endLon"));
 
-  /**
-   * Method to help process a list of trip-groups into a JSON-encodable format.
-   *
-   * @param uid
-   *     The user id this is being compiled for.
-   * @param tripGroupList
-   *     The list of troup-grips.
-   *
-   * @return A JSON-encodable list of groups of trip objects.
-   */
-  private static List<List<Map<String, String>>> processToJSON(String uid,
-      List<List<Trip>> tripGroupList) {
-    List<List<Map<String, String>>> data = new ArrayList<>();
-    for (List<Trip> entry : tripGroupList) {
+      long datetime = Long.parseLong(qm.value("date"));
+      String uid = qm.value("userID");
 
-      List<Map<String, String>> innerList = new ArrayList<>();
-      for (Trip trip : entry) {
-        String status;
-        if (trip.getMemberIds().contains(uid)) {
-          status = "joined";
-        } else if (trip.getHostId().equals(uid)) {
-          status = "hosting";
-        } else if (trip.getPendingIds().contains(uid)) {
-          status = "pending";
-        } else {
-          status = "join";
-        }
-
-        Map<String, String> vals = new HashMap<>();
-        vals.put("start", trip.getStartingAddress());
-        vals.put("end", trip.getEndingAddress());
-        vals.put("date", Long.toString(trip.getDepartureTime()));
-        vals.put("currentSize", Integer.toString(trip.getCurrentSize()));
-        vals.put("maxSize", Integer.toString(trip.getMaxUsers()));
-        if (uid != null) {
-          vals.put("costPerPerson", Double.toString(trip.getCostPerUser(uid)));
-        } else {
-          vals.put("costPerPerson", Double.toString(trip.getCostPerUser("")));
-        }
-        vals.put("id", Integer.toString(trip.getId()));
-        vals.put("name", trip.getName());
-        vals.put("status", status);
-
-        innerList.add(vals);
+      double walkTime, waitTime;
+      if (qm.hasKey("walkTime")) {
+        walkTime = qm.get("walkTime").doubleValue();
+      } else {
+        walkTime = 15; // 15 minutes walking is the default
       }
-      data.add(innerList);
+      if (qm.hasKey("waitTime")) {
+        waitTime = qm.get("waitTime").doubleValue();
+      } else {
+        waitTime = 30; // 30 minutes is default for waiting for carpool
+      }
+
+      // Mirror the inputted values back
+      payload.addProperty("startName", startName);
+      payload.addProperty("endName", endName);
+      payload.addProperty("startLat", startLat);
+      payload.addProperty("startLon", startLon);
+      payload.addProperty("endLat", endLat);
+      payload.addProperty("endLon", endLon);
+      payload.addProperty("date", datetime);
+      payload.addProperty("walkTime", walkTime);
+      payload.addProperty("waitTime", waitTime);
+
+      List<List<Trip>> results;
+      // Perform search
+      if (uid == null) {
+        results = carpools
+            .searchWithoutId(startLat, startLon, endLat, endLon, datetime,
+                (long) walkTime, (long) waitTime);
+      } else {
+        results = carpools
+            .searchWithId(uid, startLat, startLon, endLat, endLon, datetime,
+                (long) walkTime, (long) waitTime);
+      }
+      if (uid != null) {
+        data = JSONProcessor.processTripGroups(uid, results);
+      } else {
+        data = JSONProcessor.processTripGroups(results);
+      }
+
+    } catch (RuntimeException | SQLException | MissingDataException e) {
+      e.printStackTrace();
+      data = new JsonArray();
     }
-    return data;
+
+    return new Pair<>(payload, data);
   }
 
   // ---------------------------- Home ------------------------------------
@@ -216,69 +216,34 @@ public final class UserInterface {
    */
   private static class ListGetHandler implements TemplateViewRoute {
     @Override public ModelAndView handle(Request request, Response response) {
-      // Get parameter values
-      QueryParamsMap qm = request.queryMap();
-      List<List<Map<String, String>>> data;
-      JsonObject payload = new JsonObject();
 
-      try {
-        String startName = qm.value("startName");
-        String endName = qm.value("endName");
-
-        double startLat = Double.parseDouble(qm.value("startLat"));
-        double startLon = Double.parseDouble(qm.value("startLon"));
-        double endLat = Double.parseDouble(qm.value("endLat"));
-        double endLon = Double.parseDouble(qm.value("endLon"));
-
-        long datetime = Long.parseLong(qm.value("date"));
-        String uid = qm.value("userID");
-
-        double walkTime, waitTime;
-        if (qm.hasKey("walkTime")) {
-          walkTime = qm.get("walkTime").doubleValue();
-        } else {
-          walkTime = 15; // 15 minutes walking is the default
-        }
-        if (qm.hasKey("waitTime")) {
-          waitTime = qm.get("waitTime").doubleValue();
-        } else {
-          waitTime = 30; // 30 minutes is default for waiting for carpool
-        }
-
-        // Mirror the inputted values back
-        payload.addProperty("startName", startName);
-        payload.addProperty("endName", endName);
-        payload.addProperty("startLat", startLat);
-        payload.addProperty("startLon", startLon);
-        payload.addProperty("endLat", endLat);
-        payload.addProperty("endLon", endLon);
-        payload.addProperty("date", datetime);
-        payload.addProperty("walkTime", walkTime);
-        payload.addProperty("waitTime", waitTime);
-
-        List<List<Trip>> results;
-        // Perform search
-        if (uid == null) {
-          results = carpools
-              .searchWithoutId(startLat, startLon, endLat, endLon, datetime,
-                  (long) walkTime, (long) waitTime);
-        } else {
-          results = carpools
-              .searchWithId(uid, startLat, startLon, endLat, endLon, datetime,
-                  (long) walkTime, (long) waitTime);
-        }
-        data = processToJSON(uid, results);
-
-      } catch (RuntimeException | SQLException | MissingDataException e) {
-        data = new ArrayList<>();
-      }
+      Pair<JsonObject, JsonArray> searchResults = executeSearch(
+          request.queryMap());
 
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Results")
-          .put("favicon", "images/favicon.png").put("data", GSON.toJson(data))
-          .put("query", GSON.toJson(payload)).build();
+          .put("favicon", "images/favicon.png")
+          .put("data", GSON.toJson(searchResults.getSecond()))
+          .put("query", GSON.toJson(searchResults.getFirst())).build();
 
       return new ModelAndView(variables, "results.ftl");
+    }
+  }
+
+  /**
+   * Handler for checking trips for membership after they're displayed to
+   * display accurate hosting/pending/member information if relevant.
+   */
+  private static class ListPostHandler implements Route {
+    @Override public Object handle(Request request, Response response) {
+
+      Pair<JsonObject, JsonArray> searchResults = executeSearch(
+          request.queryMap());
+      JsonObject returnData = new JsonObject();
+      returnData.add("payload", searchResults.getFirst());
+      returnData.add("data", searchResults.getSecond());
+
+      return GSON.toJson(returnData);
     }
   }
 
@@ -372,6 +337,10 @@ public final class UserInterface {
         } else if (action.equals("deny")) {
           String pendingUID = qm.value("pendingUser");
           success = carpools.rejectRequest(tid, uid, pendingUID);
+        } else if (action.equals("editComment")) {
+          String newComment = qm.value("newComment");
+          success = carpools.updateComment(tid, uid, newComment);
+          responseData.addProperty("newComment", newComment);
         }
         assert success; // Make sure the db action was completed successfully
         responseData.addProperty("success", true);
@@ -416,10 +385,11 @@ public final class UserInterface {
         List<Trip> member = userTrips.get(1);
         List<Trip> pending = userTrips.get(2);
 
-        return GSON.toJson(processToJSON(uid, hosting, member, pending));
+        return GSON.toJson(
+            JSONProcessor.processTripGroups(uid, hosting, member, pending));
       } catch (SQLException | MissingDataException e) {
         // TODO: decide stuff to do
-        return GSON.toJson(processToJSON(uid));
+        return GSON.toJson(new JsonObject());
       }
     }
   }
@@ -459,7 +429,7 @@ public final class UserInterface {
       double endLon = Double.parseDouble(qm.value("endLon"));
 
       long departureTime = Long.parseLong(qm.value("date"));
-      long eta = (long) (Double.parseDouble(qm.value("eta")) * 60);
+      long eta = (long) (Double.parseDouble(qm.value("eta")));
       int maxSize = Integer.parseInt(qm.value("size"));
       double totalPrice = Double.parseDouble(qm.value("price"));
 
@@ -499,13 +469,15 @@ public final class UserInterface {
       String uid = qm.value("userID");
       String name = qm.value("name");
       String email = qm.value("email");
+      String profilePic = qm.value("profilePic");
 
-      User user = new User(uid, name, email);
+      User user = new User(uid, name, email, profilePic);
 
       JsonObject responseData = new JsonObject();
       responseData.addProperty("uid", uid);
 
       try {
+        // Check if they're already a member and add them if they're not
         if (carpools.addUser(user)) {
           // User successfully added to database
           responseData.addProperty("isNewUser", true);
@@ -513,6 +485,9 @@ public final class UserInterface {
           // User already exists in database
           responseData.addProperty("isNewUser", false);
         }
+
+        // Update the user's profile picture
+        carpools.updateProfilePic(uid, profilePic);
 
         responseData.addProperty("success", true);
 
