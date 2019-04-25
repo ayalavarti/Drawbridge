@@ -187,7 +187,6 @@ function handleSubmit() {
             );
             signInTooltip[0].show();
         } else {
-            x
             const postParameters = {
                 startName: addressNames[0],
                 endName: addressNames[1],
