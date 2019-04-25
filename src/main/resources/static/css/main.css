@@ -122,7 +122,7 @@ input[type="number"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 15px;
+    border-radius: 30px;
     box-shadow: 0 2px 4px 0 #0000001e, 0 5px 10px 0 #0000002f;
 }
 
