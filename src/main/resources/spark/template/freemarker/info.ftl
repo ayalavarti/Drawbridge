@@ -9,9 +9,7 @@
         </div>
         <div class="section">
             <h2>About Drawbridge</h2>
-            <img alt="divider" src="/images/divider.png" style="height: 3px;
-            width:
-            auto;"/>
+            <img alt="" src="/images/divider.png" class="divider"/>
             <p>Drawbridge is an application that allows users to efficiently
                 carpool to nearby locations.
                 Many students may share connections at different universities
@@ -19,9 +17,8 @@
                 to the same destination.
             </p>
 
-            <h2>Search for Carpools</h2>
-            <img alt="divider" src="/images/divider.png"
-                 style="height: 3px; width: auto;"/>
+            <h2>Search for carpools</h2>
+            <img alt="" src="/images/divider.png" class="divider"/>
             <div class='info-container'>
                 <div><img alt="info" src="/images/info/search.png"
                           style="height: 200px; width: auto;"/></div>
@@ -32,8 +29,7 @@
         </div>
         <div class="section">
             <h2>The Team</h2>
-            <img alt="divider" src="/images/divider.png"
-                 style="height: 3px; width: auto;"/>
+            <img alt="divider" src="/images/divider.png" class="divider"/>
 
             <div id="people">
                 <div class="person">
