@@ -18,9 +18,13 @@ Below are the behaviors we want to display and their corresponding searches:
 
 1) Multiple trip lengths
 SEARCH: Reading Terminal -> 115 Waterman Street on May 9th at 8:45 AM
+if signed in as any of us:
 => 2 direct (Philadelphia -> Providence),
  2 trips of length 2 (Philadelphia -> NYC -> Providence),
  1 trip of length 3 (Philadelphia -> NYC -> Poughkeepsie -> Providence)
+if not signed in:
+=> 2 direct (Philadelphia -> Providence),
+ 2 trips of length 2 (Philadelphia -> NYC -> Providence),
 
 2) adjustment of walk/wait time
 SEARCH: MacMillan Hall -> Kimball Farm on May 8th, 9:30 PM with (walk, wait)
@@ -31,3 +35,5 @@ iii. lower walk to 10: (10, 30) => 1 direct trip
 3) sorting
 nothing specific but the other two searches can have their
 display orders explained
+
+4)
