@@ -83,3 +83,8 @@ hr {
 .info-container > p {
     margin: 0 20px;
 }
+
+.divider {
+    height: 3px;
+    width: auto;
+}

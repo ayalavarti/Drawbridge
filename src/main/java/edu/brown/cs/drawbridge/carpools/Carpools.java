@@ -1,11 +1,13 @@
 package edu.brown.cs.drawbridge.carpools;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import edu.brown.cs.drawbridge.constants.Constants;
 import edu.brown.cs.drawbridge.database.DatabaseQuery;
 import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.models.Trip;
@@ -17,8 +19,7 @@ import edu.brown.cs.drawbridge.tripcomparators.TimeComparator;
  */
 public final class Carpools {
 
-  private static final long SECONDS_PER_MINUTE = 60;
-  private static final double WALKING_SPEED = 0.084; // Kilometers per minute
+
   private final Comparator<Trip> timeComparator = new TimeComparator();
   private DatabaseQuery database;
 
@@ -97,8 +98,8 @@ public final class Carpools {
       throws SQLException, MissingDataException {
     TripSearcher tripSearcher = new TripSearcher(database);
     return tripSearcher.searchWithId(userId, startLat, startLon, endLat, endLon,
-        departureTime, walkingTime * WALKING_SPEED,
-        timeRadius * SECONDS_PER_MINUTE);
+        departureTime, walkingTime * Constants.WALKING_SPEED,
+        timeRadius * Constants.SECONDS_PER_MINUTE);
   }
 
   /**
@@ -133,8 +134,9 @@ public final class Carpools {
       long timeRadius) throws SQLException, MissingDataException {
     TripSearcher tripSearcher = new TripSearcher(database);
     return tripSearcher.searchWithoutId(startLat, startLon, endLat, endLon,
-        departureTime, walkingTime * WALKING_SPEED,
-        timeRadius * SECONDS_PER_MINUTE);
+                                        departureTime,
+                                        walkingTime * Constants.WALKING_SPEED,
+                                        timeRadius * Constants.SECONDS_PER_MINUTE);
   }
 
   /**
