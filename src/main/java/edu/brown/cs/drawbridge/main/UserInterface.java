@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import edu.brown.cs.drawbridge.carpools.Carpools;
+import edu.brown.cs.drawbridge.carpools.TripCleaner;
+import edu.brown.cs.drawbridge.constants.Constants;
 import edu.brown.cs.drawbridge.database.MissingDataException;
 import edu.brown.cs.drawbridge.json.JSONProcessor;
 import edu.brown.cs.drawbridge.models.Trip;
@@ -25,9 +27,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * An abstract class for the User Interface of the Java project. Contains
@@ -76,19 +76,19 @@ public final class UserInterface {
 
       carpools = new Carpools(dbURL, username, password);
 
-      // Set up cron job to clean out old trips periodically
-      //      Timer timer = new Timer();
-      //      TimerTask tripCleaner = new TripCleaner(carpools);
-      //      timer.scheduleAtFixedRate(tripCleaner, 0, Constants.TRIP_CLEAN_INTERVAL);
+      //Set up cron job to clean out old trips periodically
+      Timer timer = new Timer();
+      TimerTask tripCleaner = new TripCleaner(carpools);
+      timer.scheduleAtFixedRate(tripCleaner, 0, Constants.TRIP_CLEAN_INTERVAL);
 
       return true;
     } catch (URISyntaxException e) {
-      System.out.println(
-          "ERROR: Problem reading database url location: " + e.getMessage());
+      System.out.println("ERROR: Problem reading database url location: "
+              + e.getMessage());
       return false;
     } catch (SQLException | ClassNotFoundException e) {
-      System.out.println(
-          "ERROR: Could not connect to the database: " + e.getMessage());
+      System.out.println("ERROR: Could not connect to the database: "
+              + e.getMessage());
       return false;
     }
   }

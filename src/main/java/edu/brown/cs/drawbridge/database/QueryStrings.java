@@ -5,7 +5,7 @@ package edu.brown.cs.drawbridge.database;
  *
  * @author Sam Maffa
  */
-public final class QueryStrings {
+public abstract class QueryStrings {
 
   protected static final String INSERT_USER = "INSERT INTO "
           + "users VALUES (?, ?, ?, ?);";
@@ -64,7 +64,9 @@ public final class QueryStrings {
   protected static final String FIND_CONNECTED_TRIPS_AFTER_ETA =
           "SELECT * FROM trips WHERE "
                   + "(haversine(start_latitude, start_longitude, ?, ?) < ?) "
-                  + " AND (departure BETWEEN ((haversine(start_latitude, start_longitude, ?, ?) / 0.0014) + ?) "
-                  + " AND (haversine(start_latitude, start_longitude, ?, ?) / 0.0014) + ?);";
+                  + " AND (departure BETWEEN ((haversine(start_latitude, "
+                  + "start_longitude, ?, ?) / 0.0014) + ?) "
+                  + " AND (haversine(start_latitude, start_longitude,"
+                  + " ?, ?) / 0.0014) + ?);";
   //lat, lon, distRadius, lat, lon, lastEta, lat, lon, lastEta + buffer
 }

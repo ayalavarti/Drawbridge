@@ -1,0 +1,39 @@
+Roughly 250 trips total
+
+randomized between 
+{ "Keeney Quad", "Providence Station",
+      "Metcalf Research Building", "RISD Store", "CIT", "Hope High School",
+      "Wheeler School", "Nelson Fitness Center", "Providence Place", "Ratty",
+      "Jo's"}
+and
+{ "Copley Square", "Metropolitan Opera House",
+      "Museum of Fine Arts, Boston", "Rockefeller Center", "Coney Island",
+      "Six Flags, New England", "Mount Monadnock", "Narragansett Beach",
+      "Tanglewood", "Grand Central Station", "Reading Terminal", "Walden Pond",
+      "Kimball Farm", "Bedford Farms"}
+
+as well as specially inserted sets.
+
+Below are the behaviors we want to display and their corresponding searches:
+
+1) Multiple trip lengths
+SEARCH: Reading Terminal -> 115 Waterman Street on May 9th at 8:45 AM
+if signed in as any of us:
+=> 2 direct (Philadelphia -> Providence),
+ 2 trips of length 2 (Philadelphia -> NYC -> Providence),
+ 1 trip of length 3 (Philadelphia -> NYC -> Poughkeepsie -> Providence)
+if not signed in:
+=> 2 direct (Philadelphia -> Providence),
+ 2 trips of length 2 (Philadelphia -> NYC -> Providence),
+
+2) adjustment of walk/wait time
+SEARCH: MacMillan Hall -> Kimball Farm on May 8th, 9:30 PM with (walk, wait)
+i. default: (15, 30) => 3 direct trips
+ii. raise wait to 60: (15, 60) => 4 direct trips
+iii. lower walk to 10: (10, 30) => 1 direct trip
+
+3) sorting
+nothing specific but the other two searches can have their
+display orders explained
+
+4)

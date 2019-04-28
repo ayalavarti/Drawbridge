@@ -428,10 +428,7 @@ public class Trip {
       return false;
     }
     Trip other = (Trip) obj;
-    if (id != other.id) {
-      return false;
-    }
-    return true;
+    return (id == other.id);
   }
 
   /**

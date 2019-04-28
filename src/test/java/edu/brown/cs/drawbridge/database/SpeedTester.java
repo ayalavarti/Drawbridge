@@ -1,5 +1,6 @@
 package edu.brown.cs.drawbridge.database;
 
+import edu.brown.cs.drawbridge.carpools.Carpools;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 import org.junit.BeforeClass;
@@ -14,11 +15,12 @@ import static org.junit.Assert.*;
 public class SpeedTester {
 
   private static DatabaseQuery test;
+  private static DatabaseQuery speed;
 
   @BeforeClass
   public static void oneTimeSetUp() throws SQLException, ClassNotFoundException {
-    String username = System.getenv("DB_USER");
-    String password = System.getenv("DB_PASS");
+    String username = "dev";//System.getenv("DB_USER");
+    String password = "dev";//System.getenv("DB_PASS");
     /*
      * Run the following queries in pgadmin:
      * CREATE USER <username> WITH PASSWORD '<password>'
@@ -27,6 +29,7 @@ public class SpeedTester {
      */
     test = new DatabaseQuery("//127.0.0.1:5432/massData", username,
             password);
+    speed = new DatabaseQuery("//127.0.0.1:5432/speed", username, password);
   }
 
   private static Long lastTime;
@@ -82,7 +85,7 @@ public class SpeedTester {
   }
 
   @Test
-  public void testSearchTrips() throws MissingDataException, SQLException {
+  public void testSearchTrips() throws MissingDataException, SQLException, ClassNotFoundException {
     if (midSize) {
       timeSince();
       List<Trip> t1 = test.getConnectedTripsWithinTimeRadius(
@@ -113,15 +116,25 @@ public class SpeedTester {
       assertTrue(timeSince() < 5000);
       assertEquals(t2.size(), 2);
       //walk distance = halfway around the equator
-      List<Trip> t3 = test.getConnectedTripsWithinTimeRadius(
-              0, 0, Math.PI * 6371, 1555870749, 10000);
-      assertTrue(timeSince() < 60000);
-      List<Trip> t4 = test.getConnectedTripsAfterEta(
-              72.035, -53.227, Math.PI * 6371, 1556010000, 1000000);
-      assertFalse(t4.isEmpty());
-      assertTrue(timeSince() < 60000);
-      System.out.println(t3.size());
-      System.out.println(t4.size());
+//      List<Trip> t3 = test.getConnectedTripsWithinTimeRadius(
+//              0, 0, Math.PI * 6371, 1555870749, 10000);
+//      assertTrue(timeSince() < 60000);
+//      List<Trip> t4 = test.getConnectedTripsAfterEta(
+//              72.035, -53.227, Math.PI * 6371, 1556010000, 1000000);
+//      assertFalse(t4.isEmpty());
+//      assertTrue(timeSince() < 60000);
+//      System.out.println(t3.size());
+//      System.out.println(t4.size());
+      Carpools cp = new Carpools("//127.0.0.1:5432/massData", "dev", "dev");
+      timeSince();
+      List<List<Trip>> results = cp.searchWithId("1", 54.8743144468108, -107.696585988682, 88.2212956652336, -172.076626546341, 1556081006,1440, 1440);
+      System.out.println(results.size());
+      for (List<Trip> connectedTrips : results) {
+        for (Trip t : connectedTrips) {
+          System.out.println(t.getName());
+        }
+      }
+      assertTrue(timeSince() < 2000);
     }
   }
 
@@ -182,6 +195,21 @@ public class SpeedTester {
 
       test.deleteUser("1001");
     }
+  }
+
+  //@Test
+  public void speedTest() throws SQLException, ClassNotFoundException, MissingDataException {
+    Carpools cp = new Carpools("//127.0.0.1:5432/speed", "dev", "dev");
+    timeSince();
+    List<List<Trip>> results = cp.searchWithId(
+            "1", 42.34819, -71.078705 , 39.953342, -75.15931, 1557154980, 1440, 1440);
+    System.out.println(results.size());
+    for (List<Trip> ts : results) {
+      System.out.println(ts.size());
+      System.out.println(ts.get(0).getName());
+    }
+    System.out.println(results.size());
+    timeSince();
   }
 
 }

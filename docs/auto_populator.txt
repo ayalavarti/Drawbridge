@@ -2,6 +2,7 @@ package edu.brown.cs.drawbridge.database;
 
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
+import org.junit.Test;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -226,7 +227,7 @@ public class AutoPopulator {
     return (long) (Math.floor(Math.random() * (max - min)) + min);
   }
 
-  private void populateTrips2(DatabaseQuery db, int tripNum)
+  private void populateSpecificTrips(DatabaseQuery db, int tripNum)
       throws SQLException, MissingDataException, ClassNotFoundException {
     for (int i = 1; i <= tripNum; i++) {
       int randomStartIndex = (int) (Math.random() * startNames.length);
@@ -253,7 +254,7 @@ public class AutoPopulator {
   }
 
   //@Test
-  public void popUsers() throws SQLException, ClassNotFoundException {
+  public void populateSpecificUsers() throws SQLException, ClassNotFoundException {
     test = new DatabaseQuery("//127.0.0.1:5432/carpools", "dev", "dev");
     for (User u : users) {
       test.addUser(u);
@@ -261,14 +262,14 @@ public class AutoPopulator {
   }
 
   //@Test
-  public void popTrips()
+  public void populateSpecificTrips()
       throws SQLException, ClassNotFoundException, MissingDataException {
     test = new DatabaseQuery("//127.0.0.1:5432/carpools", "dev", "dev");
-    populateTrips2(test, 1000);
+    populateSpecificTrips(test, 1000);
   }
 
   //@Test
-  public void popMembers()
+  public void populateSpecificMembers()
       throws SQLException, ClassNotFoundException, MissingDataException {
     test = new DatabaseQuery("//127.0.0.1:5432/carpools", "dev", "dev");
     for (int i = 2001; i < 3000; i++) {

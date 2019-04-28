@@ -1,7 +1,5 @@
 package edu.brown.cs.drawbridge.database;
 
-import static org.junit.Assert.assertTrue;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,16 +44,6 @@ public class DatabaseSearchTests {
     //searchTester.addUser(dummyHost);
   }
 
-  public static boolean hasAllTrips(List<String> nameList, List<Trip> trips) {
-    boolean same = true;
-    for (Trip t : trips) {
-      if (!nameList.contains(t.getName())) {
-        same = false;
-      }
-    }
-    return same && (nameList.size() == trips.size());
-  }
-
   @Test
   public void testSet1() throws SQLException, MissingDataException {
     if (false) {
@@ -90,16 +78,6 @@ public class DatabaseSearchTests {
             .addDetails(2, 2.00, "", "", "").build(), "1");
       }
     }
-    // these conditions should give paths that traverse the entire set
-    // specific paths to follow soon
-    List<Trip> s1 = searchTester.getConnectedTripsWithinTimeRadius(40, 40, 0.85,
-        300, 1500);
-    assertTrue(hasAllTrips(new ArrayList<>(Arrays.asList("1A", "1H")), s1));
-
-    List<Trip> s2 = searchTester.getConnectedTripsWithinTimeRadius(40, 40, 1.6,
-        300, 1500);
-    assertTrue(
-        hasAllTrips(new ArrayList<>(Arrays.asList("1A", "1B", "1H")), s2));
   }
 
   @Test
@@ -141,12 +119,6 @@ public class DatabaseSearchTests {
               .addTimes(1500, 3000).addDetails(2, 2.00, "", "", "").build(),
           "1");
     }
-    // these conditions should give paths that traverse the entire set
-    // specific paths to follow soon
-    List<Trip> s1 = searchTester.getConnectedTripsWithinTimeRadius(0, 0, 1.3,
-        50, 2000);
-    assertTrue(
-        hasAllTrips(new ArrayList<>(Arrays.asList("2A", "2B", "2C")), s1));
   }
 
   @Test

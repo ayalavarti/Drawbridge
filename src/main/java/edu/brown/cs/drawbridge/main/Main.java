@@ -1,8 +1,6 @@
 package edu.brown.cs.drawbridge.main;
 
-import joptsimple.OptionException;
-import joptsimple.OptionParser;
-import joptsimple.OptionSet;
+import edu.brown.cs.drawbridge.constants.Constants;
 import spark.ExceptionHandler;
 import spark.Request;
 import spark.Response;
@@ -18,7 +16,6 @@ import java.io.StringWriter;
  */
 public final class Main {
 
-  private static final int DEFAULT_PORT = 4567;
   private String[] args;
 
   /**
@@ -45,19 +42,7 @@ public final class Main {
    * Processes the commands in a REPL.
    */
   private void run() {
-    // Parse command line arguments
-    OptionParser parser = new OptionParser();
-    parser.accepts("gui");
-    parser.accepts("port").withRequiredArg().ofType(Integer.class)
-        .defaultsTo(DEFAULT_PORT);
-
-    // Accept gui command and begin REPL reading
-    try {
-      OptionSet options = parser.parse(args);
-      runSparkServer();
-    } catch (OptionException e) {
-      System.out.println("Use one of: --gui [--port <number>] or no inputs.");
-    }
+    runSparkServer();
   }
 
   private void runSparkServer() {
@@ -76,7 +61,7 @@ public final class Main {
     if (processBuilder.environment().get("PORT") != null) {
       return Integer.parseInt(processBuilder.environment().get("PORT"));
     }
-    return 8000;
+    return Constants.DEFAULT_PORT;
     //return default port if heroku-port isn't set (i.e. on localhost)
   }
 

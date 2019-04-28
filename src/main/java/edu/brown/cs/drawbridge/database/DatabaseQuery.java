@@ -1,5 +1,6 @@
 package edu.brown.cs.drawbridge.database;
 
+import edu.brown.cs.drawbridge.constants.Constants;
 import edu.brown.cs.drawbridge.models.Trip;
 import edu.brown.cs.drawbridge.models.User;
 
@@ -20,7 +21,6 @@ import java.util.List;
  */
 public class DatabaseQuery {
 
-  private static final double NANOMETER = 0.000000000001;
   private Connection conn;
 
   /**
@@ -471,7 +471,7 @@ public class DatabaseQuery {
           throws SQLException, MissingDataException {
     //due to rounding errors in SQL, a walk radius of 0 will not return results.
     if (walkRadius == 0) {
-      walkRadius = NANOMETER;
+      walkRadius = Constants.NANOMETER;
     }
     List<Trip> results = new ArrayList<>();
     try (PreparedStatement prep = conn

@@ -18,8 +18,6 @@ import edu.brown.cs.drawbridge.tripcomparators.TimeComparator;
  * A class used to interact with the GUI handlers.
  */
 public final class Carpools {
-
-
   private final Comparator<Trip> timeComparator = new TimeComparator();
   private DatabaseQuery database;
 

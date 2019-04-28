@@ -34,9 +34,9 @@ public class DatabaseQueryTest {
       .addDetails(3, 16.00, "333-333-3333", "car", "").build();
   private static DatabaseQuery test;
   private static int t1, t2, t3;
-  private static DatabaseQuery teamData;
 
-  @BeforeClass public static void oneTimeSetUp()
+  @BeforeClass
+  public static void oneTimeSetUp()
       throws SQLException, MissingDataException, ClassNotFoundException {
     String username = System.getenv("DB_USER");
     String password = System.getenv("DB_PASS");
@@ -48,8 +48,6 @@ public class DatabaseQueryTest {
      */
     test = new DatabaseQuery("jdbc:postgresql://127.0.0.1:5432/testCarpools",
         username, password);
-    teamData = new DatabaseQuery("jdbc:postgresql://127.0.0.1:5432/carpools",
-        username, password);
     test.addUser(DUMMY_U1);
     test.addUser(DUMMY_U2);
     t1 = test.createTrip(DUMMY_T1, "1");
@@ -57,16 +55,19 @@ public class DatabaseQueryTest {
     t3 = test.createTrip(DUMMY_T3, "2");
   }
 
-  @AfterClass public static void oneTimeTearDown() throws SQLException {
+  @AfterClass
+  public static void oneTimeTearDown() throws SQLException {
     test.clearData();
   }
 
-  @Test public void testAddUser() throws SQLException, MissingDataException {
+  @Test
+  public void testAddUser() throws SQLException, MissingDataException {
     assertNotNull(test.getUserById("1"));
     assertNotNull(test.getUserById("2"));
   }
 
-  @Test public void testCreateTrip() throws SQLException, MissingDataException {
+  @Test
+  public void testCreateTrip() throws SQLException, MissingDataException {
     assertNotNull(test.getTripById(t1));
     assertNotNull(test.getTripById(t2));
     assertNotNull(test.getTripById(t3));
@@ -79,7 +80,8 @@ public class DatabaseQueryTest {
     assertEquals(test.getHostOnTrip(t3), "2");
   }
 
-  @Test public void testDeleteTripManually()
+  @Test
+  public void testDeleteTripManually()
       throws SQLException, MissingDataException {
     Trip t = Trip.TripBuilder.newTripBuilder().addIdentification(4, "extra")
         .addLocations(9, 9, 10, 12).addAddressNames("(9, 9)", "(10, 12)")
@@ -92,7 +94,8 @@ public class DatabaseQueryTest {
     assertTrue(test.getHostTripsWithUser("1").contains(t1));
   }
 
-  @Test public void testDeleteTripByTime()
+  @Test
+  public void testDeleteTripByTime()
       throws SQLException, MissingDataException {
     //need to test with a trip after current time
     test.deleteExpiredTrips();
@@ -134,7 +137,8 @@ public class DatabaseQueryTest {
     assertNotNull(test.getTripById(t3));
   }
 
-  @Test public void testGetRelevantTrips()
+  @Test
+  public void testGetRelevantTrips()
       throws SQLException, MissingDataException {
     assertEquals(test.getConnectedTripsWithinTimeRadius(3, 3, 0, 1000, 0),
         new ArrayList<>(Collections.singletonList(test.getTripById(t1))));
@@ -155,7 +159,8 @@ public class DatabaseQueryTest {
             Arrays.asList(test.getTripById(t1), test.getTripById(t3))));
   }
 
-  @Test public void testGetConnectedTrips()
+  @Test
+  public void testGetConnectedTrips()
       throws SQLException, MissingDataException {
     //not location
     assertTrue(test.getConnectedTripsAfterEta(5, 5, 0, 1000, 0).isEmpty());
@@ -179,7 +184,8 @@ public class DatabaseQueryTest {
         new ArrayList<>(Collections.singletonList(test.getTripById(t2))));
   }
 
-  @Test public void testRequest() throws SQLException {
+  @Test
+  public void testRequest() throws SQLException {
     test.request(t1, "1");
     test.request(t1, "2");
     assertTrue(test.getRequestsOnTrip(t1).contains("1"));
@@ -188,7 +194,8 @@ public class DatabaseQueryTest {
     assertTrue(test.getRequestTripsWithUser("2").contains(t1));
   }
 
-  @Test public void testApprove() throws SQLException {
+  @Test
+  public void testApprove() throws SQLException {
     test.request(t3, "1");
     test.request(t3, "2");
     assertTrue(test.getRequestsOnTrip(t3).contains("1"));
@@ -200,7 +207,8 @@ public class DatabaseQueryTest {
     assertTrue(test.getRequestsOnTrip(t3).isEmpty());
   }
 
-  @Test public void testReject() throws SQLException {
+  @Test
+  public void testReject() throws SQLException {
     test.request(t2, "1");
     test.request(t2, "2");
     assertTrue(test.getRequestsOnTrip(t2).contains("1"));
@@ -211,7 +219,8 @@ public class DatabaseQueryTest {
     assertTrue(test.getRequestsOnTrip(t2).isEmpty());
   }
 
-  @Test public void testKick() throws SQLException {
+  @Test
+  public void testKick() throws SQLException {
     test.request(t1, "1");
     test.request(t1, "2");
     test.approve(t1, "1");
@@ -222,5 +231,14 @@ public class DatabaseQueryTest {
     assertTrue(test.getMembersOnTrip(t1).contains("2"));
     test.kick(t1, "2");
     assertTrue(test.getMembersOnTrip(t1).isEmpty());
+  }
+
+  @Test
+  public void testUpdate() throws SQLException, MissingDataException {
+    Trip trip1 = test.getTripById(t1);
+    assertEquals(trip1.getComments(), "");
+    test.updateTripDescription(t1, "This is a new comment");
+    Trip trip1Changed = test.getTripById(t1);
+    assertEquals(trip1Changed.getComments(), "This is a new comment");
   }
 }

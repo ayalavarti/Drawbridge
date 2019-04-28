@@ -33,8 +33,8 @@ public class TripSearcher {
   private static final int MAX_TRIPS_PER_PATH = 3;
   private static final int MAX_PATH_OPTIONS = 10;
   private static final int MAX_PATH_FOUND = 15;
-  // Higher multipler means better quality, lower multipler means better
-  // quantity; higher multipler reaches best point faster and marks more nodes
+  // Higher multiplier means better quality, lower multipler means better
+  // quantity; higher multiplier reaches best point faster and marks more nodes
   // as visited
   private static final double HEURISTIC_MULTIPLIER = 0.9;
 
