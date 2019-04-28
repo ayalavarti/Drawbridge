@@ -1,5 +1,6 @@
 package edu.brown.cs.drawbridge.carpools;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +18,6 @@ import edu.brown.cs.drawbridge.tripcomparators.TimeComparator;
  * A class used to interact with the GUI handlers.
  */
 public final class Carpools {
-  
   private final Comparator<Trip> timeComparator = new TimeComparator();
   private DatabaseQuery database;
 
@@ -96,7 +96,7 @@ public final class Carpools {
       throws SQLException, MissingDataException {
     TripSearcher tripSearcher = new TripSearcher(database);
     return tripSearcher.searchWithId(userId, startLat, startLon, endLat, endLon,
-        departureTime, walkingTime * Constants.WALKING_SPEED_PER_MINUTE,
+        departureTime, walkingTime * Constants.WALKING_SPEED,
         timeRadius * Constants.SECONDS_PER_MINUTE);
   }
 
@@ -132,8 +132,9 @@ public final class Carpools {
       long timeRadius) throws SQLException, MissingDataException {
     TripSearcher tripSearcher = new TripSearcher(database);
     return tripSearcher.searchWithoutId(startLat, startLon, endLat, endLon,
-        departureTime, walkingTime * Constants.WALKING_SPEED_PER_MINUTE,
-        timeRadius * Constants.SECONDS_PER_MINUTE);
+                                        departureTime,
+                                        walkingTime * Constants.WALKING_SPEED,
+                                        timeRadius * Constants.SECONDS_PER_MINUTE);
   }
 
   /**
