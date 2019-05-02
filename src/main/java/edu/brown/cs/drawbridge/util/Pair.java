@@ -13,15 +13,28 @@ public class Pair<T, U> {
   private final T first;
   private final U second;
 
+  /**
+   * Creates an immutable pair object.
+   * @param first The first object in the pair.
+   * @param second The second object in the pair.
+   */
   public Pair(T first, U second) {
     this.first = first;
     this.second = second;
   }
 
+  /**
+   * Gets the first object in the pair.
+   * @return The first object in the pair.
+   */
   public T getFirst() {
     return first;
   }
 
+  /**
+   * Gets the second object in the pair.
+   * @return The second object in the pair.
+   */
   public U getSecond() {
     return second;
   }
@@ -35,8 +48,8 @@ public class Pair<T, U> {
       return false;
     }
     Pair<?, ?> pair = (Pair<?, ?>) o;
-    return Objects.equals(first, pair.first) &&
-                   Objects.equals(second, pair.second);
+    return Objects.equals(first, pair.first)
+           && Objects.equals(second, pair.second);
   }
 
   @Override

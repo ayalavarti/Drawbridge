@@ -15,7 +15,7 @@ public abstract class JSONProcessor {
   /**
    * Private constructor to hide default public one.
    */
-  private JSONProcessor() {}
+  private JSONProcessor() { }
 
   /**
    * Method for processing trip groups into json with a user to set the

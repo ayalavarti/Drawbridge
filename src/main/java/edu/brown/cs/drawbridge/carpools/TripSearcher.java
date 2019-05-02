@@ -39,16 +39,22 @@ public class TripSearcher {
   private static final double HEURISTIC_MULTIPLIER = 0.9;
 
   private final Comparator<List<Trip>> hostComparator = new HostComparator();
-  private final Comparator<List<Trip>> memberComparator = new MemberComparator();
-  private final Comparator<List<Trip>> pendingComparator = new PendingComparator();
+  private final Comparator<List<Trip>> memberComparator =
+          new MemberComparator();
+  private final Comparator<List<Trip>> pendingComparator =
+          new PendingComparator();
   private final Comparator<List<Trip>> costComparator = new CostComparator();
-  private final Comparator<List<Trip>> lengthComparator = new LengthComparator();
+  private final Comparator<List<Trip>> lengthComparator =
+          new LengthComparator();
   private final List<Identifiable> identifiable = Arrays.asList(
       (Identifiable) hostComparator, (Identifiable) memberComparator,
       (Identifiable) pendingComparator, (Identifiable) costComparator);
-  private final Comparator<List<Trip>> tripComparator = new MultipleTripComparator(
-      Arrays.asList(hostComparator, memberComparator, pendingComparator,
-          lengthComparator, costComparator));
+  private final Comparator<List<Trip>> tripComparator =
+          new MultipleTripComparator(Arrays.asList(hostComparator,
+                                                   memberComparator,
+                                                   pendingComparator,
+                                                   lengthComparator,
+                                                   costComparator));
 
   private DatabaseQuery database;
 
