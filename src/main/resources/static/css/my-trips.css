@@ -40,7 +40,7 @@ body {
     box-shadow: none;
     display: flex;
     flex-wrap: wrap;
-    justify-content: left;
+    justify-content: center;
     min-height: auto;
     margin-bottom: 40px;
 
@@ -58,10 +58,4 @@ body {
     width: 250px;
     height: 120px;
     margin: 5px;
-}
-
-@media screen and (max-width: 830px) {
-    .results-content {
-        justify-content: center;
-    }
 }
