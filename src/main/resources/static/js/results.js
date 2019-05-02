@@ -116,13 +116,13 @@ function queryResults() {
  * @param {*} data
  */
 function setTripResults(data) {
+    const queryMap = JSON.parse(payload);
+    if (queryMap.walkTime >= queryMap.eta) {
+        $("#walk-eta-time").text(parseFloat(queryMap.eta).toFixed(2));
+        $("#walking-distance").show();
+    }
+
     if (data.length > 0) {
-        const queryMap = JSON.parse(payload);
-        console.log(queryMap);
-        if (queryMap.walkTime >= queryMap.eta) {
-            $("#walk-eta-time").text(parseFloat(queryMap.eta).toFixed(2));
-            $("#walking-distance").show();
-        }
         // Iterate through each trip group
         data.forEach(element => {
             let result = `<div class="result"><div class="result-trips">`;
@@ -165,8 +165,6 @@ function handleJoin(ids) {
         signInTooltip[0].setContent(
             "Sign in with your Google Account to join an existing trip.");
         signInTooltip[0].show();
-    } else {
-        console.log(ids);
     }
 }
 
