@@ -295,7 +295,6 @@ function denyClick(tid, pendUID) {
 function sendRequest(data, url) {
     $.post(url, data, response => {
         if (response.success) {
-            console.log(response);
             if (response.payload.action === "editComment") {
                 updatePageComment(response.newComment);
             } else if (response.redirect) {
@@ -327,10 +326,9 @@ function drawRoute(c) {
 }
 
 function copyToClipboard() {
-    //let text = `localhost:8000/trip/${tid}`;
     navigator.clipboard.writeText(window.location).then(function () {
         showHideTooltip(copyTooltip[0], 1500);
     }, function (err) {
-        console.error('Async: Could not copy text: ', err);
+        console.log('Could not copy text.');
     });
 }
