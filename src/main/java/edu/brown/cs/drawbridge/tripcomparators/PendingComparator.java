@@ -8,8 +8,6 @@ import edu.brown.cs.drawbridge.models.Trip;
 /**
  * A comparator that compares Lists of Trips based on how many Trips the User
  * has requested to join.
- *
- * @author Jeffrey Zhu
  */
 public class PendingComparator implements Comparator<List<Trip>>, Identifiable {
 

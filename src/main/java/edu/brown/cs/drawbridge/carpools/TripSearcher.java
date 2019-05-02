@@ -276,7 +276,7 @@ public class TripSearcher {
       toVisit.add(new PathNode(trip, endLat, endLon));
     }
 
-    // Search for at most 5 valid paths to destination
+    // Search for at most 15 valid paths to destination
     while (!toVisit.isEmpty() && paths.size() < MAX_PATH_FOUND) {
       PathNode visitingNode = toVisit.poll();
       Trip visitingTrip = visitingNode.current;

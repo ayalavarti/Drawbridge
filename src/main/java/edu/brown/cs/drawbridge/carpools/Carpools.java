@@ -1,6 +1,5 @@
 package edu.brown.cs.drawbridge.carpools;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -132,9 +131,8 @@ public final class Carpools {
       long timeRadius) throws SQLException, MissingDataException {
     TripSearcher tripSearcher = new TripSearcher(database);
     return tripSearcher.searchWithoutId(startLat, startLon, endLat, endLon,
-                                        departureTime,
-                                        walkingTime * Constants.WALKING_SPEED,
-                                        timeRadius * Constants.SECONDS_PER_MINUTE);
+        departureTime, walkingTime * Constants.WALKING_SPEED,
+        timeRadius * Constants.SECONDS_PER_MINUTE);
   }
 
   /**
@@ -399,29 +397,52 @@ public final class Carpools {
 
   /**
    * Gets a user given the user's id.
-   * @param uid The user id.
+   *
+   * @param uid
+   *          The user id.
    * @return The user object associated with the id.
-   * @throws SQLException when the database has an error
-   * @throws MissingDataException when the user doesn't exist.
+   * @throws SQLException
+   *           when the database has an error
+   * @throws MissingDataException
+   *           when the user doesn't exist.
    */
   public User getUserById(String uid)
-          throws SQLException, MissingDataException {
+      throws SQLException, MissingDataException {
     return database.getUserById(uid);
   }
 
   /**
    * Updates the user's profile picture in the database.
-   * @param uid The id of the user to update the picture for.
-   * @param newProfilePic The new url of the picture.
-   * @throws SQLException when the database encounters an error.
+   *
+   * @param uid
+   *          The id of the user to update the picture for.
+   * @param newProfilePic
+   *          The new url of the picture.
+   * @throws SQLException
+   *           when the database encounters an error.
    */
   public void updateProfilePic(String uid, String newProfilePic)
-          throws SQLException {
+      throws SQLException {
     database.updateUserPicture(uid, newProfilePic);
   }
 
+  /**
+   * Update the comment of a Trip.
+   *
+   * @param tid
+   *          The id of the Trip
+   * @param uid
+   *          The id of the User updating the comment
+   * @param newComment
+   *          The new comment
+   * @return True if the update was successful. False otherwise
+   * @throws SQLException
+   *           If the SQL query is invalid.
+   * @throws MissingDataException
+   *           If database is missing information
+   */
   public boolean updateComment(int tid, String uid, String newComment)
-          throws SQLException, MissingDataException {
+      throws SQLException, MissingDataException {
     if (database.getHostOnTrip(tid).equals(uid)) {
       database.updateTripDescription(tid, newComment);
       return true;
