@@ -108,21 +108,6 @@ public class DatabaseQueryTest {
     } catch (MissingDataException e) {
       assert true;
     }
-    int t4 = test.createTrip(
-        Trip.TripBuilder.newTripBuilder().addIdentification(-1, "Late")
-            .addLocations(10, 10, 15, 15)
-            .addAddressNames("(10, 10)", "(15, 15)")
-            .addTimes(1556470997, 1556479997)
-            .addDetails(5, 30.00, "108-851-fake", "uber", "").build(),
-        DUMMY_U1.getId());
-    test.deleteExpiredTrips();
-    assertNotNull(test.getTripById(t4));
-    test.deleteTripManually(t4);
-    try {
-      assertNull(test.getTripById(t4));
-    } catch (MissingDataException e) {
-      assert true;
-    }
     t1 = test.createTrip(DUMMY_T1, "1");
     t2 = test.createTrip(DUMMY_T2, "2");
     t3 = test.createTrip(DUMMY_T3, "2");

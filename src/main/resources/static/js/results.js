@@ -2,6 +2,7 @@ const months = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
 ];
+const walkSpeed = 0.05167;
 
 let formValidationTooltip;
 
@@ -34,8 +35,7 @@ function queryTrips() {
     }
     let walkTime = $("#walking-input").val();
     let waitTime = $("#waiting-input").val();
-
-    let postParameters = JSON.parse(payload);
+    let postParameters = (payload);
 
     if (parseFloat(walkTime) > 0 && parseFloat(waitTime) > 0) {
         postParameters["walkTime"] = parseFloat(walkTime);
@@ -50,6 +50,8 @@ function queryTrips() {
     $("#walking-distance").hide();
     $.post("/results", postParameters, response => {
         // Set the trip results on the page with the resulting data
+        payload = response.payload;
+        data = response.data;
         setTripResults((response.data));
     }, "json");
 }
@@ -96,7 +98,7 @@ function initTooltips() {
  * Query the server for the results of the trip search
  */
 function queryResults() {
-    const queryMap = JSON.parse(payload);
+    const queryMap = (payload);
     $("#start").text(queryMap["startName"]);
     $("#end").text(queryMap["endName"]);
 
@@ -116,9 +118,10 @@ function queryResults() {
  * @param {*} data
  */
 function setTripResults(data) {
-    const queryMap = JSON.parse(payload);
-    if (queryMap.tripDist < queryMap.walkTime * 0.05167) {
-        $("#walk-eta-time").text(parseFloat(queryMap.eta).toFixed(2));
+    const queryMap = (payload);
+    if (queryMap.tripDist < queryMap.walkTime * walkSpeed) {
+        $("#walk-eta-time")
+        .text(parseFloat(queryMap.tripDist / walkSpeed).toFixed(0));
         $("#walking-distance").show();
     }
 
