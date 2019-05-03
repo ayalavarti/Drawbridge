@@ -109,7 +109,7 @@ function queryResults() {
     if ((navigator.cookieEnabled && getCookie("loggedIn") === "true")) {
     } else {
         // Set the trip results on the page with the resulting data
-        setTripResults(JSON.parse(data));
+        setTripResults(data);
     }
 }
 
