@@ -161,7 +161,8 @@ function validateSubmit() {
             endLat: coordinates[1][1],
             endLon: coordinates[1][0],
             date: date.getTime() / 1000,
-            eta: route[1]
+            eta: route[1],
+            tripDist: route[0]
         };
         let urlStr = jQuery.param(postParameters);
         window.open(`/results?${urlStr}`, "_self");

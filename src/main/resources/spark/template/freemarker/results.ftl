@@ -65,9 +65,8 @@
             </div>
             <span class="trip-info-text">Carpool Search Results</span>
             <div id="walking-distance" style="display: none;">
-                We found results, but given your travel time is
-                <span id="walk-eta-time"></span> minutes, we strongly feel
-                you should just walk.
+                We found results, but it's only a
+                <span id="walk-eta-time"></span> minute walk.
             </div>
             <div class="loading-gif2" id="loading">
                 <img src="/images/loading.gif"
@@ -78,8 +77,8 @@
         </div>
     </div>
     <script type="text/javascript">
-        let data = "${data?js_string}"
-        let payload = "${query?js_string}"
+        let data = JSON.parse("${data?js_string}");
+        let payload = JSON.parse("${query?js_string}");
     </script>
     <script src="/js/results.js"></script>
 </#assign>

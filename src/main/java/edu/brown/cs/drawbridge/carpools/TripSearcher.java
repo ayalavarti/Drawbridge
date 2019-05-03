@@ -39,10 +39,13 @@ public class TripSearcher {
   private static final double HEURISTIC_MULTIPLIER = 0.9;
 
   private final Comparator<List<Trip>> hostComparator = new HostComparator();
-  private final Comparator<List<Trip>> memberComparator = new MemberComparator();
-  private final Comparator<List<Trip>> pendingComparator = new PendingComparator();
+  private final Comparator<List<Trip>> memberComparator =
+          new MemberComparator();
+  private final Comparator<List<Trip>> pendingComparator =
+          new PendingComparator();
   private final Comparator<List<Trip>> costComparator = new CostComparator();
-  private final Comparator<List<Trip>> lengthComparator = new LengthComparator();
+  private final Comparator<List<Trip>> lengthComparator =
+          new LengthComparator();
   private final List<Identifiable> identifiable = Arrays.asList(
       (Identifiable) hostComparator, (Identifiable) memberComparator,
       (Identifiable) pendingComparator, (Identifiable) costComparator);
@@ -278,7 +281,7 @@ public class TripSearcher {
       toVisit.add(new PathNode(trip, endLat, endLon));
     }
 
-    // Search for at most 5 valid paths to destination
+    // Search for at most 15 valid paths to destination
     while (!toVisit.isEmpty() && paths.size() < MAX_PATH_FOUND) {
       PathNode visitingNode = toVisit.poll();
       Trip visitingTrip = visitingNode.current;

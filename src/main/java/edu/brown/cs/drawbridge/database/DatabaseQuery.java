@@ -467,7 +467,8 @@ public class DatabaseQuery {
    *     Errors involving the database's contents.
    */
   public List<Trip> getConnectedTripsAfterEta(double lastLat, double lastLon,
-                                              double walkRadius, long lastEta, double timeBuffer)
+                                              double walkRadius, long lastEta,
+                                              double timeBuffer)
           throws SQLException, MissingDataException {
     //due to rounding errors in SQL, a walk radius of 0 will not return results.
     if (walkRadius == 0) {
@@ -489,14 +490,22 @@ public class DatabaseQuery {
       try (ResultSet rs = prep.executeQuery()) {
         while (rs.next()) {
           results.add(Trip.TripBuilder.newTripBuilder()
-                  .addIdentification(rs.getInt(1), rs.getString(2))
-                  .addLocations(rs.getDouble(4), rs.getDouble(5), rs.getDouble(7),
-                          rs.getDouble(8))
-                  .addAddressNames(rs.getString(3), rs.getString(6))
-                  .addTimes(rs.getLong(9), rs.getLong(10))
-                  .addDetails(rs.getInt(11), rs.getDouble(12), rs.getString(13),
-                          rs.getString(14), rs.getString(15))
-                  .buildWithUsers(getHostOnTrip(rs.getInt(1)),
+              .addIdentification(rs.getInt(1),
+                                rs.getString(2))
+              .addLocations(rs.getDouble(4),
+                           rs.getDouble(5),
+                           rs.getDouble(7),
+                           rs.getDouble(8))
+              .addAddressNames(rs.getString(3),
+                              rs.getString(6))
+              .addTimes(rs.getLong(9),
+                       rs.getLong(10))
+              .addDetails(rs.getInt(11),
+                         rs.getDouble(12),
+                         rs.getString(13),
+                          rs.getString(14),
+                         rs.getString(15))
+              .buildWithUsers(getHostOnTrip(rs.getInt(1)),
                           getMembersOnTrip(rs.getInt(1)),
                           getRequestsOnTrip(rs.getInt(1))));
         }

@@ -27,7 +27,11 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Map;
 
 /**
  * An abstract class for the User Interface of the Java project. Contains
@@ -141,6 +145,7 @@ public final class UserInterface {
       double endLat = Double.parseDouble(qm.value("endLat"));
       double endLon = Double.parseDouble(qm.value("endLon"));
       double eta = Double.parseDouble(qm.value("eta"));
+      double tripDist = Double.parseDouble(qm.value("tripDist"));
 
       long datetime = Long.parseLong(qm.value("date"));
       String uid = qm.value("userID");
@@ -168,6 +173,7 @@ public final class UserInterface {
       payload.addProperty("walkTime", walkTime);
       payload.addProperty("waitTime", waitTime);
       payload.addProperty("eta", eta);
+      payload.addProperty("tripDist", tripDist);
 
       List<List<Trip>> results;
       // Perform search

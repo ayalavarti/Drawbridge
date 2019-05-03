@@ -34,15 +34,14 @@ Install PGAdmin4 from https://www.pgadmin.org/download/
 as well. Open PGAdmin and create a new database named
 "carpools".
 
-To restore data to your database, select "restore" and
-choose one of the data files. 
-(For some reason, the dump file restores data in the
-wrong order: i.e., restoring references to foreign ids
-before the ids themselves. Restoring the same data
-twice should correctly populate the database.)
+To restore data to your database, choose one of the .tar 
+data files. 
+(The dump file may restore referenced keys in the wrong order;
+restoring the same data twice should correctly populate 
+the database.)
 
-*In the carpools database, open the query tool (lightning
-symbol), and run the following commands, consistent with
+*In the carpools database, open the query tool, and run
+the following commands, consistent with
 the environment variables set up earlier:*
 ```postgresql
 CREATE USER <username> WITH PASSWORD '<password>';
@@ -56,8 +55,7 @@ run, though it can be downloaded at
 https://jdbc.postgresql.org/download.html
 and manually imported as an external jar file.
 
-Recommended: For testing purposes, create 4 databases
-in total:
+The test classes expect 4 databases in total:
 * testCarpools - intended for testing interactions with
 the database; data will be inserted and deleted
 regularly. _Restore skeletonDump.tar_
@@ -70,16 +68,4 @@ _Restore testSearchData.tar_
 * massData - intended for testing speed on massive
 sets of data. _Restore then massData.tar or 
 midSizeDataDump.tar_
-
-(If you do not intend to run tests over the databases,
-comment out all the test files in the database
-package; alternatively, set up the urls
-to your specific database structure)
-
-*If you already have data existing data in the database
-run the following command to clear your database 
-before restoring data:*
-```postgresql
-TRUNCATE users, trips RESTART IDENTITY CASCADE;
-```
 

@@ -106,7 +106,7 @@ function onSignIn(googleUser) {
             }
         } else {
             window.location.replace("/error");
-            console.log("ERROR logging in");
+            console.log("Error logging in");
         }
     });
 }

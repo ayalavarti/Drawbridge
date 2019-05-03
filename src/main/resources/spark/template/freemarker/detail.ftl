@@ -21,7 +21,8 @@
                 <span><i class="far fa-calendar-alt"></i>${(trip.getDepartureTime()*1000)?number_to_date}</span>
             </div>
             <div class="info-box half-size">
-                <span><i class="far fa-clock"></i>${(trip.getDepartureTime()*1000)?number_to_time?string("h:mm a")}</span>
+                <i class="far fa-clock"></i><span
+                        id="timeDetail"></span>
             </div>
             <div id='privacy-hidden' style="display:none;" class="info-box">
                 <span><i class="fas fa-phone"></i>Contact host at ${trip.getPhoneNumber()}</span>
@@ -31,7 +32,7 @@
                 <h3 style="margin-top: 30px;">Share this Trip</h3>
                 <div style="display: flex; flex-wrap: wrap; justify-content:
                 center; align-items: center;">
-                    <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Flocalhost:8000/trip/${trip.getId()}&text=Join%20My%20Carpool!&hashtags=drawbridge">
+                    <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fdrawbridges.herokuapp.com/trip/${trip.getId()}&text=Join%20My%20Carpool!&hashtags=drawbridge">
                         <div class="share-tooltip">
                             <img style="height: 15px; width: auto"
                                  src="/images/twitter-icon.png"/>
@@ -201,6 +202,10 @@
         <#list members as mem>"${mem.getId()?js_string}"<#if mem_has_next>,
         </#if></#list>
     ];
+    let time = ${(trip.getDepartureTime()*1000)?c};
+    let date = new Date(time);
+    console.log(toJSTime(date));
+    $("#timeDetail").text(toJSTime(date));
 
     let tripFull =
     ${trip.getMaxUsers()} ===
