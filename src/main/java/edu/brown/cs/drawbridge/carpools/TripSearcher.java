@@ -46,7 +46,9 @@ public class TripSearcher {
   private final List<Identifiable> identifiable = Arrays.asList(
       (Identifiable) hostComparator, (Identifiable) memberComparator,
       (Identifiable) pendingComparator, (Identifiable) costComparator);
-  private final Comparator<List<Trip>> tripComparator = new MultipleTripComparator(
+  private final Comparator<List<Trip>> notLoggedInComparator = new MultipleTripComparator(
+      Arrays.asList(lengthComparator, costComparator));
+  private final Comparator<List<Trip>> loggedInComparator = new MultipleTripComparator(
       Arrays.asList(hostComparator, memberComparator, pendingComparator,
           lengthComparator, costComparator));
 
@@ -180,7 +182,7 @@ public class TripSearcher {
 
     List<List<Trip>> paths = search(userId, startLat, startLon, endLat, endLon,
         departureTime, distanceRadius, timeRadius);
-    Collections.sort(paths, tripComparator);
+    Collections.sort(paths, loggedInComparator);
     return paths.subList(0, Math.min(paths.size(), MAX_PATH_OPTIONS));
   }
 
@@ -216,7 +218,7 @@ public class TripSearcher {
 
     List<List<Trip>> paths = search("", startLat, startLon, endLat, endLon,
         departureTime, distanceRadius, timeRadius);
-    Collections.sort(paths, costComparator);
+    Collections.sort(paths, notLoggedInComparator);
     return paths.subList(0, Math.min(paths.size(), MAX_PATH_OPTIONS));
   }
 
