@@ -117,7 +117,7 @@ function queryResults() {
  */
 function setTripResults(data) {
     const queryMap = JSON.parse(payload);
-    if (queryMap.walkTime >= queryMap.eta) {
+    if (queryMap.tripDist < queryMap.walkTime * 0.05167) {
         $("#walk-eta-time").text(parseFloat(queryMap.eta).toFixed(2));
         $("#walking-distance").show();
     }
