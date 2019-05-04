@@ -69,3 +69,5 @@ _Restore testSearchData.tar_
 sets of data. _Restore then massData.tar or 
 midSizeDataDump.tar_
 
+## Deploying
+We deploy on Heroku. See [deployment instructions](docs/deploymentInstructions.md) for detailed instructions on setting up the database and deploying. If you want to set up your own site - please check our license first. If you wish to connect to our production database (or need help with anything else), feel free to create an issue and mark it as question. We'll check out your request and decide how to best help you out!
