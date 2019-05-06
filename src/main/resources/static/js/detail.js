@@ -162,7 +162,7 @@ function editComment(tid) {
     } else {
         const data = {
             action: "editComment",
-            newComment: $(".comments-textarea").val(),
+            newComment: sanitize($(".comments-textarea").val()),
             user: userProfile.getId()
         };
         sendRequest(data, "/trip/" + tid);

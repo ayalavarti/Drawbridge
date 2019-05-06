@@ -28,6 +28,9 @@
     <link href='https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css'
           rel='stylesheet'/>
 
+    <#-- Sanitize inputs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/1.0.10/purify.min.js"></script>
+
     <#--  JQuery and Main.js  -->
     <script src="/js/external/jquery-3.1.1.js"></script>
     <script src="/js/main.js"></script>

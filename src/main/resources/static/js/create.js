@@ -156,12 +156,12 @@ function handleSubmit() {
     let timeInput = $("#time").val();
     let date = new Date(`${dateInput} ${timeInput}`);
 
-    let nameInput = $("#name").val();
+    let nameInput = sanitize($("#name").val());
     let sizeInput = $("#carpool-size").val();
-    let typeInput = $("#transport-type").val();
+    let typeInput = sanitize($("#transport-type").val());
     let priceInput = $("#expected-price").val();
-    let phoneInput = $("#contact-number").val();
-    let commentsInput = $("#comments").val();
+    let phoneInput = sanitize($("#contact-number").val());
+    let commentsInput = sanitize($("#comments").val());
 
     /**
      * If any of the input entries are not filled out, show the form validation

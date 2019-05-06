@@ -368,3 +368,8 @@ function initTutorialTooltips() {
             " our info page to learn more."
     }));
 }
+
+/** Sanitizes inputs to give clean **/
+function sanitize(string) {
+    return DOMPurify.sanitize(string);
+}

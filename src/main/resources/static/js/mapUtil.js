@@ -132,7 +132,7 @@ $("#end-input").on('blur', function () {
 function handleInput(id, index) {
     if (map) {
         // Get the address value from the correct input box
-        let address = $(`#${id}`).val();
+        let address = sanitize($(`#${id}`).val());
         if ($.trim(address) === "") {
             removeMarker(index);
             disableTrip();
@@ -166,7 +166,7 @@ function handleInput(id, index) {
                                  * feature data.
                                  * */
                                 let feature = response.body.features[0];
-                                $(`#${id}`).val(feature.place_name);
+                                sanitize($(`#${id}`).val(feature.place_name));
                                 coordinates[index] = feature.center;
                                 // Add new marker on the map with the returned
                                 // feature data
@@ -249,7 +249,7 @@ function handleClick(coord) {
  */
 function updateAddress(id, index, featureName, featureLat, featureLng) {
     droppedPin.remove();
-    $(`#${id}`).val(featureName);
+    sanitize($(`#${id}`).val(featureName));
     coordinates[index] = [parseFloat(featureLng), parseFloat(featureLat)];
     /**
      * Add new marker on the map with the returned feature data
@@ -538,6 +538,7 @@ function addMarker(lat, long, id, index, name, map) {
  * @param {*} index
  */
 function parseAddress(raw, index) {
+    raw = sanitize(raw);
     if (raw.indexOf(",") > -1) {
         let title = raw.substr(0, raw.indexOf(","));
         addressNames[index] = title;
