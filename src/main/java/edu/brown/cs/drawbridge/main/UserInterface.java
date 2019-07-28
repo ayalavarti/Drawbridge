@@ -43,6 +43,8 @@ public final class UserInterface {
 
   private static final Gson GSON = new Gson();
   private static final String MAPBOX_TOKEN = System.getenv("MAPBOX_KEY");
+  private static final String GOOGLE_CLIENT_ID = System
+      .getenv("GOOGLE_CLIENT_ID");
   private static Carpools carpools;
 
   /**
@@ -210,6 +212,7 @@ public final class UserInterface {
     @Override public ModelAndView handle(Request req, Response res) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Home").put("mapboxKey", MAPBOX_TOKEN)
+          .put("google_client_id", GOOGLE_CLIENT_ID)
           .put("favicon", "images/favicon.png").build();
 
       return new ModelAndView(variables, "map.ftl");
@@ -232,6 +235,7 @@ public final class UserInterface {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Results")
           .put("favicon", "images/favicon.png")
+          .put("google_client_id", GOOGLE_CLIENT_ID)
           .put("data", GSON.toJson(searchResults.getSecond()))
           .put("query", GSON.toJson(searchResults.getFirst())).build();
 
@@ -288,7 +292,8 @@ public final class UserInterface {
           .put("title", String.format("Drawbridge | %s", trip.getName()))
           .put("favicon", "images/favicon.png").put("mapboxKey", MAPBOX_TOKEN)
           .put("trip", trip).put("host", host).put("members", members)
-          .put("pending", pending).build();
+          .put("google_client_id", GOOGLE_CLIENT_ID).put("pending", pending)
+          .build();
       return new ModelAndView(variables, "detail.ftl");
     }
   }
@@ -372,6 +377,7 @@ public final class UserInterface {
     @Override public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | My Trips")
+          .put("google_client_id", GOOGLE_CLIENT_ID)
           .put("favicon", "images/favicon.png").build();
 
       return new ModelAndView(variables, "my-trips.ftl");
@@ -412,6 +418,7 @@ public final class UserInterface {
     @Override public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Create Trip")
+          .put("google_client_id", GOOGLE_CLIENT_ID)
           .put("mapboxKey", MAPBOX_TOKEN).put("favicon", "images/favicon.png")
           .build();
 
@@ -518,6 +525,7 @@ public final class UserInterface {
     @Override public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Info")
+          .put("google_client_id", GOOGLE_CLIENT_ID)
           .put("favicon", "images/favicon.png").build();
 
       return new ModelAndView(variables, "info.ftl");
@@ -533,6 +541,7 @@ public final class UserInterface {
     @Override public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Page Not Found")
+          .put("google_client_id", GOOGLE_CLIENT_ID)
           .put("favicon", "images/favicon.png").build();
 
       response.status(404);
@@ -547,6 +556,7 @@ public final class UserInterface {
     @Override public ModelAndView handle(Request request, Response response) {
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "Drawbridge | Page Not Found")
+          .put("google_client_id", GOOGLE_CLIENT_ID)
           .put("favicon", "images/favicon.png").build();
 
       response.status(500);

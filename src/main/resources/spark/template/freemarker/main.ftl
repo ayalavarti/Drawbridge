@@ -18,7 +18,7 @@
     <#--  Google Sign In  -->
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id"
-          content="682909194982-und7derro321d0gpldrb746efq2ipm6p.apps.googleusercontent.com">
+          content="${google_client_id}">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 
     <#--  Mapbox Scripts and Styling  -->

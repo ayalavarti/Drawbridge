@@ -3,7 +3,8 @@
 export DB_USER=$1
 export DB_PASS=$2
 export DATABASE_URL="postgres://$1:$2@localhost:5432/carpools"
-export MAPBOX_KEY="pk.eyJ1IjoiYXJ2Mzk1IiwiYSI6ImNqdWlvejgyYzFjcXg0M3AwaGMyc2xxNTYifQ.oQ3sxHUi9vHBYJ6El0Stjg"
+export MAPBOX_KEY=<MAPBOX_TOKEN>
+export GOOGLE_CLIENT_ID=<GOOGLE_CLIENT_ID>
 
 mvn package
 
