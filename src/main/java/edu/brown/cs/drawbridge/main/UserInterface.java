@@ -280,6 +280,7 @@ public final class UserInterface {
         Map<String, Object> variables
             = new ImmutableMap.Builder<String, Object>()
             .put("title", String.format("Drawbridge | Not Found"))
+            .put("google_client_id", GOOGLE_CLIENT_ID)
             .put("favicon", "images/favicon.png").build();
         return new ModelAndView(variables, "not-found.ftl");
       }
